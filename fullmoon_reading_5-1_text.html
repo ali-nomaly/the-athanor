@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reading — May 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=VT323&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap');
+
+:root {
+  --black: #0a0a0a;
+  --offwhite: #f0ead6;
+  --neon: #C7FF43;
+  --dim: #1a1a1a;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--black);
+  color: var(--offwhite);
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 1.05rem;
+  line-height: 1.75;
+  min-height: 100vh;
+}
+
+/* Scanline */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg, transparent, transparent 3px,
+    rgba(0,0,0,0.08) 3px, rgba(0,0,0,0.08) 4px
+  );
+  pointer-events: none;
+  z-index: 999;
+}
+
+.page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 48px 28px 80px;
+}
+
+/* ── MASTHEAD ── */
+.masthead {
+  border-bottom: 5px solid var(--neon);
+  padding-bottom: 20px;
+  margin-bottom: 36px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.masthead-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.label {
+  font-family: 'VT323', monospace;
+  font-size: 0.85rem;
+  color: var(--neon);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.title {
+  font-family: 'Black Han Sans', sans-serif;
+  font-size: 3rem;
+  color: var(--offwhite);
+  line-height: 1;
+  letter-spacing: 1px;
+  text-shadow: 3px 3px 0 var(--neon);
+}
+
+.masthead-right {
+  text-align: right;
+}
+
+.date-line {
+  font-family: 'Black Han Sans', sans-serif;
+  font-size: 0.75rem;
+  color: var(--neon);
+  letter-spacing: 3px;
+  background: var(--neon);
+  color: var(--black);
+  padding: 4px 10px;
+  display: inline-block;
+}
+
+.sub-line {
+  font-family: 'VT323', monospace;
+  font-size: 0.8rem;
+  color: #555;
+  letter-spacing: 2px;
+  margin-top: 5px;
+  text-transform: uppercase;
+}
+
+/* ── PULL QUOTE ── */
+.pull-quote {
+  border-left: 6px solid var(--neon);
+  padding: 20px 24px;
+  margin: 36px 0;
+  background: var(--dim);
+  position: relative;
+}
+
+.pull-quote::before {
+  content: '';
+  position: absolute;
+  top: 4px; right: -4px; bottom: -4px; left: 4px;
+  border: 2px solid #2a2a2a;
+  z-index: -1;
+}
+
+.pull-quote p {
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 1.25rem;
+  font-style: italic;
+  color: var(--offwhite);
+  line-height: 1.65;
+}
+
+.pull-quote p em {
+  color: var(--neon);
+  font-style: normal;
+  font-weight: 600;
+}
+
+/* ── SECTION ── */
+.section {
+  margin-bottom: 40px;
+}
+
+.section-header {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.section-num {
+  font-family: 'Black Han Sans', sans-serif;
+  font-size: 3rem;
+  color: var(--neon);
+  line-height: 1;
+  opacity: 0.25;
+  flex-shrink: 0;
+}
+
+.section-title {
+  font-family: 'Black Han Sans', sans-serif;
+  font-size: 1rem;
+  color: var(--neon);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.section-body {
+  padding-left: 0;
+  color: var(--offwhite);
+  opacity: 0.9;
+}
+
+.section-body p + p {
+  margin-top: 12px;
+}
+
+.section-body em {
+  color: var(--neon);
+  font-style: normal;
+}
+
+/* ── DIVIDER ── */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 32px 0;
+}
+
+.divider-line {
+  flex: 1;
+  height: 2px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--neon) 0, var(--neon) 10px,
+    transparent 10px, transparent 16px
+  );
+  opacity: 0.4;
+}
+
+.divider-mark {
+  font-family: 'Black Han Sans', sans-serif;
+  font-size: 0.65rem;
+  color: var(--neon);
+  letter-spacing: 3px;
+  opacity: 0.5;
+}
+
+/* ── CLOSING MAXIM ── */
+.closing {
+  border: 3px solid var(--offwhite);
+  padding: 24px;
+  margin-top: 44px;
+  position: relative;
+  background: #0d0d0d;
+}
+
+.closing::before {
+  content: 'AXIOM';
+  position: absolute;
+  top: -11px;
+  left: 16px;
+  font-family: 'Black Han Sans', sans-serif;
+  font-size: 0.65rem;
+  background: var(--black);
+  color: var(--neon);
+  padding: 0 8px;
+  letter-spacing: 4px;
+}
+
+.closing-text {
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 1.15rem;
+  font-style: italic;
+  color: var(--offwhite);
+  line-height: 1.7;
+  text-align: center;
+}
+
+.closing-text strong {
+  font-style: normal;
+  color: var(--neon);
+}
+
+/* ── FOOTER ── */
+.footer {
+  margin-top: 48px;
+  border-top: 2px solid #222;
+  padding-top: 14px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.footer-left {
+  font-family: 'VT323', monospace;
+  font-size: 0.8rem;
+  color: #444;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.footer-right {
+  font-family: 'Black Han Sans', sans-serif;
+  font-size: 0.65rem;
+  color: var(--neon);
+  letter-spacing: 3px;
+  opacity: 0.4;
+}
+
+/* staggered fade-in */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.masthead  { animation: fadeUp 0.5s ease both; }
+.pull-quote { animation: fadeUp 0.5s 0.15s ease both; }
+.section:nth-child(1) { animation: fadeUp 0.5s 0.25s ease both; }
+.section:nth-child(2) { animation: fadeUp 0.5s 0.35s ease both; }
+.section:nth-child(3) { animation: fadeUp 0.5s 0.45s ease both; }
+.section:nth-child(4) { animation: fadeUp 0.5s 0.55s ease both; }
+.section:nth-child(5) { animation: fadeUp 0.5s 0.65s ease both; }
+.closing   { animation: fadeUp 0.5s 0.75s ease both; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="masthead">
+    <div class="masthead-left">
+      <span class="label">Personal Archive · Full Moon Spread</span>
+      <div class="title">Reading</div>
+    </div>
+    <div class="masthead-right">
+      <div class="date-line">MAY 1</div>
+      <div class="sub-line">New Moon · Scorpio · Beltane</div>
+    </div>
+  </div>
+
+  <div class="pull-quote">
+    <p>The most striking thing about this spread is the direct contradiction between positions one and two. The Star reversed — hopelessness, faithlessness, defeat — sits where self-perception lives. The World, the card of the completed Great Work, the <em>Anima Mundi</em>, sits as your best quality. In Kabbalistic terms this is the path of <em>Tav</em>, the final letter, connecting Yesod to Malkuth — literally the card of the finished Great Work. The person who feels most broken is also the one most capable of perceiving wholeness. <em>Tat tvam asi.</em></p>
+  </div>
+
+  <div class="divider">
+    <div class="divider-line"></div>
+    <div class="divider-mark">I</div>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <span class="section-title">The Inversion · The Star Reversed</span>
+    </div>
+    <div class="section-body">
+      <p>In pre-modern astrology Aquarius belongs to <em>Saturn</em>, not Uranus. The Star reversed under Saturnine influence reads as the weight of structure — isolation, the cold father-principle, obligation and inheritance — pressing down on the upward pour of celestial waters. The cup is still full. The water simply cannot rise.</p>
+      <p>On a New Moon in Scorpio — Mars-ruled, a moon of descent, of confronting what is hidden — you are in a pit that is <em>cosmically appropriate to the moment</em>. Seeds do not germinate in daylight. The family dynamics you named, the sense of defeat, the faithlessness: these are not evidence against the Star. They are the condition of the new beginning. The darkness is the container, not the conclusion.</p>
+    </div>
+  </div>
+
+  <div class="divider">
+    <div class="divider-line"></div>
+    <div class="divider-mark">II</div>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <span class="section-title">The Grail Knight · Knight of Cups</span>
+    </div>
+    <div class="section-body">
+      <p>The gift you carry outward is the cup elevated — offered, not consumed. The medieval Grail tradition turns on a single question the knight must eventually learn to ask: <em>whom does the Grail serve?</em> The wound of the Knight of Cups is emotional depth without discernment — acting before the water settles, feeling everything and communicating nothing or everything at once.</p>
+      <p>Your notes named it correctly: artist, poet, sensitive nature acting from emotion. The reading confirms the gift and the responsibility simultaneously. Emotional depth is the asset. Discernment and communication are what that depth demands in return. Beauty and wonder are present everywhere you look — the task is learning when to hold the cup still.</p>
+    </div>
+  </div>
+
+  <div class="divider">
+    <div class="divider-line"></div>
+    <div class="divider-mark">III</div>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <span class="section-title">Hod Appearing Twice · Mercury's Domain</span>
+    </div>
+    <div class="section-body">
+      <p>The Eight of Pentacles and the Eight of Wands both correspond to <em>Hod</em> — the sphere of Mercury on the Tree of Life, domain of Splendor, form-making, intellect applied to craft. Mercury appears twice in this reading. That is notable. The craftsman's obsessive refinement, rapid cognition, the one who cannot stop improving the work — this runs deep in you.</p>
+      <p>The Eight of Pentacles as fulfillment is real. You are someone with passion, high standards, a dedication to craft that raises the bar on what you create. The shadow you named is also real: <em>that endless sense of never enough</em>. In Hermetic terms this is Hod without its balance in Netzach — Venus, feeling, release. Refinement without release becomes infinite regress. The master who never ships. What needs addressing, as you circled in your notes, is exactly that.</p>
+      <p>The Eight of Wands as unrecognized potential is pure Mercurial fire — wands already airborne, no hand holding them. Momentum you do not see in yourself is <em>already in motion</em>. Romantic love appears in this position, under rapid action and quick decisions. Something is already in flight that you have not fully clocked.</p>
+    </div>
+  </div>
+
+  <div class="divider">
+    <div class="divider-line"></div>
+    <div class="divider-mark">IV</div>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <span class="section-title">The New Moon's Work · Solve et Coagula</span>
+    </div>
+    <div class="section-body">
+      <p>The Scorpionic new moon — Mars-ruled, a moon of going under — creates the exact container this reading needed. The Star is face-down. The World is present but unreached. The Knight rides. The craftsman grinds. The wands fly without hands. Each card doing its work, none of them resolved.</p>
+      <p>The Hermetic maxim applies directly: <em>Solve et coagula</em> — dissolve and coagulate. The dissolution phase is where you are. The self-perception of faithlessness and defeat is not a permanent state, it is the moment of dissolving a previous form of self. What coagulates on the other side, this reading suggests, looks like the World-card recognition of your own completeness — which was always already there.</p>
+      <p>The reading does not promise anything. But it maps something real: the gap between how you see yourself and what you actually carry. That gap is the work.</p>
+    </div>
+  </div>
+
+  <div class="closing">
+    <p class="closing-text">
+      The one who cannot see their own light<br>
+      is the one who carries the completed world.<br><br>
+      <strong>The Star is not absent.</strong><br>
+      It is face-down because you are the seed.
+    </p>
+  </div>
+
+  <div class="footer">
+    <span class="footer-left">Labyrinthos · Full Moon Spread · 05.01 · Archive #001</span>
+    <span class="footer-right">◈ READING LOG ◈</span>
+  </div>
+
+</div>
+</body>
+</html>

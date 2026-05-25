@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BODY MECHANIC — Field Manual</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@300;400;500&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0d0b;
+    --bg2: #151410;
+    --bg3: #1c1a16;
+    --panel: #201e19;
+    --border: #2e2b24;
+    --brass: #c9963a;
+    --amber: #e8b84b;
+    --terra: #c4522a;
+    --sage: #7a9e7e;
+    --cream: #e8dfc8;
+    --muted: #7a7060;
+    --text: #d4c9b0;
+    --dim: #9c9080;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  /* NOISE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 999;
+    opacity: 0.4;
+  }
+
+  .wrapper {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  /* HEADER */
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 48px 0 32px;
+    margin-bottom: 48px;
+    position: relative;
+  }
+
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 120px;
+    height: 2px;
+    background: var(--brass);
+  }
+
+  .eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--brass);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(52px, 9vw, 96px);
+    letter-spacing: 0.04em;
+    line-height: 0.9;
+    color: var(--cream);
+  }
+
+  h1 span {
+    color: var(--brass);
+  }
+
+  .subtitle {
+    margin-top: 16px;
+    color: var(--dim);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  /* SECTION TITLES */
+  .section-block {
+    margin-bottom: 56px;
+  }
+
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .section-label .num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    color: var(--border);
+    line-height: 1;
+    min-width: 48px;
+  }
+
+  .section-label .title-wrap h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 0.08em;
+    color: var(--cream);
+    line-height: 1;
+  }
+
+  .section-label .title-wrap .time {
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--brass);
+    text-transform: uppercase;
+    margin-top: 3px;
+  }
+
+  /* PRACTICE CARDS */
+  .practices-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+  }
+
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--brass);
+    padding: 18px 20px;
+    position: relative;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .card:hover {
+    background: var(--bg3);
+    border-left-color: var(--amber);
+  }
+
+  .card.terra { border-left-color: var(--terra); }
+  .card.terra:hover { border-left-color: #e8633a; }
+  .card.sage { border-left-color: var(--sage); }
+  .card.sage:hover { border-left-color: #9fc9a4; }
+
+  .card-tag {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+
+  .card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    color: var(--cream);
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  .card p {
+    font-size: 11.5px;
+    color: var(--dim);
+    line-height: 1.65;
+  }
+
+  .card .mechanic-note {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+    font-size: 10.5px;
+    color: var(--brass);
+  }
+
+  .card .mechanic-note::before {
+    content: '⚙ ';
+    opacity: 0.7;
+  }
+
+  /* SUPPLEMENTS TABLE */
+  .supp-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 10px;
+  }
+
+  .supp-row {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 14px 18px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 14px;
+    align-items: start;
+  }
+
+  .supp-icon {
+    font-size: 20px;
+    margin-top: 2px;
+  }
+
+  .supp-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    color: var(--cream);
+    margin-bottom: 2px;
+  }
+
+  .supp-dose {
+    font-size: 10px;
+    color: var(--brass);
+    letter-spacing: 0.1em;
+    margin-bottom: 4px;
+  }
+
+  .supp-why {
+    font-size: 11px;
+    color: var(--dim);
+    line-height: 1.55;
+  }
+
+  /* FUELS */
+  .fuels-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  @media (max-width: 600px) {
+    .fuels-layout { grid-template-columns: 1fr; }
+    .practices-grid { grid-template-columns: 1fr; }
+    .supp-grid { grid-template-columns: 1fr; }
+  }
+
+  .fuel-category {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 20px;
+  }
+
+  .fuel-category h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 0.1em;
+    color: var(--amber);
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .fuel-item {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    align-items: flex-start;
+  }
+
+  .fuel-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .fuel-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--brass);
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+
+  .fuel-dot.t { background: var(--terra); }
+  .fuel-dot.s { background: var(--sage); }
+
+  .fuel-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    color: var(--cream);
+  }
+
+  .fuel-desc {
+    font-size: 11px;
+    color: var(--dim);
+    margin-top: 1px;
+  }
+
+  /* TOPICALS */
+  .topicals-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 10px;
+  }
+
+  .topical-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-top: 2px solid var(--terra);
+    padding: 16px 18px;
+  }
+
+  .topical-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    color: var(--cream);
+    margin-bottom: 4px;
+  }
+
+  .topical-card .apply {
+    font-size: 9.5px;
+    letter-spacing: 0.15em;
+    color: var(--terra);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .topical-card p {
+    font-size: 11px;
+    color: var(--dim);
+    line-height: 1.6;
+  }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: linear-gradient(to right, var(--brass), transparent);
+    margin: 40px 0;
+    opacity: 0.4;
+  }
+
+  /* MASTER TABLE */
+  .master-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11.5px;
+  }
+
+  .master-table th {
+    text-align: left;
+    padding: 10px 14px;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--brass);
+    background: var(--bg3);
+    border-bottom: 1px solid var(--border);
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 500;
+  }
+
+  .master-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--dim);
+    vertical-align: top;
+  }
+
+  .master-table tr:hover td {
+    background: var(--bg3);
+    color: var(--text);
+  }
+
+  .master-table td:first-child {
+    color: var(--cream);
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+  }
+
+  .tag-pill {
+    display: inline-block;
+    font-size: 8px;
+    letter-spacing: 0.1em;
+    padding: 2px 7px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    margin-right: 4px;
+  }
+
+  .tag-ay { background: rgba(201,150,58,0.15); color: var(--brass); }
+  .tag-tcm { background: rgba(122,158,126,0.15); color: var(--sage); }
+  .tag-mod { background: rgba(196,82,42,0.15); color: var(--terra); }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 0;
+    color: var(--muted);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .highlight-bar {
+    background: linear-gradient(to right, rgba(201,150,58,0.08), transparent);
+    border-left: 3px solid var(--brass);
+    padding: 16px 20px;
+    margin-bottom: 32px;
+    font-size: 12px;
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  .highlight-bar strong {
+    color: var(--amber);
+    font-weight: 500;
+  }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <!-- HEADER -->
+  <header>
+    <div class="eyebrow">TCM · Ayurveda · Modern Physiology</div>
+    <h1>BODY<br><span>MECHANIC</span></h1>
+    <div class="subtitle">Field Manual — Daily Maintenance Protocol</div>
+  </header>
+
+  <div class="highlight-bar">
+    <strong>Core principle:</strong> The body is not a temple to be worshipped — it's a vehicle to be maintained. Ancient systems mapped the same physiology in different languages: agni = metabolic fire, jing = cellular reserve, wei qi = immune boundary, ojas = nervous system vitality. Modern science has now caught up with nearly all of it.
+  </div>
+
+  <!-- SECTION 1: DAWN -->
+  <div class="section-block">
+    <div class="section-label">
+      <div class="num">01</div>
+      <div class="title-wrap">
+        <h2>DAWN IGNITION</h2>
+        <div class="time">4:30 – 7:00 AM · Brahma Muhurta · Yang Rising</div>
+      </div>
+    </div>
+
+    <div class="practices-grid">
+      <div class="card">
+        <div class="card-tag">Ayurveda · Oral</div>
+        <h3>Tongue Scraping</h3>
+        <p>7 strokes front-to-back with a copper or stainless scraper before anything touches the mouth. Removes ama (overnight bacterial coating) and activates the oral-digestive reflex.</p>
+        <div class="mechanic-note">Reduces pathogenic bacteria load before it gets swallowed. Copper is antimicrobial by contact.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-tag">Ayurveda · Oral</div>
+        <h3>Oil Pulling</h3>
+        <p>1 tbsp sesame or coconut oil, swish 10–15 min while you do other things. Spit in trash (not sink). Rinse with warm salt water.</p>
+        <div class="mechanic-note">Emulsifies fat-soluble toxins from gum tissue. Reduces Streptococcus mutans. Supports oral microbiome over brushing alone.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-tag">Ayurveda · Hydration</div>
+        <h3>Warm Water + Ginger/Lemon</h3>
+        <p>500ml warm (not hot) water with fresh ginger slices or lemon. First input of the day primes bile production and peristalsis before food.</p>
+        <div class="mechanic-note">Kickstarts agni. Lemon raises gastric acid pH prep. Ginger is proven prokinetic — moves things along mechanically.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-tag">Ayurveda · Nasal</div>
+        <h3>Nasya + Jala Neti</h3>
+        <p>Neti pot with warm saline first (rinse). Then 2 drops warm sesame or nasya oil in each nostril, inhale gently. Apply mornings in dry or polluted air.</p>
+        <div class="mechanic-note">Lubricates mucosal barrier — first line of immune defense. Modern ENT research confirms daily saline irrigation reduces sinus infections significantly.</div>
+      </div>
+
+      <div class="card sage">
+        <div class="card-tag">TCM · Qi Circulation</div>
+        <h3>Qigong / Joint Rotations</h3>
+        <p>5–10 min of systematic joint circles: ankles → knees → hips → spine → shoulders → neck → wrists. Eight Brocades (Ba Duan Jin) is the OG sequence.</p>
+        <div class="mechanic-note">Moves synovial fluid into cartilage before load-bearing. Activates meridian pathways. Modern: reduces morning cortisol spike, improves HRV.</div>
+      </div>
+
+      <div class="card sage">
+        <div class="card-tag">TCM · Modern · Light</div>
+        <h3>Morning Sunlight</h3>
+        <p>10–20 min outside within 30 min of wake. No sunglasses. Even overcast works. This is non-negotiable for the whole system.</p>
+        <div class="mechanic-note">Sets circadian clock via retinal melanopsin cells. Triggers serotonin → melatonin cascade. Lowers evening cortisol. Andrew Huberman's #1 protocol — fully validated.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- SECTION 2: BODY OILING -->
+  <div class="section-block">
+    <div class="section-label">
+      <div class="num">02</div>
+      <div class="title-wrap">
+        <h2>ABHYANGA — THE OIL JOB</h2>
+        <div class="time">Before Shower · 10–15 Min · Non-Negotiable Weekly, Ideal Daily</div>
+      </div>
+    </div>
+
+    <div class="highlight-bar" style="margin-bottom:20px;">
+      <strong>This is the central maintenance ritual.</strong> Warm oil + friction = lymphatic pump activation + nervous system downshift + skin barrier fortification. Ayurveda calls it the single most vata-pacifying practice. Modern: stimulates peripheral nervous system, moves interstitial fluid, reduces inflammatory markers.
+    </div>
+
+    <div class="practices-grid">
+      <div class="card terra">
+        <div class="card-tag">Technique</div>
+        <h3>Warm Sesame Oil — Full Body</h3>
+        <p>Warm oil slightly (test on wrist). Long strokes on limbs toward heart, circular on joints. Scalp gets special attention. Let sit 5–10 min before shower. Use a dedicated towel.</p>
+        <div class="mechanic-note">Sesame penetrates deepest of all carrier oils. Warming = vasodilation before absorption. Toward-heart strokes assist lymphatic return.</div>
+      </div>
+
+      <div class="card terra">
+        <div class="card-tag">Contrast Shower</div>
+        <h3>Hot → Cold Finish</h3>
+        <p>Shower normally to rinse oil. Finish with 30–60 sec cold blast. Don't fight it — breathe through it. The cold is the adaptation signal.</p>
+        <div class="mechanic-note">Cold triggers norepinephrine spike (up to 300%). Brown adipose activation. Vagal tone increase. Immune cytokine upregulation. Not a trend — it's physiology.</div>
+      </div>
+
+      <div class="card terra">
+        <div class="card-tag">Dry Brushing Alt.</div>
+        <h3>Garshana (Dry Silk Gloves)</h3>
+        <p>If no time for full abhyanga — 5 min dry silk or natural bristle brushing before shower. Circular motions toward lymph nodes (armpits, groin, collarbone).</p>
+        <div class="mechanic-note">Exfoliates dead skin, mechanically pumps lymph. Think of it as manually running the lymphatic system that has no pump of its own.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- SECTION 3: MIDDAY -->
+  <div class="section-block">
+    <div class="section-label">
+      <div class="num">03</div>
+      <div class="title-wrap">
+        <h2>MIDDAY ENGINE</h2>
+        <div class="time">11:00 AM – 2:00 PM · Peak Agni · Pitta Time</div>
+      </div>
+    </div>
+
+    <div class="practices-grid">
+      <div class="card">
+        <div class="card-tag">Ayurveda · Nutrition</div>
+        <h3>Largest Meal at Noon</h3>
+        <p>The digestive system runs on a circadian schedule. Gastric acid, bile, and enzyme output peak around solar noon. This is when you fuel hardest.</p>
+        <div class="mechanic-note">Chronobiology research confirms: same meal eaten at noon vs. 8pm produces better insulin sensitivity, lower triglycerides, and higher satiety hormones.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-tag">Ayurveda · Digestion</div>
+        <h3>CCF Tea with Meals</h3>
+        <p>Equal parts Cumin + Coriander + Fennel seeds, simmered 10 min. Sip warm with or after lunch. Replaces cold water during meals which douses agni.</p>
+        <div class="mechanic-note">Cumin: digestive enzyme secretion. Coriander: bile flow. Fennel: antispasmodic on gut smooth muscle. Collectively: reduce bloat, gas, sluggish digestion.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-tag">Ayurveda · Modern</div>
+        <h3>100 Steps After Eating</h3>
+        <p>Shatapavali — 100 steps (≈5 min walk) after the main meal. Light, not a workout. Just enough to initiate gastric emptying and metabolic response.</p>
+        <div class="mechanic-note">Proven to blunt postprandial glucose spike by up to 30%. Better than a walk before the meal. Simple, practical, underutilized.</div>
+      </div>
+
+      <div class="card sage">
+        <div class="card-tag">TCM · Acupressure</div>
+        <h3>ST36 — Zusanli</h3>
+        <p>4 finger-widths below the kneecap, one finger outside the shin bone. Apply firm thumb pressure for 1–2 min per side. Activates digestive + immune function.</p>
+        <div class="mechanic-note">"Leg Three Miles" — the TCM powerhouse point. Research: stimulates vagal nerve, increases natural killer cell activity, reduces inflammatory cytokines.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- SECTION 4: EVENING -->
+  <div class="section-block">
+    <div class="section-label">
+      <div class="num">04</div>
+      <div class="title-wrap">
+        <h2>EVENING WIND-DOWN</h2>
+        <div class="time">6:00 – 9:00 PM · Vata Transition · Yin Building</div>
+      </div>
+    </div>
+
+    <div class="practices-grid">
+      <div class="card">
+        <div class="card-tag">Ayurveda · Timing</div>
+        <h3>Light Dinner, Early</h3>
+        <p>Smaller than lunch, ideally by 7pm. Soups, kitchari, cooked vegetables — easy on the digestive fire which is dimming. No raw salads or heavy protein at night.</p>
+        <div class="mechanic-note">Time-restricted eating: finish eating 3–4 hrs before sleep. Body rebuilds tissue and detoxes during sleep, not digesting food. Liver detox peaks 1–3am.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-tag">Ayurveda · Nervous System</div>
+        <h3>Brahmi Oil Head Massage</h3>
+        <p>Warm brahmi or sesame oil worked into scalp with fingertips — 5 to 10 min. Slow, rhythmic, deliberate strokes. Stimulates Marma points at crown and temples.</p>
+        <div class="mechanic-note">Activates parasympathetic. Scalp has dense nerve endings — slow mechanical pressure triggers GABA-mediated calm. Also repairs hair follicle barrier.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-tag">Ayurveda · Feet</div>
+        <h3>Padabhyanga — Foot Oil</h3>
+        <p>Warm ghee or sesame on soles of feet before bed. Massage in with firm thumb strokes. Wear socks to sleep if needed. Ancient, effective, drastically underused.</p>
+        <div class="mechanic-note">Sole of foot = highest density of nerve endings. Activates parasympathetic cascade, reduces cortisol. Clinical trials show improved sleep quality in elderly. Works for all.</div>
+      </div>
+
+      <div class="card sage">
+        <div class="card-tag">TCM · Modern · Breathwork</div>
+        <h3>Nadi Shodhana / Box Breathing</h3>
+        <p>Alternate nostril breathing 5–10 min OR box breath (4-4-4-4). Do this before bed or during any stress spike. The exhale is the braking system.</p>
+        <div class="mechanic-note">Direct vagal nerve stimulation via breath. Slows heart rate, lowers blood pressure, shifts from sympathetic to parasympathetic within 3–5 cycles. Fastest free tool in the kit.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-tag">Ayurveda · Posture</div>
+        <h3>Viparita Karani — Legs Up Wall</h3>
+        <p>10–15 min with legs against the wall, hips close in, arms out. This is a yoga nidra gateway. Do it post-dinner, or right before sleep.</p>
+        <div class="mechanic-note">Reverses venous stasis in lower extremities. Drains lymph from legs. Gentle inversion calms the nervous system and drops cortisol. No equipment needed.</div>
+      </div>
+
+      <div class="card sage">
+        <div class="card-tag">TCM · Modern · Recovery</div>
+        <h3>Sleep Before 10 PM</h3>
+        <p>The pitta time (10pm–2am) is the body's self-repair window. Miss it and you borrow against your jing reserve. Screens off at 9pm minimum.</p>
+        <div class="mechanic-note">HGH peaks in deep sleep cycles before midnight. Glymphatic system (brain lymph drainage) runs primarily in stages 3–4. Every hour before midnight is worth 2 after.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- SECTION 5: SUPPLEMENTS -->
+  <div class="section-block">
+    <div class="section-label">
+      <div class="num">05</div>
+      <div class="title-wrap">
+        <h2>THE SUPPLEMENT STACK</h2>
+        <div class="time">Core Fuels — Daily Input Optimization</div>
+      </div>
+    </div>
+
+    <p style="color: var(--dim); font-size: 11.5px; margin-bottom: 20px;">Quality matters. Choose standardized extracts, third-party tested. Ayurvedic herbs work best as food-forms (powders in warm milk/water) when possible — not isolated capsules.</p>
+
+    <div class="supp-grid">
+
+      <div class="supp-row">
+        <div class="supp-icon">🌿</div>
+        <div>
+          <div class="supp-name">Ashwagandha (KSM-66)</div>
+          <div class="supp-dose">300–600mg · Evening · With Fat</div>
+          <div class="supp-why">HPA axis regulation, cortisol reduction, testosterone support, thyroid T3/T4 optimization. The most studied adaptogen. Take at night — not morning.</div>
+        </div>
+      </div>
+
+      <div class="supp-row">
+        <div class="supp-icon">🪨</div>
+        <div>
+          <div class="supp-name">Shilajit (Purified)</div>
+          <div class="supp-dose">200–400mg · Morning · Resin Form</div>
+          <div class="supp-why">Fulvic acid mineral transport. Mitochondrial CoQ10 amplification. Testosterone and DHEA support. Jing tonic — the Ayurvedic equivalent of trace mineral supplementation for cellular energy.</div>
+        </div>
+      </div>
+
+      <div class="supp-row">
+        <div class="supp-icon">🫐</div>
+        <div>
+          <div class="supp-name">Triphala</div>
+          <div class="supp-dose">500mg–1g · Before Bed · Powder in Warm Water</div>
+          <div class="supp-why">Three fruits (amalaki, bibhitaki, haritaki). Bowel regulator, antioxidant powerhouse, gut microbiome prebiotic, eye health. Rasayana — cellular rejuvenation formula.</div>
+        </div>
+      </div>
+
+      <div class="supp-row">
+        <div class="supp-icon">🧠</div>
+        <div>
+          <div class="supp-name">Brahmi / Bacopa Monnieri</div>
+          <div class="supp-dose">300mg (55% bacosides) · Morning · With Food</div>
+          <div class="supp-why">Neuroplasticity, memory consolidation, anxiety reduction. Takes 6–8 weeks to peak. TCM equivalent: He Shou Wu for cognitive longevity. Best long-game brain investment.</div>
+        </div>
+      </div>
+
+      <div class="supp-row">
+        <div class="supp-icon">🍊</div>
+        <div>
+          <div class="supp-name">Amla / Amalaki</div>
+          <div class="supp-dose">500mg–1g powder daily · Or fresh fruit</div>
+          <div class="supp-why">Highest natural Vitamin C (heat-stable tannin-bound form). Collagen synthesis, liver protection, immune modulation, lipid lowering. The Ayurvedic longevity fruit — skip synthetic ascorbic acid.</div>
+        </div>
+      </div>
+
+      <div class="supp-row">
+        <div class="supp-icon">🌙</div>
+        <div>
+          <div class="supp-name">Magnesium Glycinate</div>
+          <div class="supp-dose">300–400mg · Night · With Dinner</div>
+          <div class="supp-why">Most depleted mineral in modern humans. Sleep quality, muscle relaxation, nervous system calm, insulin sensitivity, 300+ enzymatic reactions. The single highest-leverage mineral supplement.</div>
+        </div>
+      </div>
+
+      <div class="supp-row">
+        <div class="supp-icon">☀️</div>
+        <div>
+          <div class="supp-name">Vitamin D3 + K2</div>
+          <div class="supp-dose">3000–5000 IU D3 · 100–200mcg K2-MK7 · Morning</div>
+          <div class="supp-why">D3 without K2 is incomplete. K2 directs calcium into bone (not arteries). D3 is immune master regulator, mood, testosterone cofactor. Test your levels — optimize to 50–80 ng/mL.</div>
+        </div>
+      </div>
+
+      <div class="supp-row">
+        <div class="supp-icon">🐟</div>
+        <div>
+          <div class="supp-name">Omega-3 (EPA/DHA)</div>
+          <div class="supp-dose">2–3g combined EPA+DHA · With Largest Meal</div>
+          <div class="supp-why">Cell membrane fluidity, brain structure, anti-inflammatory prostaglandin cascade, cardiovascular, joint lubrication. Use triglyceride-form fish oil or algae (vegan). Refrigerate.</div>
+        </div>
+      </div>
+
+      <div class="supp-row">
+        <div class="supp-icon">🌾</div>
+        <div>
+          <div class="supp-name">Turmeric + Black Pepper + Fat</div>
+          <div class="supp-dose">500–1g curcumin · Always with piperine + fat</div>
+          <div class="supp-why">Curcumin alone is poorly absorbed. Piperine (black pepper) increases bioavailability 2000%. Fat-soluble. Anti-inflammatory, liver protection, joint health. Golden milk formula hits all three.</div>
+        </div>
+      </div>
+
+      <div class="supp-row">
+        <div class="supp-icon">🔴</div>
+        <div>
+          <div class="supp-name">Chyawanprash</div>
+          <div class="supp-dose">1–2 tsp · Morning · With Warm Milk or Alone</div>
+          <div class="supp-why">Ayurvedic polyherbal jam with 40+ botanicals. Amla base + ashwagandha, shatavari, pippali, ghee, honey. The OG comprehensive tonic. Replace your multivitamin with this.</div>
+        </div>
+      </div>
+
+      <div class="supp-row">
+        <div class="supp-icon">🦠</div>
+        <div>
+          <div class="supp-name">Probiotic / Fermented Foods</div>
+          <div class="supp-dose">Daily · Vary strains · Food first</div>
+          <div class="supp-why">Microbiome is the second brain. Lactobacillus and Bifidobacterium strains regulate mood via gut-brain axis, train immune response, produce neurotransmitters. Food: kefir, lassi, miso, kimchi.</div>
+        </div>
+      </div>
+
+      <div class="supp-row">
+        <div class="supp-icon">🌺</div>
+        <div>
+          <div class="supp-name">Saffron (Crocus sativus)</div>
+          <div class="supp-dose">30mg daily · Morning</div>
+          <div class="supp-why">Underrated. Clinical trials show comparable efficacy to SSRIs for mild depression. Protects retina from blue light. Anti-inflammatory. TCM: moves qi, brightens spirit. Tiny dose — huge effect.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- SECTION 6: FUELS -->
+  <div class="section-block">
+    <div class="section-label">
+      <div class="num">06</div>
+      <div class="title-wrap">
+        <h2>ESSENTIAL FUELS</h2>
+        <div class="time">Food as Medicine — The Maintenance Diet</div>
+      </div>
+    </div>
+
+    <div class="fuels-layout">
+
+      <div class="fuel-category">
+        <h3>Oils & Sacred Fats</h3>
+        <div class="fuel-item">
+          <div class="fuel-dot"></div>
+          <div>
+            <div class="fuel-name">Ghee</div>
+            <div class="fuel-desc">Butyrate for gut lining, fat-soluble vitamin carrier, lubricates joints. Ayurvedic gold — use as primary cooking fat.</div>
+          </div>
+        </div>
+        <div class="fuel-item">
+          <div class="fuel-dot t"></div>
+          <div>
+            <div class="fuel-name">Black Sesame Seeds</div>
+            <div class="fuel-desc">TCM kidney jing tonic. Calcium, lignans, sesamol antioxidant. Eat daily — tahini, sprinkled, or sesame milk.</div>
+          </div>
+        </div>
+        <div class="fuel-item">
+          <div class="fuel-dot s"></div>
+          <div>
+            <div class="fuel-name">Avocado</div>
+            <div class="fuel-desc">Glutathione precursors, K2, oleic acid, mitochondrial fat. The most complete whole food fat source.</div>
+          </div>
+        </div>
+        <div class="fuel-item">
+          <div class="fuel-dot"></div>
+          <div>
+            <div class="fuel-name">Coconut Oil / MCT</div>
+            <div class="fuel-desc">Instant ketone energy, lauric acid (antiviral/antifungal), cooling pitta. Raw or low heat only.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fuel-category">
+        <h3>Roots, Spices & Activators</h3>
+        <div class="fuel-item">
+          <div class="fuel-dot"></div>
+          <div>
+            <div class="fuel-name">Turmeric + Ginger + Black Pepper</div>
+            <div class="fuel-desc">Anti-inflammatory trinity. Daily dose in cooking, teas, or golden milk. Non-negotiable base layer.</div>
+          </div>
+        </div>
+        <div class="fuel-item">
+          <div class="fuel-dot t"></div>
+          <div>
+            <div class="fuel-name">Garlic (Raw or Lightly Cooked)</div>
+            <div class="fuel-desc">Allicin: antimicrobial, cardiovascular, immune. Let it sit 10 min after chopping to activate alliinase enzyme.</div>
+          </div>
+        </div>
+        <div class="fuel-item">
+          <div class="fuel-dot s"></div>
+          <div>
+            <div class="fuel-name">Moringa Leaf</div>
+            <div class="fuel-desc">Complete amino acids, iron, Vitamin C, B vitamins. One of the most nutrient-dense foods on earth. Powder into smoothies or soups.</div>
+          </div>
+        </div>
+        <div class="fuel-item">
+          <div class="fuel-dot"></div>
+          <div>
+            <div class="fuel-name">Amla / Indian Gooseberry</div>
+            <div class="fuel-desc">Heat-stable Vitamin C. Highest antioxidant ORAC of any fruit. Liver tonic, collagen builder. Powder or fresh.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fuel-category">
+        <h3>Gut & Microbiome Foods</h3>
+        <div class="fuel-item">
+          <div class="fuel-dot s"></div>
+          <div>
+            <div class="fuel-name">Kitchari (Mung Dal + Rice)</div>
+            <div class="fuel-desc">Ayurvedic reset meal. Tridoshic, highly bioavailable, gives the gut a break while feeding it. Weekly or when off-balance.</div>
+          </div>
+        </div>
+        <div class="fuel-item">
+          <div class="fuel-dot"></div>
+          <div>
+            <div class="fuel-name">Miso Soup</div>
+            <div class="fuel-desc">TCM spleen food. Live probiotics, glutamates for gut lining repair, trace minerals. Unpasteurized only — don't boil it.</div>
+          </div>
+        </div>
+        <div class="fuel-item">
+          <div class="fuel-dot t"></div>
+          <div>
+            <div class="fuel-name">Kefir / Lassi</div>
+            <div class="fuel-desc">50+ bacterial strains vs. 1–5 in yogurt. Lactobacillus kefiri is unique to kefir. Ayurvedic takra (spiced buttermilk) for post-meal digestion.</div>
+          </div>
+        </div>
+        <div class="fuel-item">
+          <div class="fuel-dot s"></div>
+          <div>
+            <div class="fuel-name">Bone Broth / Mushroom Broth</div>
+            <div class="fuel-desc">Collagen, glycine, proline for gut lining + joint repair. Shiitake/reishi broth for immune beta-glucans. TCM: builds blood and marrow.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fuel-category">
+        <h3>Blood, Jing & Vitality Foods</h3>
+        <div class="fuel-item">
+          <div class="fuel-dot"></div>
+          <div>
+            <div class="fuel-name">Dates + Warm Milk</div>
+            <div class="fuel-desc">Ayurvedic reproductive tonic. Iron, quick glycogen, tryptophan for serotonin. TCM: nourishes yin, builds blood.</div>
+          </div>
+        </div>
+        <div class="fuel-item">
+          <div class="fuel-dot t"></div>
+          <div>
+            <div class="fuel-name">Beets</div>
+            <div class="fuel-desc">Nitric oxide precursor via nitrates → endothelial vasodilation. Liver phase 2 detox support. Performance + cardiovascular.</div>
+          </div>
+        </div>
+        <div class="fuel-item">
+          <div class="fuel-dot s"></div>
+          <div>
+            <div class="fuel-name">Pomegranate</div>
+            <div class="fuel-desc">Punicalagins: the most potent antioxidant in food. Urolithin-A (gut microbiome convert) for mitochondrial renewal. TCM: astringes qi.</div>
+          </div>
+        </div>
+        <div class="fuel-item">
+          <div class="fuel-dot"></div>
+          <div>
+            <div class="fuel-name">Seaweed (Nori, Kelp, Wakame)</div>
+            <div class="fuel-desc">Iodine for thyroid, ocean mineral spectrum, fucoidan for immune. TCM: softens hardness, resolves phlegm accumulation.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- SECTION 7: TOPICALS -->
+  <div class="section-block">
+    <div class="section-label">
+      <div class="num">07</div>
+      <div class="title-wrap">
+        <h2>TOPICALS — EXTERNAL APPLICATIONS</h2>
+        <div class="time">The Skin is the Largest Organ · Everything Penetrates</div>
+      </div>
+    </div>
+
+    <div class="topicals-grid">
+
+      <div class="topical-card">
+        <h3>Sesame Oil — Base Carrier</h3>
+        <div class="apply">Full Body · Abhyanga · Daily</div>
+        <p>Warmest, deepest-penetrating carrier. Sesamin + sesamolin are antioxidants unique to sesame. Vata-pacifying — grounds and lubricates the nervous system through the skin.</p>
+      </div>
+
+      <div class="topical-card">
+        <h3>Castor Oil — The Detox Pack</h3>
+        <div class="apply">Liver · Joints · Scalp · 3x/week</div>
+        <p>Applied over liver (right side, below ribs) with warm cloth pack — draws out stagnation, supports lymphatic drainage. On joints for inflammation. On scalp for hair follicle regeneration. Ricinoleic acid is deeply anti-inflammatory.</p>
+      </div>
+
+      <div class="topical-card">
+        <h3>Brahmi Oil — Neural Repair</h3>
+        <div class="apply">Scalp + Temples · Evening</div>
+        <p>Bacopa infused in sesame or coconut. Works through scalp marma points. Cools pitta in the head, calms excess mental activity. Legitimate CNS calming effect via topical absorption.</p>
+      </div>
+
+      <div class="topical-card">
+        <h3>Neem Oil — Antimicrobial</h3>
+        <div class="apply">Skin Conditions · Scalp · Spot Treatment</div>
+        <p>Azadirachtin compound is antifungal, antibacterial, anti-parasitic. For scalp issues, acne, skin infections. Always dilute 1:10 in carrier. Strong smell — use at night.</p>
+      </div>
+
+      <div class="topical-card">
+        <h3>Kumkumadi Oil — Face</h3>
+        <div class="apply">Face · Nightly · 3–5 drops</div>
+        <p>Saffron-infused Ayurvedic facial oil with 16+ botanicals. Brightens, repairs barrier, reduces hyperpigmentation. The Ayurvedic retinol analog — takes weeks but works systemically. Apply after face wash at night.</p>
+      </div>
+
+      <div class="topical-card">
+        <h3>Mahanarayan Oil — Deep Muscle</h3>
+        <div class="apply">Joints · Spine · Post-Workout · As Needed</div>
+        <p>Sesame base with 50+ herbs including ashwagandha, shatavari, bala. Penetrates deeply into muscle and joint tissue. The Ayurvedic equivalent of a deep tissue treatment. Warm before applying.</p>
+      </div>
+
+      <div class="topical-card">
+        <h3>Magnesium Oil (Transdermal)</h3>
+        <div class="apply">Legs · Feet · Post-Workout</div>
+        <p>Magnesium chloride in water. Applied to skin bypasses gut absorption issues. Spray on sore muscles, calves before sleep, or feet. Muscle cramp relief within 20 min. Pair with oral glycinate for full coverage.</p>
+      </div>
+
+      <div class="topical-card">
+        <h3>Copper Water (Tamra Jal)</h3>
+        <div class="apply">Drink · Store in Copper Vessel Overnight</div>
+        <p>Store filtered water in copper vessel 8 hrs minimum. Small amount of copper ions transfer. Ayurvedic antimicrobial, antioxidant. Modern: oligodynamic effect of copper on pathogens confirmed by WHO studies on water purification.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- MASTER DAILY SCHEDULE -->
+  <div class="section-block">
+    <div class="section-label">
+      <div class="num">08</div>
+      <div class="title-wrap">
+        <h2>MASTER SCHEDULE</h2>
+        <div class="time">The Full Protocol — Compressed</div>
+      </div>
+    </div>
+
+    <table class="master-table">
+      <thead>
+        <tr>
+          <th>Time</th>
+          <th>Practice</th>
+          <th>System</th>
+          <th>Duration</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Wake + 0 min</td>
+          <td>Tongue scrape → oil pull → warm ginger water</td>
+          <td><span class="tag-pill tag-ay">Ayurveda</span></td>
+          <td>15 min</td>
+        </tr>
+        <tr>
+          <td>Wake + 15 min</td>
+          <td>Sunlight exposure outdoors — no screens</td>
+          <td><span class="tag-pill tag-tcm">TCM</span><span class="tag-pill tag-mod">Modern</span></td>
+          <td>10–20 min</td>
+        </tr>
+        <tr>
+          <td>Wake + 30 min</td>
+          <td>Qigong / joint rotations / breath work</td>
+          <td><span class="tag-pill tag-tcm">TCM</span><span class="tag-pill tag-ay">Ayurveda</span></td>
+          <td>10–20 min</td>
+        </tr>
+        <tr>
+          <td>Pre-shower</td>
+          <td>Abhyanga — warm sesame oil full body</td>
+          <td><span class="tag-pill tag-ay">Ayurveda</span></td>
+          <td>10–15 min</td>
+        </tr>
+        <tr>
+          <td>Shower</td>
+          <td>Rinse oil → finish with 30–60 sec cold</td>
+          <td><span class="tag-pill tag-mod">Modern</span><span class="tag-pill tag-tcm">TCM</span></td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>Morning</td>
+          <td>Chyawanprash + Shilajit + Saffron + D3/K2</td>
+          <td><span class="tag-pill tag-ay">Ayurveda</span><span class="tag-pill tag-mod">Modern</span></td>
+          <td>With food</td>
+        </tr>
+        <tr>
+          <td>Nasya</td>
+          <td>Saline neti → 2 drops sesame in each nostril</td>
+          <td><span class="tag-pill tag-ay">Ayurveda</span></td>
+          <td>5 min</td>
+        </tr>
+        <tr>
+          <td>Noon</td>
+          <td>Largest meal — spiced with digestive trio</td>
+          <td><span class="tag-pill tag-ay">Ayurveda</span><span class="tag-pill tag-mod">Modern</span></td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>Post-lunch</td>
+          <td>CCF tea + 5 min walk + ST36 acupressure</td>
+          <td><span class="tag-pill tag-ay">Ayurveda</span><span class="tag-pill tag-tcm">TCM</span></td>
+          <td>10 min</td>
+        </tr>
+        <tr>
+          <td>Afternoon</td>
+          <td>Brahmi / Bacopa + Omega-3 + Turmeric</td>
+          <td><span class="tag-pill tag-ay">Ayurveda</span><span class="tag-pill tag-mod">Modern</span></td>
+          <td>With food</td>
+        </tr>
+        <tr>
+          <td>6–7 PM</td>
+          <td>Light early dinner — no raw, cooked only</td>
+          <td><span class="tag-pill tag-ay">Ayurveda</span><span class="tag-pill tag-mod">Modern</span></td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>7–8 PM</td>
+          <td>Legs up wall → nadi shodhana breathing</td>
+          <td><span class="tag-pill tag-ay">Ayurveda</span><span class="tag-pill tag-mod">Modern</span></td>
+          <td>15–20 min</td>
+        </tr>
+        <tr>
+          <td>8–9 PM</td>
+          <td>Brahmi scalp oil + foot padabhyanga + kumkumadi face</td>
+          <td><span class="tag-pill tag-ay">Ayurveda</span></td>
+          <td>15 min</td>
+        </tr>
+        <tr>
+          <td>Pre-sleep</td>
+          <td>Triphala + Ashwagandha + Magnesium glycinate</td>
+          <td><span class="tag-pill tag-ay">Ayurveda</span><span class="tag-pill tag-mod">Modern</span></td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>9–10 PM</td>
+          <td>Screens off. Sleep before 10 PM.</td>
+          <td><span class="tag-pill tag-tcm">TCM</span><span class="tag-pill tag-mod">Modern</span></td>
+          <td>Hard rule</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <footer>
+    <span>Body Mechanic Field Manual · TCM + Ayurveda + Modern Physiology</span>
+    <span>Build the system. Run the maintenance. Trust the protocol.</span>
+  </footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,1595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Keyboard Intuition Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Mono:wght@300;400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1410;
+    --paper: #f5f0e8;
+    --ivory: #fdf8ef;
+    --amber: #c8922a;
+    --amber-light: #e8b84b;
+    --rust: #8b3a2a;
+    --sage: #4a6741;
+    --slate: #2d3a4a;
+    --cream: #ede8d8;
+    --shadow: rgba(26, 20, 16, 0.15);
+    --white-key: #faf7f0;
+    --black-key: #1a1410;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background-color: var(--ink);
+    color: var(--paper);
+    font-family: 'Lora', Georgia, serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* GRAIN OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  .page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  /* HEADER */
+  header {
+    text-align: center;
+    padding: 60px 0 40px;
+    border-bottom: 1px solid rgba(200, 146, 42, 0.3);
+    margin-bottom: 56px;
+    position: relative;
+  }
+
+  .header-rule {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    justify-content: center;
+    margin-bottom: 24px;
+  }
+
+  .header-rule span {
+    width: 60px;
+    height: 1px;
+    background: var(--amber);
+  }
+
+  .header-rule .dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--amber);
+  }
+
+  .overtitle {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    color: var(--amber);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(38px, 7vw, 72px);
+    font-weight: 900;
+    line-height: 1;
+    color: var(--ivory);
+    letter-spacing: -0.02em;
+  }
+
+  h1 em {
+    color: var(--amber);
+    font-style: italic;
+  }
+
+  .subtitle {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: rgba(245, 240, 232, 0.55);
+    margin-top: 14px;
+    max-width: 460px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+  }
+
+  /* SECTIONS */
+  .section {
+    margin-bottom: 64px;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  .section-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--amber);
+    letter-spacing: 0.2em;
+    flex-shrink: 0;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(22px, 4vw, 32px);
+    font-weight: 700;
+    color: var(--ivory);
+    line-height: 1.1;
+  }
+
+  .section-rule {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, rgba(200,146,42,0.4), transparent);
+  }
+
+  .card {
+    background: rgba(245, 240, 232, 0.05);
+    border: 1px solid rgba(200, 146, 42, 0.15);
+    border-radius: 4px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+
+  .card p, .card li {
+    font-size: 15px;
+    line-height: 1.8;
+    color: rgba(245, 240, 232, 0.8);
+  }
+
+  .card ul { padding-left: 20px; }
+  .card li { margin-bottom: 6px; }
+
+  .highlight {
+    color: var(--amber-light);
+    font-weight: 600;
+  }
+
+  /* ── KEYBOARD DIAGRAM ── */
+  .keyboard-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .keyboard-container {
+    position: relative;
+    width: 100%;
+    max-width: 780px;
+    background: #111;
+    border-radius: 6px 6px 12px 12px;
+    padding: 16px 16px 24px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 0 2px rgba(200,146,42,0.2);
+  }
+
+  .keyboard {
+    display: flex;
+    position: relative;
+    height: 160px;
+    user-select: none;
+  }
+
+  .white-key {
+    flex: 1;
+    background: var(--white-key);
+    border: 1px solid #c8c0b0;
+    border-top: none;
+    border-radius: 0 0 5px 5px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.1s;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 10px;
+    box-shadow: inset 0 -3px 5px rgba(0,0,0,0.08), 1px 0 0 rgba(0,0,0,0.05);
+    min-width: 0;
+  }
+
+  .white-key:hover, .white-key.active {
+    background: #fff8e8;
+  }
+
+  .white-key.pressed {
+    background: linear-gradient(180deg, #ffecc0 0%, #fff8e8 100%);
+    box-shadow: inset 0 4px 6px rgba(200,146,42,0.2);
+  }
+
+  .white-key .key-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    color: #888;
+    letter-spacing: 0.05em;
+  }
+
+  .white-key.c-key .key-label {
+    color: var(--amber);
+    font-weight: 700;
+  }
+
+  .octave-label {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: rgba(200,146,42,0.5);
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+  }
+
+  .black-keys-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  .black-key {
+    position: absolute;
+    top: 0;
+    width: 8.5%;
+    max-width: 38px;
+    height: 60%;
+    background: linear-gradient(180deg, #2a2420 0%, #1a1410 60%, #0d0a08 100%);
+    border-radius: 0 0 4px 4px;
+    cursor: pointer;
+    pointer-events: all;
+    z-index: 2;
+    box-shadow: 2px 4px 8px rgba(0,0,0,0.5), inset -1px 0 1px rgba(255,255,255,0.05);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 6px;
+    transition: background 0.1s;
+  }
+
+  .black-key:hover, .black-key.active {
+    background: linear-gradient(180deg, #3a3430 0%, #2a2420 60%, #1a1410 100%);
+  }
+
+  .black-key.pressed {
+    background: linear-gradient(180deg, #6b4a1a 0%, #3a2a0a 100%);
+  }
+
+  .black-key .key-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    color: rgba(255,255,255,0.3);
+    text-align: center;
+    line-height: 1.2;
+  }
+
+  .keyboard-legend {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: rgba(245,240,232,0.6);
+  }
+
+  .legend-swatch {
+    width: 14px;
+    height: 14px;
+    border-radius: 2px;
+  }
+
+  /* ── FINGER NUMBERING ── */
+  .hands-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  .hand-card {
+    background: rgba(245, 240, 232, 0.04);
+    border: 1px solid rgba(200, 146, 42, 0.12);
+    border-radius: 4px;
+    padding: 24px;
+    text-align: center;
+  }
+
+  .hand-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--amber);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .hand-svg { width: 100%; max-width: 180px; }
+
+  .finger-tip {
+    cursor: pointer;
+    transition: fill 0.2s;
+  }
+  .finger-tip:hover { fill: var(--amber-light) !important; }
+
+  .finger-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    fill: var(--ink);
+    pointer-events: none;
+  }
+
+  /* ── NOTES GRID ── */
+  .notes-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+  }
+
+  .note-card {
+    background: rgba(245,240,232,0.05);
+    border: 1px solid rgba(200,146,42,0.15);
+    border-radius: 4px;
+    padding: 14px 8px;
+    text-align: center;
+    cursor: default;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .note-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(200,146,42,0.1), transparent);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .note-card:hover::before { opacity: 1; }
+
+  .note-letter {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--amber-light);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .note-card.c-note .note-letter { color: #e8c060; }
+
+  .note-solfege {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: rgba(245,240,232,0.4);
+    letter-spacing: 0.1em;
+  }
+
+  .note-desc {
+    font-size: 11px;
+    color: rgba(245,240,232,0.55);
+    margin-top: 4px;
+    line-height: 1.4;
+    font-style: italic;
+  }
+
+  /* ── SCALE PATTERNS ── */
+  .scale-diagram {
+    background: rgba(245,240,232,0.04);
+    border: 1px solid rgba(200,146,42,0.12);
+    border-radius: 4px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+
+  .scale-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ivory);
+    margin-bottom: 8px;
+  }
+
+  .scale-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: rgba(200,146,42,0.7);
+    letter-spacing: 0.1em;
+    margin-bottom: 20px;
+  }
+
+  .scale-steps {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+
+  .scale-note {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .scale-note-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--ivory);
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.15s;
+  }
+
+  .scale-note-name.root {
+    background: var(--amber);
+    color: var(--ink);
+  }
+
+  .scale-note-name.fifth {
+    background: rgba(200,146,42,0.25);
+    border: 1px solid var(--amber);
+  }
+
+  .scale-note-finger {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: rgba(200,146,42,0.6);
+  }
+
+  .scale-interval {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    flex-shrink: 0;
+    padding: 0 4px;
+    padding-bottom: 22px;
+  }
+
+  .interval-line {
+    width: 28px;
+    height: 1px;
+    background: rgba(245,240,232,0.2);
+    position: relative;
+  }
+
+  .interval-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: rgba(245,240,232,0.35);
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+
+  /* ── CHORDS ── */
+  .chords-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+  }
+
+  .chord-card {
+    background: rgba(245,240,232,0.04);
+    border: 1px solid rgba(200,146,42,0.12);
+    border-radius: 4px;
+    padding: 20px;
+    transition: border-color 0.2s;
+  }
+
+  .chord-card:hover {
+    border-color: rgba(200,146,42,0.4);
+  }
+
+  .chord-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--amber-light);
+    margin-bottom: 4px;
+  }
+
+  .chord-type {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: rgba(245,240,232,0.4);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  .chord-keys {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .chord-key {
+    width: 32px;
+    height: 44px;
+    border-radius: 3px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 4px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+  }
+
+  .chord-key.white {
+    background: var(--white-key);
+    color: #888;
+    border: 1px solid #ccc;
+  }
+
+  .chord-key.black {
+    background: var(--black-key);
+    color: rgba(255,255,255,0.5);
+    height: 30px;
+  }
+
+  .chord-key.active-chord {
+    background: var(--amber);
+    color: var(--ink);
+    font-weight: 700;
+    border-color: var(--amber);
+  }
+
+  .chord-formula {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: rgba(245,240,232,0.45);
+  }
+
+  .chord-formula span {
+    color: var(--amber);
+  }
+
+  /* ── POSTURE ── */
+  .posture-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .posture-item {
+    display: flex;
+    gap: 14px;
+    background: rgba(245,240,232,0.04);
+    border: 1px solid rgba(200,146,42,0.1);
+    border-radius: 4px;
+    padding: 18px;
+  }
+
+  .posture-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+  }
+
+  .posture-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--amber);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .posture-text {
+    font-size: 13px;
+    line-height: 1.65;
+    color: rgba(245,240,232,0.7);
+  }
+
+  /* ── PRACTICE ROADMAP ── */
+  .roadmap {
+    position: relative;
+    padding-left: 40px;
+  }
+
+  .roadmap::before {
+    content: '';
+    position: absolute;
+    left: 14px;
+    top: 20px;
+    bottom: 20px;
+    width: 1px;
+    background: linear-gradient(180deg, var(--amber), transparent);
+  }
+
+  .roadmap-item {
+    position: relative;
+    margin-bottom: 28px;
+    background: rgba(245,240,232,0.04);
+    border: 1px solid rgba(200,146,42,0.12);
+    border-radius: 4px;
+    padding: 20px 24px;
+  }
+
+  .roadmap-item::before {
+    content: '';
+    position: absolute;
+    left: -31px;
+    top: 24px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--amber);
+    box-shadow: 0 0 0 3px rgba(200,146,42,0.2);
+  }
+
+  .roadmap-phase {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--amber);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .roadmap-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--ivory);
+    margin-bottom: 10px;
+  }
+
+  .roadmap-items {
+    list-style: none;
+    padding: 0;
+  }
+
+  .roadmap-items li {
+    font-size: 13px;
+    color: rgba(245,240,232,0.65);
+    padding: 3px 0;
+    padding-left: 16px;
+    position: relative;
+    line-height: 1.6;
+  }
+
+  .roadmap-items li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--amber);
+    font-size: 11px;
+  }
+
+  .roadmap-time {
+    display: inline-block;
+    margin-top: 10px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    background: rgba(200,146,42,0.15);
+    border: 1px solid rgba(200,146,42,0.3);
+    color: var(--amber-light);
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.1em;
+  }
+
+  /* ── NOTE VALUES / RHYTHM ── */
+  .rhythm-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(245,240,232,0.06);
+  }
+
+  .rhythm-row:last-child { border-bottom: none; }
+
+  .rhythm-symbol {
+    width: 48px;
+    flex-shrink: 0;
+    text-align: center;
+  }
+
+  .rhythm-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ivory);
+    width: 120px;
+    flex-shrink: 0;
+  }
+
+  .rhythm-beats {
+    display: flex;
+    gap: 6px;
+    flex: 1;
+  }
+
+  .beat-dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgba(200,146,42,0.2);
+    border: 1px solid rgba(200,146,42,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .beat-dot.filled {
+    background: var(--amber);
+    border-color: var(--amber-light);
+  }
+
+  .rhythm-note-svg {
+    font-size: 32px;
+    line-height: 1;
+  }
+
+  /* ── INTERVALS TABLE ── */
+  .interval-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .interval-table th {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--amber);
+    text-align: left;
+    padding: 10px 16px;
+    border-bottom: 1px solid rgba(200,146,42,0.2);
+  }
+
+  .interval-table td {
+    font-size: 13px;
+    color: rgba(245,240,232,0.7);
+    padding: 10px 16px;
+    border-bottom: 1px solid rgba(245,240,232,0.05);
+    line-height: 1.5;
+    vertical-align: top;
+  }
+
+  .interval-table tr:hover td {
+    background: rgba(200,146,42,0.04);
+  }
+
+  .interval-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ivory);
+  }
+
+  /* ── TIPS ── */
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+  }
+
+  .tip-card {
+    background: rgba(245,240,232,0.04);
+    border: 1px solid rgba(200,146,42,0.1);
+    border-radius: 4px;
+    padding: 20px;
+  }
+
+  .tip-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 28px;
+    font-weight: 300;
+    color: rgba(200,146,42,0.25);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .tip-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--amber-light);
+    margin-bottom: 8px;
+  }
+
+  .tip-body {
+    font-size: 13px;
+    line-height: 1.65;
+    color: rgba(245,240,232,0.6);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 40px 0 20px;
+    border-top: 1px solid rgba(200,146,42,0.15);
+    margin-top: 20px;
+  }
+
+  footer p {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: rgba(245,240,232,0.25);
+    letter-spacing: 0.1em;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 600px) {
+    .hands-grid, .posture-grid { grid-template-columns: 1fr; }
+    .notes-grid { grid-template-columns: repeat(4, 1fr); }
+    .chords-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-rule">
+      <span></span><div class="dot"></div><div class="dot"></div><div class="dot"></div><span></span>
+    </div>
+    <div class="overtitle">A Foundational Reference</div>
+    <h1>The Keyboard<br><em>Intuition</em> Guide</h1>
+    <p class="subtitle">Everything you need to build solid fundamentals before the music starts to flow on its own</p>
+  </header>
+
+  <!-- 01: THE KEYBOARD LAYOUT -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2 class="section-title">The Keyboard Layout</h2>
+      <div class="section-rule"></div>
+    </div>
+
+    <div class="keyboard-wrap">
+      <div class="keyboard-container">
+        <div class="keyboard" id="keyboard"></div>
+      </div>
+      <div class="keyboard-legend">
+        <div class="legend-item">
+          <div class="legend-swatch" style="background:var(--amber); border-radius:50%;width:10px;height:10px;"></div>
+          C notes — the anchors of the keyboard
+        </div>
+        <div class="legend-item">
+          <div class="legend-swatch" style="background:#faf7f0; border:1px solid #ccc;"></div>
+          White keys — natural notes (A B C D E F G)
+        </div>
+        <div class="legend-item">
+          <div class="legend-swatch" style="background:#1a1410;"></div>
+          Black keys — sharps (♯) & flats (♭)
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:20px;">
+      <p>The keyboard repeats the same 12-note pattern (7 white + 5 black) over and over. Each repetition is called an <span class="highlight">octave</span>. Middle C (C4) sits roughly in the center of a full 88-key piano and is your primary home base. Notice the <span class="highlight">black key clusters</span> — groups of 2 and groups of 3 — they are your visual landmarks. The white key just to the left of any group of 2 black keys is always C.</p>
+    </div>
+  </div>
+
+  <!-- 02: THE SEVEN NOTES -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2 class="section-title">The Seven Natural Notes</h2>
+      <div class="section-rule"></div>
+    </div>
+
+    <div class="notes-grid">
+      <div class="note-card c-note">
+        <div class="note-letter">C</div>
+        <div class="note-solfege">Do</div>
+        <div class="note-desc">Home base. Left of 2 black keys.</div>
+      </div>
+      <div class="note-card">
+        <div class="note-letter">D</div>
+        <div class="note-solfege">Re</div>
+        <div class="note-desc">Between the 2 black keys.</div>
+      </div>
+      <div class="note-card">
+        <div class="note-letter">E</div>
+        <div class="note-solfege">Mi</div>
+        <div class="note-desc">Right of 2 black keys.</div>
+      </div>
+      <div class="note-card">
+        <div class="note-letter">F</div>
+        <div class="note-solfege">Fa</div>
+        <div class="note-desc">Left of 3 black keys.</div>
+      </div>
+      <div class="note-card">
+        <div class="note-letter">G</div>
+        <div class="note-solfege">Sol</div>
+        <div class="note-desc">Between 1st & 2nd of the 3.</div>
+      </div>
+      <div class="note-card">
+        <div class="note-letter">A</div>
+        <div class="note-solfege">La</div>
+        <div class="note-desc">Between 2nd & 3rd of the 3.</div>
+      </div>
+      <div class="note-card">
+        <div class="note-letter">B</div>
+        <div class="note-solfege">Ti</div>
+        <div class="note-desc">Right of 3 black keys.</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px;">
+      <p>The black keys are named after their neighbors. <span class="highlight">C♯ = D♭</span> (same key, two names). Context (the key signature of a piece) determines which name you use. Sharps go up (♯), flats go down (♭). There is <span class="highlight">no black key between E and F, or between B and C</span> — these are natural half steps, and they're essential to understand.</p>
+    </div>
+  </div>
+
+  <!-- 03: FINGER NUMBERING -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2 class="section-title">Finger Numbering</h2>
+      <div class="section-rule"></div>
+    </div>
+
+    <div class="hands-grid">
+      <div class="hand-card">
+        <div class="hand-title">Left Hand (LH)</div>
+        <svg class="hand-svg" viewBox="0 0 180 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Palm -->
+          <ellipse cx="90" cy="170" rx="58" ry="48" fill="rgba(245,240,232,0.08)" stroke="rgba(200,146,42,0.3)" stroke-width="1.5"/>
+          <!-- Thumb (5) -->
+          <ellipse class="finger-tip" cx="148" cy="158" rx="16" ry="11" fill="rgba(200,146,42,0.5)" stroke="rgba(200,146,42,0.8)" stroke-width="1.5" transform="rotate(-30 148 158)"/>
+          <text class="finger-num" x="143" y="162" font-size="12" fill="#1a1410">5</text>
+          <!-- Index (4) -->
+          <rect class="finger-tip" x="108" y="90" width="22" height="65" rx="11" fill="rgba(245,240,232,0.08)" stroke="rgba(200,146,42,0.4)" stroke-width="1.5"/>
+          <text class="finger-num" x="114" y="125" font-size="12">4</text>
+          <!-- Middle (3) -->
+          <rect class="finger-tip" x="84" y="76" width="22" height="79" rx="11" fill="rgba(245,240,232,0.08)" stroke="rgba(200,146,42,0.4)" stroke-width="1.5"/>
+          <text class="finger-num" x="90" y="118" font-size="12">3</text>
+          <!-- Ring (2) -->
+          <rect class="finger-tip" x="60" y="82" width="22" height="74" rx="11" fill="rgba(245,240,232,0.08)" stroke="rgba(200,146,42,0.4)" stroke-width="1.5"/>
+          <text class="finger-num" x="66" y="122" font-size="12">2</text>
+          <!-- Pinky (1) -->
+          <rect class="finger-tip" x="36" y="98" width="20" height="60" rx="10" fill="rgba(200,146,42,0.2)" stroke="rgba(200,146,42,0.6)" stroke-width="1.5"/>
+          <text class="finger-num" x="42" y="130" font-size="12">1</text>
+          <!-- Labels -->
+          <text x="90" y="210" text-anchor="middle" font-family="DM Mono" font-size="10" fill="rgba(245,240,232,0.3)">Pinky=1 · Thumb=5</text>
+        </svg>
+      </div>
+      <div class="hand-card">
+        <div class="hand-title">Right Hand (RH)</div>
+        <svg class="hand-svg" viewBox="0 0 180 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="90" cy="170" rx="58" ry="48" fill="rgba(245,240,232,0.08)" stroke="rgba(200,146,42,0.3)" stroke-width="1.5"/>
+          <!-- Thumb (1) -->
+          <ellipse class="finger-tip" cx="32" cy="158" rx="16" ry="11" fill="rgba(200,146,42,0.5)" stroke="rgba(200,146,42,0.8)" stroke-width="1.5" transform="rotate(30 32 158)"/>
+          <text class="finger-num" x="27" y="162" font-size="12" fill="#1a1410">1</text>
+          <!-- Index (2) -->
+          <rect class="finger-tip" x="50" y="90" width="22" height="65" rx="11" fill="rgba(245,240,232,0.08)" stroke="rgba(200,146,42,0.4)" stroke-width="1.5"/>
+          <text class="finger-num" x="56" y="125" font-size="12">2</text>
+          <!-- Middle (3) -->
+          <rect class="finger-tip" x="74" y="76" width="22" height="79" rx="11" fill="rgba(245,240,232,0.08)" stroke="rgba(200,146,42,0.4)" stroke-width="1.5"/>
+          <text class="finger-num" x="80" y="118" font-size="12">3</text>
+          <!-- Ring (4) -->
+          <rect class="finger-tip" x="98" y="82" width="22" height="74" rx="11" fill="rgba(245,240,232,0.08)" stroke="rgba(200,146,42,0.4)" stroke-width="1.5"/>
+          <text class="finger-num" x="104" y="122" font-size="12">4</text>
+          <!-- Pinky (5) -->
+          <rect class="finger-tip" x="124" y="98" width="20" height="60" rx="10" fill="rgba(200,146,42,0.2)" stroke="rgba(200,146,42,0.6)" stroke-width="1.5"/>
+          <text class="finger-num" x="130" y="130" font-size="12">5</text>
+          <text x="90" y="210" text-anchor="middle" font-family="DM Mono" font-size="10" fill="rgba(245,240,232,0.3)">Thumb=1 · Pinky=5</text>
+        </svg>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:20px;">
+      <p>For the <span class="highlight">Right Hand</span>: Thumb = 1, Index = 2, Middle = 3, Ring = 4, Pinky = 5. For the <span class="highlight">Left Hand</span>: the thumbs are still 1 — but since the hands mirror each other on the keys, the pinky on your left is finger 5 and sits on the left side. Sheet music uses these numbers (called <em>fingering</em>) to tell you which fingers to use. Correct fingering = efficient motion = speed.</p>
+    </div>
+  </div>
+
+  <!-- 04: POSTURE & HAND POSITION -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <h2 class="section-title">Posture &amp; Hand Position</h2>
+      <div class="section-rule"></div>
+    </div>
+
+    <div class="posture-grid">
+      <div class="posture-item">
+        <div class="posture-icon">🪑</div>
+        <div>
+          <div class="posture-label">Seat Height</div>
+          <div class="posture-text">Sit so your elbows are at or slightly above key level. Feet flat on the floor. Don't hunch — the power comes from relaxed arms, not hunching.</div>
+        </div>
+      </div>
+      <div class="posture-item">
+        <div class="posture-icon">🤲</div>
+        <div>
+          <div class="posture-label">Hand Shape</div>
+          <div class="posture-text">Imagine holding a small orange. Your knuckles should be the highest point, fingers gently curved, wrists floating level — not collapsed or arched.</div>
+        </div>
+      </div>
+      <div class="posture-item">
+        <div class="posture-icon">💪</div>
+        <div>
+          <div class="posture-label">Arm Weight</div>
+          <div class="posture-text">Don't press with tension — drop the weight of your arm into the key. The key resists; gravity does the work. Tension is the enemy of speed.</div>
+        </div>
+      </div>
+      <div class="posture-item">
+        <div class="posture-icon">👆</div>
+        <div>
+          <div class="posture-label">Fingertips</div>
+          <div class="posture-text">Play on the fleshy pads of your fingertips, not the nails. Shorter nails help — they force you into the correct position naturally.</div>
+        </div>
+      </div>
+      <div class="posture-item">
+        <div class="posture-icon">🔄</div>
+        <div>
+          <div class="posture-label">Wrist Motion</div>
+          <div class="posture-text">The wrist acts as a shock absorber. It can rotate and flex slightly — but it should never become a pivot point or lock up.</div>
+        </div>
+      </div>
+      <div class="posture-item">
+        <div class="posture-icon">👁️</div>
+        <div>
+          <div class="posture-label">Eyes Off Keys</div>
+          <div class="posture-text">Train yourself to feel the geography of the keys without looking. Start slow. Muscle memory of key spacing is what allows you to play intuitively.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 05: THE MAJOR SCALE -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <h2 class="section-title">Scales &amp; The Major Scale Formula</h2>
+      <div class="section-rule"></div>
+    </div>
+
+    <div class="scale-diagram">
+      <div class="scale-title">C Major Scale</div>
+      <div class="scale-sub">W · W · H · W · W · W · H &nbsp;(W = Whole Step / H = Half Step)</div>
+      <div class="scale-steps" id="c-major-scale"></div>
+    </div>
+
+    <div class="scale-diagram">
+      <div class="scale-title">G Major Scale</div>
+      <div class="scale-sub">Same formula — one sharp (F♯)</div>
+      <div class="scale-steps" id="g-major-scale"></div>
+    </div>
+
+    <div class="scale-diagram">
+      <div class="scale-title">F Major Scale</div>
+      <div class="scale-sub">Same formula — one flat (B♭)</div>
+      <div class="scale-steps" id="f-major-scale"></div>
+    </div>
+
+    <div class="card">
+      <p>Every major scale uses the same interval formula: <span class="highlight">W-W-H-W-W-W-H</span>. A whole step (W) skips one key; a half step (H) is the very next key. Learn C major on white keys first — then apply the formula starting from any note to find that major scale. The pattern is always the same; only the starting pitch changes.</p>
+      <br>
+      <p><span class="highlight">Right hand fingering for C major:</span> 1-2-3 (thumb under) 1-2-3-4-5 going up. Left hand: 5-4-3-2-1 (finger over) 3-2-1 going up.</p>
+    </div>
+  </div>
+
+  <!-- 06: BASIC CHORDS -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">06</span>
+      <h2 class="section-title">Basic Chords</h2>
+      <div class="section-rule"></div>
+    </div>
+
+    <div class="chords-grid" id="chords-grid"></div>
+
+    <div class="card" style="margin-top:20px;">
+      <p>A <span class="highlight">triad</span> (3-note chord) is built by stacking thirds: take a root note, skip one, take the next, skip one, take the next. <span class="highlight">Major triads</span> sound bright: root + 4 half steps + 3 half steps. <span class="highlight">Minor triads</span> sound darker: root + 3 half steps + 4 half steps. Learn to build and play these from any note — this is the bedrock of chord-based intuitive playing.</p>
+    </div>
+  </div>
+
+  <!-- 07: INTERVALS -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">07</span>
+      <h2 class="section-title">Key Intervals to Internalize</h2>
+      <div class="section-rule"></div>
+    </div>
+
+    <div class="card" style="padding:0; overflow:hidden;">
+      <table class="interval-table">
+        <thead>
+          <tr>
+            <th>Interval</th>
+            <th>Half Steps</th>
+            <th>Sound / Use</th>
+            <th>Example</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="interval-name">Unison</span></td>
+            <td>0</td>
+            <td>Same note, same pitch</td>
+            <td>C → C</td>
+          </tr>
+          <tr>
+            <td><span class="interval-name">Minor 2nd</span></td>
+            <td>1</td>
+            <td>Tense, dissonant. Half step.</td>
+            <td>C → C♯</td>
+          </tr>
+          <tr>
+            <td><span class="interval-name">Major 2nd</span></td>
+            <td>2</td>
+            <td>Stepwise motion. Melodic.</td>
+            <td>C → D</td>
+          </tr>
+          <tr>
+            <td><span class="interval-name">Minor 3rd</span></td>
+            <td>3</td>
+            <td>Minor chord quality. Melancholy.</td>
+            <td>C → E♭</td>
+          </tr>
+          <tr>
+            <td><span class="interval-name">Major 3rd</span></td>
+            <td>4</td>
+            <td>Major chord quality. Bright.</td>
+            <td>C → E</td>
+          </tr>
+          <tr>
+            <td><span class="interval-name">Perfect 4th</span></td>
+            <td>5</td>
+            <td>Open, suspended sound.</td>
+            <td>C → F</td>
+          </tr>
+          <tr>
+            <td><span class="interval-name">Tritone</span></td>
+            <td>6</td>
+            <td>Unstable, dramatic. Blues / jazz.</td>
+            <td>C → F♯</td>
+          </tr>
+          <tr>
+            <td><span class="interval-name">Perfect 5th</span></td>
+            <td>7</td>
+            <td>Powerful, stable. Power chords.</td>
+            <td>C → G</td>
+          </tr>
+          <tr>
+            <td><span class="interval-name">Minor 6th</span></td>
+            <td>8</td>
+            <td>Tender, romantic.</td>
+            <td>C → A♭</td>
+          </tr>
+          <tr>
+            <td><span class="interval-name">Major 6th</span></td>
+            <td>9</td>
+            <td>Bright, hopeful. Common in melody.</td>
+            <td>C → A</td>
+          </tr>
+          <tr>
+            <td><span class="interval-name">Minor 7th</span></td>
+            <td>10</td>
+            <td>Bluesy, jazzy. Dominant 7th chords.</td>
+            <td>C → B♭</td>
+          </tr>
+          <tr>
+            <td><span class="interval-name">Major 7th</span></td>
+            <td>11</td>
+            <td>Lush, yearning. Jazz harmony.</td>
+            <td>C → B</td>
+          </tr>
+          <tr>
+            <td><span class="interval-name">Octave</span></td>
+            <td>12</td>
+            <td>Same note, higher pitch. Resolution.</td>
+            <td>C → C (high)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 08: RHYTHM BASICS -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">08</span>
+      <h2 class="section-title">Rhythm &amp; Note Values</h2>
+      <div class="section-rule"></div>
+    </div>
+
+    <div class="card">
+      <div class="rhythm-row">
+        <div class="rhythm-symbol" style="font-size:28px; color:var(--ivory);">𝅝</div>
+        <div class="rhythm-name">Whole Note</div>
+        <div class="rhythm-beats">
+          <div class="beat-dot filled"></div>
+          <div class="beat-dot"></div>
+          <div class="beat-dot"></div>
+          <div class="beat-dot"></div>
+        </div>
+        <div style="font-family:'DM Mono',monospace; font-size:11px; color:rgba(200,146,42,0.7); flex-shrink:0;">4 beats</div>
+      </div>
+      <div class="rhythm-row">
+        <div class="rhythm-symbol" style="font-size:28px; color:var(--ivory);">𝅗𝅥</div>
+        <div class="rhythm-name">Half Note</div>
+        <div class="rhythm-beats">
+          <div class="beat-dot filled"></div>
+          <div class="beat-dot"></div>
+          <div class="beat-dot" style="border-color:transparent;"></div>
+          <div class="beat-dot" style="border-color:transparent;"></div>
+        </div>
+        <div style="font-family:'DM Mono',monospace; font-size:11px; color:rgba(200,146,42,0.7); flex-shrink:0;">2 beats</div>
+      </div>
+      <div class="rhythm-row">
+        <div class="rhythm-symbol" style="font-size:28px; color:var(--ivory);">♩</div>
+        <div class="rhythm-name">Quarter Note</div>
+        <div class="rhythm-beats">
+          <div class="beat-dot filled"></div>
+          <div class="beat-dot" style="border-color:transparent;"></div>
+          <div class="beat-dot" style="border-color:transparent;"></div>
+          <div class="beat-dot" style="border-color:transparent;"></div>
+        </div>
+        <div style="font-family:'DM Mono',monospace; font-size:11px; color:rgba(200,146,42,0.7); flex-shrink:0;">1 beat</div>
+      </div>
+      <div class="rhythm-row">
+        <div class="rhythm-symbol" style="font-size:28px; color:var(--ivory);">♪</div>
+        <div class="rhythm-name">Eighth Note</div>
+        <div class="rhythm-beats">
+          <div class="beat-dot filled" style="width:12px;height:12px;"></div>
+          <div class="beat-dot" style="border-color:transparent;"></div>
+          <div class="beat-dot" style="border-color:transparent;"></div>
+          <div class="beat-dot" style="border-color:transparent;"></div>
+        </div>
+        <div style="font-family:'DM Mono',monospace; font-size:11px; color:rgba(200,146,42,0.7); flex-shrink:0;">½ beat</div>
+      </div>
+      <div class="rhythm-row">
+        <div class="rhythm-symbol" style="font-size:22px; color:var(--ivory);">𝅘𝅥𝅯</div>
+        <div class="rhythm-name">Sixteenth Note</div>
+        <div class="rhythm-beats">
+          <div class="beat-dot filled" style="width:9px;height:9px;"></div>
+          <div class="beat-dot" style="border-color:transparent;"></div>
+          <div class="beat-dot" style="border-color:transparent;"></div>
+          <div class="beat-dot" style="border-color:transparent;"></div>
+        </div>
+        <div style="font-family:'DM Mono',monospace; font-size:11px; color:rgba(200,146,42,0.7); flex-shrink:0;">¼ beat</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px;">
+      <p>In <span class="highlight">4/4 time</span> (the most common), there are 4 beats per measure and a quarter note gets 1 beat. Use a metronome every single practice session — internal rhythm is a skill, and it's built through repetition with a steady pulse. Start slower than feels comfortable. <span class="highlight">Slow and accurate beats fast and messy every time.</span></p>
+    </div>
+  </div>
+
+  <!-- 09: PRACTICE ROADMAP -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">09</span>
+      <h2 class="section-title">Your Practice Roadmap</h2>
+      <div class="section-rule"></div>
+    </div>
+
+    <div class="roadmap">
+      <div class="roadmap-item">
+        <div class="roadmap-phase">Phase 01</div>
+        <div class="roadmap-title">Orientation &amp; Posture</div>
+        <ul class="roadmap-items">
+          <li>Learn where every white key is by feel, without looking</li>
+          <li>Practice the correct hand shape (curved fingers, floating wrist)</li>
+          <li>Play each finger independently: 1-2-3-4-5 slowly on white keys</li>
+          <li>5-finger position: place RH thumb on C, play C-D-E-F-G and back</li>
+        </ul>
+        <span class="roadmap-time">Weeks 1–2</span>
+      </div>
+
+      <div class="roadmap-item">
+        <div class="roadmap-phase">Phase 02</div>
+        <div class="roadmap-title">Notes, Scales &amp; Simple Melodies</div>
+        <ul class="roadmap-items">
+          <li>Memorize note names on all white keys across 2 octaves</li>
+          <li>Learn C major scale with proper fingering, both hands separately</li>
+          <li>Play simple melodies (Ode to Joy, Mary Had a Little Lamb) by ear</li>
+          <li>Begin using a metronome at 60 BPM</li>
+          <li>Introduce G major and F major scales</li>
+        </ul>
+        <span class="roadmap-time">Weeks 3–6</span>
+      </div>
+
+      <div class="roadmap-item">
+        <div class="roadmap-phase">Phase 03</div>
+        <div class="roadmap-title">Chords &amp; Both Hands</div>
+        <ul class="roadmap-items">
+          <li>Learn C, G, Am, F chords (the "four-chord song" foundation)</li>
+          <li>Practice hands separately first, then together slowly</li>
+          <li>Simple LH pattern: bass note + chord (Alberti bass or broken chord)</li>
+          <li>Play chord progressions with a metronome</li>
+          <li>Learn chord inversions for smooth voice leading</li>
+        </ul>
+        <span class="roadmap-time">Weeks 7–12</span>
+      </div>
+
+      <div class="roadmap-item">
+        <div class="roadmap-phase">Phase 04</div>
+        <div class="roadmap-title">Reading Music &amp; Repertoire</div>
+        <ul class="roadmap-items">
+          <li>Learn treble and bass clef note reading (use mnemonics)</li>
+          <li>Pick one beginner piece you love and learn it measure by measure</li>
+          <li>Practice sight-reading easy pieces daily (even 5 minutes counts)</li>
+          <li>Explore dynamics: piano (soft), forte (loud), crescendo</li>
+        </ul>
+        <span class="roadmap-time">Months 3–5</span>
+      </div>
+
+      <div class="roadmap-item">
+        <div class="roadmap-phase">Phase 05</div>
+        <div class="roadmap-title">Toward Intuitive Playing</div>
+        <ul class="roadmap-items">
+          <li>Learn the 12 major scales and their relative minors</li>
+          <li>Practice chord progressions in all 12 keys</li>
+          <li>Improvise over a single chord — just explore sound</li>
+          <li>Learn the pentatonic scale (5 notes = forgiving improv tool)</li>
+          <li>Transcribe simple melodies by ear — this builds your inner ear</li>
+          <li>Study songs you love: what chords? What patterns?</li>
+        </ul>
+        <span class="roadmap-time">Months 6–12+</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10: PRACTICE TIPS -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">10</span>
+      <h2 class="section-title">Principles for Effective Practice</h2>
+      <div class="section-rule"></div>
+    </div>
+
+    <div class="tips-grid">
+      <div class="tip-card">
+        <div class="tip-num">01</div>
+        <div class="tip-title">Slow Is Fast</div>
+        <div class="tip-body">Always learn something new at a tempo where you make zero mistakes. Your hands learn what you repeat — including errors. Slow perfect > fast sloppy.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-num">02</div>
+        <div class="tip-title">Isolate Trouble Spots</div>
+        <div class="tip-body">Don't run through an entire piece. Find the measure that trips you up and loop just that. 10x on the hard part beats 1x on the whole thing.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-num">03</div>
+        <div class="tip-title">Hands Separately First</div>
+        <div class="tip-body">Always learn the right hand, then the left hand, then put them together. Skipping to both-hands too quickly builds bad habits.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-num">04</div>
+        <div class="tip-title">Daily Over Long Sessions</div>
+        <div class="tip-body">20 minutes every day beats 3 hours once a week. Motor memory is built through consistent repetition over time, not marathon sessions.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-num">05</div>
+        <div class="tip-title">Listen Actively</div>
+        <div class="tip-body">Listen to music with intention — identify chords, note how tension resolves, notice rhythmic patterns. Your ear teaches your hands.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-num">06</div>
+        <div class="tip-title">End with Joy</div>
+        <div class="tip-body">Always end your practice session with something you can already play well. This reinforces confidence and keeps your relationship with the instrument positive.</div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="header-rule" style="margin-bottom:16px;">
+      <span style="width:40px;height:1px;background:rgba(200,146,42,0.3);display:block;"></span>
+      <div class="dot" style="width:4px;height:4px;background:rgba(200,146,42,0.3);border-radius:50%;"></div>
+      <span style="width:40px;height:1px;background:rgba(200,146,42,0.3);display:block;"></span>
+    </div>
+    <p>THE KEYBOARD INTUITION GUIDE &nbsp;·&nbsp; A PERSONAL REFERENCE &nbsp;·&nbsp; KEEP. PRACTICE. TRUST THE PROCESS.</p>
+  </footer>
+
+</div>
+
+<script>
+// ── BUILD KEYBOARD ──
+(function() {
+  const keyboard = document.getElementById('keyboard');
+  
+  // Two octave pattern
+  const octaves = [3, 4];
+  const noteNames = ['C','D','E','F','G','A','B'];
+  const whiteKeysPerOctave = 7;
+  
+  // We'll build 2 full octaves + C5
+  let html = '';
+  let whiteCount = 0;
+  const totalWhites = 15; // 7+7+1
+  
+  // Compute black key positions after rendering
+  const whiteKeys = [];
+  const blackKeyDefs = [
+    // Relative to start of octave (in white-key units)
+    { name:'C♯', pos: 0.7 },
+    { name:'D♯', pos: 1.7 },
+    { name:'F♯', pos: 3.7 },
+    { name:'G♯', pos: 4.7 },
+    { name:'A♯', pos: 5.7 },
+  ];
+  
+  const whiteKeyNotes = [];
+  for (let oct = 3; oct <= 5; oct++) {
+    const notes = oct < 5 ? ['C','D','E','F','G','A','B'] : ['C'];
+    notes.forEach(n => whiteKeyNotes.push({ note: n, oct }));
+  }
+  
+  const keyboardEl = keyboard;
+  keyboardEl.style.position = 'relative';
+  
+  // White keys
+  whiteKeyNotes.forEach((k, i) => {
+    const div = document.createElement('div');
+    div.className = 'white-key' + (k.note === 'C' ? ' c-key' : '');
+    div.innerHTML = `<span class="key-label">${k.note}${k.oct}</span>`;
+    if (k.note === 'C') {
+      const lbl = document.createElement('span');
+      lbl.className = 'octave-label';
+      lbl.textContent = `Oct ${k.oct}`;
+      div.appendChild(lbl);
+    }
+    div.addEventListener('mousedown', () => { div.classList.add('pressed'); playNote(k.note, k.oct); });
+    div.addEventListener('mouseup', () => div.classList.remove('pressed'));
+    div.addEventListener('mouseleave', () => div.classList.remove('pressed'));
+    keyboardEl.appendChild(div);
+  });
+  
+  // Black keys overlay
+  const blackLayer = document.createElement('div');
+  blackLayer.className = 'black-keys-layer';
+  keyboardEl.appendChild(blackLayer);
+  
+  // We need to position black keys relative to white keys
+  // After layout, use requestAnimationFrame
+  requestAnimationFrame(() => {
+    const whites = keyboardEl.querySelectorAll('.white-key');
+    const containerW = keyboardEl.offsetWidth;
+    const keyW = whites[0] ? whites[0].offsetWidth : containerW / totalWhites;
+    
+    // For each octave (3 and 4), add black keys
+    // White key index offsets: Oct3 starts at 0, Oct4 at 7, Oct5 (just C) at 14
+    [0, 7].forEach(octOffset => {
+      blackKeyDefs.forEach(bk => {
+        const wIdx = octOffset + Math.floor(bk.pos);
+        const wEl = whites[wIdx];
+        if (!wEl) return;
+        const wLeft = wEl.offsetLeft;
+        const bLeft = wLeft + keyW * (bk.pos - Math.floor(bk.pos)) + keyW * 0.5 - (keyW * 0.85 * 0.5);
+        
+        const bDiv = document.createElement('div');
+        bDiv.className = 'black-key';
+        bDiv.style.left = bLeft + 'px';
+        bDiv.style.width = (keyW * 0.68) + 'px';
+        bDiv.innerHTML = `<span class="key-label">${bk.name}</span>`;
+        bDiv.addEventListener('mousedown', (e) => {
+          e.stopPropagation();
+          bDiv.classList.add('pressed');
+        });
+        bDiv.addEventListener('mouseup', () => bDiv.classList.remove('pressed'));
+        bDiv.addEventListener('mouseleave', () => bDiv.classList.remove('pressed'));
+        blackLayer.appendChild(bDiv);
+      });
+    });
+  });
+  
+  function playNote(note, oct) {
+    // Visual feedback only (no audio API required)
+  }
+})();
+
+// ── BUILD C MAJOR SCALE ──
+function buildScale(containerId, notes, fingers) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  notes.forEach((note, i) => {
+    if (i > 0) {
+      const interval = document.createElement('div');
+      interval.className = 'scale-interval';
+      const isHalf = (i === 3 || i === 7);
+      interval.innerHTML = `
+        <div class="interval-line"></div>
+        <div class="interval-label">${isHalf ? 'H' : 'W'}</div>
+      `;
+      container.appendChild(interval);
+    }
+    const noteEl = document.createElement('div');
+    noteEl.className = 'scale-note';
+    const isRoot = i === 0 || i === 7;
+    const isFifth = i === 4;
+    noteEl.innerHTML = `
+      <div class="scale-note-name ${isRoot ? 'root' : isFifth ? 'fifth' : ''}">${note}</div>
+      <div class="scale-note-finger">${fingers[i]}</div>
+    `;
+    container.appendChild(noteEl);
+  });
+}
+
+buildScale('c-major-scale', ['C','D','E','F','G','A','B','C'], ['1','2','3','1','2','3','4','5']);
+buildScale('g-major-scale', ['G','A','B','C','D','E','F♯','G'], ['1','2','3','1','2','3','4','5']);
+buildScale('f-major-scale', ['F','G','A','B♭','C','D','E','F'], ['1','2','3','4','1','2','3','4']);
+
+// ── BUILD CHORDS ──
+(function() {
+  const chordsGrid = document.getElementById('chords-grid');
+  
+  const chords = [
+    { name: 'C Major', type: 'Major Triad', notes: ['C','E','G'], formula: 'R + <span>4</span>st + <span>3</span>st', types: ['white','white','white'] },
+    { name: 'G Major', type: 'Major Triad', notes: ['G','B','D'], formula: 'R + <span>4</span>st + <span>3</span>st', types: ['white','white','white'] },
+    { name: 'A Minor', type: 'Minor Triad', notes: ['A','C','E'], formula: 'R + <span>3</span>st + <span>4</span>st', types: ['white','white','white'] },
+    { name: 'F Major', type: 'Major Triad', notes: ['F','A','C'], formula: 'R + <span>4</span>st + <span>3</span>st', types: ['white','white','white'] },
+    { name: 'D Minor', type: 'Minor Triad', notes: ['D','F','A'], formula: 'R + <span>3</span>st + <span>4</span>st', types: ['white','white','white'] },
+    { name: 'E Minor', type: 'Minor Triad', notes: ['E','G','B'], formula: 'R + <span>3</span>st + <span>4</span>st', types: ['white','white','white'] },
+    { name: 'C7', type: 'Dominant 7th', notes: ['C','E','G','B♭'], formula: 'Maj + <span>♭7</span>', types: ['white','white','white','black'] },
+    { name: 'Am7', type: 'Minor 7th', notes: ['A','C','E','G'], formula: 'Min + <span>♭7</span>', types: ['white','white','white','white'] },
+  ];
+  
+  chords.forEach(chord => {
+    const card = document.createElement('div');
+    card.className = 'chord-card';
+    
+    const keysHtml = chord.notes.map((n, i) => 
+      `<div class="chord-key ${chord.types[i]} active-chord">${n}</div>`
+    ).join('');
+    
+    card.innerHTML = `
+      <div class="chord-name">${chord.name}</div>
+      <div class="chord-type">${chord.type}</div>
+      <div class="chord-keys">${keysHtml}</div>
+      <div class="chord-formula">${chord.formula}</div>
+    `;
+    chordsGrid.appendChild(card);
+  });
+})();
+</script>
+</body>
+</html>

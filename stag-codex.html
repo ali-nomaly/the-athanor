@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAGI // STAG CODEX — MASCULINE MATURATION PROTOCOL</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --void:#050608;
+  --panel:#080b0f;
+  --border:#1a2430;
+  --border-bright:#2a3d52;
+  --acid:#C7FF43;
+  --acid-dim:rgba(199,255,67,0.15);
+  --acid-glow:rgba(199,255,67,0.06);
+  --orange:#FF6B1A;
+  --orange-dim:rgba(255,107,26,0.12);
+  --red:#FF2D2D;
+  --red-dim:rgba(255,45,45,0.08);
+  --cyan:#00CFCF;
+  --cyan-dim:rgba(0,207,207,0.08);
+  --text-primary:#c8d8e8;
+  --text-secondary:#5a7a96;
+  --text-muted:#2d4458;
+  --scan:rgba(0,0,0,0.35);
+}
+
+html{scroll-behavior:smooth}
+
+body{
+  background:var(--void);
+  color:var(--text-primary);
+  font-family:'IBM Plex Mono',monospace;
+  font-size:13px;
+  line-height:1.7;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* SCANLINE OVERLAY */
+body::before{
+  content:'';
+  position:fixed;
+  top:0;left:0;right:0;bottom:0;
+  background:repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    var(--scan) 2px,
+    var(--scan) 3px
+  );
+  pointer-events:none;
+  z-index:9999;
+  opacity:0.25;
+}
+
+/* NOISE TEXTURE */
+body::after{
+  content:'';
+  position:fixed;
+  top:0;left:0;right:0;bottom:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none;
+  z-index:9998;
+  opacity:0.4;
+}
+
+.container{
+  max-width:860px;
+  margin:0 auto;
+  padding:0 24px 80px;
+  position:relative;
+  z-index:1;
+}
+
+/* ===== HEADER ===== */
+.sys-header{
+  border-bottom:1px solid var(--border);
+  padding:28px 0 20px;
+  margin-bottom:48px;
+  position:relative;
+}
+.sys-header::before{
+  content:'';
+  position:absolute;
+  bottom:-1px;left:0;
+  width:220px;height:1px;
+  background:var(--acid);
+}
+
+.magi-label{
+  font-family:'Orbitron',sans-serif;
+  font-size:9px;
+  font-weight:400;
+  letter-spacing:0.25em;
+  color:var(--text-muted);
+  text-transform:uppercase;
+  margin-bottom:10px;
+}
+
+.main-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(18px,3vw,28px);
+  font-weight:900;
+  letter-spacing:0.05em;
+  color:#fff;
+  text-transform:uppercase;
+  line-height:1.2;
+}
+.main-title span{color:var(--acid)}
+
+.subtitle{
+  font-family:'DM Mono',monospace;
+  font-size:11px;
+  color:var(--text-secondary);
+  letter-spacing:0.1em;
+  margin-top:10px;
+  text-transform:uppercase;
+}
+
+.header-meta{
+  display:flex;
+  gap:24px;
+  margin-top:18px;
+  flex-wrap:wrap;
+}
+.meta-item{
+  font-size:10px;
+  color:var(--text-muted);
+  letter-spacing:0.15em;
+  text-transform:uppercase;
+}
+.meta-item b{color:var(--acid);font-weight:400}
+
+/* ===== CORNER BRACKETS ===== */
+.bracketed{
+  position:relative;
+  padding:20px 20px 20px 20px;
+}
+.bracketed::before,
+.bracketed::after,
+.bracketed .br-bl::before,
+.bracketed .br-tr::before{
+  content:'';
+  position:absolute;
+  width:14px;height:14px;
+  border-color:var(--border-bright);
+  border-style:solid;
+}
+.bracketed::before{top:0;left:0;border-width:1px 0 0 1px}
+.bracketed::after{bottom:0;right:0;border-width:0 1px 1px 0}
+.bracketed .br-bl::before{content:'';position:absolute;bottom:0;left:0;width:14px;height:14px;border:solid var(--border-bright);border-width:0 0 1px 1px}
+.bracketed .br-tr::before{content:'';position:absolute;top:0;right:0;width:14px;height:14px;border:solid var(--border-bright);border-width:1px 1px 0 0}
+
+/* ===== PHASE CARDS ===== */
+.phase-card{
+  margin-bottom:56px;
+  opacity:0;
+  transform:translateY(24px);
+  transition:opacity 0.7s ease, transform 0.7s ease;
+}
+.phase-card.visible{opacity:1;transform:translateY(0)}
+
+.phase-header{
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  align-items:center;
+  gap:16px;
+  margin-bottom:20px;
+}
+
+.phase-number{
+  font-family:'Orbitron',sans-serif;
+  font-size:40px;
+  font-weight:900;
+  color:var(--text-muted);
+  line-height:1;
+  letter-spacing:-0.02em;
+  min-width:48px;
+}
+
+.phase-title-group{}
+.phase-code{
+  font-size:9px;
+  letter-spacing:0.3em;
+  color:var(--text-muted);
+  text-transform:uppercase;
+  margin-bottom:4px;
+}
+.phase-name{
+  font-family:'Orbitron',sans-serif;
+  font-size:clamp(14px,2.5vw,20px);
+  font-weight:700;
+  color:#fff;
+  text-transform:uppercase;
+  letter-spacing:0.08em;
+}
+.phase-name .accent{color:var(--acid)}
+
+.phase-age{
+  font-family:'DM Mono',monospace;
+  font-size:10px;
+  color:var(--text-secondary);
+  text-align:right;
+  white-space:nowrap;
+  letter-spacing:0.1em;
+}
+
+.phase-divider{
+  height:1px;
+  background:linear-gradient(90deg, var(--border-bright) 0%, var(--border) 60%, transparent 100%);
+  margin-bottom:24px;
+  position:relative;
+}
+.phase-divider::after{
+  content:'';
+  position:absolute;
+  left:0;top:-1px;
+  width:40px;height:3px;
+  background:var(--acid);
+}
+
+/* SPLIT LAYOUT */
+.phase-body{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+}
+@media(max-width:600px){.phase-body{grid-template-columns:1fr}}
+
+.panel{
+  background:var(--panel);
+  border:1px solid var(--border);
+  padding:18px 20px;
+  position:relative;
+}
+
+.panel-label{
+  font-size:8px;
+  letter-spacing:0.35em;
+  color:var(--text-muted);
+  text-transform:uppercase;
+  margin-bottom:12px;
+  padding-bottom:8px;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.panel-label::before{
+  content:'';
+  display:inline-block;
+  width:6px;height:6px;
+  border:1px solid currentColor;
+  transform:rotate(45deg);
+}
+
+.panel.stag .panel-label{color:var(--orange)}
+.panel.psych .panel-label{color:var(--acid)}
+.panel.stag{border-color:rgba(255,107,26,0.18)}
+.panel.psych{border-color:rgba(199,255,67,0.12)}
+.panel.stag::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--orange),transparent)}
+.panel.psych::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--acid),transparent)}
+
+.panel p{
+  font-size:12.5px;
+  line-height:1.75;
+  color:var(--text-primary);
+  font-family:'DM Mono',monospace;
+  font-weight:300;
+}
+
+.panel p + p{margin-top:10px}
+
+/* SYMBOL ROW */
+.symbol-row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-top:16px;
+  padding-top:14px;
+  border-top:1px solid var(--border);
+}
+.symbol-tag{
+  font-size:9px;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  padding:3px 8px;
+  border:1px solid;
+}
+.symbol-tag.jungian{border-color:rgba(199,255,67,0.3);color:var(--acid);background:var(--acid-glow)}
+.symbol-tag.adlerian{border-color:rgba(0,207,207,0.3);color:var(--cyan);background:var(--cyan-dim)}
+.symbol-tag.somatic{border-color:rgba(255,107,26,0.3);color:var(--orange);background:var(--orange-dim)}
+.symbol-tag.hermetic{border-color:rgba(255,45,45,0.25);color:var(--red);background:var(--red-dim)}
+
+/* ===== ANTLER SVG SECTION ===== */
+.antler-section{
+  margin:40px 0 56px;
+  padding:24px;
+  background:var(--panel);
+  border:1px solid var(--border);
+  position:relative;
+  overflow:hidden;
+}
+.antler-section::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--acid),transparent);
+}
+.antler-section::after{
+  content:'CYCLE COMPLETE';
+  position:absolute;
+  bottom:14px;right:20px;
+  font-family:'Orbitron',sans-serif;
+  font-size:8px;
+  letter-spacing:0.3em;
+  color:var(--text-muted);
+}
+
+.antler-label{
+  font-family:'Orbitron',sans-serif;
+  font-size:9px;
+  letter-spacing:0.3em;
+  color:var(--acid);
+  text-transform:uppercase;
+  margin-bottom:16px;
+}
+
+/* ===== TERMINAL BLOCK ===== */
+.terminal{
+  background:#020406;
+  border:1px solid var(--border);
+  border-left:3px solid var(--acid);
+  padding:20px 22px;
+  margin:48px 0;
+  position:relative;
+}
+.terminal::before{
+  content:'MAGI-03 // SYNTHESIS OUTPUT';
+  font-family:'Orbitron',sans-serif;
+  font-size:8px;
+  letter-spacing:0.3em;
+  color:var(--acid);
+  display:block;
+  margin-bottom:16px;
+  padding-bottom:10px;
+  border-bottom:1px solid var(--border);
+}
+.terminal p{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:12.5px;
+  line-height:1.85;
+  color:var(--text-primary);
+  font-style:italic;
+  font-weight:300;
+}
+.terminal p + p{margin-top:12px}
+.terminal em{color:var(--acid);font-style:normal}
+
+/* ===== CYCLE DIAGRAM ===== */
+.cycle-diagram{
+  margin:48px 0;
+}
+.cycle-label{
+  font-family:'Orbitron',sans-serif;
+  font-size:9px;
+  letter-spacing:0.3em;
+  color:var(--text-secondary);
+  margin-bottom:20px;
+  text-transform:uppercase;
+}
+
+/* ===== FOOTER ===== */
+.codex-footer{
+  border-top:1px solid var(--border);
+  padding-top:24px;
+  margin-top:60px;
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  flex-wrap:wrap;
+  gap:16px;
+}
+.footer-stamp{
+  font-family:'Orbitron',sans-serif;
+  font-size:8px;
+  letter-spacing:0.25em;
+  color:var(--text-muted);
+  text-transform:uppercase;
+  line-height:1.9;
+}
+.footer-stamp b{color:var(--acid);font-weight:400;display:block;font-size:12px;margin-bottom:4px}
+
+/* ===== ANIMATIONS ===== */
+@keyframes pulse-border{
+  0%,100%{opacity:0.5}
+  50%{opacity:1}
+}
+@keyframes scanline-drift{
+  0%{background-position:0 0}
+  100%{background-position:0 100%}
+}
+@keyframes flicker{
+  0%,100%{opacity:1}
+  92%{opacity:1}
+  93%{opacity:0.85}
+  94%{opacity:1}
+}
+body{animation:flicker 8s infinite}
+
+/* PROGRESS BAR */
+.anima-bar{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-top:10px;
+}
+.bar-label{font-size:9px;letter-spacing:0.2em;color:var(--text-muted);text-transform:uppercase;min-width:70px}
+.bar-track{
+  flex:1;height:4px;
+  background:var(--border);
+  position:relative;
+}
+.bar-fill{
+  height:100%;
+  transition:width 1.5s ease;
+}
+.bar-fill.acid{background:var(--acid)}
+.bar-fill.orange{background:var(--orange)}
+
+/* WARNING BAND */
+.warning-band{
+  background:repeating-linear-gradient(
+    45deg,
+    var(--orange-dim),
+    var(--orange-dim) 8px,
+    transparent 8px,
+    transparent 16px
+  );
+  border:1px solid rgba(255,107,26,0.25);
+  border-left:3px solid var(--orange);
+  padding:12px 16px;
+  margin:16px 0;
+  font-size:11px;
+  color:var(--orange);
+  font-family:'IBM Plex Mono',monospace;
+  letter-spacing:0.05em;
+}
+.warning-band::before{
+  content:'⚠ ';
+  font-size:11px;
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- SYSTEM HEADER -->
+  <div class="sys-header">
+    <div class="magi-label">MAGI SYSTEM // DEPTH CODEX — ATHANOR ARCHIVE</div>
+    <div class="main-title">STAG <span>PROTOCOL</span></div>
+    <div class="main-title" style="font-size:clamp(12px,2vw,16px);color:var(--text-secondary);margin-top:6px;font-weight:400;">MASCULINE MATURATION & INNER PSYCHIC DEVELOPMENT</div>
+    <div class="subtitle">Cervid Life Cycle × Jungian Integration × Anima/Animus Dialectic</div>
+    <div class="header-meta">
+      <div class="meta-item">UNIT: <b>STAG-01</b></div>
+      <div class="meta-item">CLASS: <b>DEPTH ANALYSIS</b></div>
+      <div class="meta-item">PHASES: <b>05</b></div>
+      <div class="meta-item">STATUS: <b style="color:var(--acid)">ACTIVE</b></div>
+    </div>
+  </div>
+
+  <!-- TERMINAL PREAMBLE -->
+  <div class="terminal">
+    <p>The male deer and the male human share a structural homology that precedes metaphor — not allegory imposed from outside, but a genuine parallel in developmental logic. Both organisms move through the same arc: <em>dissolution → differentiation → assertion → integration → depth</em>. The antler, grown in blood, hardened, used, and shed — is the central symbol. It encodes what the masculine cannot fake: the truth of interior state made legible in exterior form.</p>
+    <p>What follows is a five-phase codex tracing this parallel. Each phase maps the biological sequence onto the psychic maturation of the inner masculine and feminine — read through Jungian, Adlerian, and Hermetic frameworks.</p>
+  </div>
+
+  <!-- ===== PHASE 01 — FAWN ===== -->
+  <div class="phase-card bracketed">
+    <div class="br-bl"></div><div class="br-tr"></div>
+    <div class="phase-header">
+      <div class="phase-number">01</div>
+      <div class="phase-title-group">
+        <div class="phase-code">INITIALISATION // PRE-EGO STATE</div>
+        <div class="phase-name">THE <span class="accent">FAWN</span></div>
+      </div>
+      <div class="phase-age">0 – 6 MONTHS<br><span style="color:var(--text-muted);font-size:9px">HUMAN: 0–7 YEARS</span></div>
+    </div>
+    <div class="phase-divider"></div>
+
+    <div class="phase-body">
+      <div class="panel stag">
+        <div class="panel-label">BIOLOGICAL RECORD // CERVUS ELAPHUS</div>
+        <p>Born spotted — camouflage that functions as non-identity. The fawn has no scent strong enough to register as threat or territory. He is diffuse. His survival depends entirely on stillness and concealment within the mother's field.</p>
+        <p>No antlers. No rack to grow. The hormonal architecture that will eventually drive rut is latent, unactivated. The fawn cannot yet separate from the doe; her presence is the entire perimeter of his world.</p>
+        <div class="anima-bar" style="margin-top:14px">
+          <div class="bar-label">FEMININE</div>
+          <div class="bar-track"><div class="bar-fill acid" style="width:92%"></div></div>
+          <div style="font-size:9px;color:var(--acid)">DOMINANT</div>
+        </div>
+        <div class="anima-bar">
+          <div class="bar-label">MASCULINE</div>
+          <div class="bar-track"><div class="bar-fill orange" style="width:8%"></div></div>
+          <div style="font-size:9px;color:var(--text-muted)">LATENT</div>
+        </div>
+      </div>
+
+      <div class="panel psych">
+        <div class="panel-label">PSYCHIC PARALLEL // INNER DEVELOPMENT</div>
+        <p>This is pre-ego existence in the Jungian sense: the psyche undifferentiated from the uroboric matrix. The mother-world is not "dependency" — it is the necessary groundlessness from which form will eventually emerge.</p>
+        <p>The inner feminine is total here. Diffuse awareness, somatic absorption, relational permeability. The inner masculine is present as potential only — a seed within the undivided field. Premature masculine assertion at this phase is not strength but a developmental dysrhythmia.</p>
+        <div class="symbol-row">
+          <div class="symbol-tag jungian">UROBOROS</div>
+          <div class="symbol-tag somatic">PRE-VERBAL</div>
+          <div class="symbol-tag hermetic">PRIMA MATERIA</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PHASE 02 — YEARLING ===== -->
+  <div class="phase-card bracketed">
+    <div class="br-bl"></div><div class="br-tr"></div>
+    <div class="phase-header">
+      <div class="phase-number">02</div>
+      <div class="phase-title-group">
+        <div class="phase-code">DIFFERENTIATION // FIRST ANTLER EMERGENCE</div>
+        <div class="phase-name">THE <span class="accent">YEARLING</span></div>
+      </div>
+      <div class="phase-age">6 MO – 2 YRS<br><span style="color:var(--text-muted);font-size:9px">HUMAN: 8–16 YEARS</span></div>
+    </div>
+    <div class="phase-divider"></div>
+
+    <div class="phase-body">
+      <div class="panel stag">
+        <div class="panel-label">BIOLOGICAL RECORD // FIRST VELVET</div>
+        <p>Velvet spike nubs emerge — not yet antlers but the gesture toward them. Still covered in blood-rich skin. The yearling begins ranging beyond the doe's immediate orbit and enters loose bachelor groups: same-sex peer cohorts where hierarchy is tested without mortal consequence.</p>
+        <p>The first separation from the mother-field is not chosen — it is generated by the yearling's own growth. His increasing body mass and emerging hormonal surges make him too large, too disruptive to remain in fawn-position.</p>
+        <div class="anima-bar" style="margin-top:14px">
+          <div class="bar-label">FEMININE</div>
+          <div class="bar-track"><div class="bar-fill acid" style="width:65%"></div></div>
+          <div style="font-size:9px;color:var(--acid)">RECEDING</div>
+        </div>
+        <div class="anima-bar">
+          <div class="bar-label">MASCULINE</div>
+          <div class="bar-track"><div class="bar-fill orange" style="width:35%"></div></div>
+          <div style="font-size:9px;color:var(--orange)">EMERGING</div>
+        </div>
+      </div>
+
+      <div class="panel psych">
+        <div class="panel-label">PSYCHIC PARALLEL // SEPARATION WOUND</div>
+        <p>The yearling's separation initiates the wound that every masculine initiation rite encodes: the expulsion from the mother-field is not abandonment but the necessary rupture that permits individuation to begin. In many traditions this is deliberately ritualized. Where it isn't, it happens anyway — usually more destructively.</p>
+        <p>The bachelor group is the first experience of peer hierarchy. Identity begins forming through comparison, through testing, through the charged dynamics of same-sex proximity. The inner masculine begins to assert — but the capacity to hold that assertion hasn't yet arrived. Adolescent instability is this gap made behavioral.</p>
+        <div class="symbol-row">
+          <div class="symbol-tag jungian">HERO EMERGENCE</div>
+          <div class="symbol-tag adlerian">INFERIORITY ENCOUNTER</div>
+          <div class="symbol-tag hermetic">CALCINATION</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PHASE 03 — SUB-ADULT ===== -->
+  <div class="phase-card bracketed">
+    <div class="br-bl"></div><div class="br-tr"></div>
+    <div class="phase-header">
+      <div class="phase-number">03</div>
+      <div class="phase-title-group">
+        <div class="phase-code">CONFRONTATION // THE RUT HE CANNOT WIN</div>
+        <div class="phase-name">THE <span class="accent">SUB-ADULT</span></div>
+      </div>
+      <div class="phase-age">2 – 3 YRS<br><span style="color:var(--text-muted);font-size:9px">HUMAN: 17–28 YEARS</span></div>
+    </div>
+    <div class="phase-divider"></div>
+
+    <div class="warning-band">
+      CRITICAL PHASE — most developmental arrest occurs here. Premature assertion without interior resources.
+    </div>
+
+    <div class="phase-body">
+      <div class="panel stag">
+        <div class="panel-label">BIOLOGICAL RECORD // FAILED RUT ENTRY</div>
+        <p>Antlers branch but remain modest. The sub-adult enters rut — the annual mating competition — and loses. He is outcompeted by dominant stags with greater mass, larger racks, and more established territory. He attempts roaring displays, is challenged, and retreats.</p>
+        <p>This is not pathology. It is the organism learning through defeat the actual distance between desire and readiness. The rack he will eventually grow encodes the health of the years spent building toward it — including these years of necessary loss.</p>
+        <div class="anima-bar" style="margin-top:14px">
+          <div class="bar-label">FEMININE</div>
+          <div class="bar-track"><div class="bar-fill acid" style="width:40%"></div></div>
+          <div style="font-size:9px;color:var(--text-muted)">SUPPRESSED</div>
+        </div>
+        <div class="anima-bar">
+          <div class="bar-label">MASCULINE</div>
+          <div class="bar-track"><div class="bar-fill orange" style="width:70%"></div></div>
+          <div style="font-size:9px;color:var(--orange)">UNCONTAINED</div>
+        </div>
+      </div>
+
+      <div class="panel psych">
+        <div class="panel-label">PSYCHIC PARALLEL // DEFEAT AS INITIATION</div>
+        <p>The cultures that survive are the ones that build meaningful rites of passage at this juncture — ordeals, mentorship, initiation into craft and responsibility. The sub-adult male has full adult hormones and adult self-conception without interior resources sufficient to hold them. This gap is the most dangerous interval in male development.</p>
+        <p>The inner feminine functions here as psychological shock absorber. The capacity to remain in relationship with one's own experience during failure — to learn from defeat rather than be destroyed by it — requires the anima. The young man with no inner feminine access is shattered by this phase. Compensation follows: grandiosity, withdrawal, or chronic aggression as defense against the wound.</p>
+        <div class="symbol-row">
+          <div class="symbol-tag jungian">SHADOW ENCOUNTER</div>
+          <div class="symbol-tag adlerian">COMPENSATION</div>
+          <div class="symbol-tag somatic">DORSAL FREEZE</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PHASE 04 — PRIME ADULT ===== -->
+  <div class="phase-card bracketed">
+    <div class="br-bl"></div><div class="br-tr"></div>
+    <div class="phase-header">
+      <div class="phase-number">04</div>
+      <div class="phase-title-group">
+        <div class="phase-code">INTEGRATION // RACK, RUT & RECOVERY</div>
+        <div class="phase-name">THE <span class="accent">PRIME</span> STAG</div>
+      </div>
+      <div class="phase-age">3 – 7 YRS<br><span style="color:var(--text-muted);font-size:9px">HUMAN: 29–50 YEARS</span></div>
+    </div>
+    <div class="phase-divider"></div>
+
+    <div class="phase-body">
+      <div class="panel stag">
+        <div class="panel-label">BIOLOGICAL RECORD // FULL RACK</div>
+        <p>Antlers reach peak mass and complexity. The rack is not primarily a weapon — it is a signal. It broadcasts interior vitality through exterior structure. Antler quality tracks nutrition, stress load, testosterone function, and systemic health across the entire previous year. You cannot fake a rack. It grows from what you actually are.</p>
+        <p>The rut is now entered with the capacity to hold it — roaring, thrashing, competition, display, and selective combat. Post-rut, the dominant stag is depleted, sometimes fatally so. He must withdraw, feed, and rebuild. The annual shedding follows: the rack drops. It will grow again.</p>
+        <div class="anima-bar" style="margin-top:14px">
+          <div class="bar-label">FEMININE</div>
+          <div class="bar-track"><div class="bar-fill acid" style="width:58%"></div></div>
+          <div style="font-size:9px;color:var(--acid)">INTEGRATED</div>
+        </div>
+        <div class="anima-bar">
+          <div class="bar-label">MASCULINE</div>
+          <div class="bar-track"><div class="bar-fill orange" style="width:82%"></div></div>
+          <div style="font-size:9px;color:var(--orange)">EXPRESSED</div>
+        </div>
+      </div>
+
+      <div class="panel psych">
+        <div class="panel-label">PSYCHIC PARALLEL // AUTHENTIC ASSERTION</div>
+        <p>The rack teaches the central truth of mature masculine expression: authentic presence is not performance — it is legible manifestation of interior state. The man who has built toward his capacity, who has moved through defeat, who has maintained contact with both his inner masculine and feminine across the years, expresses from that actual ground. He cannot express another man's rack.</p>
+        <p>The critical neglected half of this phase is post-rut recovery. The masculine pathology that cannot come down from assertion-state — that cannot rest, cannot receive, cannot be restored — burns out. The willingness to shed, to enter the recovery, to let the rack drop: this is the inner feminine's most important function at prime. It is not weakness. It is the metabolic intelligence of cycles.</p>
+        <div class="symbol-row">
+          <div class="symbol-tag jungian">SELF MANIFESTATION</div>
+          <div class="symbol-tag adlerian">SOCIAL INTEREST</div>
+          <div class="symbol-tag somatic">VENTRAL VAGAL</div>
+          <div class="symbol-tag hermetic">CONJUNCTION</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PHASE 05 — ELDER ===== -->
+  <div class="phase-card bracketed">
+    <div class="br-bl"></div><div class="br-tr"></div>
+    <div class="phase-header">
+      <div class="phase-number">05</div>
+      <div class="phase-title-group">
+        <div class="phase-code">TRANSMUTATION // TERRAIN INTELLIGENCE</div>
+        <div class="phase-name">THE <span class="accent">ELDER</span> STAG</div>
+      </div>
+      <div class="phase-age">7+ YRS<br><span style="color:var(--text-muted);font-size:9px">HUMAN: 50+ YEARS</span></div>
+    </div>
+    <div class="phase-divider"></div>
+
+    <div class="phase-body">
+      <div class="panel stag">
+        <div class="panel-label">BIOLOGICAL RECORD // SENESCENCE</div>
+        <p>Antler mass may diminish. Rut competition decreases. The elder stag no longer organizes his existence around contest for dominance. What remains — and what no younger stag possesses — is knowledge of terrain: seasonal movement corridors, water sources, escape routes accumulated across years of inhabiting the same landscape.</p>
+        <p>His survival is increasingly cognitive, not physical. He reads the environment with the depth of long familiarity. The rack of the elder stag is smaller and more elegant. It has nothing left to prove.</p>
+        <div class="anima-bar" style="margin-top:14px">
+          <div class="bar-label">FEMININE</div>
+          <div class="bar-track"><div class="bar-fill acid" style="width:78%"></div></div>
+          <div style="font-size:9px;color:var(--acid)">PERMANENT</div>
+        </div>
+        <div class="anima-bar">
+          <div class="bar-label">MASCULINE</div>
+          <div class="bar-track"><div class="bar-fill orange" style="width:62%"></div></div>
+          <div style="font-size:9px;color:var(--orange)">REFINED</div>
+        </div>
+      </div>
+
+      <div class="panel psych">
+        <div class="panel-label">PSYCHIC PARALLEL // THE SENEX</div>
+        <p>Every initiatory tradition preserves the elder masculine ideal: authority derived from depth of experience rather than performance of vigor. The Jungian wise old man — the senex — is the figure who knows the terrain because he has moved through it across decades, not because he has conquered it. His authority is not asserted. It is simply present.</p>
+        <p>The integration at this phase requires what most men resist most: the conscious and permanent embrace of the inner feminine — not as periodic refuge but as structural partner. The elder who has genuinely matured no longer outsources his anima to women in his life. He carries it. He is receptive, patient, attuned — not as compensatory softness, but as the natural result of decades of integration. Dissolution is the precondition. It was never a threat.</p>
+        <div class="symbol-row">
+          <div class="symbol-tag jungian">SENEX / SAGE</div>
+          <div class="symbol-tag hermetic">PHILOSOPHER'S STONE</div>
+          <div class="symbol-tag adlerian">GEMEINSCHAFTSGEFÜHL</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ANTLER CYCLE DIAGRAM ===== -->
+  <div class="antler-section">
+    <div class="antler-label">// ANTLER CYCLE SYMBOLIC DIAGRAM — ANNUAL DEATH & REBIRTH</div>
+    <svg width="100%" viewBox="0 0 780 180" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+
+      <!-- Nodes -->
+      <!-- 1: VELVET (GROWTH) -->
+      <g>
+        <rect x="20" y="60" width="120" height="56" rx="4" fill="none" stroke="#2a3d52" stroke-width="0.5"/>
+        <rect x="20" y="60" width="120" height="2" fill="#C7FF43"/>
+        <text font-family="'IBM Plex Mono',monospace" font-size="8" fill="#5a7a96" letter-spacing="2" x="80" y="78" text-anchor="middle">STAGE I</text>
+        <text font-family="'Orbitron',sans-serif" font-size="10" fill="#C7FF43" letter-spacing="1" x="80" y="95" text-anchor="middle">VELVET</text>
+        <text font-family="'DM Mono',monospace" font-size="9" fill="#5a7a96" x="80" y="110" text-anchor="middle">Blood / Growth</text>
+      </g>
+
+      <!-- Arrow 1->2 -->
+      <line x1="142" y1="88" x2="172" y2="88" stroke="#2a3d52" stroke-width="0.5" marker-end="url(#arr)"/>
+      <text font-family="'DM Mono',monospace" font-size="8" fill="#2d4458" x="157" y="82" text-anchor="middle">Calcify</text>
+
+      <!-- 2: HARD RACK -->
+      <g>
+        <rect x="174" y="60" width="120" height="56" rx="4" fill="none" stroke="#2a3d52" stroke-width="0.5"/>
+        <rect x="174" y="60" width="120" height="2" fill="#FF6B1A"/>
+        <text font-family="'IBM Plex Mono',monospace" font-size="8" fill="#5a7a96" letter-spacing="2" x="234" y="78" text-anchor="middle">STAGE II</text>
+        <text font-family="'Orbitron',sans-serif" font-size="10" fill="#FF6B1A" letter-spacing="1" x="234" y="95" text-anchor="middle">HARD RACK</text>
+        <text font-family="'DM Mono',monospace" font-size="9" fill="#5a7a96" x="234" y="110" text-anchor="middle">Form / Signal</text>
+      </g>
+
+      <!-- Arrow 2->3 -->
+      <line x1="296" y1="88" x2="326" y2="88" stroke="#2a3d52" stroke-width="0.5" marker-end="url(#arr)"/>
+      <text font-family="'DM Mono',monospace" font-size="8" fill="#2d4458" x="311" y="82" text-anchor="middle">Enter Rut</text>
+
+      <!-- 3: RUT -->
+      <g>
+        <rect x="328" y="60" width="120" height="56" rx="4" fill="none" stroke="#2a3d52" stroke-width="0.5"/>
+        <rect x="328" y="60" width="120" height="2" fill="#FF2D2D"/>
+        <text font-family="'IBM Plex Mono',monospace" font-size="8" fill="#5a7a96" letter-spacing="2" x="388" y="78" text-anchor="middle">STAGE III</text>
+        <text font-family="'Orbitron',sans-serif" font-size="10" fill="#FF2D2D" letter-spacing="1" x="388" y="95" text-anchor="middle">THE RUT</text>
+        <text font-family="'DM Mono',monospace" font-size="9" fill="#5a7a96" x="388" y="110" text-anchor="middle">Display / Combat</text>
+      </g>
+
+      <!-- Arrow 3->4 -->
+      <line x1="450" y1="88" x2="480" y2="88" stroke="#2a3d52" stroke-width="0.5" marker-end="url(#arr)"/>
+      <text font-family="'DM Mono',monospace" font-size="8" fill="#2d4458" x="465" y="82" text-anchor="middle">Withdraw</text>
+
+      <!-- 4: RECOVERY -->
+      <g>
+        <rect x="482" y="60" width="120" height="56" rx="4" fill="none" stroke="#2a3d52" stroke-width="0.5"/>
+        <rect x="482" y="60" width="120" height="2" fill="#00CFCF"/>
+        <text font-family="'IBM Plex Mono',monospace" font-size="8" fill="#5a7a96" letter-spacing="2" x="542" y="78" text-anchor="middle">STAGE IV</text>
+        <text font-family="'Orbitron',sans-serif" font-size="10" fill="#00CFCF" letter-spacing="1" x="542" y="95" text-anchor="middle">RECOVERY</text>
+        <text font-family="'DM Mono',monospace" font-size="9" fill="#5a7a96" x="542" y="110" text-anchor="middle">Rest / Rebuild</text>
+      </g>
+
+      <!-- Arrow 4->5 -->
+      <line x1="604" y1="88" x2="634" y2="88" stroke="#2a3d52" stroke-width="0.5" marker-end="url(#arr)"/>
+      <text font-family="'DM Mono',monospace" font-size="8" fill="#2d4458" x="619" y="82" text-anchor="middle">Shed</text>
+
+      <!-- 5: SHED -->
+      <g>
+        <rect x="636" y="60" width="120" height="56" rx="4" fill="none" stroke="#2a3d52" stroke-width="0.5"/>
+        <rect x="636" y="60" width="120" height="2" fill="#C7FF43"/>
+        <text font-family="'IBM Plex Mono',monospace" font-size="8" fill="#5a7a96" letter-spacing="2" x="696" y="78" text-anchor="middle">STAGE V</text>
+        <text font-family="'Orbitron',sans-serif" font-size="10" fill="#C7FF43" letter-spacing="1" x="696" y="95" text-anchor="middle">SHED</text>
+        <text font-family="'DM Mono',monospace" font-size="9" fill="#5a7a96" x="696" y="110" text-anchor="middle">Death / Return</text>
+      </g>
+
+      <!-- Return arc -->
+      <path d="M756 116 Q756 155 388 155 Q20 155 20 116" fill="none" stroke="#1a2430" stroke-width="0.5" stroke-dasharray="4 4" marker-end="url(#arr)"/>
+      <text font-family="'DM Mono',monospace" font-size="8" fill="#2d4458" x="388" y="168" text-anchor="middle">new year encodes new health — velvet regrows</text>
+    </svg>
+  </div>
+
+  <!-- ===== SYNTHESIS TERMINAL ===== -->
+  <div class="terminal">
+    <p>The antler cycle is the central symbol because it encodes the central truth: <em>growth requires the feminine mode; expression requires the masculine; shedding requires surrender; regrowing requires vitality.</em> Neither phase is more important. Neither is optional. The man who cannot grow is arrested. The man who cannot shed calcifies. Both fail the cycle.</p>
+    <p>Authentic masculine expression is not performance — it is legible manifestation of interior state. <em>You cannot grow another stag's rack.</em> The rack you have is built from the ground you actually occupy, the winters you actually survived, the defeats you actually metabolized. This is not fatalism. It is the only honest starting point.</p>
+    <p>The inner feminine — the anima — is not the softening of the masculine. It is the <em>metabolic intelligence that makes the cycle possible</em>: the receptivity that allows growth, the capacity to learn from defeat, the willingness to recover, and finally, the groundedness to carry depth rather than perform dominance. The elder stag who has completed the full cycle is not diminished. He is the landscape itself, made mobile.</p>
+  </div>
+
+  <!-- FRAMEWORK REFS -->
+  <div style="border:1px solid var(--border);padding:18px 20px;margin-bottom:48px">
+    <div style="font-family:'Orbitron',sans-serif;font-size:8px;letter-spacing:0.3em;color:var(--text-muted);text-transform:uppercase;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border)">// THEORETICAL COORDINATES</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px">
+      <div style="font-size:11px;line-height:1.7;font-family:'DM Mono',monospace;font-weight:300">
+        <div style="color:var(--acid);font-size:9px;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:6px">Jungian</div>
+        <div style="color:var(--text-secondary)">Individuation / Anima / Shadow / Senex / Self-Ego axis / Active Imagination</div>
+      </div>
+      <div style="font-size:11px;line-height:1.7;font-family:'DM Mono',monospace;font-weight:300">
+        <div style="color:var(--orange);font-size:9px;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:6px">Adlerian</div>
+        <div style="color:var(--text-secondary)">Inferiority compensation / Teleological framing / Social interest (Gemeinschaftsgefühl)</div>
+      </div>
+      <div style="font-size:11px;line-height:1.7;font-family:'DM Mono',monospace;font-weight:300">
+        <div style="color:var(--cyan);font-size:9px;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:6px">Somatic</div>
+        <div style="color:var(--text-secondary)">Polyvagal hierarchy / Titration & Pendulation / Dorsal freeze / Ventral vagal regulation</div>
+      </div>
+      <div style="font-size:11px;line-height:1.7;font-family:'DM Mono',monospace;font-weight:300">
+        <div style="color:var(--red);font-size:9px;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:6px">Hermetic</div>
+        <div style="color:var(--text-secondary)">Calcination / Dissolution / Conjunction / Philosopher's Stone / Prima materia</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="codex-footer">
+    <div class="footer-stamp">
+      <b>ATHANOR ARCHIVE</b>
+      ENTRY CLASS: CORPUS × SPIRITUS<br>
+      DOMAIN: ANIMUS DEVELOPMENT<br>
+      STATUS: FILED
+    </div>
+    <div class="footer-stamp" style="text-align:right">
+      <b style="color:var(--orange)">STAG-01 // COMPLETE</b>
+      MAGI SYSTEM APPROVAL: MELCHIOR ✓<br>
+      CASPAR ✓ // BALTHASAR ✓<br>
+      UNIT CLEARED FOR ARCHIVE
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<script>
+const cards = document.querySelectorAll('.phase-card');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), 80);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.08 });
+
+cards.forEach(c => observer.observe(c));
+
+// Animate bars on visibility
+const barFills = document.querySelectorAll('.bar-fill');
+barFills.forEach(b => {
+  const w = b.style.width;
+  b.style.width = '0%';
+  setTimeout(() => { b.style.width = w; }, 600);
+});
+</script>
+</body>
+</html>

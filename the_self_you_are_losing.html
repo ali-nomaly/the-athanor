@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Self You Are Losing Was Never Yours</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #1a1814;
+    --ink-faint: #6b6560;
+    --ink-ghost: #b0a89e;
+    --paper: #f5f1eb;
+    --paper-warm: #ede8df;
+    --rule: #d4cdc4;
+    --accent: #8b4a2f;
+  }
+
+  html { background: var(--paper); }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 300;
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  /* Header strip */
+  .masthead {
+    border-bottom: 1px solid var(--rule);
+    padding: 2rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    opacity: 0;
+    animation: rise 1s ease forwards 0.1s;
+  }
+
+  .masthead-name {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 300;
+    letter-spacing: 0.12em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+  }
+
+  .masthead-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 300;
+    color: var(--ink-ghost);
+    letter-spacing: 0.08em;
+  }
+
+  /* Main layout */
+  .page {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 5rem 3rem 8rem;
+  }
+
+  /* Eyebrow */
+  .eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 300;
+    letter-spacing: 0.18em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    animation: rise 0.9s ease forwards 0.3s;
+  }
+
+  /* Title block */
+  .title-block {
+    border-top: 1px solid var(--ink);
+    padding-top: 2.5rem;
+    margin-bottom: 3.5rem;
+    opacity: 0;
+    animation: rise 1s ease forwards 0.5s;
+  }
+
+  h1 {
+    font-size: clamp(2.4rem, 5.5vw, 4rem);
+    font-weight: 300;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin-bottom: 1.5rem;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .subtitle {
+    font-size: 1.05rem;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--ink-faint);
+    line-height: 1.6;
+    max-width: 500px;
+  }
+
+  /* Pull quote that runs vertically in margin */
+  .essay-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 180px;
+    gap: 4rem;
+    align-items: start;
+    opacity: 0;
+    animation: rise 1s ease forwards 0.8s;
+  }
+
+  .essay-body p {
+    font-size: 1.15rem;
+    line-height: 1.85;
+    color: var(--ink);
+    margin-bottom: 1.8rem;
+    font-weight: 300;
+  }
+
+  .essay-body p.opening {
+    font-size: 1.35rem;
+    line-height: 1.75;
+    font-style: italic;
+    color: var(--ink);
+  }
+
+  .essay-body p strong {
+    font-weight: 400;
+  }
+
+  .section-break {
+    display: block;
+    text-align: center;
+    color: var(--ink-ghost);
+    font-size: 1.1rem;
+    letter-spacing: 0.3em;
+    margin: 3rem 0;
+    font-family: 'DM Mono', monospace;
+    font-weight: 300;
+  }
+
+  /* Margin column */
+  .margin-col {
+    position: sticky;
+    top: 4rem;
+    padding-top: 0.4rem;
+  }
+
+  .margin-note {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 300;
+    color: var(--ink-ghost);
+    letter-spacing: 0.06em;
+    line-height: 1.7;
+    border-left: 1px solid var(--rule);
+    padding-left: 1.25rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .margin-note span {
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+
+  .margin-note em {
+    font-style: italic;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 12px;
+    color: var(--ink-faint);
+  }
+
+  /* Pulled lines */
+  .pull {
+    font-size: 1.5rem;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--accent);
+    line-height: 1.4;
+    border-left: 2px solid var(--accent);
+    padding-left: 1.5rem;
+    margin: 2.5rem 0;
+  }
+
+  /* Closing block */
+  .closing-block {
+    border-top: 1px solid var(--rule);
+    padding-top: 3rem;
+    margin-top: 4rem;
+  }
+
+  .closing-block p {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--ink-faint);
+    margin-bottom: 1rem;
+    font-style: italic;
+  }
+
+  .author-line {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 300;
+    letter-spacing: 0.12em;
+    color: var(--ink-ghost);
+    text-transform: uppercase;
+    margin-top: 2rem;
+  }
+
+  /* Footer */
+  .footer-rule {
+    border: none;
+    border-top: 1px solid var(--rule);
+    margin: 5rem 3rem 0;
+  }
+
+  .footer {
+    padding: 2rem 3rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 300;
+    color: var(--ink-ghost);
+    letter-spacing: 0.08em;
+  }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 680px) {
+    .masthead { padding: 1.5rem; }
+    .page { padding: 3rem 1.5rem 6rem; }
+    .essay-wrapper { grid-template-columns: 1fr; gap: 0; }
+    .margin-col { display: none; }
+    h1 { font-size: 2.2rem; }
+    .footer { padding: 1.5rem; }
+    .footer-rule { margin: 3rem 1.5rem 0; }
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <span class="masthead-name">Depth Notes</span>
+  <span class="masthead-tag">Essay No. 001</span>
+</header>
+
+<main class="page">
+
+  <p class="eyebrow">On identity &amp; dissolution</p>
+
+  <div class="title-block">
+    <h1>The self you are losing<br>was <em>never</em> yours</h1>
+    <p class="subtitle">What I had to stop calling grief before I could understand what was actually happening.</p>
+  </div>
+
+  <div class="essay-wrapper">
+    <article class="essay-body">
+
+      <p class="opening">There was a moment — not a breakdown, not a crisis, just a quiet Tuesday — when I looked at my own life and did not recognize the person living it.</p>
+
+      <p>Not estrangement. Not depression, exactly. Something more specific and stranger than that: the sensation of looking at a suit hanging in a closet and realizing you've been wearing it for years without ever having chosen it. The career, the manner of speaking, the things I reached for when I needed to feel okay — none of it had been selected. It had been <strong>assembled</strong>, piece by piece, from whatever was handed to me by people who were themselves wearing suits they hadn't chosen either.</p>
+
+      <p>The first thing I tried to do was fix it. That's what you do when something is wrong. You adjust. You optimize. You find the better version of the thing you already are. I read the books, shifted the habits, changed some of the external arrangements of my life. And for a while I believed that was working.</p>
+
+      <p>But the ground kept going.</p>
+
+      <span class="section-break">* * *</span>
+
+      <p>What nobody tells you — what I had to find out through the body before the mind could accept it — is that what you're experiencing when you lose yourself is not actually loss. Or it is loss, but not of something that was ever <em>yours</em>.</p>
+
+      <p>The self that is dissolving is a construction. Yours in the sense that it was built inside your skin, but not yours in the sense that you chose the materials, the design, the purpose it was built to serve. It was built to make you acceptable. To make you legible to the people whose love was conditional on legibility. To give you a shape that fit inside the spaces that were available to you.</p>
+
+      <div class="pull">"That self did its job. It kept you alive, included, tolerated. You should grieve it. And then you should let it go."</div>
+
+      <p>When it falls apart — and it falls apart for everyone eventually, in one form or another — the instinct is to hold it together. To grip harder. To interpret the falling as failure. As evidence that you are broken. As something happening <em>to</em> you, a mistake, a crisis to be resolved so you can get back to the business of being who you were.</p>
+
+      <p>But what if it's not falling apart? What if it's falling <em>away</em>?</p>
+
+      <span class="section-break">* * *</span>
+
+      <p>Jung called it the death of the persona — that first constructed self we build for the world. He wasn't speaking metaphorically. He meant that something in you actually has to die before anything real can take its place. And he was honest about something most self-development culture refuses to say plainly: you cannot rush it. You cannot shortcut it. You cannot reframe your way out of it. You can only move through it, or spend the rest of your life trying not to.</p>
+
+      <p>The body knows before the mind does. This is what I discovered — not through reading, but through the strange experience of sitting with a sensation I would previously have done anything to escape, and finding that when I stopped trying to escape it, it began to move. The tightness in the chest. The heaviness in the gut. The specific quality of dread that isn't quite dread — more like the feeling of something enormous nearby that hasn't been named yet.</p>
+
+      <p>The body has been holding the truth of who you are for your entire life. It holds it in the way it tenses when you say yes and mean no. In the exhaustion that comes from performing emotions you don't actually feel. In the hunger for something you can't name because the part of you that knew its name was buried early, before language, before the suit was even tailored.</p>
+
+      <p>What I found — what keeps being true — is that the real self doesn't announce itself dramatically. It's not a revelation. It's more like the first moment after a long illness when you realize you're not pretending to feel better. Something is simply, quietly there that wasn't accessible before. Or was, but you had no container for it.</p>
+
+      <span class="section-break">* * *</span>
+
+      <p>I'm writing this because I know what it's like to be in the middle of it and have no map. To be doing all the right things — therapy, the practices, the inner work — and still feel like the floor isn't there. And to have the terrible suspicion that what's happening is wrong, is a mistake, is something that needs to be stopped rather than moved through.</p>
+
+      <p>It isn't wrong. It's the most right thing that's ever happened to you, and I know that sounds like something you'd find stitched on a throw pillow. I don't mean it that way. I mean it the way Jung meant it: the psyche, when it's healthy, will not allow you to live indefinitely in a life that is too small for what you actually are. The symptoms of dissolution — the anxiety, the disorientation, the loss of motivation for things that used to sustain you — are not signs of illness. They are signs of a self trying to emerge from a container it's outgrown.</p>
+
+      <p>The question is not how to make the feeling stop. The question is what you're willing to meet on the other side of it.</p>
+
+      <div class="pull">"You are not losing yourself. You are losing what was never you. Those are not the same thing, and in the difference between them is everything."</div>
+
+      <p>That's where the real work begins.</p>
+
+      <div class="closing-block">
+        <p>If something in this resonated — if you recognized yourself in it — I write more like this. About the actual texture of dissolution and reconstruction. About what the body knows. About the long, unglamorous work of building a self that is actually yours.</p>
+        <p>You can follow along here. Or, if you're in it right now and want to talk, reach out. I work with a small number of people who are ready to move through this with intention and support.</p>
+        <div class="author-line">— Written from the other side of something I'm still crossing</div>
+      </div>
+
+    </article>
+
+    <aside class="margin-col">
+      <div class="margin-note">
+        <span>Jung, <em>Two Essays on Analytical Psychology</em></span>
+        <em>"The persona is a complicated system of relations between individual consciousness and society."</em>
+      </div>
+      <div class="margin-note">
+        <span>On somatic truth:</span>
+        <em>The body does not lie. It simply speaks a language the mind has learned to ignore.</em>
+      </div>
+      <div class="margin-note">
+        <span>Manly P. Hall:</span>
+        <em>"The first step toward wisdom is the recognition of what we are not."</em>
+      </div>
+      <div class="margin-note">
+        <span>On timing:</span>
+        <em>Individuation has no schedule. The process unfolds at the rate the psyche can bear.</em>
+      </div>
+    </aside>
+  </div>
+
+</main>
+
+<hr class="footer-rule">
+<footer class="footer">
+  <span class="footer-text">Depth Notes &mdash; Essays on individuation &amp; inner life</span>
+  <span class="footer-text">Essay 001</span>
+</footer>
+
+</body>
+</html>

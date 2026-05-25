@@ -1,0 +1,1636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Grande Traversée — Your France Immersion Plan</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=IM+Fell+English:ital@0;1&family=Inconsolata:wght@300;400&display=swap');
+
+:root {
+  --parchment: #f5ead5;
+  --parchment-dk: #ede0c1;
+  --parchment-shadow: #d6c8a8;
+  --ink: #1e1409;
+  --ink-mid: #3d2f18;
+  --ink-light: #7a6040;
+  --ink-faint: #b09c78;
+  --red-wax: #8b2020;
+  --red-light: #c0392b;
+  --blue-royal: #1a3a5c;
+  --blue-med: #2e6b8a;
+  --teal-old: #2a6b5a;
+  --gold: #b8860b;
+  --gold-light: #d4a017;
+  --rose: #8b3a3a;
+  --purple-hist: #4a2060;
+  --border: rgba(30,20,9,0.15);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: #2c1f0d;
+  font-family: 'IM Fell English', serif;
+  color: var(--ink);
+  overflow-x: hidden;
+}
+
+/* ── GRAIN / TEXTURE ── */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 9999;
+  mix-blend-mode: multiply; opacity: 0.6;
+}
+
+/* ── PARCHMENT WRAPPER ── */
+.page {
+  max-width: 1180px;
+  margin: 2rem auto;
+  background: var(--parchment);
+  position: relative;
+  box-shadow: 0 0 80px rgba(0,0,0,0.7), inset 0 0 100px rgba(0,0,0,0.04);
+}
+
+/* Aged edge effect */
+.page::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse at top left, rgba(180,140,70,0.18) 0%, transparent 50%),
+    radial-gradient(ellipse at bottom right, rgba(140,100,40,0.14) 0%, transparent 50%),
+    radial-gradient(ellipse at top right, rgba(100,70,20,0.1) 0%, transparent 40%);
+  pointer-events: none; z-index: 1;
+}
+
+/* ── DECORATIVE BORDER ── */
+.border-frame {
+  position: absolute; inset: 12px;
+  border: 1.5px solid var(--ink-light);
+  pointer-events: none; z-index: 2;
+}
+.border-frame::before {
+  content: '';
+  position: absolute; inset: 5px;
+  border: 0.5px solid var(--ink-faint);
+}
+
+/* Corner ornaments */
+.corner {
+  position: absolute;
+  width: 40px; height: 40px;
+  z-index: 3;
+  pointer-events: none;
+}
+.corner svg { width: 100%; height: 100%; }
+.c-tl { top: 0; left: 0; }
+.c-tr { top: 0; right: 0; transform: scaleX(-1); }
+.c-bl { bottom: 0; left: 0; transform: scaleY(-1); }
+.c-br { bottom: 0; right: 0; transform: scale(-1); }
+
+/* ── CONTENT ── */
+.content { position: relative; z-index: 5; padding: 3.5rem 4rem; }
+
+/* ── HERO / TITLE ── */
+.header {
+  text-align: center;
+  padding-bottom: 2.5rem;
+  border-bottom: 1px solid var(--ink-light);
+  margin-bottom: 3rem;
+  position: relative;
+}
+.header-eyebrow {
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.35em;
+  color: var(--ink-light);
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+}
+.header-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.8rem, 6vw, 5.5rem);
+  font-weight: 700;
+  line-height: 1.0;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  margin-bottom: 0.4rem;
+}
+.header-subtitle {
+  font-style: italic;
+  font-size: 1.15rem;
+  color: var(--ink-light);
+  margin-bottom: 1.5rem;
+}
+.header-desc {
+  font-size: 0.95rem;
+  line-height: 1.9;
+  color: var(--ink-mid);
+  max-width: 680px;
+  margin: 0 auto;
+}
+.header-rule {
+  display: flex; align-items: center; gap: 1rem;
+  margin: 1.5rem 0 0;
+  color: var(--ink-faint);
+  font-size: 1.2rem;
+}
+.header-rule::before, .header-rule::after {
+  content: ''; flex: 1;
+  height: 1px; background: var(--ink-faint);
+}
+
+/* ── SECTION HEADER ── */
+.sec-head {
+  display: flex; align-items: baseline; gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.7rem;
+  border-bottom: 1px solid var(--parchment-shadow);
+}
+.sec-num {
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  color: var(--ink-faint);
+}
+.sec-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--ink);
+  flex: 1;
+}
+.sec-tag {
+  font-style: italic;
+  font-size: 0.82rem;
+  color: var(--ink-light);
+}
+
+/* ── TIMELINE — THE GRAND PHASES ── */
+.phases { margin-bottom: 4rem; }
+
+.phase-track {
+  display: flex;
+  gap: 0;
+  margin: 2rem 0;
+  position: relative;
+}
+.phase-track::before {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  top: 28px;
+  height: 2px;
+  background: linear-gradient(to right, var(--ink-faint), var(--ink-light), var(--ink-faint));
+}
+
+.phase-node {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+}
+
+.phase-circle {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  border: 2px solid var(--ink-mid);
+  background: var(--parchment);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--ink);
+  position: relative; z-index: 1;
+  transition: all 0.4s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.phase-node.active .phase-circle {
+  background: var(--ink-mid);
+  color: var(--parchment);
+  transform: scale(1.15);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+}
+
+.phase-node:hover .phase-circle {
+  background: var(--ink-light);
+  color: var(--parchment);
+  transform: scale(1.1);
+}
+
+.phase-label {
+  margin-top: 0.8rem;
+  text-align: center;
+  max-width: 120px;
+}
+.phase-period {
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.6rem;
+  color: var(--ink-faint);
+  letter-spacing: 0.1em;
+  display: block;
+}
+.phase-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--ink-mid);
+  line-height: 1.3;
+  display: block;
+  margin-top: 0.2rem;
+}
+
+/* ── PHASE DETAIL CARDS ── */
+.phase-details { display: none; }
+.phase-details.active { display: block; }
+
+.phase-card {
+  background: var(--parchment-dk);
+  border: 1px solid var(--parchment-shadow);
+  padding: 2.5rem 3rem;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 1rem;
+  animation: unfold 0.5s ease;
+}
+
+@keyframes unfold {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.phase-card-accent {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 5px;
+}
+
+.phase-card-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  font-style: italic;
+  color: var(--ink);
+  margin-bottom: 0.3rem;
+}
+.phase-card-period {
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  color: var(--ink-faint);
+  margin-bottom: 1.5rem;
+}
+.phase-card-desc {
+  font-size: 0.92rem;
+  line-height: 1.9;
+  color: var(--ink-mid);
+  margin-bottom: 1.5rem;
+  max-width: 740px;
+}
+
+.phase-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1.5rem;
+}
+.phase-col-head {
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+  margin-bottom: 0.6rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--parchment-shadow);
+}
+.phase-col ul { list-style: none; }
+.phase-col ul li {
+  font-size: 0.82rem;
+  color: var(--ink-mid);
+  line-height: 1.7;
+  padding-left: 1rem;
+  position: relative;
+}
+.phase-col ul li::before {
+  content: '→';
+  position: absolute; left: 0;
+  color: var(--ink-faint);
+  font-size: 0.75rem;
+}
+
+/* ── FRENCH LEVELS ── */
+.language-section { margin-bottom: 4rem; }
+
+.lang-timeline {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0;
+  margin: 2rem 0;
+  border: 1px solid var(--parchment-shadow);
+}
+
+.lang-level {
+  padding: 1.5rem 1.2rem;
+  border-right: 1px solid var(--parchment-shadow);
+  position: relative;
+  overflow: hidden;
+}
+.lang-level:last-child { border-right: none; }
+
+.lang-badge {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+  line-height: 1;
+}
+.lang-name {
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  color: var(--ink-faint);
+  margin-bottom: 0.8rem;
+}
+.lang-hours {
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.62rem;
+  color: var(--ink-light);
+  margin-bottom: 0.6rem;
+}
+.lang-desc {
+  font-size: 0.78rem;
+  color: var(--ink-mid);
+  line-height: 1.6;
+}
+.lang-milestone {
+  font-style: italic;
+  font-size: 0.75rem;
+  color: var(--ink-light);
+  margin-top: 0.5rem;
+}
+
+/* Level colors */
+.l-a1 { background: var(--parchment); }
+.l-a1 .lang-badge { color: var(--ink-faint); }
+.l-a2 { background: rgba(46,107,138,0.06); }
+.l-a2 .lang-badge { color: var(--blue-med); }
+.l-b1 { background: rgba(42,107,90,0.06); }
+.l-b1 .lang-badge { color: var(--teal-old); }
+.l-b2 { background: rgba(184,134,11,0.08); }
+.l-b2 .lang-badge { color: var(--gold); }
+.l-c1 { background: rgba(139,32,32,0.06); }
+.l-c1 .lang-badge { color: var(--red-wax); }
+.l-c2 { background: rgba(74,32,96,0.06); }
+.l-c2 .lang-badge { color: var(--purple-hist); }
+
+/* Language resources */
+.lang-resources {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  border: 1px solid var(--parchment-shadow);
+  margin-top: 1rem;
+}
+.lang-res-col {
+  padding: 1.2rem 1.2rem;
+  border-right: 1px solid var(--parchment-shadow);
+}
+.lang-res-col:last-child { border-right: none; }
+.lang-res-cat {
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.2em;
+  color: var(--ink-faint);
+  margin-bottom: 0.5rem;
+}
+.lang-res-col ul { list-style: none; }
+.lang-res-col ul li {
+  font-size: 0.78rem;
+  color: var(--ink-mid);
+  line-height: 1.7;
+  border-bottom: 0.5px solid var(--parchment-shadow);
+  padding: 0.25rem 0;
+}
+.lang-res-col ul li:last-child { border-bottom: none; }
+.lang-res-col ul li strong {
+  color: var(--ink);
+  font-weight: normal;
+  font-style: italic;
+}
+
+/* ── REGIONS MAP ── */
+.regions-section { margin-bottom: 4rem; }
+
+.regions-intro {
+  font-size: 0.92rem;
+  line-height: 1.9;
+  color: var(--ink-mid);
+  max-width: 820px;
+  margin-bottom: 2rem;
+}
+
+.regions-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border: 1px solid var(--parchment-shadow);
+}
+
+.region-card {
+  padding: 2rem 1.8rem;
+  border-right: 1px solid var(--parchment-shadow);
+  border-bottom: 1px solid var(--parchment-shadow);
+  position: relative;
+  overflow: hidden;
+  transition: background 0.3s;
+}
+.region-card:hover { background: rgba(0,0,0,0.02); }
+.region-card:nth-child(3n) { border-right: none; }
+.region-card:nth-last-child(-n+3) { border-bottom: none; }
+
+.region-seq {
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.2em;
+  color: var(--ink-faint);
+  margin-bottom: 0.3rem;
+}
+.region-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 0.2rem;
+}
+.region-type {
+  font-style: italic;
+  font-size: 0.78rem;
+  color: var(--ink-light);
+  margin-bottom: 0.8rem;
+}
+.region-why {
+  font-size: 0.82rem;
+  line-height: 1.75;
+  color: var(--ink-mid);
+  margin-bottom: 1rem;
+}
+.region-sites {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.region-sites li {
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.65rem;
+  color: var(--ink-light);
+  display: flex;
+  gap: 0.4rem;
+}
+.region-sites li::before { content: '✦'; color: var(--ink-faint); }
+.region-era {
+  display: inline-block;
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.55rem;
+  border: 0.5px solid var(--ink-faint);
+  padding: 0.15rem 0.4rem;
+  color: var(--ink-faint);
+  letter-spacing: 0.1em;
+  margin-top: 0.8rem;
+}
+
+/* Region accent colors */
+.rc-paris .region-name { color: var(--blue-royal); }
+.rc-normandy .region-name { color: var(--ink-mid); }
+.rc-loire .region-name { color: var(--teal-old); }
+.rc-dordogne .region-name { color: var(--red-wax); }
+.rc-provence .region-name { color: var(--gold); }
+.rc-brittany .region-name { color: var(--blue-med); }
+
+/* ── HISTORY LAYERS ── */
+.history-section { margin-bottom: 4rem; }
+
+.history-river {
+  position: relative;
+  padding-left: 3rem;
+  border-left: 2px solid var(--parchment-shadow);
+  margin: 2rem 0;
+}
+
+.history-era {
+  margin-bottom: 2.5rem;
+  position: relative;
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: all 0.6s ease;
+}
+.history-era.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.history-era::before {
+  content: '';
+  position: absolute;
+  left: -3.45rem;
+  top: 0.5rem;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  border: 2px solid var(--parchment-shadow);
+  background: var(--parchment);
+}
+.history-era.active-era::before {
+  background: var(--ink-mid);
+  border-color: var(--ink-mid);
+}
+
+.era-period {
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  color: var(--ink-faint);
+  margin-bottom: 0.3rem;
+}
+.era-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+.era-desc {
+  font-size: 0.85rem;
+  line-height: 1.8;
+  color: var(--ink-mid);
+  max-width: 680px;
+  margin-bottom: 0.5rem;
+}
+.era-where {
+  font-style: italic;
+  font-size: 0.78rem;
+  color: var(--ink-light);
+}
+
+/* ── CULTURAL PILLARS ── */
+.culture-section { margin-bottom: 4rem; }
+
+.culture-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  border: 1px solid var(--parchment-shadow);
+}
+
+.culture-card {
+  padding: 2rem 2rem;
+  border-right: 1px solid var(--parchment-shadow);
+  border-bottom: 1px solid var(--parchment-shadow);
+}
+.culture-card:nth-child(2n) { border-right: none; }
+.culture-card:nth-last-child(-n+2) { border-bottom: none; }
+
+.culture-icon { font-size: 1.4rem; margin-bottom: 0.8rem; }
+.culture-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 0.5rem;
+}
+.culture-desc {
+  font-size: 0.83rem;
+  line-height: 1.8;
+  color: var(--ink-mid);
+  margin-bottom: 0.8rem;
+}
+.culture-practices {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.culture-practices li {
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.65rem;
+  color: var(--ink-light);
+  padding-left: 1rem;
+  position: relative;
+}
+.culture-practices li::before {
+  content: '·';
+  position: absolute; left: 0;
+  color: var(--ink-faint);
+  font-size: 1rem;
+  line-height: 1;
+}
+
+/* ── PRACTICAL CHECKLIST ── */
+.practical-section { margin-bottom: 4rem; }
+
+.checklist-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.checklist-block {
+  border: 1px solid var(--parchment-shadow);
+  padding: 1.8rem;
+}
+.check-head {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 0.3rem;
+}
+.check-sub {
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  color: var(--ink-faint);
+  margin-bottom: 1rem;
+}
+.check-items { list-style: none; }
+.check-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  padding: 0.5rem 0;
+  border-bottom: 0.5px solid var(--parchment-shadow);
+  font-size: 0.82rem;
+  color: var(--ink-mid);
+  line-height: 1.5;
+}
+.check-item:last-child { border-bottom: none; }
+.check-box {
+  width: 14px; height: 14px;
+  border: 1px solid var(--ink-faint);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.check-note {
+  font-style: italic;
+  color: var(--ink-faint);
+  font-size: 0.75rem;
+}
+
+/* ── COSTS TABLE ── */
+.costs-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.83rem;
+}
+.costs-table th {
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  color: var(--ink-faint);
+  text-align: left;
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid var(--parchment-shadow);
+  font-weight: 400;
+}
+.costs-table td {
+  padding: 0.6rem 1rem;
+  border-bottom: 0.5px solid var(--parchment-shadow);
+  color: var(--ink-mid);
+  vertical-align: top;
+}
+.costs-table tr:last-child td { border-bottom: none; }
+.costs-table .cat {
+  font-style: italic;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.costs-table .total {
+  font-family: 'Playfair Display', serif;
+  font-weight: 600;
+  color: var(--ink);
+}
+.costs-table tr.total-row td {
+  border-top: 1px solid var(--ink-faint);
+  border-bottom: none;
+}
+
+/* ── TIME TRAVELER PHILOSOPHY ── */
+.philosophy-section {
+  margin-bottom: 4rem;
+  background: var(--ink);
+  color: var(--parchment);
+  padding: 3rem;
+  position: relative;
+  overflow: hidden;
+}
+.philosophy-section::before {
+  content: '❦';
+  position: absolute;
+  font-size: 15rem;
+  color: rgba(255,255,255,0.02);
+  right: -2rem;
+  top: -3rem;
+  pointer-events: none;
+}
+.philo-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  font-style: italic;
+  color: var(--parchment);
+  margin-bottom: 1.5rem;
+  opacity: 0.9;
+}
+.philo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+.philo-item {}
+.philo-item-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  color: var(--parchment-dk);
+  margin-bottom: 0.5rem;
+}
+.philo-item-body {
+  font-size: 0.83rem;
+  line-height: 1.8;
+  color: rgba(245,234,213,0.65);
+}
+
+/* ── FOOTER ── */
+.footer {
+  border-top: 1px solid var(--ink-light);
+  padding-top: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+.footer-motto {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  font-style: italic;
+  color: var(--ink-mid);
+}
+.footer-note {
+  font-family: 'Inconsolata', monospace;
+  font-size: 0.6rem;
+  color: var(--ink-faint);
+  text-align: right;
+  line-height: 1.7;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 860px) {
+  .content { padding: 2rem 2rem; }
+  .phase-cols { grid-template-columns: 1fr; }
+  .lang-timeline { grid-template-columns: 1fr 1fr; }
+  .lang-resources { grid-template-columns: 1fr 1fr; }
+  .regions-grid { grid-template-columns: 1fr; }
+  .region-card { border-right: none; border-bottom: 1px solid var(--parchment-shadow); }
+  .region-card:nth-last-child(1) { border-bottom: none; }
+  .culture-grid { grid-template-columns: 1fr; }
+  .culture-card { border-right: none; }
+  .checklist-grid { grid-template-columns: 1fr; }
+  .philo-grid { grid-template-columns: 1fr; }
+  .phase-track { flex-wrap: wrap; gap: 1rem; }
+  .phase-track::before { display: none; }
+  .phase-node { flex: 0 0 calc(50% - 0.5rem); }
+  .footer { flex-direction: column; gap: 1rem; }
+  .footer-note { text-align: left; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #2c1f0d; }
+::-webkit-scrollbar-thumb { background: var(--ink-light); }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <!-- Border & corners -->
+  <div class="border-frame"></div>
+  <div class="corner c-tl">
+    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M2 2 L2 20 Q2 2 20 2 Z" stroke="#7a6040" stroke-width="0.5" fill="none"/>
+      <path d="M2 2 L12 2 Q2 2 2 12 Z" stroke="#7a6040" stroke-width="0.5" fill="rgba(122,96,64,0.08)"/>
+      <circle cx="4" cy="4" r="1.5" fill="#b09c78" opacity="0.5"/>
+      <path d="M8 2 Q2 8 2 8" stroke="#b09c78" stroke-width="0.5" opacity="0.5"/>
+    </svg>
+  </div>
+  <div class="corner c-tr"></div>
+  <div class="corner c-bl"></div>
+  <div class="corner c-br"></div>
+
+  <div class="content">
+
+    <!-- ══════════════════════════════════
+         HEADER
+    ══════════════════════════════════ -->
+    <header class="header">
+      <p class="header-eyebrow">A Personal Atlas · Long-Term Immersion Plan · France</p>
+      <h1 class="header-title">La Grande Traversée</h1>
+      <p class="header-subtitle">The Great Crossing — A Time Traveler's Map to France</p>
+      <p class="header-desc">
+        This is not a tourist itinerary. It is a <em>life plan</em> — a multi-year passage into one of the world's most historically layered, linguistically rich, and culturally alive countries. You are not going to visit France. You are going to <em>inhabit</em> it — to slip through its centuries the way water finds stone, and emerge speaking its language, dreaming its history, and tasting its place in your blood.
+      </p>
+      <div class="header-rule">❦</div>
+    </header>
+
+    <!-- ══════════════════════════════════
+         PHASE OVERVIEW
+    ══════════════════════════════════ -->
+    <section class="phases">
+      <div class="sec-head">
+        <span class="sec-num">I —</span>
+        <h2 class="sec-title">The Five Phases of Your Passage</h2>
+        <span class="sec-tag">Click each phase to expand</span>
+      </div>
+
+      <div class="phase-track">
+        <div class="phase-node active" onclick="showPhase(0)">
+          <div class="phase-circle">I</div>
+          <div class="phase-label">
+            <span class="phase-period">NOW — MONTH 6</span>
+            <span class="phase-name">The Preparation</span>
+          </div>
+        </div>
+        <div class="phase-node" onclick="showPhase(1)">
+          <div class="phase-circle">II</div>
+          <div class="phase-label">
+            <span class="phase-period">MONTHS 6–12</span>
+            <span class="phase-name">The Landing</span>
+          </div>
+        </div>
+        <div class="phase-node" onclick="showPhase(2)">
+          <div class="phase-circle">III</div>
+          <div class="phase-label">
+            <span class="phase-period">YEARS 1–2</span>
+            <span class="phase-name">The Rooting</span>
+          </div>
+        </div>
+        <div class="phase-node" onclick="showPhase(3)">
+          <div class="phase-circle">IV</div>
+          <div class="phase-label">
+            <span class="phase-period">YEARS 2–4</span>
+            <span class="phase-name">The Wandering</span>
+          </div>
+        </div>
+        <div class="phase-node" onclick="showPhase(4)">
+          <div class="phase-circle">V</div>
+          <div class="phase-label">
+            <span class="phase-period">YEAR 5+</span>
+            <span class="phase-name">The Becoming</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase I -->
+      <div class="phase-details active" id="phase-0">
+        <div class="phase-card" style="border-left: 5px solid #3d2f18;">
+          <div class="phase-card-title">Phase I — The Preparation</div>
+          <div class="phase-card-period">NOW → MONTH 6 · Before You Arrive</div>
+          <p class="phase-card-desc">
+            The time traveler prepares before stepping through the portal. You build the foundation here: legal scaffolding, financial architecture, and your first 100 hours of French — not to be fluent, but to arrive with the basic instruments of contact. The French will forgive everything if you try in their language.
+          </p>
+          <div class="phase-cols">
+            <div class="phase-col">
+              <div class="phase-col-head">Legal & Administrative</div>
+              <ul>
+                <li>Apply for Long-Stay Visitor Visa (VLS-TS) — 3 months before departure</li>
+                <li>Prove ≥ €1,400/month income (French minimum wage standard, 2025)</li>
+                <li>Secure long-term health insurance (travel insurance not accepted)</li>
+                <li>Gather apostilled documents: birth certificate, bank statements, proof of address</li>
+                <li>Open a multi-currency account (Wise or Revolut) for bridge banking</li>
+                <li>Research opening a French bank account remotely (BNP Paribas, Société Générale)</li>
+              </ul>
+            </div>
+            <div class="phase-col">
+              <div class="phase-col-head">Language: First 100 Hours</div>
+              <ul>
+                <li>Anki flashcards: 500 most common French words</li>
+                <li>Pimsleur French: 30 min/day audio while commuting</li>
+                <li>Duolingo: 15 min/day — supplemental only, not primary</li>
+                <li>italki: 2x/week with a tutor (conversation from day one)</li>
+                <li>Watch: <em>Lupin</em>, <em>Call My Agent</em> with French subtitles</li>
+                <li>Goal: arrive at functional A1 — survive basic interactions</li>
+              </ul>
+            </div>
+            <div class="phase-col">
+              <div class="phase-col-head">Cultural Immersion (from home)</div>
+              <ul>
+                <li>Read: <em>A Year in Provence</em> (Mayle), <em>French Women Don't Get Fat</em> — cultural texture</li>
+                <li>Listen: <em>InnerFrench</em> podcast by Hugo Cotton (A2+)</li>
+                <li>Research French history: Gaul → Franks → Capetians → Revolution → Republic</li>
+                <li>Choose your first base region (see Region Guide below)</li>
+                <li>Connect with expat communities: r/france, r/expats, InterNations France</li>
+                <li>Start a "France Journal" — observations, words, fragments you find beautiful</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase II -->
+      <div class="phase-details" id="phase-1">
+        <div class="phase-card" style="border-left: 5px solid #2e6b8a;">
+          <div class="phase-card-title">Phase II — The Landing</div>
+          <div class="phase-card-period">MONTHS 6–12 · Your First Year in France</div>
+          <p class="phase-card-desc">
+            You have landed. The first year is not about mastery — it is about <em>surviving beautifully</em>. You are learning French not in a classroom but in a boulangerie, at a marché, in a quartier where you are the outsider who is trying. Validate your VLS-TS online within three months of arrival. Choose a base city that is not Paris — somewhere with slower rhythms and clearer access to the French soul.
+          </p>
+          <div class="phase-cols">
+            <div class="phase-col">
+              <div class="phase-col-head">Administrative on Arrival</div>
+              <ul>
+                <li>Validate VLS-TS at ANEF portal within 3 months — mandatory</li>
+                <li>Register with your local mairie (city hall)</li>
+                <li>Open a French bank account: La Banque Postale is most foreigner-friendly</li>
+                <li>Get a French SIM card (Free Mobile or Bouygues)</li>
+                <li>Register with a local médecin traitant (general practitioner)</li>
+                <li>Renew VLS-TS before it expires — apply at prefecture for carte de séjour</li>
+              </ul>
+            </div>
+            <div class="phase-col">
+              <div class="phase-col-head">Language: A2 → B1</div>
+              <ul>
+                <li>Enroll in Alliance Française or local école de langue — 2x/week minimum</li>
+                <li>Join a <em>tandem linguistique</em> — find a French person learning your language</li>
+                <li>Journal every day in French — even 3 sentences</li>
+                <li>Read Le Monde or Le Figaro: one article/day with a dictionary</li>
+                <li>Listen only to French podcasts, radio (France Inter), French music</li>
+                <li>Goal: survive real conversations without freezing</li>
+              </ul>
+            </div>
+            <div class="phase-col">
+              <div class="phase-col-head">Cultural Anchors</div>
+              <ul>
+                <li>Attend your local marché every Saturday morning — ritual, not errand</li>
+                <li>Find one café where you become a regular. Order the same thing. They will remember.</li>
+                <li>Visit one historical site per month in your region</li>
+                <li>Attend a cultural event: wine harvest, village festival, concert</li>
+                <li>Cook one new French dish each week from a French cookbook</li>
+                <li>Begin a "Carnet des Lieux" — a notebook of places and what they made you feel</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase III -->
+      <div class="phase-details" id="phase-2">
+        <div class="phase-card" style="border-left: 5px solid #2a6b5a;">
+          <div class="phase-card-title">Phase III — The Rooting</div>
+          <div class="phase-card-period">YEARS 1–2 · Finding Your France</div>
+          <p class="phase-card-desc">
+            After one year you are no longer a tourist with papers. You are beginning to have a <em>local self</em> — a relationship with the boulanger who knows your order, the neighbor who nods. Now is when you deepen rather than expand. Language becomes real conversation. History becomes the landscape you live inside. You start to understand what the French mean when they say <em>la douceur de vivre</em> — the sweetness of living.
+          </p>
+          <div class="phase-cols">
+            <div class="phase-col">
+              <div class="phase-col-head">Residency & Legal</div>
+              <ul>
+                <li>Apply for carte de séjour "visiteur" renewal — valid 1–3 years</li>
+                <li>Begin A2 language certification (required for some renewals post-2026)</li>
+                <li>Register with CAF if eligible for any social benefits</li>
+                <li>Explore PACS or other legal ties if applicable</li>
+                <li>Consider tax residency implications — France taxes worldwide income after 183 days</li>
+                <li>Consult a <em>notaire</em> or tax advisor familiar with expat situations</li>
+              </ul>
+            </div>
+            <div class="phase-col">
+              <div class="phase-col-head">Language: B1 → B2</div>
+              <ul>
+                <li>DELF B1 exam — official certification, unlocks doors</li>
+                <li>Read first French novel in French: <em>Le Petit Prince</em> → <em>L'Étranger</em></li>
+                <li>Watch French cinema without subtitles: Truffaut, Godard, Agnès Varda</li>
+                <li>Take a French philosophy or history course at local university (open to public)</li>
+                <li>At B2: you can think in French. The translation disappears.</li>
+                <li>Goal: hold 45-minute conversations on complex topics without exhaustion</li>
+              </ul>
+            </div>
+            <div class="phase-col">
+              <div class="phase-col-head">Deep Culture</div>
+              <ul>
+                <li>Undertake a themed regional journey: e.g., "The Cathars" or "Impressionist France"</li>
+                <li>Visit a different region for 2+ weeks: immerse, don't tour</li>
+                <li>Join a local <em>association culturelle</em> — book club, hiking club, art group</li>
+                <li>Volunteer for a local event — this is when French people invite you in</li>
+                <li>Begin studying one historical period deeply: choose your era</li>
+                <li>Start writing — reflections, stories, observations — in both languages</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase IV -->
+      <div class="phase-details" id="phase-3">
+        <div class="phase-card" style="border-left: 5px solid #b8860b;">
+          <div class="phase-card-title">Phase IV — The Wandering</div>
+          <div class="phase-card-period">YEARS 2–4 · France as a Living Manuscript</div>
+          <p class="phase-card-desc">
+            Now you wander with intention. You move region by region — 3 to 6 months in each — as a time traveler inhabiting different centuries. Brittany is Celtic and pre-Christian; Normandy is Viking and medieval; the Loire is Renaissance; Dordogne is prehistoric. Provence is Rome. You carry your French with you, each region polishing a different accent, a different vocabulary, a different relationship to time.
+          </p>
+          <div class="phase-cols">
+            <div class="phase-col">
+              <div class="phase-col-head">Movement Strategy</div>
+              <ul>
+                <li>Base yourself in each region for 3–6 months — rent, don't hotel</li>
+                <li>Use the TGV high-speed network as your time machine between eras</li>
+                <li>Document each region through a different medium: photography, writing, sketching, sound recording</li>
+                <li>Walk long-distance routes: GR34 (Brittany coast), Chemin de Saint-Jacques</li>
+                <li>Attend regional festivals as a participant, not a spectator</li>
+                <li>Build a circle of locals in each place — not just expats</li>
+              </ul>
+            </div>
+            <div class="phase-col">
+              <div class="phase-col-head">Language: B2 → C1</div>
+              <ul>
+                <li>DELF B2 or DALF C1 exam — consider for permanent residency path</li>
+                <li>Engage with regional patois and accents: Breton, Occitan, Alsatian influences</li>
+                <li>Read French historians: Jules Michelet, Emmanuel Le Roy Ladurie</li>
+                <li>Listen to French political debate, radio essays (France Culture)</li>
+                <li>Write something worth reading — a blog, a zine, personal essays</li>
+                <li>At C1: you dream in French. History speaks to you directly.</li>
+              </ul>
+            </div>
+            <div class="phase-col">
+              <div class="phase-col-head">The Time Traveler's Work</div>
+              <ul>
+                <li>Choose one historical site per region and spend a full day in silence there</li>
+                <li>Visit Lascaux IV — stand before 17,000-year-old consciousness</li>
+                <li>Walk the D-Day beaches alone in early morning</li>
+                <li>Attend a midnight mass at a medieval cathedral at Christmas</li>
+                <li>Spend a night in a troglodyte village in the Loire — carved from cliff</li>
+                <li>Find the oldest living tree in France and sit under it</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase V -->
+      <div class="phase-details" id="phase-4">
+        <div class="phase-card" style="border-left: 5px solid #4a2060;">
+          <div class="phase-card-title">Phase V — The Becoming</div>
+          <div class="phase-card-period">YEAR 5 AND BEYOND · Permanent Residency & Citizenship Path</div>
+          <p class="phase-card-desc">
+            After five years of legal residency, you may apply for <em>résidence permanente</em> (permanent residency) and begin the citizenship path. At this point you are no longer a visitor in any sense — you are someone France has shaped, and who carries France within them. The language is no longer a tool; it is a self. The history is no longer information; it is your ancestral air. The culture is not something you observe; it is the water you swim in.
+          </p>
+          <div class="phase-cols">
+            <div class="phase-col">
+              <div class="phase-col-head">Legal Milestones: Year 5+</div>
+              <ul>
+                <li>Apply for Carte de Résident (10-year permanent residency) after 5 years</li>
+                <li>Requires B1 French minimum (rising requirements — aim for B2+)</li>
+                <li>French citizenship eligibility after 5 years of residency — requires B2 and integration evidence</li>
+                <li>Application via naturalisation — prefecture + OFPRA</li>
+                <li>No requirement to give up other citizenship (France allows dual nationality)</li>
+                <li>Celebrate: you are now legally a <em>Français</em></li>
+              </ul>
+            </div>
+            <div class="phase-col">
+              <div class="phase-col-head">Language: C1 → C2</div>
+              <ul>
+                <li>DALF C2 — near-native mastery. Rare. Worth pursuing for the discipline.</li>
+                <li>Write entirely in French: letters, essays, creative work</li>
+                <li>Read untranslated Proust, Flaubert, Simone de Beauvoir, Aimé Césaire</li>
+                <li>Attend a <em>café philosophique</em> and argue about ideas in French</li>
+                <li>At C2: French is no longer foreign. You think and feel in it.</li>
+                <li>You can now teach French culture to others — a profound marker of integration</li>
+              </ul>
+            </div>
+            <div class="phase-col">
+              <div class="phase-col-head">Who You Have Become</div>
+              <ul>
+                <li>You have inhabited at least 4–5 distinct regions of France deeply</li>
+                <li>You have a genuine relationship to 3,000 years of French history</li>
+                <li>You move through the world as someone who has chosen their own cultural education</li>
+                <li>You carry within you a Gallic relationship to time — <em>le temps qui passe</em></li>
+                <li>You are ready for the next world — the next time and place</li>
+                <li>France will always be somewhere you can return and belong</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════
+         LANGUAGE LEVELS
+    ══════════════════════════════════ -->
+    <section class="language-section">
+      <div class="sec-head">
+        <span class="sec-num">II —</span>
+        <h2 class="sec-title">The Language Map: A1 to C2</h2>
+        <span class="sec-tag">Your tongue is the key to every door</span>
+      </div>
+
+      <div class="lang-timeline">
+        <div class="lang-level l-a1">
+          <div class="lang-badge">A1</div>
+          <div class="lang-name">BEGINNER</div>
+          <div class="lang-hours">80–100 hrs total</div>
+          <div class="lang-desc">You can introduce yourself, order at a café, ask directions. People will smile encouragingly. You have arrived.</div>
+          <div class="lang-milestone">"<em>Bonjour, je m'appelle...</em>"</div>
+        </div>
+        <div class="lang-level l-a2">
+          <div class="lang-badge">A2</div>
+          <div class="lang-name">ELEMENTARY</div>
+          <div class="lang-hours">180–200 hrs cumulative</div>
+          <div class="lang-desc">Simple exchanges about familiar topics. You can survive markets, pharmacies, bureaucracy — imperfectly but authentically.</div>
+          <div class="lang-milestone">"Je voudrais louer un appartement..."</div>
+        </div>
+        <div class="lang-level l-b1">
+          <div class="lang-badge">B1</div>
+          <div class="lang-name">INTERMEDIATE</div>
+          <div class="lang-hours">350–400 hrs cumulative</div>
+          <div class="lang-desc">You can discuss past, present, future. You understand the main points of conversations. You have opinions in French.</div>
+          <div class="lang-milestone">DELF B1 certification — required for many renewals</div>
+        </div>
+        <div class="lang-level l-b2">
+          <div class="lang-badge">B2</div>
+          <div class="lang-name">UPPER INTERMEDIATE</div>
+          <div class="lang-hours">500–600 hrs cumulative</div>
+          <div class="lang-desc">You speak with native speakers without strain. You watch films without subtitles. The translation stops. This is the golden level.</div>
+          <div class="lang-milestone">DELF B2 — threshold for university, naturalization</div>
+        </div>
+        <div class="lang-level l-c1">
+          <div class="lang-badge">C1</div>
+          <div class="lang-name">ADVANCED</div>
+          <div class="lang-hours">700–800 hrs cumulative</div>
+          <div class="lang-desc">You use French flexibly for social, academic, emotional expression. You understand nuance. Humor. Irony. History from the inside.</div>
+          <div class="lang-milestone">DALF C1 — recognized for naturalization</div>
+        </div>
+        <div class="lang-level l-c2">
+          <div class="lang-badge">C2</div>
+          <div class="lang-name">MASTERY</div>
+          <div class="lang-hours">1,000+ hrs cumulative</div>
+          <div class="lang-desc">You think in French. You dream in French. You forget which language you are in. You read Proust and understand why he is brilliant.</div>
+          <div class="lang-milestone">DALF C2 — near-native. You have become someone else.</div>
+        </div>
+      </div>
+
+      <div class="lang-resources">
+        <div class="lang-res-col">
+          <div class="lang-res-cat">Daily Practice (A1–B1)</div>
+          <ul>
+            <li><strong>Anki</strong> — spaced repetition flashcards</li>
+            <li><strong>Pimsleur French</strong> — audio, 30 min/day</li>
+            <li><strong>Duolingo</strong> — supplement only</li>
+            <li><strong>italki</strong> — 2x/week conversation tutor</li>
+            <li><strong>Lingvist</strong> — vocabulary frequency</li>
+          </ul>
+        </div>
+        <div class="lang-res-col">
+          <div class="lang-res-cat">Immersion Media (A2–B2)</div>
+          <ul>
+            <li><strong>InnerFrench podcast</strong> — Hugo Cotton, comprehensible input</li>
+            <li><strong>France Inter radio</strong> — stream live, 24/7</li>
+            <li><strong>France Culture</strong> — philosophy, art, history</li>
+            <li><strong>TV5MONDE</strong> — French TV with French subtitles</li>
+            <li><strong>Lupin, Call My Agent, Engrenages</strong></li>
+          </ul>
+        </div>
+        <div class="lang-res-col">
+          <div class="lang-res-cat">Reading (B1–C1)</div>
+          <ul>
+            <li><strong>Le Monde / Le Figaro</strong> — one article/day</li>
+            <li><strong>Le Petit Prince</strong> — first full novel</li>
+            <li><strong>L'Étranger</strong> — Camus, then Sartre</li>
+            <li><strong>Astérix</strong> — comic books, oral French, humor</li>
+            <li><strong>Jules Michelet</strong> — French history in French</li>
+          </ul>
+        </div>
+        <div class="lang-res-col">
+          <div class="lang-res-cat">Certification Path</div>
+          <ul>
+            <li><strong>DELF A2</strong> — recommended Year 1</li>
+            <li><strong>DELF B1</strong> — required for residency renewal (post-2026)</li>
+            <li><strong>DELF B2</strong> — naturalization standard</li>
+            <li><strong>DALF C1</strong> — university, professional</li>
+            <li><strong>Alliance Française</strong> — prep courses worldwide</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════
+         REGION GUIDE
+    ══════════════════════════════════ -->
+    <section class="regions-section">
+      <div class="sec-head">
+        <span class="sec-num">III —</span>
+        <h2 class="sec-title">Six Territories, Six Centuries</h2>
+        <span class="sec-tag">Each region is a different chapter of the same story</span>
+      </div>
+      <p class="regions-intro">
+        France is not one country — it is a palimpsest of overlapping civilizations, each region a manuscript written in a different hand. The time traveler does not choose one and stay; they move, deliberately, through each layer. Below are six territories mapped by their historical soul, not their tourism rank.
+      </p>
+
+      <div class="regions-grid">
+
+        <div class="region-card rc-paris">
+          <div class="region-seq">BASE CAMP · STAGE I</div>
+          <div class="region-name">Paris & Île-de-France</div>
+          <div class="region-type">Nerve center of the French mind · 2,000 years of continuous civilization</div>
+          <p class="region-why">Do not begin here permanently — you will get lost in the cosmopolitan surface. But spend 3 months here first: learn the city's geometry, its arrondissements, its rhythm. Paris is not France, but it is where France explains itself. Take the Musée Cluny (medieval France), the Conciergerie (the Revolution), the catacombs (the city beneath the city).</p>
+          <ul class="region-sites">
+            <li>Sainte-Chapelle — Gothic light made architectural</li>
+            <li>Musée de Cluny — Medieval art in an actual Roman bath</li>
+            <li>Marché d'Aligre — the most Parisian market, not touristic</li>
+            <li>Canal Saint-Martin neighborhood — 19th-century Paris unchanged</li>
+          </ul>
+          <span class="region-era">ROMAN · MEDIEVAL · REVOLUTION · BELLE ÉPOQUE</span>
+        </div>
+
+        <div class="region-card rc-normandy">
+          <div class="region-seq">STAGE II · YEAR 1</div>
+          <div class="region-name">Normandy</div>
+          <div class="region-type">Viking homeland · Medieval conquest · 20th-century sacrifice</div>
+          <p class="region-why">Normandy is one of the most historically concentrated landscapes on Earth. Within 100km you can touch: Viking settlement, the Bayeux Tapestry (1,000 years old, depicting the conquest of England), Mont-Saint-Michel rising from tidal flats, and the D-Day beaches where the 20th century turned. Base in Bayeux or Caen. Speak French with fishermen.</p>
+          <ul class="region-sites">
+            <li>Bayeux Tapestry — 70 meters of embroidered history</li>
+            <li>Mont-Saint-Michel — approach at low tide on foot</li>
+            <li>Omaha Beach at dawn, alone — before the tourists arrive</li>
+            <li>Abbaye aux Hommes, Caen — William the Conqueror's tomb</li>
+          </ul>
+          <span class="region-era">VIKING · NORMAN · MEDIEVAL · WW2</span>
+        </div>
+
+        <div class="region-card rc-loire">
+          <div class="region-seq">STAGE III · YEAR 1–2</div>
+          <div class="region-name">Loire Valley</div>
+          <div class="region-type">Renaissance glory · Garden of France · Royal dreamscape</div>
+          <p class="region-why">The Loire is where French royalty built their fantasies in stone. Over 300 châteaux in a single valley — Chambord (Leonardo da Vinci contributed to the design), Chenonceau spanning a river, Azay-le-Rideau reflected in glass water. This is the France of Renaissance humanism, of Leonardo's last years in Amboise, of kings who believed heaven should look like this. Base in Tours or Amboise.</p>
+          <ul class="region-sites">
+            <li>Château de Chambord — the double-helix staircase, possibly designed by Leonardo</li>
+            <li>Château de Chenonceau — built by and for women, spanning the Cher river</li>
+            <li>Troglodyte villages of Anjou — entire communities carved into cliff</li>
+            <li>Fontevraud Abbey — Eleanor of Aquitaine's tomb</li>
+          </ul>
+          <span class="region-era">RENAISSANCE · ROYAL COURT · HUMANISM</span>
+        </div>
+
+        <div class="region-card rc-dordogne">
+          <div class="region-seq">STAGE IV · YEAR 2</div>
+          <div class="region-name">Dordogne & Périgord</div>
+          <div class="region-type">Prehistoric consciousness · Medieval cliff villages · Time at its deepest</div>
+          <p class="region-why">This is the oldest France. Lascaux is here — cave paintings from 17,000 years ago that will rearrange your understanding of human consciousness. The Dordogne River winds past medieval fortresses perched on limestone cliffs. Sarlat is a perfectly preserved medieval market town where time stopped in the 14th century. This is where the French soul touches its oldest roots. Base in Sarlat.</p>
+          <ul class="region-sites">
+            <li>Lascaux IV — the full recreation of paintings 17,000 years old</li>
+            <li>Font-de-Gaume — one of the last original prehistoric caves open to public</li>
+            <li>Château de Beynac — clifftop fortress, canoe past below</li>
+            <li>Sarlat-la-Canéda market (Saturday) — medieval stone, black truffles, foie gras</li>
+          </ul>
+          <span class="region-era">PREHISTORIC · MEDIEVAL · HUNDRED YEARS WAR</span>
+        </div>
+
+        <div class="region-card rc-provence">
+          <div class="region-seq">STAGE V · YEAR 3</div>
+          <div class="region-name">Provence</div>
+          <div class="region-type">Roman conquest · Troubadours · Van Gogh's light · The southern soul</div>
+          <p class="region-why">Rome is everywhere in Provence — the Pont du Gard aqueduct still stands, the amphitheater in Arles still seats concerts, the theater in Orange is intact. Then the medieval papacy moved here (Avignon, Palais des Papes). Then Van Gogh came to Arles and painted 300 canvases in 444 days. Provence is where the Mediterranean DNA of France lives. Base in Arles or Aix-en-Provence.</p>
+          <ul class="region-sites">
+            <li>Pont du Gard — Roman aqueduct from 50 BCE, swim beneath it</li>
+            <li>Arles Roman amphitheater — still hosts bullfights</li>
+            <li>Palais des Papes, Avignon — when Catholicism's capital was French</li>
+            <li>Les Baux-de-Provence — hilltop ghost village above the Alpilles</li>
+          </ul>
+          <span class="region-era">ROMAN GAUL · PAPAL · IMPRESSIONIST · MEDITERRANEAN</span>
+        </div>
+
+        <div class="region-card rc-brittany">
+          <div class="region-seq">STAGE VI · YEAR 3–4</div>
+          <div class="region-name">Brittany (Breizh)</div>
+          <div class="region-type">Celtic identity · Pre-Christian mystery · Atlantic wildness</div>
+          <p class="region-why">Brittany is France's Celtic country — it speaks a language related to Welsh and Cornish, it raises standing stones older than Stonehenge, it carries a mythological world that predates Rome. Carnac has 3,000 megalithic stones aligned across a field — nobody knows exactly why. The coast is rough and beautiful and unconquered in spirit. Brittany is the part of France that is proudly not quite France. Base in Rennes or Vannes.</p>
+          <ul class="region-sites">
+            <li>Carnac megaliths — 3,000+ standing stones from 3,300 BCE</li>
+            <li>Saint-Malo — corsair city, walled, on the sea</li>
+            <li>Dinan — best preserved medieval center in Brittany</li>
+            <li>Île de Bréhat — walk the island at low tide, no cars, ancient light</li>
+          </ul>
+          <span class="region-era">NEOLITHIC · CELTIC · CORSAIR · BRETON RENAISSANCE</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════
+         HISTORY LAYERS
+    ══════════════════════════════════ -->
+    <section class="history-section">
+      <div class="sec-head">
+        <span class="sec-num">IV —</span>
+        <h2 class="sec-title">The River of French History</h2>
+        <span class="sec-tag">You are not learning history. You are remembering where you are standing.</span>
+      </div>
+
+      <div class="history-river">
+
+        <div class="history-era" id="era-0">
+          <div class="era-period">40,000 – 10,000 BCE</div>
+          <div class="era-name" style="color: var(--ink-faint);">The Cave Painters</div>
+          <p class="era-desc">Before France was anything, the land was inhabited by humans who painted horses and aurochs in firelit caves with red ochre and charcoal. At Lascaux, Chauvet, Font-de-Gaume — the most ancient art in Europe. These people did not know they were in France. But France was in them.</p>
+          <p class="era-where">Where to stand inside it: Lascaux IV (Dordogne) · Font-de-Gaume (Les Eyzies) · Carnac megaliths (Brittany, 3300 BCE)</p>
+        </div>
+
+        <div class="history-era" id="era-1">
+          <div class="era-period">58–51 BCE</div>
+          <div class="era-name" style="color: #7a4020;">Roman Gaul — La Romanisation</div>
+          <p class="era-desc">Julius Caesar conquers the Celtic tribes of Gaul in eight years of brutal campaign. Gallic chieftain Vercingetorix surrenders at Alésia in 52 BCE. Rome builds cities — Lugdunum (Lyon), Nemausus (Nîmes), Arausio (Orange). The Latin language is planted in Gallic soil, and from that crossing will eventually grow French itself.</p>
+          <p class="era-where">Where to stand inside it: Pont du Gard (Nîmes) · Arles amphitheater · Orange Roman theater · Gallo-Roman Museum, Lyon</p>
+        </div>
+
+        <div class="history-era" id="era-2">
+          <div class="era-period">843 – 987 CE</div>
+          <div class="era-name" style="color: var(--blue-royal);">The Carolingians & the Birth of France</div>
+          <p class="era-desc">Charlemagne's empire fractures at the Treaty of Verdun (843 CE) — and from that fracture, the kernel of what will become France emerges. The Capetian dynasty takes the throne in 987. The Viking invasions shape the north: Normandy is named for the Northmen who settled it, converted to Christianity, and learned French within two generations.</p>
+          <p class="era-where">Where to stand inside it: Abbaye de Cluny (Burgundy) · Viking Museum, Normandy · Cathédrale de Reims, where French kings were crowned</p>
+        </div>
+
+        <div class="history-era" id="era-3">
+          <div class="era-period">1066 – 1450 CE</div>
+          <div class="era-name" style="color: var(--ink-mid);">The Medieval: Cathedrals, Crusades & Jeanne d'Arc</div>
+          <p class="era-desc">William of Normandy conquers England in 1066 — for centuries, French is the language of the English court. The great cathedrals rise: Notre-Dame de Paris, Chartres, Reims — Gothic architecture as theology in stone. The Hundred Years' War (1337–1453) ravages France and produces its most enduring myth: Jeanne d'Arc, the girl from Lorraine who heard voices and turned the tide.</p>
+          <p class="era-where">Where to stand inside it: Chartres Cathedral · Carcassonne · Mont-Saint-Michel · Bayeux (Tapestry) · Rouen (where Jeanne was burned)</p>
+        </div>
+
+        <div class="history-era" id="era-4">
+          <div class="era-period">1494 – 1610 CE</div>
+          <div class="era-name" style="color: var(--teal-old);">The Renaissance & the Loire Kings</div>
+          <p class="era-desc">The Italian Renaissance arrives in France with the invasion of Italy. Francis I brings Leonardo da Vinci to Amboise in 1516; Leonardo dies there in 1519. The Loire Valley becomes a laboratory for French humanism — 300 châteaux built in a century. The printing press spreads French as a literary language; Montaigne invents the essay; Rabelais invents the satirical novel.</p>
+          <p class="era-where">Where to stand inside it: Château de Chambord · Château du Clos Lucé (Leonardo's last home) · Fontainebleau Palace</p>
+        </div>
+
+        <div class="history-era" id="era-5">
+          <div class="era-period">1789 – 1799 CE</div>
+          <div class="era-name" style="color: var(--red-wax);">The Revolution — When the World Changed</div>
+          <p class="era-desc">On July 14, 1789, the Bastille falls. Within five years: the monarchy ends, the King is guillotined, the Terror consumes 40,000 lives, and the entire political vocabulary of the modern world — liberté, égalité, fraternité, left and right, citizen, nation — is born or transformed. France invents modern politics and nearly destroys itself doing so.</p>
+          <p class="era-where">Where to stand inside it: Place de la Bastille, Paris · Conciergerie (where Marie-Antoinette was held) · Panthéon (where the Republic buries its great)</p>
+        </div>
+
+        <div class="history-era" id="era-6">
+          <div class="era-period">1940 – 1944 CE</div>
+          <div class="era-name" style="color: var(--ink);">The Occupation & Liberation</div>
+          <p class="era-desc">Nazi Germany occupies France in June 1940. For four years, France is divided — the occupied north and Vichy France in the south. The Resistance, Charles de Gaulle broadcasting from London, the maquis fighters in the hills. On June 6, 1944, Allied forces land on Normandy's beaches and begin the long liberation. This trauma and glory live in every French person's DNA.</p>
+          <p class="era-where">Where to stand inside it: Omaha Beach, Normandy · Mémorial de Caen · Musée de l'Ordre de la Libération, Paris · Résistance Museum, Lyon</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════
+         CULTURAL PILLARS
+    ══════════════════════════════════ -->
+    <section class="culture-section">
+      <div class="sec-head">
+        <span class="sec-num">V —</span>
+        <h2 class="sec-title">The Eight Pillars of French Culture</h2>
+        <span class="sec-tag">What you are actually learning to inhabit</span>
+      </div>
+
+      <div class="culture-grid">
+        <div class="culture-card">
+          <div class="culture-icon">🥖</div>
+          <div class="culture-name">La Table — Food as Civilization</div>
+          <p class="culture-desc">The French meal is not sustenance — it is a philosophical position. Two hours minimum. Bread, wine, several courses, conversation that matters. The boulangerie, the fromagerie, the marché — these are not shops but institutions. Learn to recognize 30 cheeses, 10 wine regions, the difference between a beurre blanc and a beurre noisette.</p>
+          <ul class="culture-practices">
+            <li>Go to a marché every Saturday — this is required</li>
+            <li>Learn to cook 10 French dishes from scratch, no shortcuts</li>
+            <li>Take a cheese tasting at an affineur (cheese ager)</li>
+            <li>Visit a boulangerie every morning and learn every product's name</li>
+          </ul>
+        </div>
+        <div class="culture-card">
+          <div class="culture-icon">💬</div>
+          <div class="culture-name">Le Débat — Argument as Affection</div>
+          <p class="culture-desc">The French argue because they care about ideas. A dinner table debate about philosophy or politics is not a fight — it is intimacy. The French are intensely verbal, precise, and love being contradicted if you can do it well. Learning to hold and defend a position in French, with wit and rigor, is how you earn genuine friendship here.</p>
+          <ul class="culture-practices">
+            <li>Attend a <em>café philosophique</em> — they exist in most French cities</li>
+            <li>Read one French philosopher per year: Descartes, Camus, Simone de Beauvoir</li>
+            <li>Disagree — politely but firmly — and watch French people respect you for it</li>
+            <li>Learn French political vocabulary: gauche, droite, laïcité, République</li>
+          </ul>
+        </div>
+        <div class="culture-card">
+          <div class="culture-icon">🎨</div>
+          <div class="culture-name">L'Art — Beauty as a Moral Category</div>
+          <p class="culture-desc">France produced Impressionism, Cubism, Existentialism, the Nouvelle Vague, haute couture. The French treat aesthetics as a serious discipline. A badly designed object is a moral failure. Learn to see light as Monet saw it, to understand why Rodin's figures seem to breathe, to know what makes a building truly beautiful and not merely large.</p>
+          <ul class="culture-practices">
+            <li>Visit the Musée d'Orsay (Impressionism) before the Louvre</li>
+            <li>Watch the entire Nouvelle Vague: Godard, Truffaut, Varda, Resnais</li>
+            <li>Attend one live performance per month: opera, jazz, theater</li>
+            <li>Learn to sketch — carry a small notebook and draw what you see</li>
+          </ul>
+        </div>
+        <div class="culture-card">
+          <div class="culture-icon">⏳</div>
+          <div class="culture-name">Le Temps — A Different Relationship to Time</div>
+          <p class="culture-desc">The French are not slow — they are deliberate. The concept of <em>flânerie</em> — wandering without destination — is not laziness but a practice of presence. The <em>apéritif</em> hour, the long lunch, the refusal to be hurried: these are assertions of human dignity against the tyranny of efficiency. This is the hardest thing to learn, and the most valuable.</p>
+          <ul class="culture-practices">
+            <li>Practice <em>flânerie</em>: walk without a destination for 2 hours every week</li>
+            <li>Never eat standing up if you can help it. Never eat alone at a café.</li>
+            <li>Observe the <em>heure d'apéritif</em> — 6–8pm is for drinks and conversation, not work</li>
+            <li>Take all five weeks of summer vacation — France mandates it; honor it</li>
+          </ul>
+        </div>
+        <div class="culture-card">
+          <div class="culture-icon">📚</div>
+          <div class="culture-name">La Littérature — The Nation of the Written Word</div>
+          <p class="culture-desc">France is the country that invented the essay, the modern novel, the existentialist tract, the Surrealist manifesto. Its 16 Nobel Prizes in Literature are not accidental — they reflect a culture where a bookshop is as important as a pharmacy. Learn to talk about books. The French do this at dinner. You must be able to participate.</p>
+          <ul class="culture-practices">
+            <li>Read the Prix Goncourt winner each year — France's highest literary honor</li>
+            <li>Visit Shakespeare & Company in Paris — attend a reading</li>
+            <li>Carry a book visibly in public — a social signal in France</li>
+            <li>Read Simone de Beauvoir: <em>Le Deuxième Sexe</em> is foundational to modern France</li>
+          </ul>
+        </div>
+        <div class="culture-card">
+          <div class="culture-icon">🌿</div>
+          <div class="culture-name">Le Terroir — The Philosophy of Place</div>
+          <p class="culture-desc"><em>Terroir</em> is untranslatable: it means the specific taste of a place — the soil, the microclimate, the tradition — that makes a wine or a cheese or a bread different from any other on earth. The French believe deeply that place shapes substance, that where something comes from determines what it is. This is a whole philosophy. It will change how you perceive everything.</p>
+          <ul class="culture-practices">
+            <li>Taste wine from five regions and learn to identify the region by palate</li>
+            <li>Visit an AOC producer — appellation d'origine contrôlée — in Burgundy or Bordeaux</li>
+            <li>Understand that "fromage de chèvre" from one valley tastes nothing like from the next</li>
+            <li>Apply terroir thinking to yourself: who shaped you, and how?</li>
+          </ul>
+        </div>
+        <div class="culture-card">
+          <div class="culture-icon">🏛️</div>
+          <div class="culture-name">La République — The Secular Sacred</div>
+          <p class="culture-desc">France is not just a country — it is an idea: <em>liberté, égalité, fraternité</em>, <em>laïcité</em> (secularism), the Republic. The French state is not merely a government but a civic religion. Bastille Day is not a celebration of a historical event — it is a reenactment of the founding myth. Understanding the République is understanding why the French sometimes seem to argue with each other about everything — because they are arguing about what kind of idea they want to be.</p>
+          <ul class="culture-practices">
+            <li>Attend a Bastille Day celebration — July 14th — in a provincial town, not Paris</li>
+            <li>Visit the Panthéon and read who France has chosen to honor</li>
+            <li>Read the Declaration of the Rights of Man (1789) in French</li>
+            <li>Understand <em>laïcité</em> — it is not anti-religion, it is the French version of pluralism</li>
+          </ul>
+        </div>
+        <div class="culture-card">
+          <div class="culture-icon">🎶</div>
+          <div class="culture-name">La Chanson — Song as Autobiography</div>
+          <p class="culture-desc">French chanson is not background music — it is a literary genre. Édith Piaf, Jacques Brel, Serge Gainsbourg, Barbara, Georges Brassens: these are poets who happened to use melody. To know French music is to know the French interior — their irony, their sentiment, their relationship to love and loss and time. Learn a Piaf song by heart. It will make a French person cry — and love you.</p>
+          <ul class="culture-practices">
+            <li>Learn <em>La Vie en Rose</em> and <em>Non, je ne regrette rien</em> by heart</li>
+            <li>Discover Serge Gainsbourg — controversial, brilliant, essentially French</li>
+            <li>Explore contemporary artists: Pomme, Angèle, Stromae (Belgian-French)</li>
+            <li>Attend a live <em>bal populaire</em> — village dance, especially in summer</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════
+         PRACTICAL PLAN
+    ══════════════════════════════════ -->
+    <section class="practical-section">
+      <div class="sec-head">
+        <span class="sec-num">VI —</span>
+        <h2 class="sec-title">The Practical Architecture</h2>
+        <span class="sec-tag">The scaffolding behind the dream</span>
+      </div>
+
+      <div class="checklist-grid">
+        <div class="checklist-block">
+          <div class="check-head">Before You Leave (Month 1–5)</div>
+          <div class="check-sub">// LEGAL & FINANCIAL FOUNDATION</div>
+          <ul class="check-items">
+            <li class="check-item"><div class="check-box"></div><div>Apply for Long-Stay Visitor Visa (VLS-TS) at French consulate — €99 fee + docs <span class="check-note">· apply 3 months before departure</span></div></li>
+            <li class="check-item"><div class="check-box"></div><div>Prove ≥ €1,400/month stable income (bank statements, 3–6 months) <span class="check-note">· approximately French SMIC minimum wage</span></div></li>
+            <li class="check-item"><div class="check-box"></div><div>Get long-term health insurance covering France (not travel insurance)</div></li>
+            <li class="check-item"><div class="check-box"></div><div>Open Wise or Revolut multi-currency account — save on exchange fees</div></li>
+            <li class="check-item"><div class="check-box"></div><div>Get apostilled copies: birth certificate, criminal background check</div></li>
+            <li class="check-item"><div class="check-box"></div><div>Secure housing for first 3 months (Leboncoin, Airbnb long-stay, Fusac.fr)</div></li>
+            <li class="check-item"><div class="check-box"></div><div>Learn 500 French words minimum before arrival (Anki deck)</div></li>
+          </ul>
+        </div>
+        <div class="checklist-block">
+          <div class="check-head">First 90 Days in France</div>
+          <div class="check-sub">// LANDING PROTOCOL</div>
+          <ul class="check-items">
+            <li class="check-item"><div class="check-box"></div><div>Validate VLS-TS online at ANEF portal within 3 months <span class="check-note">· mandatory — failure risks deportation</span></div></li>
+            <li class="check-item"><div class="check-box"></div><div>Open French bank account: La Banque Postale or BNP Paribas (most foreigner-friendly)</div></li>
+            <li class="check-item"><div class="check-box"></div><div>Register with local mairie (city hall) — get your commune registration</div></li>
+            <li class="check-item"><div class="check-box"></div><div>Get French SIM card: Free Mobile (budget) or Orange (reliability)</div></li>
+            <li class="check-item"><div class="check-box"></div><div>Find a médecin traitant — primary care doctor, register with French health system</div></li>
+            <li class="check-item"><div class="check-box"></div><div>Enroll in Alliance Française or local language school</div></li>
+            <li class="check-item"><div class="check-box"></div><div>Find your Saturday market and make it a ritual</div></li>
+          </ul>
+        </div>
+      </div>
+
+      <div style="margin: 1.5rem 0; border: 1px solid var(--parchment-shadow); padding: 1.5rem 2rem;">
+        <div class="check-head" style="margin-bottom: 0.3rem;">Monthly Budget Estimate — Independent Lifestyle</div>
+        <div class="check-sub" style="margin-bottom: 1rem;">// OUTSIDE PARIS · PROVINCIAL CITY · SINGLE PERSON</div>
+        <table class="costs-table">
+          <thead>
+            <tr>
+              <th>CATEGORY</th>
+              <th>BUDGET (€/month)</th>
+              <th>NOTES</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="cat">Housing (rent, furnished)</td><td>€600–900</td><td>Lyon, Bordeaux, Montpellier, Tours — 1BR apartment</td></tr>
+            <tr><td class="cat">Food & Markets</td><td>€250–350</td><td>Cook at home 5 days, marché twice weekly, café regularly</td></tr>
+            <tr><td class="cat">Health Insurance</td><td>€100–200</td><td>Private long-term policy; reduces after CPAM enrollment</td></tr>
+            <tr><td class="cat">Transport</td><td>€50–150</td><td>City pass + occasional TGV; no car needed in cities</td></tr>
+            <tr><td class="cat">Language (school/tutor)</td><td>€80–200</td><td>Alliance Française group classes, or 2x/week italki tutor</td></tr>
+            <tr><td class="cat">Culture (museums, concerts)</td><td>€50–100</td><td>Museum Pass pays for itself in 3 visits</td></tr>
+            <tr><td class="cat">Miscellaneous</td><td>€100–200</td><td>Clothing, household, books, wine (essential)</td></tr>
+            <tr class="total-row"><td class="cat total">TOTAL (comfortable)</td><td class="total">€1,230–2,100</td><td>Paris adds 40–60% to housing; rural France reduces by 30%</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════
+         TIME TRAVELER PHILOSOPHY
+    ══════════════════════════════════ -->
+    <section class="philosophy-section">
+      <div class="philo-title">The Philosophy of the Time Traveler</div>
+      <div class="philo-grid">
+        <div class="philo-item">
+          <div class="philo-item-title">Inhabit, Don't Visit</div>
+          <p class="philo-item-body">A tourist sees a place. A traveler passes through it. A time traveler <em>inhabits</em> it — becomes part of its texture, returns to the same café until they know your order, learns the smell of rain on that specific stone. The difference between knowing about Normandy and knowing Normandy is measured in months of lived proximity, not hours of itinerary.</p>
+        </div>
+        <div class="philo-item">
+          <div class="philo-item-title">Language as Portal</div>
+          <p class="philo-item-body">Every language is a different consciousness, a different way of organizing time and relationship. French has a word — <em>dépaysement</em> — for the feeling of being in a foreign country, disoriented and strangely alive. It has <em>flâner</em>, <em>terroir</em>, <em>joie de vivre</em>. When you learn French, you are not translating English thoughts — you are growing a second mind. That second mind will see things your first cannot.</p>
+        </div>
+        <div class="philo-item">
+          <div class="philo-item-title">History as Presence</div>
+          <p class="philo-item-body">The time traveler does not read history — they stand inside it. When you walk the ramparts of Carcassonne, you are not learning about the 13th century — you are feeling the weight of stone that watched the Cathar heresy crushed below. History in France is not past. It is the ground beneath your feet, the grammar of the language in your mouth, the reason the bread is shaped the way it is.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════
+         FOOTER
+    ══════════════════════════════════ -->
+    <footer class="footer">
+      <div class="footer-motto">
+        <em>"Partir, c'est mourir un peu.</em><br>
+        <em>Rester, c'est naître lentement."</em><br>
+        <span style="font-size: 0.75rem; color: var(--ink-faint);">— To leave is to die a little. To stay is to be born, slowly.</span>
+      </div>
+      <div class="footer-note">
+        La Grande Traversée · Personal Immersion Atlas<br>
+        Version I · Drawn for a time traveler<br>
+        France awaits · Allez-y
+      </div>
+    </footer>
+
+  </div><!-- /content -->
+</div><!-- /page -->
+
+<script>
+// Phase switching
+function showPhase(index) {
+  document.querySelectorAll('.phase-node').forEach((n, i) => {
+    n.classList.toggle('active', i === index);
+  });
+  document.querySelectorAll('.phase-details').forEach((d, i) => {
+    d.classList.toggle('active', i === index);
+  });
+}
+
+// History era scroll reveal
+const eras = document.querySelectorAll('.history-era');
+const eraObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) e.target.classList.add('visible');
+  });
+}, { threshold: 0.15 });
+eras.forEach(e => eraObserver.observe(e));
+
+// General reveal
+const reveals = document.querySelectorAll('.region-card, .culture-card, .lang-level, .checklist-block');
+const revealObs = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      e.target.style.opacity = '0';
+      e.target.style.transform = 'translateY(12px)';
+      e.target.style.transition = `opacity 0.6s ease ${i * 0.05}s, transform 0.6s ease ${i * 0.05}s`;
+      requestAnimationFrame(() => {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      });
+      revealObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.08 });
+reveals.forEach(r => revealObs.observe(r));
+</script>
+</body>
+</html>

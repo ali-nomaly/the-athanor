@@ -1,0 +1,1527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Mesa — Family Eating Guide</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=DM+Sans:wght@300;400;500;600&family=Noto+Serif:ital,wght@0,400;0,600;1,400&display=swap');
+
+:root {
+  --chili: #c0392b;
+  --chili-soft: #e8836b;
+  --adobe: #b5651d;
+  --maiz: #e6a817;
+  --maiz-light: #f5d58e;
+  --verde: #4a7c59;
+  --verde-light: #d4e8da;
+  --jade: #2d6a4f;
+  --frijol: #6b4226;
+  --cream: #fdf8f0;
+  --oat: #f0e8d5;
+  --warm-white: #fefcf8;
+  --ink: #1a120a;
+  --text: #2d1f0f;
+  --muted: #7a6050;
+  --sky-blue: #4a90b8;
+  --umami: #5c4033;
+  --sakura: #e8a0a0;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--cream);
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text);
+  line-height: 1.6;
+}
+
+/* ===== COVER ===== */
+.cover {
+  background: var(--frijol);
+  background-image:
+    radial-gradient(ellipse at 15% 30%, rgba(192,57,43,0.5) 0%, transparent 45%),
+    radial-gradient(ellipse at 85% 70%, rgba(74,124,89,0.4) 0%, transparent 45%),
+    radial-gradient(ellipse at 50% 100%, rgba(230,168,23,0.2) 0%, transparent 40%);
+  padding: 3.5rem 2rem 3rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.cover::after {
+  content: '✦';
+  position: absolute;
+  font-size: 18rem;
+  opacity: 0.03;
+  top: -2rem;
+  right: -3rem;
+  color: white;
+  line-height: 1;
+}
+
+.cover-eyebrow {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--maiz-light);
+  margin-bottom: 0.7rem;
+}
+
+.cover h1 {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(2.4rem, 6vw, 4rem);
+  font-weight: 600;
+  color: var(--warm-white);
+  line-height: 1.05;
+  margin-bottom: 0.5rem;
+}
+
+.cover h1 em {
+  font-style: italic;
+  color: var(--maiz);
+}
+
+.cover-tagline {
+  font-family: 'Noto Serif', serif;
+  font-style: italic;
+  font-size: 1rem;
+  color: rgba(255,255,255,0.65);
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.03em;
+}
+
+.cover-flags {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.cover-flag {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 20px;
+  padding: 0.35rem 0.9rem;
+  font-size: 0.73rem;
+  color: rgba(255,255,255,0.8);
+  letter-spacing: 0.08em;
+}
+
+/* ===== NAV ===== */
+.top-nav {
+  background: var(--jade);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.2);
+}
+
+.top-nav a {
+  padding: 0.65rem 1.2rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.78);
+  text-decoration: none;
+  font-weight: 500;
+  transition: background 0.2s, color 0.2s;
+  border-right: 1px solid rgba(255,255,255,0.08);
+}
+.top-nav a:hover { background: var(--verde); color: white; }
+
+/* ===== SECTION WRAPPER ===== */
+.wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+}
+
+.sec-head {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid var(--oat);
+  padding-bottom: 0.8rem;
+}
+
+.sec-num {
+  font-family: 'Fraunces', serif;
+  font-size: 3.2rem;
+  color: var(--oat);
+  line-height: 1;
+  flex-shrink: 0;
+  font-weight: 300;
+}
+
+.sec-head h2 {
+  font-family: 'Fraunces', serif;
+  font-size: 1.65rem;
+  font-weight: 500;
+  color: var(--frijol);
+  line-height: 1.2;
+}
+
+.sec-head p {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-top: 0.2rem;
+  font-style: italic;
+}
+
+/* BAND COLORS */
+.band-cream { background: var(--cream); border-top: 4px solid var(--chili); }
+.band-warm  { background: #fdf5e8; border-top: 4px solid var(--maiz); }
+.band-green { background: #f2f8f4; border-top: 4px solid var(--verde); }
+.band-blue  { background: #f2f7fb; border-top: 4px solid var(--sky-blue); }
+.band-soft  { background: #fdf0ed; border-top: 4px solid var(--chili-soft); }
+.band-dark  { background: var(--frijol); }
+
+/* ===== PHILOSOPHY SECTION ===== */
+.philosophy-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.philosophy-text {
+  font-family: 'Noto Serif', serif;
+  font-size: 1.05rem;
+  line-height: 1.75;
+  color: var(--text);
+}
+
+.philosophy-text em { color: var(--chili); font-style: italic; }
+.philosophy-text strong { color: var(--frijol); font-style: normal; font-weight: 600; }
+
+.truth-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.truth-card {
+  display: flex;
+  gap: 0.9rem;
+  align-items: flex-start;
+  background: white;
+  border-radius: 10px;
+  padding: 1rem 1.1rem;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  border-left: 4px solid var(--maiz);
+}
+
+.truth-icon { font-size: 1.5rem; flex-shrink: 0; margin-top: 1px; }
+
+.truth-text h4 {
+  font-size: 0.83rem;
+  font-weight: 600;
+  color: var(--frijol);
+  margin-bottom: 2px;
+}
+
+.truth-text p { font-size: 0.76rem; color: var(--muted); line-height: 1.5; }
+
+/* ===== THE REAL CULPRIT ===== */
+.culprit-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.culprit-bad {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+}
+
+.culprit-header {
+  padding: 1rem 1.3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.culprit-bad .culprit-header { background: #fde8e8; }
+.culprit-good .culprit-header { background: #e8f4ec; }
+
+.culprit-header h3 {
+  font-family: 'Fraunces', serif;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.culprit-bad .culprit-header h3 { color: #8b1a1a; }
+.culprit-good .culprit-header h3 { color: var(--jade); }
+
+.culprit-body { padding: 0.8rem 1.3rem 1.3rem; }
+
+.culprit-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid var(--oat);
+  font-size: 0.78rem;
+  color: var(--text);
+  line-height: 1.4;
+}
+.culprit-item:last-child { border-bottom: none; }
+
+.c-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 5px;
+}
+
+.dot-red { background: var(--chili); }
+.dot-green { background: var(--verde); }
+
+/* ===== PLATE GUIDE ===== */
+.plate-section {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 2rem;
+  align-items: center;
+}
+
+.plate-diagram {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+.plate-diagram svg { width: 100%; height: auto; }
+
+.plate-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  background: white;
+  border-radius: 8px;
+  padding: 0.7rem 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.legend-dot-lg {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.legend-text h4 {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--frijol);
+  margin-bottom: 1px;
+}
+
+.legend-text p { font-size: 0.7rem; color: var(--muted); }
+
+/* ===== FOOD WORLDS ===== */
+.worlds-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.world-card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+}
+
+.world-header {
+  padding: 1.3rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.world-mx .world-header { background: linear-gradient(135deg, #c0392b22, #e6a81722); border-bottom: 2px solid #c0392b33; }
+.world-as .world-header { background: linear-gradient(135deg, #4a90b822, #4a7c5922); border-bottom: 2px solid #4a90b833; }
+
+.world-flag { font-size: 2.2rem; }
+
+.world-header-text h3 {
+  font-family: 'Fraunces', serif;
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 1px;
+}
+
+.world-mx .world-header-text h3 { color: var(--chili); }
+.world-as .world-header-text h3 { color: var(--sky-blue); }
+
+.world-header-text p { font-size: 0.72rem; color: var(--muted); }
+
+.world-body { padding: 1.2rem 1.5rem; }
+
+.food-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid var(--oat);
+  font-size: 0.78rem;
+}
+
+.food-row:last-child { border-bottom: none; }
+
+.food-name { color: var(--text); font-weight: 500; }
+
+.food-tags {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.ftag {
+  font-size: 0.58rem;
+  padding: 1px 6px;
+  border-radius: 20px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.t-protein { background: #fde8dc; color: #8b2500; }
+.t-fiber  { background: #e8f4e8; color: #1a5a1a; }
+.t-anti   { background: #e8f0f8; color: #1a3a6a; }
+.t-fat    { background: #fef3dc; color: #5a3800; }
+.t-probiotic { background: #f0e8f8; color: #5a1a7a; }
+.t-omega  { background: #e0f0f0; color: #1a5a5a; }
+
+/* Swap guide */
+.swap-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+}
+
+.swap-table th {
+  padding: 0.8rem 1rem;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 600;
+  text-align: left;
+}
+
+.swap-table thead tr th:nth-child(1) { background: #fde8e8; color: #8b1a1a; }
+.swap-table thead tr th:nth-child(2) { background: #fff; color: var(--muted); text-align: center; }
+.swap-table thead tr th:nth-child(3) { background: #e8f4e8; color: #1a5a1a; }
+
+.swap-table td {
+  padding: 0.55rem 1rem;
+  font-size: 0.78rem;
+  color: var(--text);
+  border-bottom: 1px solid var(--oat);
+  vertical-align: middle;
+}
+
+.swap-table tr:last-child td { border-bottom: none; }
+.swap-table td:nth-child(2) { text-align: center; color: var(--muted); font-size: 1rem; }
+.swap-table td:nth-child(3) { color: var(--jade); font-weight: 500; }
+
+/* ===== MEAL IDEAS ===== */
+.meals-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.2rem;
+}
+
+.meal-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 3px 16px rgba(0,0,0,0.06);
+  transition: transform 0.2s;
+}
+
+.meal-card:hover { transform: translateY(-3px); }
+
+.meal-header {
+  padding: 0.9rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.meal-emoji { font-size: 1.6rem; }
+
+.meal-header h3 {
+  font-family: 'Fraunces', serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--frijol);
+  line-height: 1.2;
+}
+
+.meal-tag {
+  font-size: 0.58rem;
+  padding: 1px 6px;
+  border-radius: 10px;
+  background: var(--oat);
+  color: var(--muted);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: 2px;
+  display: inline-block;
+}
+
+.meal-card .meal-body {
+  padding: 0 1rem 1rem;
+  font-size: 0.75rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.meal-nutrients {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-top: 0.5rem;
+}
+
+.m-header-mx { background: linear-gradient(90deg, #fde8dc, #fff8f5); }
+.m-header-as { background: linear-gradient(90deg, #e8f0f8, #f5f9fd); }
+.m-header-fusion { background: linear-gradient(90deg, #f0f8f0, #f8fcf8); }
+
+/* ===== HYDRATION & DRINKS ===== */
+.drinks-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.drink-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.2rem;
+  text-align: center;
+  box-shadow: 0 3px 14px rgba(0,0,0,0.05);
+  border-top: 4px solid var(--verde);
+}
+
+.drink-card.bad-drink { border-top-color: var(--chili); }
+
+.drink-card .d-icon { font-size: 2.2rem; margin-bottom: 0.5rem; }
+.drink-card h4 { font-size: 0.78rem; font-weight: 600; color: var(--frijol); margin-bottom: 0.3rem; }
+.drink-card p { font-size: 0.7rem; color: var(--muted); line-height: 1.4; }
+
+/* ===== BEHAVIOR & HABIT ===== */
+.habit-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.habit-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.4rem;
+  box-shadow: 0 3px 16px rgba(0,0,0,0.06);
+}
+
+.habit-card h3 {
+  font-family: 'Fraunces', serif;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--jade);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.habit-item {
+  display: flex;
+  gap: 0.7rem;
+  align-items: flex-start;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid var(--oat);
+  font-size: 0.77rem;
+  color: var(--text);
+  line-height: 1.4;
+}
+.habit-item:last-child { border-bottom: none; }
+
+.h-num {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--verde-light);
+  color: var(--jade);
+  font-size: 0.65rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* ===== WEEKLY RHYTHM ===== */
+.week-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.6rem;
+}
+
+.day-card {
+  background: white;
+  border-radius: 10px;
+  padding: 0.7rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  text-align: center;
+  border-top: 3px solid var(--oat);
+}
+
+.day-card.mx-day { border-top-color: var(--chili); }
+.day-card.as-day { border-top-color: var(--sky-blue); }
+.day-card.fusion  { border-top-color: var(--verde); }
+.day-card.simple  { border-top-color: var(--maiz); }
+
+.day-label {
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.4rem;
+}
+
+.day-type {
+  font-size: 0.6rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.4rem;
+}
+
+.day-meals {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.day-meal {
+  font-size: 0.62rem;
+  color: var(--text);
+  padding: 2px 4px;
+  border-radius: 4px;
+  background: var(--cream);
+  line-height: 1.3;
+}
+
+/* ===== CALLOUT / QUOTE ===== */
+.callout-warm {
+  background: linear-gradient(135deg, #b5651d18, #e6a81718);
+  border-left: 4px solid var(--maiz);
+  border-radius: 0 10px 10px 0;
+  padding: 1.1rem 1.5rem;
+  margin: 1.5rem 0;
+  font-family: 'Noto Serif', serif;
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--frijol);
+  line-height: 1.65;
+}
+
+.callout-green {
+  background: linear-gradient(135deg, #4a7c5918, #2d6a4f12);
+  border-radius: 10px;
+  padding: 1rem 1.3rem;
+  font-size: 0.83rem;
+  color: var(--jade);
+  line-height: 1.6;
+  margin: 1rem 0;
+}
+
+.callout-green strong { font-weight: 700; }
+
+/* ===== INFLAMMATION ===== */
+.inflam-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.inflam-side {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 3px 16px rgba(0,0,0,0.06);
+}
+
+.inflam-side-header {
+  padding: 0.9rem 1.2rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.inflam-fire .inflam-side-header { background: #fde8e8; color: #8b1a1a; }
+.inflam-cool .inflam-side-header { background: #e8f4e8; color: var(--jade); }
+
+.inflam-items { padding: 0.5rem 1.2rem 1.2rem; }
+
+.inflam-item {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  padding: 0.45rem 0;
+  border-bottom: 1px solid var(--oat);
+  font-size: 0.77rem;
+}
+.inflam-item:last-child { border-bottom: none; }
+
+/* ===== QUICK DARK FOOTER ===== */
+.quick-dark {
+  background: var(--frijol);
+  padding: 2.5rem 1.5rem;
+}
+
+.quick-dark-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.quick-dark h2 {
+  font-family: 'Fraunces', serif;
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: var(--cream);
+  text-align: center;
+  margin-bottom: 0.4rem;
+}
+
+.quick-dark p.sub {
+  text-align: center;
+  font-style: italic;
+  color: rgba(255,255,255,0.55);
+  font-family: 'Noto Serif', serif;
+  font-size: 0.85rem;
+  margin-bottom: 2rem;
+}
+
+.reminders {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.reminder-card {
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 12px;
+  padding: 1.2rem;
+}
+
+.reminder-card h4 {
+  font-family: 'Fraunces', serif;
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: var(--maiz);
+  margin-bottom: 0.7rem;
+  font-style: italic;
+}
+
+.reminder-card p {
+  font-size: 0.76rem;
+  color: rgba(255,255,255,0.65);
+  line-height: 1.6;
+}
+
+.foot-note {
+  text-align: center;
+  margin-top: 2rem;
+  font-size: 0.68rem;
+  color: rgba(255,255,255,0.3);
+  letter-spacing: 0.1em;
+}
+
+/* UTILITY */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+.three-col { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.2rem; }
+.mt { margin-top: 1.5rem; }
+.italic-note { font-style: italic; color: var(--muted); font-size: 0.78rem; }
+
+@media (max-width: 800px) {
+  .philosophy-grid, .culprit-grid, .worlds-grid, .habit-grid, .inflam-grid, .two-col { grid-template-columns: 1fr; }
+  .meals-grid, .three-col { grid-template-columns: 1fr 1fr; }
+  .drinks-grid { grid-template-columns: 1fr 1fr; }
+  .week-grid { grid-template-columns: repeat(4, 1fr); }
+  .reminders { grid-template-columns: 1fr; }
+  .plate-section { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 480px) {
+  .meals-grid, .three-col, .drinks-grid { grid-template-columns: 1fr; }
+  .week-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-eyebrow">A Guide for Your Family · Con Amor</div>
+  <h1>La Mesa —<br><em>Eating Well</em> Together</h1>
+  <div class="cover-tagline">Rooted in tradition. Nourished by knowledge. Built with love.</div>
+  <div class="cover-flags">
+    <span class="cover-flag">🌮 Northern Mexican Heritage</span>
+    <span class="cover-flag">🥢 Asian-Inspired</span>
+    <span class="cover-flag">🌿 Whole Foods First</span>
+    <span class="cover-flag">❤️ Family Healing</span>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="top-nav">
+  <a href="#truth">The Truth</a>
+  <a href="#plate">Your Plate</a>
+  <a href="#food-worlds">Food Worlds</a>
+  <a href="#swaps">Gentle Swaps</a>
+  <a href="#meals">Meal Ideas</a>
+  <a href="#inflammation">Inflammation</a>
+  <a href="#rhythm">Weekly Rhythm</a>
+  <a href="#habits">Habits</a>
+</nav>
+
+
+<!-- ===== 01: THE TRUTH ===== -->
+<div id="truth" class="band-cream">
+<div class="wrap">
+  <div class="sec-head">
+    <div class="sec-num">01</div>
+    <div>
+      <h2>A Gentle, Honest Starting Point</h2>
+      <p>No shame. No extremes. Just truth worth knowing.</p>
+    </div>
+  </div>
+
+  <div class="philosophy-grid">
+    <div>
+      <div class="philosophy-text">
+        <p>Your family's food culture — the tortillas, the caldo, the frijoles de la olla, the chiles — <em>is not the problem.</em> Traditional Mexican food is, at its roots, one of the healthiest eating patterns on earth.</p>
+        <br>
+        <p>What happened to most families over the past few decades is a <strong>transition</strong> — away from whole, home-cooked food and toward processed convenience foods, sugary drinks, large portions of refined carbs, and less movement. That shift — not your heritage — is what's driving the weight, the fatigue, and the chronic conditions your family may be experiencing.</p>
+        <br>
+        <p>The path forward isn't a diet. It's a <em>return</em> — back toward real ingredients, home cooking, and the wisdom already encoded in your culinary tradition, enriched by what Asian food cultures have long understood about longevity.</p>
+        <br>
+        <p style="color:var(--muted); font-size:0.9rem; font-style:italic;">Research shows that people who return to traditional Mexican dietary patterns see improvements in cholesterol, blood sugar, inflammation, and body weight — without abandoning the foods they love.</p>
+      </div>
+    </div>
+
+    <div class="truth-cards">
+      <div class="truth-card">
+        <div class="truth-icon">🧬</div>
+        <div class="truth-text">
+          <h4>Overweight ≠ Lazy or Broken</h4>
+          <p>Chronic weight gain is almost always driven by the food environment, processed food design, stress, and inflammation — not a failure of willpower. The body is responding rationally to bad inputs.</p>
+        </div>
+      </div>
+      <div class="truth-card">
+        <div class="truth-icon">🌱</div>
+        <div class="truth-text">
+          <h4>Change Doesn't Require Perfection</h4>
+          <p>Studies show that even a 5–10% reduction in body weight meaningfully improves blood pressure, blood sugar, and joint pain. Small, consistent shifts compound powerfully over time.</p>
+        </div>
+      </div>
+      <div class="truth-card">
+        <div class="truth-icon">🫘</div>
+        <div class="truth-text">
+          <h4>Your Heritage Food Is Medicine</h4>
+          <p>Beans, corn, nopales, chiles, tomatoes, and avocado are among the most researched health-protective foods on the planet. The problem is rarely what's traditional — it's what's been added to it.</p>
+        </div>
+      </div>
+      <div class="truth-card">
+        <div class="truth-icon">🍜</div>
+        <div class="truth-text">
+          <h4>Asian Food Aligns Beautifully</h4>
+          <p>Japanese, Korean, and Chinese food traditions share the same core wisdom: vegetables, fermented foods, seafood, minimal processing, smaller portions, and eating with intention. These are natural bridges to your own values.</p>
+        </div>
+      </div>
+      <div class="truth-card">
+        <div class="truth-icon">❤️</div>
+        <div class="truth-text">
+          <h4>Self-Care Is Not Selfish</h4>
+          <p>Feeding your family well is an act of love and sovereignty. When the body is nourished — not just filled — energy returns, mood lifts, and the whole family feels the difference.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></div>
+
+
+<!-- ===== 02: THE REAL CULPRIT ===== -->
+<div class="band-warm">
+<div class="wrap">
+  <div class="sec-head">
+    <div class="sec-num">02</div>
+    <div>
+      <h2>The Real Culprit — Processed vs. Whole</h2>
+      <p>This is the single most important distinction in food</p>
+    </div>
+  </div>
+
+  <div class="culprit-grid">
+    <div class="culprit-bad">
+      <div class="culprit-header">
+        <span style="font-size:1.6rem;">⚠️</span>
+        <h3>What's Actually Causing the Damage</h3>
+      </div>
+      <div class="culprit-body">
+        <div class="culprit-item"><div class="c-dot dot-red"></div><div><strong>Sugary drinks</strong> — sodas, juices, aguas frescas with added sugar, sports drinks. One soda = 10 teaspoons of sugar hitting your bloodstream at once.</div></div>
+        <div class="culprit-item"><div class="c-dot dot-red"></div><div><strong>Ultra-processed flour products</strong> — white bread, flour tortillas (commercial), donuts, packaged pastries. Stripped of fiber, they spike blood sugar rapidly.</div></div>
+        <div class="culprit-item"><div class="c-dot dot-red"></div><div><strong>Fried fast food oils</strong> — vegetable/soybean oils heated at high temps create inflammatory compounds. Chicharrón, fried chicken, French fries in commercial oil are different from home-cooked foods.</div></div>
+        <div class="culprit-item"><div class="c-dot dot-red"></div><div><strong>Packaged snacks</strong> — chips, crackers, cookies with long ingredient lists. Engineered to override your body's "I'm full" signal.</div></div>
+        <div class="culprit-item"><div class="c-dot dot-red"></div><div><strong>Excess refined salt + MSG in processed foods</strong> — different from using salt in home cooking. Processed food sodium is in everything and drives hypertension.</div></div>
+        <div class="culprit-item"><div class="c-dot dot-red"></div><div><strong>Eating without awareness</strong> — large portions while distracted (TV, phone), skipping meals then overeating, eating fast. These behaviors override the body's natural fullness signals.</div></div>
+      </div>
+    </div>
+
+    <div class="culprit-bad culprit-good">
+      <div class="culprit-header">
+        <span style="font-size:1.6rem;">✅</span>
+        <h3>What Actually Heals the Body</h3>
+      </div>
+      <div class="culprit-body">
+        <div class="culprit-item"><div class="c-dot dot-green"></div><div><strong>Whole grains with their fiber intact</strong> — corn tortillas (not flour), brown rice, oats, whole wheat. Fiber slows digestion, feeds gut bacteria, prevents blood sugar spikes.</div></div>
+        <div class="culprit-item"><div class="c-dot dot-green"></div><div><strong>Beans and legumes, daily</strong> — research consistently shows beans are one of the most powerful foods for weight management, blood sugar, and heart health. Eat them freely.</div></div>
+        <div class="culprit-item"><div class="c-dot dot-green"></div><div><strong>Vegetables at every meal</strong> — nopales, chiles, squash, bok choy, spinach, cabbage, broccoli. Volume, fiber, and micronutrients without excess calories.</div></div>
+        <div class="culprit-item"><div class="c-dot dot-green"></div><div><strong>Fish and seafood 2–3×/week</strong> — omega-3 fatty acids directly reduce inflammation, protect the heart and brain. Canned sardines and salmon count.</div></div>
+        <div class="culprit-item"><div class="c-dot dot-green"></div><div><strong>Fermented foods</strong> — salsa made fresh, kimchi, miso, plain yogurt, kefir. Feed the gut microbiome, which controls inflammation and immune function.</div></div>
+        <div class="culprit-item"><div class="c-dot dot-green"></div><div><strong>Water, tea, and agua de Jamaica</strong> (unsweetened). Staying hydrated reduces hunger, supports kidney function, and replaces the empty calories of sweet drinks.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout-warm">
+    "People lost twice as much body weight eating minimally processed foods compared to ultra-processed foods — even when the ultra-processed version was considered 'healthy.' The food's structure matters more than its label." — Harvard Medical School, 2025
+  </div>
+
+</div></div>
+
+
+<!-- ===== 03: THE PLATE ===== -->
+<div id="plate" class="band-green">
+<div class="wrap">
+  <div class="sec-head">
+    <div class="sec-num">03</div>
+    <div>
+      <h2>Build Your Plate — La Regla del Plato</h2>
+      <p>A simple visual guide for every meal, every day</p>
+    </div>
+  </div>
+
+  <div class="plate-section">
+    <div class="plate-diagram">
+      <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+        <!-- Plate rim -->
+        <circle cx="150" cy="150" r="148" fill="#f0e8d5" stroke="#d4c4a8" stroke-width="2"/>
+        <!-- Plate -->
+        <circle cx="150" cy="150" r="135" fill="white" stroke="#e8dcc8" stroke-width="1.5"/>
+
+        <!-- Half: Vegetables (50%) -->
+        <path d="M 150 150 L 150 15 A 135 135 0 0 1 285 150 Z" fill="#d4e8da" opacity="0.9"/>
+        <!-- Extra quarter for vegs going down -->
+        <path d="M 150 150 L 285 150 A 135 135 0 0 1 150 285 Z" fill="#b8d9c4" opacity="0.85"/>
+
+        <!-- Quarter: Protein/Beans (25%) -->
+        <path d="M 150 150 L 15 150 A 135 135 0 0 1 150 15 Z" fill="#fde8dc" opacity="0.9"/>
+
+        <!-- Quarter: Whole grains (25%) -->
+        <path d="M 150 150 L 150 285 A 135 135 0 0 1 15 150 Z" fill="#fef3dc" opacity="0.9"/>
+
+        <!-- Dividing lines -->
+        <line x1="150" y1="15" x2="150" y2="285" stroke="white" stroke-width="3"/>
+        <line x1="15" y1="150" x2="285" y2="150" stroke="white" stroke-width="3"/>
+
+        <!-- Center dot -->
+        <circle cx="150" cy="150" r="28" fill="white" stroke="#e8dcc8" stroke-width="1.5"/>
+        <text x="150" y="147" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="8" fill="#7a6050" font-weight="600">HEALTHY</text>
+        <text x="150" y="158" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="8" fill="#7a6050" font-weight="600">PLATE</text>
+
+        <!-- Labels -->
+        <text x="215" y="90" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="11" fill="#2d6a4f" font-weight="700">VEGETABLES</text>
+        <text x="215" y="103" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="9" fill="#4a7c59">50% of plate</text>
+
+        <text x="215" y="210" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="11" fill="#2d6a4f" font-weight="700">VEGETABLES</text>
+        <text x="215" y="223" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="9" fill="#4a7c59">(continued)</text>
+
+        <text x="85" y="90" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#8b2500" font-weight="700">PROTEIN</text>
+        <text x="85" y="103" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="9" fill="#c0392b">25% of plate</text>
+        <text x="85" y="115" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="8" fill="#c0392b">Beans · Fish · Egg</text>
+
+        <text x="85" y="205" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#5a3800" font-weight="700">WHOLE GRAIN</text>
+        <text x="85" y="218" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="9" fill="#7a5a20">25% of plate</text>
+        <text x="85" y="230" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="8" fill="#7a5a20">Rice · Tortilla · Oats</text>
+
+        <!-- Plus healthy fat badge -->
+        <circle cx="150" cy="285" r="0" fill="transparent"/>
+        <text x="150" y="296" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="9" fill="#7a6050">+ Healthy fat on the side: avocado, olive oil, nuts</text>
+      </svg>
+    </div>
+
+    <div class="plate-legend">
+      <div class="legend-item">
+        <div class="legend-dot-lg" style="background:#b8d9c4;"></div>
+        <div class="legend-text">
+          <h4>½ Plate — Non-Starchy Vegetables</h4>
+          <p>Nopales, calabaza, chiles, bok choy, spinach, broccoli, cabbage, tomatoes, onions, mushrooms, zucchini. Cook or raw. The more variety and color, the better.</p>
+        </div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot-lg" style="background:#fde8dc;"></div>
+        <div class="legend-text">
+          <h4>¼ Plate — Quality Protein</h4>
+          <p>Prioritize: beans, lentils, fish, tofu, eggs, chicken (grilled or baked). Limit: fatty fried meats, processed meats. Beans can be your protein daily — they're ideal.</p>
+        </div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot-lg" style="background:#fef3dc;"></div>
+        <div class="legend-text">
+          <h4>¼ Plate — Whole Grains or Starchy Veg</h4>
+          <p>Corn tortillas (2–3), brown rice, oats, sweet potato, quinoa. Not white bread, flour tortillas, or white rice as a base. The grain should earn its plate space.</p>
+        </div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot-lg" style="background:#d4e8da;"></div>
+        <div class="legend-text">
+          <h4>On the Side — Healthy Fat</h4>
+          <p>¼ avocado, drizzle of olive oil, small handful of nuts or seeds. Fat is not the enemy — it supports satiety, hormone production, and absorption of fat-soluble vitamins.</p>
+        </div>
+      </div>
+      <div class="callout-green">
+        <strong>The Mexican Plate already does this naturally</strong> when made from scratch: caldo de pollo with vegetables, beans on the side, 2 corn tortillas, a little salsa verde. That is the template. The problem is the soda next to it, the refried beans cooked in lard, and the flour tortillas the size of a plate.
+      </div>
+    </div>
+  </div>
+
+</div></div>
+
+
+<!-- ===== 04: FOOD WORLDS ===== -->
+<div id="food-worlds" class="band-cream">
+<div class="wrap">
+  <div class="sec-head">
+    <div class="sec-num">04</div>
+    <div>
+      <h2>Two Healing Food Worlds — Your Daily Inspiration</h2>
+      <p>The best of Northern Mexican tradition + the longevity wisdom of Asian cuisines</p>
+    </div>
+  </div>
+
+  <div class="worlds-grid">
+    <!-- MEXICAN -->
+    <div class="world-card world-mx">
+      <div class="world-header">
+        <div class="world-flag">🌮</div>
+        <div class="world-header-text">
+          <h3>Northern Mexican — Comida Tradicional</h3>
+          <p>Return to whole ingredients. Let go of the processed add-ons.</p>
+        </div>
+      </div>
+      <div class="world-body">
+        <div class="food-row"><span class="food-name">🫘 Frijoles de la olla</span><div class="food-tags"><span class="ftag t-fiber">Fiber</span><span class="ftag t-protein">Protein</span></div></div>
+        <div class="food-row"><span class="food-name">🌵 Nopales (fresh or grilled)</span><div class="food-tags"><span class="ftag t-anti">Anti-inflam</span><span class="ftag t-fiber">Fiber</span></div></div>
+        <div class="food-row"><span class="food-name">🥑 Aguacate / Guacamole</span><div class="food-tags"><span class="ftag t-fat">Healthy Fat</span><span class="ftag t-anti">Anti-inflam</span></div></div>
+        <div class="food-row"><span class="food-name">🌽 Corn tortillas (masa)</span><div class="food-tags"><span class="ftag t-fiber">Whole Grain</span></div></div>
+        <div class="food-row"><span class="food-name">🍅 Salsa fresca / Pico de gallo</span><div class="food-tags"><span class="ftag t-anti">Antioxidants</span></div></div>
+        <div class="food-row"><span class="food-name">🐟 Pescado a la plancha</span><div class="food-tags"><span class="ftag t-omega">Omega-3</span><span class="ftag t-protein">Protein</span></div></div>
+        <div class="food-row"><span class="food-name">🍲 Caldo de pollo / res (homemade)</span><div class="food-tags"><span class="ftag t-anti">Healing</span><span class="ftag t-probiotic">Gut</span></div></div>
+        <div class="food-row"><span class="food-name">🌶️ Chiles (fresh, dried, roasted)</span><div class="food-tags"><span class="ftag t-anti">Capsaicin</span><span class="ftag t-anti">Anti-inflam</span></div></div>
+        <div class="food-row"><span class="food-name">🎃 Calabaza en tacha / zapote</span><div class="food-tags"><span class="ftag t-fiber">Fiber</span><span class="ftag t-anti">Carotenoids</span></div></div>
+        <div class="food-row"><span class="food-name">🌿 Hierba santa, epazote, cilantro</span><div class="food-tags"><span class="ftag t-anti">Medicinal</span></div></div>
+        <div class="food-row"><span class="food-name">🧄 Ajo, cebolla, jitomate (base)</span><div class="food-tags"><span class="ftag t-anti">Polyphenols</span></div></div>
+        <div class="food-row"><span class="food-name">🥭 Frutas frescas: mango, papaya, guayaba</span><div class="food-tags"><span class="ftag t-anti">Vitamin C</span><span class="ftag t-fiber">Fiber</span></div></div>
+      </div>
+    </div>
+
+    <!-- ASIAN -->
+    <div class="world-card world-as">
+      <div class="world-header">
+        <div class="world-flag">🥢</div>
+        <div class="world-header-text">
+          <h3>Asian Inspired — La Sabiduría del Oriente</h3>
+          <p>Longevity traditions with overlapping values to your own.</p>
+        </div>
+      </div>
+      <div class="world-body">
+        <div class="food-row"><span class="food-name">🍚 Brown rice / soba noodles</span><div class="food-tags"><span class="ftag t-fiber">Whole Grain</span></div></div>
+        <div class="food-row"><span class="food-name">🫐 Edamame / Tofu / Miso</span><div class="food-tags"><span class="ftag t-protein">Plant Protein</span><span class="ftag t-probiotic">Gut</span></div></div>
+        <div class="food-row"><span class="food-name">🥬 Bok choy, napa cabbage, spinach</span><div class="food-tags"><span class="ftag t-anti">Anti-inflam</span><span class="ftag t-fiber">Fiber</span></div></div>
+        <div class="food-row"><span class="food-name">🥒 Kimchi (fermented vegetables)</span><div class="food-tags"><span class="ftag t-probiotic">Probiotics</span><span class="ftag t-anti">Anti-inflam</span></div></div>
+        <div class="food-row"><span class="food-name">🍵 Green tea / matcha</span><div class="food-tags"><span class="ftag t-anti">Polyphenols</span><span class="ftag t-anti">Antioxidants</span></div></div>
+        <div class="food-row"><span class="food-name">🐟 Salmon, sardines, mackerel</span><div class="food-tags"><span class="ftag t-omega">Omega-3</span><span class="ftag t-protein">Protein</span></div></div>
+        <div class="food-row"><span class="food-name">🫚 Sesame oil / seeds</span><div class="food-tags"><span class="ftag t-fat">Healthy Fat</span><span class="ftag t-anti">Anti-inflam</span></div></div>
+        <div class="food-row"><span class="food-name">🍄 Shiitake / oyster mushrooms</span><div class="food-tags"><span class="ftag t-anti">Immune</span><span class="ftag t-probiotic">Gut</span></div></div>
+        <div class="food-row"><span class="food-name">🫚 Ginger (fresh or dried)</span><div class="food-tags"><span class="ftag t-anti">Anti-inflam</span><span class="ftag t-probiotic">Digestive</span></div></div>
+        <div class="food-row"><span class="food-name">🥦 Broccoli, cabbage, daikon</span><div class="food-tags"><span class="ftag t-anti">Cruciferous</span><span class="ftag t-fiber">Fiber</span></div></div>
+        <div class="food-row"><span class="food-name">🌊 Seaweed (nori, wakame)</span><div class="food-tags"><span class="ftag t-anti">Iodine</span><span class="ftag t-omega">Minerals</span></div></div>
+        <div class="food-row"><span class="food-name">🍠 Sweet potato / kabocha squash</span><div class="food-tags"><span class="ftag t-anti">Beta-carotene</span><span class="ftag t-fiber">Fiber</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout-green mt">
+    <strong>The Bridge:</strong> Both traditions share the same foundation — vegetables, legumes, whole grains, fermented foods, fish, and minimal processing. The flavors are different. The wisdom is the same. A caldo made with bok choy, ginger, and tofu alongside your beans and corn tortilla is not a contradiction — it's a celebration.
+  </div>
+
+</div></div>
+
+
+<!-- ===== 05: GENTLE SWAPS ===== -->
+<div id="swaps" class="band-warm">
+<div class="wrap">
+  <div class="sec-head">
+    <div class="sec-num">05</div>
+    <div>
+      <h2>Gentle Swaps — No Deprivation</h2>
+      <p>Keep the flavors you love. Change what's hurting you.</p>
+    </div>
+  </div>
+
+  <table class="swap-table">
+    <thead>
+      <tr>
+        <th>❌ Replace This</th>
+        <th>→</th>
+        <th>✅ With This</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Soda, Jarritos, sweet juice</td><td>→</td><td>Agua de Jamaica (no sugar added), sparkling water + lime, green tea</td></tr>
+      <tr><td>Large flour tortilla (burrito-size)</td><td>→</td><td>2–3 small corn tortillas (nixtamalized masa) — more fiber, less refined carbs</td></tr>
+      <tr><td>Refried beans fried in lard</td><td>→</td><td>Frijoles de la olla (whole beans, slow-cooked in water with garlic + epazote)</td></tr>
+      <tr><td>White rice as a base with no veg</td><td>→</td><td>Brown rice with sautéed bok choy or zucchini, or cauliflower rice mixed half-and-half</td></tr>
+      <tr><td>Fried chicharrón, carnitas daily</td><td>→</td><td>Grilled chicken, baked fish taco, or bean taco as the everyday option — carnitas on occasions</td></tr>
+      <tr><td>Commercial packaged chips and cookies</td><td>→</td><td>Jicama or cucumber with tajín + lime, edamame, roasted pepitas, or fresh fruit</td></tr>
+      <tr><td>Store-bought taco seasoning packets</td><td>→</td><td>Fresh cumin, chili powder, garlic, oregano, salt — make your own blend in 30 seconds</td></tr>
+      <tr><td>Fast food or take-out as default meal</td><td>→</td><td>Batch-cooked beans + rice + salsa + eggs at home in 15 minutes — faster than delivery</td></tr>
+      <tr><td>Full-sugar coffee drinks (café de olla excess sugar)</td><td>→</td><td>Café de olla with just a small amount of piloncillo + cinnamon, or green tea</td></tr>
+      <tr><td>Deep-fried anything daily</td><td>→</td><td>Baked, steamed, grilled, or sautéed in a small amount of olive or avocado oil</td></tr>
+      <tr><td>Eating from large shared pots / serving bowls</td><td>→</td><td>Plate individual portions before eating — the eye calibrates better than the hand</td></tr>
+      <tr><td>Ramen (instant packaged)</td><td>→</td><td>Homemade sopa de fideos or miso soup with tofu + bok choy — same comfort, real food</td></tr>
+      <tr><td>Ice cream, paletas, sweet desserts daily</td><td>→</td><td>Fresh fruit with tajín, Greek yogurt with honey, or homemade agua fresca popsicle</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout-warm" style="margin-top:1.5rem;">
+    The goal is not perfection. Follow this 80–90% of the time. The remaining 10–20% is for celebrations, family gatherings, and the joy of food. Deprivation creates rebound. Consistency creates change.
+  </div>
+
+</div></div>
+
+
+<!-- ===== 06: INFLAMMATION ===== -->
+<div id="inflammation" class="band-blue">
+<div class="wrap">
+  <div class="sec-head">
+    <div class="sec-num">06</div>
+    <div>
+      <h2>Inflammation — The Hidden Driver</h2>
+      <p>Chronic inflammation drives obesity, fatigue, joint pain, and most modern disease</p>
+    </div>
+  </div>
+
+  <div class="inflam-grid">
+    <div class="inflam-side inflam-fire">
+      <div class="inflam-side-header">🔥 Foods That Inflame — Limit These</div>
+      <div class="inflam-items">
+        <div class="inflam-item"><span>🥤</span><div>Sugary drinks — spike insulin, trigger inflammatory cytokines with every sip</div></div>
+        <div class="inflam-item"><span>🍟</span><div>Industrial seed oils (soybean, canola, corn oil) — especially when heated to high temps</div></div>
+        <div class="inflam-item"><span>🍞</span><div>Refined white flour products — strips the fiber that slows glucose absorption</div></div>
+        <div class="inflam-item"><span>🥩</span><div>Processed meats (chorizo, hot dogs, packaged deli) — contain nitrates and excess sodium</div></div>
+        <div class="inflam-item"><span>🍬</span><div>Added sugars and high-fructose corn syrup — directly feeds inflammatory pathways</div></div>
+        <div class="inflam-item"><span>🧂</span><div>Excess sodium from processed foods — raises blood pressure, stresses kidney and heart</div></div>
+        <div class="inflam-item"><span>😴</span><div>Poor sleep, chronic stress, and sedentary living — increase inflammatory markers even when diet is good</div></div>
+      </div>
+    </div>
+
+    <div class="inflam-side inflam-cool">
+      <div class="inflam-side-header">❄️ Foods That Cool Inflammation — Eat More of These</div>
+      <div class="inflam-items">
+        <div class="inflam-item"><span>🐟</span><div>Fatty fish (salmon, sardines, mackerel) — omega-3s directly block inflammatory pathways</div></div>
+        <div class="inflam-item"><span>🌰</span><div>Walnuts, almonds, chia seeds, flaxseed — plant-based omega-3 and polyphenols</div></div>
+        <div class="inflam-item"><span>🫙</span><div>Fermented foods (kimchi, miso, fresh salsa, yogurt) — microbiome diversity = lower inflammation</div></div>
+        <div class="inflam-item"><span>🫐</span><div>Berries, dark cherries, hibiscus — anthocyanins are among the most potent anti-inflammatory compounds</div></div>
+        <div class="inflam-item"><span>🟡</span><div>Turmeric + black pepper — curcumin reduces inflammatory markers comparably to ibuprofen in studies</div></div>
+        <div class="inflam-item"><span>🫚</span><div>Ginger (fresh or dried) — anti-inflammatory and digestive support; use daily in teas, soups</div></div>
+        <div class="inflam-item"><span>🥦</span><div>Cruciferous vegetables (broccoli, cabbage, nopales) — sulforaphane activates the body's own antioxidant pathways</div></div>
+        <div class="inflam-item"><span>🍵</span><div>Green tea / hibiscus / agua de Jamaica (unsweetened) — among the highest polyphenol beverages on earth</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout-green">
+    <strong>Key Insight:</strong> Chronic inflammation is like a slow fire burning inside the body. Excess body fat — especially belly fat — acts as inflammatory tissue itself, releasing signals that make inflammation worse. This is why the cycle of weight gain and inflammation feeds itself. Breaking it starts with food — not exercise, not willpower — food first.
+  </div>
+
+</div></div>
+
+
+<!-- ===== 07: MEAL IDEAS ===== -->
+<div id="meals" class="band-soft">
+<div class="wrap">
+  <div class="sec-head">
+    <div class="sec-num">07</div>
+    <div>
+      <h2>Meal Ideas — Real Food for Real Families</h2>
+      <p>Familiar, simple, culturally rooted, healing</p>
+    </div>
+  </div>
+
+  <div class="meals-grid">
+    <!-- BREAKFAST -->
+    <div class="meal-card">
+      <div class="meal-header m-header-mx">
+        <div class="meal-emoji">🍳</div>
+        <div><h3>Huevos a la Mexicana</h3><span class="meal-tag">Desayuno</span></div>
+      </div>
+      <div class="meal-body">
+        Eggs scrambled with tomato, onion, jalapeño, and cilantro. Serve with 2 corn tortillas and black beans. Simple, filling, zero processed ingredients.
+        <div class="meal-nutrients"><span class="ftag t-protein">Protein</span><span class="ftag t-fiber">Fiber</span><span class="ftag t-anti">Anti-inflam</span></div>
+      </div>
+    </div>
+
+    <div class="meal-card">
+      <div class="meal-header m-header-as">
+        <div class="meal-emoji">🍵</div>
+        <div><h3>Miso Soup + Soft-Boiled Egg</h3><span class="meal-tag">Morning</span></div>
+      </div>
+      <div class="meal-body">
+        Miso broth with tofu, wakame seaweed, green onion. One soft-boiled egg. A small bowl of brown rice. Gut-healing, energizing, anti-inflammatory start.
+        <div class="meal-nutrients"><span class="ftag t-probiotic">Probiotics</span><span class="ftag t-protein">Protein</span><span class="ftag t-anti">Anti-inflam</span></div>
+      </div>
+    </div>
+
+    <div class="meal-card">
+      <div class="meal-header m-header-fusion">
+        <div class="meal-emoji">🥣</div>
+        <div><h3>Avena con Fruta + Chia</h3><span class="meal-tag">Sencillo</span></div>
+      </div>
+      <div class="meal-body">
+        Rolled oats cooked in water or plant milk, topped with fresh mango, chia seeds, and a drizzle of honey. No sugar added. Keeps blood sugar stable for hours.
+        <div class="meal-nutrients"><span class="ftag t-fiber">Fiber</span><span class="ftag t-omega">Omega-3</span><span class="ftag t-anti">Antioxidants</span></div>
+      </div>
+    </div>
+
+    <!-- LUNCH -->
+    <div class="meal-card">
+      <div class="meal-header m-header-mx">
+        <div class="meal-emoji">🍲</div>
+        <div><h3>Caldo de Pollo con Verduras</h3><span class="meal-tag">Comida</span></div>
+      </div>
+      <div class="meal-body">
+        Homemade chicken broth with zucchini, chayote, chiles, cilantro, and lime. Serve with 2 corn tortillas. This is medicine — collagen, minerals, vegetables in one bowl.
+        <div class="meal-nutrients"><span class="ftag t-anti">Healing</span><span class="ftag t-protein">Collagen</span><span class="ftag t-fiber">Veg</span></div>
+      </div>
+    </div>
+
+    <div class="meal-card">
+      <div class="meal-header m-header-as">
+        <div class="meal-emoji">🥗</div>
+        <div><h3>Bibimbap Bowl (Mexican Spin)</h3><span class="meal-tag">Lunch</span></div>
+      </div>
+      <div class="meal-body">
+        Brown rice bowl with sautéed bok choy, nopales, a fried egg, kimchi, avocado slices, and a drizzle of sesame oil. One bowl. Every food group.
+        <div class="meal-nutrients"><span class="ftag t-probiotic">Probiotics</span><span class="ftag t-fiber">Fiber</span><span class="ftag t-fat">Healthy Fat</span></div>
+      </div>
+    </div>
+
+    <div class="meal-card">
+      <div class="meal-header m-header-fusion">
+        <div class="meal-emoji">🌮</div>
+        <div><h3>Tacos de Pescado al Vapor</h3><span class="meal-tag">Fusion</span></div>
+      </div>
+      <div class="meal-body">
+        Steamed or grilled fish (tilapia, salmon, or sardine) on corn tortillas with shredded cabbage, fresh salsa, avocado, and lime. High protein, omega-3s, no frying.
+        <div class="meal-nutrients"><span class="ftag t-omega">Omega-3</span><span class="ftag t-protein">Protein</span><span class="ftag t-anti">Anti-inflam</span></div>
+      </div>
+    </div>
+
+    <!-- DINNER -->
+    <div class="meal-card">
+      <div class="meal-header m-header-mx">
+        <div class="meal-emoji">🫘</div>
+        <div><h3>Enfrijoladas con Nopales</h3><span class="meal-tag">Cena</span></div>
+      </div>
+      <div class="meal-body">
+        Corn tortillas bathed in black bean sauce, topped with fresh nopales, a sprinkle of fresh cheese, and salsa. Plant-based, filling, deeply traditional.
+        <div class="meal-nutrients"><span class="ftag t-protein">Plant Protein</span><span class="ftag t-fiber">Fiber</span></div>
+      </div>
+    </div>
+
+    <div class="meal-card">
+      <div class="meal-header m-header-as">
+        <div class="meal-emoji">🍜</div>
+        <div><h3>Stir-Fried Vegetables + Tofu</h3><span class="meal-tag">Dinner</span></div>
+      </div>
+      <div class="meal-body">
+        Broccoli, bok choy, mushrooms, and snap peas stir-fried with ginger, garlic, tamari sauce and cubed firm tofu. Serve over brown rice. 20 minutes, one pan.
+        <div class="meal-nutrients"><span class="ftag t-protein">Protein</span><span class="ftag t-fiber">Fiber</span><span class="ftag t-anti">Anti-inflam</span></div>
+      </div>
+    </div>
+
+    <div class="meal-card">
+      <div class="meal-header m-header-fusion">
+        <div class="meal-emoji">🥘</div>
+        <div><h3>Sopa de Lentejas con Jengibre</h3><span class="meal-tag">Fusion</span></div>
+      </div>
+      <div class="meal-body">
+        Red lentil soup with tomato, garlic, cumin, fresh ginger, and a squeeze of lime. The Mexican spices meet Asian ginger. One pot. Feeds the whole family for under $5.
+        <div class="meal-nutrients"><span class="ftag t-protein">Protein</span><span class="ftag t-fiber">Fiber</span><span class="ftag t-anti">Ginger</span></div>
+      </div>
+    </div>
+  </div>
+
+</div></div>
+
+
+<!-- ===== 08: DRINKS ===== -->
+<div class="band-green">
+<div class="wrap">
+  <div class="sec-head">
+    <div class="sec-num">08</div>
+    <div>
+      <h2>What You Drink Matters as Much as What You Eat</h2>
+      <p>Liquid calories are invisible — and devastating to blood sugar</p>
+    </div>
+  </div>
+
+  <div class="drinks-grid">
+    <div class="drink-card">
+      <div class="d-icon">💧</div>
+      <h4>Water — Always First</h4>
+      <p>8–10 glasses/day minimum. Add lime, cucumber, or mint. Drink a glass before every meal — it reduces how much you eat naturally.</p>
+    </div>
+    <div class="drink-card">
+      <div class="d-icon">🌺</div>
+      <h4>Agua de Jamaica (Hibiscus)</h4>
+      <p>Brew with NO sugar or a tiny amount of piloncillo. Hibiscus is clinically proven to lower blood pressure and reduce inflammation.</p>
+    </div>
+    <div class="drink-card">
+      <div class="d-icon">🍵</div>
+      <h4>Green Tea / Matcha</h4>
+      <p>Drink 1–2 cups daily. Polyphenols and EGCG are among the most studied anti-inflammatory compounds. Replace one coffee with green tea.</p>
+    </div>
+    <div class="drink-card">
+      <div class="d-icon">☕</div>
+      <h4>Café de Olla (Light Sugar)</h4>
+      <p>Traditional Mexican cinnamon coffee is fine — in moderation and with minimal piloncillo. Skip the sugar and cream-loaded versions.</p>
+    </div>
+    <div class="drink-card bad-drink">
+      <div class="d-icon">🥤</div>
+      <h4>❌ Sodas / Sweet Drinks</h4>
+      <p>One can of soda = 10 tsp sugar + zero nutrition. This is the single most impactful swap your family can make for weight and metabolic health.</p>
+    </div>
+    <div class="drink-card bad-drink">
+      <div class="d-icon">🧃</div>
+      <h4>❌ Fruit Juice</h4>
+      <p>Even 100% fruit juice removes all the fiber and delivers concentrated sugar. Eat the whole fruit. Drink water. Don't drink your fruit.</p>
+    </div>
+    <div class="drink-card bad-drink">
+      <div class="d-icon">🧋</div>
+      <h4>❌ Flavored Coffees</h4>
+      <p>A sweetened Starbucks or café drink can contain 40–60g of sugar — more than a can of soda. Make café at home.</p>
+    </div>
+    <div class="drink-card">
+      <div class="d-icon">🥛</div>
+      <h4>Kefir / Plain Yogurt Drink</h4>
+      <p>Plain kefir or a drinkable yogurt with no added sugar delivers probiotics, calcium, and protein. Great as a snack or post-meal drink.</p>
+    </div>
+  </div>
+
+</div></div>
+
+
+<!-- ===== 09: WEEKLY RHYTHM ===== -->
+<div id="rhythm" class="band-cream">
+<div class="wrap">
+  <div class="sec-head">
+    <div class="sec-num">09</div>
+    <div>
+      <h2>Weekly Eating Rhythm — Un Ejemplo</h2>
+      <p>Variety, culture, and ease — no meal plan required, just a rhythm</p>
+    </div>
+  </div>
+
+  <div class="week-grid">
+    <div class="day-card mx-day">
+      <div class="day-label">Lunes</div>
+      <div class="day-type">🌮 Mexican</div>
+      <div class="day-meals">
+        <div class="day-meal">🍳 Huevos + tortilla + beans</div>
+        <div class="day-meal">🍲 Caldo de pollo + veg</div>
+        <div class="day-meal">🫘 Enfrijoladas + salsa</div>
+      </div>
+    </div>
+    <div class="day-card as-day">
+      <div class="day-label">Martes</div>
+      <div class="day-type">🥢 Asian</div>
+      <div class="day-meals">
+        <div class="day-meal">🍵 Miso soup + egg</div>
+        <div class="day-meal">🥗 Stir-fry veg + tofu</div>
+        <div class="day-meal">🍜 Soba + salmon</div>
+      </div>
+    </div>
+    <div class="day-card fusion">
+      <div class="day-label">Miércoles</div>
+      <div class="day-type">🌿 Fusion</div>
+      <div class="day-meals">
+        <div class="day-meal">🥣 Avena + chia + mango</div>
+        <div class="day-meal">🌮 Fish tacos + kimchi</div>
+        <div class="day-meal">🥘 Lentil ginger soup</div>
+      </div>
+    </div>
+    <div class="day-card mx-day">
+      <div class="day-label">Jueves</div>
+      <div class="day-type">🌮 Mexican</div>
+      <div class="day-meals">
+        <div class="day-meal">🌽 Nopal + egg tacos</div>
+        <div class="day-meal">🐟 Pescado a la plancha</div>
+        <div class="day-meal">🫘 Beans + rice + veg</div>
+      </div>
+    </div>
+    <div class="day-card as-day">
+      <div class="day-label">Viernes</div>
+      <div class="day-type">🥢 Asian</div>
+      <div class="day-meals">
+        <div class="day-meal">🍳 Egg fried rice (brown)</div>
+        <div class="day-meal">🥗 Bibimbap bowl</div>
+        <div class="day-meal">🥬 Bok choy + shrimp</div>
+      </div>
+    </div>
+    <div class="day-card simple">
+      <div class="day-label">Sábado</div>
+      <div class="day-type">🎉 Family Day</div>
+      <div class="day-meals">
+        <div class="day-meal">🥞 Wholesome brunch</div>
+        <div class="day-meal">🌮 Enjoy with family</div>
+        <div class="day-meal">🫒 Light, real dinner</div>
+      </div>
+    </div>
+    <div class="day-card simple">
+      <div class="day-label">Domingo</div>
+      <div class="day-type">🧑‍🍳 Batch Cook</div>
+      <div class="day-meals">
+        <div class="day-meal">🫘 Cook beans for week</div>
+        <div class="day-meal">🍚 Cook rice + grains</div>
+        <div class="day-meal">🥘 Prep soups / veg</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout-green mt">
+    <strong>Sunday is the secret weapon.</strong> Cooking a pot of beans, a pot of brown rice, and washing/chopping vegetables on Sunday means the entire week's meals take 10–15 minutes to assemble. The families who eat best are the ones who prep, not the ones with the most willpower.
+  </div>
+
+</div></div>
+
+
+<!-- ===== 10: HABITS ===== -->
+<div id="habits" class="band-warm">
+<div class="wrap">
+  <div class="sec-head">
+    <div class="sec-num">10</div>
+    <div>
+      <h2>Habits That Change Everything</h2>
+      <p>Beyond the food — how you eat matters as much as what you eat</p>
+    </div>
+  </div>
+
+  <div class="habit-grid">
+    <div class="habit-card">
+      <h3>🍽️ Eating Behaviors</h3>
+      <div class="habit-item"><div class="h-num">1</div><div><strong>Eat slowly.</strong> It takes 20 minutes for your stomach to signal fullness to your brain. Eating fast = always overeating before the signal arrives.</div></div>
+      <div class="habit-item"><div class="h-num">2</div><div><strong>No screens while eating.</strong> Eating while distracted causes 25–30% more consumption. Sit at the table. Together if possible.</div></div>
+      <div class="habit-item"><div class="h-num">3</div><div><strong>Plate your food, don't eat from pots.</strong> Portioning visually before eating dramatically reduces overeating.</div></div>
+      <div class="habit-item"><div class="h-num">4</div><div><strong>Stop at 80% full (Hara Hachi Bu).</strong> A Japanese principle from the longest-lived population on earth. Eat until you're satisfied, not stuffed.</div></div>
+      <div class="habit-item"><div class="h-num">5</div><div><strong>Don't skip meals.</strong> Hunger debt leads to poor choices and overeating at night. Eat real meals at consistent times.</div></div>
+      <div class="habit-item"><div class="h-num">6</div><div><strong>Vegetables first.</strong> Start your meal with the vegetable portion. You'll eat less of everything else and get more of what nourishes.</div></div>
+    </div>
+
+    <div class="habit-card">
+      <h3>🌙 Daily Rhythms for Health</h3>
+      <div class="habit-item"><div class="h-num">1</div><div><strong>Drink water first thing.</strong> Before coffee, food, or your phone. One full glass. Rehydrates organs after sleep and kickstarts metabolism.</div></div>
+      <div class="habit-item"><div class="h-num">2</div><div><strong>Walk 30 minutes a day.</strong> Research is clear: daily walking is among the highest-impact interventions for weight loss, blood sugar, and longevity — even at a gentle pace.</div></div>
+      <div class="habit-item"><div class="h-num">3</div><div><strong>Sleep 7–8 hours.</strong> Sleep deprivation directly increases ghrelin (hunger hormone), reduces satiety, and promotes fat storage. Sleep is not a luxury — it's metabolism.</div></div>
+      <div class="habit-item"><div class="h-num">4</div><div><strong>Cook together.</strong> Families who cook together eat better food and smaller portions. It's also one of the most powerful acts of connection and teaching for children.</div></div>
+      <div class="habit-item"><div class="h-num">5</div><div><strong>Weekly batch cook on Sunday.</strong> Beans, grains, washed vegetables. 2 hours of prep enables 7 days of easy, real meals.</div></div>
+      <div class="habit-item"><div class="h-num">6</div><div><strong>Make peace with food.</strong> Shame around eating makes it worse, not better. Each meal is a new beginning. Progress — not perfection — is what heals.</div></div>
+    </div>
+  </div>
+
+</div></div>
+
+
+<!-- ===== CLOSING REMINDERS ===== -->
+<div class="quick-dark">
+  <div class="quick-dark-inner">
+    <h2>Carry These With You</h2>
+    <p class="sub">Pin these in your kitchen. Read them when it's hard.</p>
+
+    <div class="reminders">
+      <div class="reminder-card">
+        <h4>"La comida es medicina."</h4>
+        <p>Food is medicine — and it has been in your family's kitchen all along. Beans, chiles, nopales, avocado, cilantro — these are healers. You already know how to cook them. Trust that knowledge again.</p>
+      </div>
+      <div class="reminder-card">
+        <h4>The goal is not a number on a scale.</h4>
+        <p>The goal is energy to play with your kids and grandkids. The goal is knees that don't ache. The goal is sleeping through the night. The goal is showing your children what caring for a body looks like. The scale follows from all of that.</p>
+      </div>
+      <div class="reminder-card">
+        <h4>One swap at a time.</h4>
+        <p>Don't change everything at once. This week: replace one soda per day with water or Jamaica. That's it. One swap, sustained for a month, is more powerful than a dramatic two-week diet that collapses. Progress compounds.</p>
+      </div>
+      <div class="reminder-card">
+        <h4>Your children are watching.</h4>
+        <p>86% of parents who changed to whole food eating passed those habits directly to their children. The most powerful nutrition intervention for your kids is not what you tell them — it's what you put on the table and eat yourself.</p>
+      </div>
+      <div class="reminder-card">
+        <h4>Self-neglect is learned. So is self-care.</h4>
+        <p>If you grew up seeing adults dismiss their own needs, it takes real intention to do differently. Eating well, sleeping, moving — these are not indulgences. They are the foundation on which everything else in your life rests.</p>
+      </div>
+      <div class="reminder-card">
+        <h4>This is a long game.</h4>
+        <p>Sustainable weight loss is 0.5 to 1 lb/week. That's 25–50 lbs in a year without starvation. Inflammation takes 3–6 months to cool. The body heals slowly and permanently when treated with real food and consistency. Trust the process.</p>
+      </div>
+    </div>
+
+    <div class="foot-note">
+      La Mesa — Family Eating Guide · Complement to the Family Pantry & Self-Sufficiency Guide · Not a medical prescription — consult your physician for personalized guidance
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

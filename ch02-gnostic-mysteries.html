@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Gnostic Mysteries — Secret Teachings of All Ages</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void: #03040a;
+    --deep: #07080f;
+    --crimson: #8b1a2f;
+    --crimson-glow: #c42040;
+    --crimson-dim: #4a0f1a;
+    --serpent: #1a3a2a;
+    --serpent-bright: #2a6644;
+    --gold: #c9a84c;
+    --gold-dim: #5a4520;
+    --parchment: #c8b88a;
+    --parchment-dim: #7a6a4a;
+    --text: #cfc0a0;
+    --text-dim: #7a6a50;
+    --ice: #a0c8d8;
+    --ice-dim: #405060;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--void);
+    color: var(--text);
+    font-family: 'Cormorant Garamond', serif;
+    overflow-x: hidden;
+  }
+
+  /* ── CURSOR ── */
+  .cursor {
+    position: fixed; width: 8px; height: 8px;
+    background: var(--crimson-glow);
+    border-radius: 50%;
+    pointer-events: none; z-index: 9999;
+    transform: translate(-50%,-50%);
+    mix-blend-mode: screen;
+    transition: transform 0.08s;
+  }
+  .cursor-ring {
+    position: fixed; width: 32px; height: 32px;
+    border: 1px solid rgba(196,32,64,0.5);
+    border-radius: 50%;
+    pointer-events: none; z-index: 9998;
+    transform: translate(-50%,-50%);
+    transition: all 0.18s ease;
+  }
+
+  /* ── NOISE TEXTURE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+    opacity: 0.025;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative; min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center; padding: 3rem 2rem;
+    overflow: hidden; z-index: 1;
+  }
+
+  #labCanvas {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    z-index: 0; pointer-events: none;
+    opacity: 0.35;
+  }
+
+  .hero-content { position: relative; z-index: 2; }
+
+  /* Abraxas SVG sigil */
+  .abraxas-sigil {
+    width: 180px; height: 180px;
+    margin: 0 auto 2.5rem;
+    opacity: 0;
+    animation: sigilAppear 2s ease 0.5s forwards;
+    filter: drop-shadow(0 0 20px rgba(196,32,64,0.6));
+  }
+  @keyframes sigilAppear {
+    from { opacity: 0; transform: scale(0.7) rotate(-15deg); }
+    to   { opacity: 1; transform: scale(1) rotate(0deg); }
+  }
+
+  .chapter-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem; letter-spacing: 0.55em;
+    color: var(--crimson-dim); text-transform: uppercase;
+    margin-bottom: 1rem;
+    opacity: 0; animation: fadeUp 1s ease 1.2s forwards;
+  }
+  .hero-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(1.6rem, 4.5vw, 3.2rem);
+    color: var(--parchment);
+    text-shadow: 0 0 40px rgba(196,32,64,0.4), 0 0 80px rgba(139,26,47,0.3);
+    line-height: 1.25; max-width: 700px;
+    opacity: 0; animation: fadeUp 1.2s ease 1.5s forwards;
+  }
+  .hero-sub {
+    font-size: clamp(0.85rem, 1.8vw, 1.1rem);
+    font-style: italic; color: var(--text-dim);
+    margin-top: 1rem; letter-spacing: 0.1em;
+    opacity: 0; animation: fadeUp 1s ease 1.9s forwards;
+  }
+  .scroll-cue {
+    position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+    font-family: 'Cinzel', serif; font-size: 0.55rem; letter-spacing: 0.5em;
+    color: var(--crimson-dim);
+    opacity: 0; animation: fadeIn 1s ease 2.8s forwards;
+  }
+  .scroll-cue .vline {
+    width: 1px; height: 48px;
+    background: linear-gradient(to bottom, transparent, var(--crimson-dim));
+    animation: lineGrow 1.5s ease 3s infinite;
+  }
+  @keyframes lineGrow {
+    0%,100% { transform: scaleY(1); opacity: 0.5; }
+    50% { transform: scaleY(1.3); opacity: 1; }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn { to { opacity: 1; } }
+
+  /* ── GNOSTIC DUALITY BANNER ── */
+  .duality-banner {
+    position: relative; z-index: 1;
+    display: grid; grid-template-columns: 1fr 1fr;
+    min-height: 260px;
+  }
+  .duality-half {
+    padding: 3rem 2.5rem;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    text-align: center; gap: 1rem;
+  }
+  .duality-half.light {
+    background: linear-gradient(135deg, rgba(201,168,76,0.08), rgba(201,168,76,0.03));
+    border-right: 1px solid rgba(201,168,76,0.15);
+  }
+  .duality-half.dark {
+    background: linear-gradient(225deg, rgba(139,26,47,0.12), rgba(139,26,47,0.04));
+  }
+  .duality-icon { font-size: 2.5rem; filter: drop-shadow(0 0 12px currentColor); }
+  .duality-half.light .duality-icon { color: var(--gold); }
+  .duality-half.dark .duality-icon { color: var(--crimson-glow); }
+  .duality-label {
+    font-family: 'Cinzel', serif; font-size: 0.7rem;
+    letter-spacing: 0.3em; text-transform: uppercase;
+  }
+  .duality-half.light .duality-label { color: var(--gold); }
+  .duality-half.dark .duality-label { color: var(--crimson-glow); }
+  .duality-text { font-size: 0.95rem; line-height: 1.7; color: var(--text-dim); }
+  .duality-divider {
+    position: absolute; left: 50%; top: 0; bottom: 0;
+    width: 1px; transform: translateX(-50%);
+    background: linear-gradient(to bottom, transparent, var(--parchment-dim), transparent);
+    display: flex; align-items: center; justify-content: center; z-index: 2;
+  }
+  .duality-divider-gem {
+    width: 10px; height: 10px;
+    background: var(--parchment);
+    transform: rotate(45deg);
+    box-shadow: 0 0 15px var(--parchment);
+    flex-shrink: 0;
+  }
+
+  /* ── SECTION ── */
+  .section {
+    position: relative; z-index: 1;
+    max-width: 840px; margin: 0 auto;
+    padding: 4rem 2rem;
+  }
+  .section-heading {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1rem, 2.2vw, 1.5rem);
+    color: var(--parchment); letter-spacing: 0.08em;
+    margin-bottom: 1.8rem;
+  }
+  .section-heading.crimson { color: var(--crimson-glow); }
+  .section-heading.ice { color: var(--ice); }
+
+  .body-text {
+    font-size: 1.1rem; line-height: 1.95;
+    color: var(--text); margin: 1.4rem 0;
+  }
+  .drop-cap::first-letter {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 4.2rem; float: left;
+    line-height: 0.78; margin: 0.1em 0.1em 0 0;
+    color: var(--crimson-glow);
+    text-shadow: 0 0 25px rgba(196,32,64,0.6);
+  }
+
+  /* ── ORNAMENT ── */
+  .ornament {
+    display: flex; align-items: center;
+    gap: 1.2rem; margin: 2.5rem auto;
+    max-width: 500px; padding: 0 2rem;
+  }
+  .ornament-line {
+    flex: 1; height: 1px;
+    background: linear-gradient(to right, transparent, var(--crimson-dim), transparent);
+  }
+  .ornament-glyph {
+    font-size: 1rem; color: var(--crimson-glow);
+    filter: drop-shadow(0 0 8px rgba(196,32,64,0.8));
+  }
+
+  /* ── ABRAXAS INTERACTIVE ── */
+  .abraxas-section {
+    position: relative; z-index: 1;
+    background: linear-gradient(180deg, transparent, rgba(139,26,47,0.06), transparent);
+    padding: 5rem 2rem; text-align: center;
+  }
+  #abraxasCanvas {
+    width: 100%; max-width: 560px; height: 560px;
+    margin: 2rem auto; display: block; cursor: pointer;
+  }
+  .abraxas-info {
+    max-width: 560px; margin: 0 auto;
+    font-size: 1rem; line-height: 1.8;
+    color: var(--text-dim); font-style: italic;
+    min-height: 3rem;
+    transition: color 0.4s;
+  }
+
+  /* ── QUOTE ── */
+  .quote-block {
+    border-left: 2px solid var(--crimson-dim);
+    padding: 1.5rem 2rem; margin: 3rem 0;
+    background: rgba(139,26,47,0.05); position: relative;
+  }
+  .quote-block::before {
+    content: '"';
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 4.5rem; color: var(--crimson-dim); opacity: 0.25;
+    position: absolute; top: -0.8rem; left: 0.8rem; line-height: 1;
+  }
+  .quote-text { font-size: 1.15rem; font-style: italic; line-height: 1.9; color: var(--text); }
+  .quote-attr {
+    font-family: 'Cinzel', serif; font-size: 0.65rem;
+    letter-spacing: 0.22em; color: var(--crimson-dim); margin-top: 1rem;
+  }
+
+  /* ── DEITY CARDS (Gnostic Aeons) ── */
+  .aeons-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1px; margin: 2.5rem 0;
+    border: 1px solid rgba(201,168,76,0.1);
+    background: rgba(201,168,76,0.08);
+  }
+  .aeon-card {
+    background: var(--void);
+    padding: 2rem 1.5rem; cursor: pointer;
+    transition: background 0.4s;
+    position: relative; overflow: hidden;
+  }
+  .aeon-card::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+    background: var(--crimson-glow);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.4s ease;
+  }
+  .aeon-card:hover { background: rgba(139,26,47,0.12); }
+  .aeon-card:hover::after { transform: scaleX(1); }
+  .aeon-name {
+    font-family: 'Cinzel', serif; font-size: 0.8rem;
+    letter-spacing: 0.15em; color: var(--parchment);
+    margin-bottom: 0.5rem;
+  }
+  .aeon-greek {
+    font-size: 1.4rem; color: var(--crimson-glow);
+    margin-bottom: 0.8rem;
+    filter: drop-shadow(0 0 6px rgba(196,32,64,0.6));
+  }
+  .aeon-desc { font-size: 0.9rem; line-height: 1.65; color: var(--text-dim); }
+
+  /* ── LABYRINTH SECTION ── */
+  .lab-section {
+    position: relative; z-index: 1;
+    padding: 5rem 2rem; text-align: center;
+  }
+  #mazeCanvas {
+    max-width: 440px; width: 100%;
+    margin: 2rem auto; display: block; cursor: crosshair;
+  }
+  .maze-note {
+    font-family: 'Cinzel', serif; font-size: 0.65rem;
+    letter-spacing: 0.25em; color: var(--gold-dim);
+    margin-top: 0.5rem;
+  }
+
+  /* ── ODINIC / NORSE ── */
+  .rune-strip {
+    display: flex; justify-content: center;
+    gap: 1.5rem; flex-wrap: wrap;
+    padding: 2.5rem; margin: 2rem 0;
+    border-top: 1px solid rgba(160,200,216,0.1);
+    border-bottom: 1px solid rgba(160,200,216,0.1);
+  }
+  .rune-item {
+    display: flex; flex-direction: column;
+    align-items: center; gap: 0.5rem; cursor: pointer;
+    transition: transform 0.3s;
+  }
+  .rune-item:hover { transform: translateY(-4px); }
+  .rune-glyph {
+    font-size: 2.2rem; color: var(--ice);
+    filter: drop-shadow(0 0 8px rgba(160,200,216,0.5));
+    transition: filter 0.3s;
+  }
+  .rune-item:hover .rune-glyph { filter: drop-shadow(0 0 16px rgba(160,200,216,0.9)); }
+  .rune-name {
+    font-family: 'Cinzel', serif; font-size: 0.55rem;
+    letter-spacing: 0.2em; color: var(--ice-dim);
+  }
+
+  .rune-tooltip {
+    max-width: 600px; margin: 0 auto 2rem;
+    min-height: 60px; padding: 1rem 1.5rem;
+    border: 1px solid rgba(160,200,216,0.15);
+    background: rgba(160,200,216,0.04);
+    font-size: 0.95rem; line-height: 1.8;
+    color: var(--text-dim); text-align: center;
+    font-style: italic;
+    transition: all 0.4s ease;
+  }
+
+  /* ── SERAPIS SECTION ── */
+  .serapis-panel {
+    display: grid; grid-template-columns: 1fr 2fr; gap: 0;
+    border: 1px solid rgba(201,168,76,0.12); margin: 2.5rem 0;
+  }
+  .serapis-symbol {
+    background: rgba(201,168,76,0.05);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 4rem; border-right: 1px solid rgba(201,168,76,0.1);
+    filter: drop-shadow(0 0 20px rgba(201,168,76,0.4));
+    min-height: 160px;
+  }
+  .serapis-text {
+    padding: 2rem;
+    font-size: 0.97rem; line-height: 1.85; color: var(--text-dim);
+  }
+  .serapis-title {
+    font-family: 'Cinzel', serif; font-size: 0.8rem;
+    letter-spacing: 0.15em; color: var(--gold);
+    margin-bottom: 0.8rem;
+  }
+
+  /* ── FOOTER NAV ── */
+  .book-nav {
+    position: relative; z-index: 1;
+    padding: 4rem 2rem; text-align: center;
+    border-top: 1px solid rgba(139,26,47,0.2);
+  }
+  .book-nav-series {
+    font-family: 'Cinzel', serif; font-size: 0.6rem;
+    letter-spacing: 0.4em; color: var(--crimson-dim); margin-bottom: 0.8rem;
+  }
+  .book-nav-title {
+    font-family: 'Cinzel Decorative', serif; font-size: 0.85rem;
+    color: var(--parchment); margin-bottom: 2rem;
+  }
+  .nav-row { display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; }
+  .nav-btn {
+    font-family: 'Cinzel', serif; font-size: 0.7rem;
+    letter-spacing: 0.18em; color: var(--parchment);
+    border: 1px solid rgba(200,184,138,0.2);
+    padding: 0.8rem 2rem; cursor: pointer; background: none;
+    transition: all 0.3s; text-decoration: none;
+  }
+  .nav-btn:hover {
+    border-color: var(--parchment);
+    background: rgba(200,184,138,0.07);
+    box-shadow: 0 0 20px rgba(200,184,138,0.1);
+  }
+  .nav-btn.prev { color: var(--text-dim); border-color: rgba(122,106,74,0.3); }
+
+  /* ── SCROLL REVEAL ── */
+  .reveal {
+    opacity: 0; transform: translateY(35px);
+    transition: all 0.85s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* BG gradient orbs */
+  .orb {
+    position: fixed; border-radius: 50%;
+    filter: blur(90px); pointer-events: none; z-index: 0; opacity: 0.05;
+  }
+  .orb-1 { width: 700px; height: 700px; background: var(--crimson); top: -200px; left: -200px; }
+  .orb-2 { width: 400px; height: 400px; background: var(--ice); bottom: 0; right: -150px; opacity: 0.03; }
+
+  @media(max-width:600px) {
+    .duality-banner { grid-template-columns: 1fr; }
+    .serapis-panel { grid-template-columns: 1fr; }
+    .duality-divider { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <canvas id="labCanvas"></canvas>
+  <div class="hero-content">
+    <!-- Abraxas SVG -->
+    <svg class="abraxas-sigil" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg" fill="none">
+      <!-- Outer ring -->
+      <circle cx="90" cy="90" r="86" stroke="#8b1a2f" stroke-width="0.8" stroke-dasharray="3 5" opacity="0.7"/>
+      <circle cx="90" cy="90" r="70" stroke="#c42040" stroke-width="0.4" opacity="0.4"/>
+      <!-- Serpent body (wavy) -->
+      <path d="M 40 90 Q 55 70 70 90 Q 85 110 100 90 Q 115 70 130 90 Q 145 110 150 90"
+            stroke="#c42040" stroke-width="1.5" stroke-linecap="round" opacity="0.8"/>
+      <!-- Serpent head -->
+      <circle cx="155" cy="88" r="6" stroke="#c42040" stroke-width="1.2" opacity="0.9"/>
+      <circle cx="157" cy="86" r="1.5" fill="#c42040" opacity="0.9"/>
+      <!-- Rooster head (top) -->
+      <path d="M 90 10 L 95 22 L 100 18 L 95 28 L 85 28 L 80 18 L 85 22 Z"
+            fill="#c42040" opacity="0.7"/>
+      <!-- Shield (torso) -->
+      <path d="M 72 60 L 108 60 L 112 100 L 90 115 L 68 100 Z"
+            stroke="#c42040" stroke-width="1" fill="rgba(139,26,47,0.15)" opacity="0.8"/>
+      <!-- IAO letters hint -->
+      <text x="90" y="88" font-family="serif" font-size="11" fill="#c9a84c" text-anchor="middle" opacity="0.9">IAŌ</text>
+      <!-- Human legs (pillars) -->
+      <line x1="78" y1="115" x2="72" y2="145" stroke="#c42040" stroke-width="2" opacity="0.6"/>
+      <line x1="102" y1="115" x2="108" y2="145" stroke="#c42040" stroke-width="2" opacity="0.6"/>
+      <!-- Serpent legs -->
+      <path d="M 72 145 Q 65 155 60 158" stroke="#c42040" stroke-width="1.5" opacity="0.6"/>
+      <path d="M 108 145 Q 115 155 120 158" stroke="#c42040" stroke-width="1.5" opacity="0.6"/>
+      <!-- Whips -->
+      <path d="M 40 75 Q 55 60 65 70" stroke="#c9a84c" stroke-width="1" opacity="0.5" stroke-dasharray="2 3"/>
+      <path d="M 140 75 Q 125 60 115 70" stroke="#c9a84c" stroke-width="1" opacity="0.5" stroke-dasharray="2 3"/>
+      <!-- Dots -->
+      <circle cx="90" cy="10" r="2" fill="#c42040" opacity="0.6"/>
+      <circle cx="90" cy="170" r="2" fill="#c42040" opacity="0.6"/>
+    </svg>
+
+    <p class="chapter-label">Chapter II · Secret Teachings of All Ages</p>
+    <h1 class="hero-title">The Gnostic Mysteries</h1>
+    <p class="hero-sub">Simon Magus · Abraxas · Serapis · The Odinic Rites</p>
+  </div>
+  <div class="scroll-cue">
+    <div class="vline"></div>
+    <span>ENTER</span>
+  </div>
+</section>
+
+<!-- ═══ DUALITY BANNER ═══ -->
+<div class="duality-banner reveal">
+  <div class="duality-half light">
+    <div class="duality-icon">☀️</div>
+    <p class="duality-label">Pleroma</p>
+    <p class="duality-text">The divine fullness — the realm of pure light where the supreme God dwells, utterly beyond matter and creation.</p>
+  </div>
+  <div class="duality-divider"><div class="duality-divider-gem"></div></div>
+  <div class="duality-half dark">
+    <div class="duality-icon">🌑</div>
+    <p class="duality-label">Kenoma</p>
+    <p class="duality-text">The void — the material world born of the Demiurge's flawed creation, a prison of ignorance from which the soul must escape.</p>
+  </div>
+</div>
+
+<!-- ═══ INTRO ═══ -->
+<div class="section">
+  <div class="ornament reveal"><div class="ornament-line"></div><div class="ornament-glyph">✦</div><div class="ornament-line"></div></div>
+  <p class="body-text drop-cap reveal">
+    Where the earlier Mystery Schools initiated their candidates through pageant and allegory, the <em>Gnostics</em> claimed to possess something more dangerous — direct experiential knowledge of the divine. Gnosis was not faith, not ritual, not priestly intercession. It was the lightning strike of inner awakening: the soul recognizing its own celestial origin and breaking free from the Demiurge's enchanted prison of matter.
+  </p>
+  <p class="body-text reveal">
+    Hall traces the Gnostic current through its great teachers — Simon Magus of Samaria, Basilides of Alexandria — and into the strange cosmic architectures they constructed to explain the human predicament. These were not simple heresies. They were elaborate philosophical systems encoding, in mythological language, a psychology of liberation centuries ahead of its time.
+  </p>
+  <div class="quote-block reveal">
+    <p class="quote-text">The Gnostic stood between two infinities: above, the unknowable God of pure light; below, the ignorant craftsman-god who built this world of shadow. The Gnostic's task was to remember which world he truly belonged to.</p>
+    <p class="quote-attr">— Paraphrase of Hall's Gnostic exposition, Chapter II</p>
+  </div>
+</div>
+
+<!-- ═══ ABRAXAS INTERACTIVE ═══ -->
+<div class="abraxas-section">
+  <h2 class="section-heading crimson reveal">Abraxas — The 365-Named God</h2>
+  <p class="body-text reveal" style="max-width:600px;margin:0 auto;">
+    Basilides named the supreme deity of his system <strong style="color:var(--parchment)">Abraxas</strong> — whose seven letters in Greek numerology sum to <em>365</em>, one for each day of the solar year. Click any emanation in the diagram below to explore the Basilidean cosmos.
+  </p>
+  <canvas id="abraxasCanvas" width="560" height="560"></canvas>
+  <p class="abraxas-info" id="abraxasInfo">Click an emanation to learn its nature</p>
+</div>
+
+<!-- ═══ GNOSTIC AEONS ═══ -->
+<div class="section">
+  <h2 class="section-heading reveal">The Gnostic Aeons</h2>
+  <p class="body-text reveal">The Pleroma teemed with divine beings called <em>Aeons</em> — emanations of the supreme God arranged in pairs (syzygies). Their names read like a lost mythology of the mind itself.</p>
+  <div class="aeons-grid reveal">
+    <div class="aeon-card">
+      <p class="aeon-greek">Βύθος</p>
+      <p class="aeon-name">Bythos</p>
+      <p class="aeon-desc">The Depth — the primordial, unknowable Father, existing before all things in perfect silence.</p>
+    </div>
+    <div class="aeon-card">
+      <p class="aeon-greek">Σιγή</p>
+      <p class="aeon-name">Sige</p>
+      <p class="aeon-desc">Silence — paired with Bythos as the eternal feminine principle, the womb of all emanation.</p>
+    </div>
+    <div class="aeon-card">
+      <p class="aeon-greek">Νοῦς</p>
+      <p class="aeon-name">Nous</p>
+      <p class="aeon-desc">Mind — the first emanation of the Father, also called Monogenes (Only-Begotten), the Christos.</p>
+    </div>
+    <div class="aeon-card">
+      <p class="aeon-greek">Ἀλήθεια</p>
+      <p class="aeon-name">Aletheia</p>
+      <p class="aeon-desc">Truth — paired with Nous; together they generate Logos and Zoe, Word and Life.</p>
+    </div>
+    <div class="aeon-card">
+      <p class="aeon-greek">Σοφία</p>
+      <p class="aeon-name">Sophia</p>
+      <p class="aeon-desc">Wisdom — the errant Aeon whose longing to know the Father independently caused matter to be born.</p>
+    </div>
+    <div class="aeon-card">
+      <p class="aeon-greek">Δημιουργός</p>
+      <p class="aeon-name">Demiurge</p>
+      <p class="aeon-desc">The Craftsman — Sophia's flawed offspring, who mistook himself for the supreme God and built our world.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SERAPIS PANEL ═══ -->
+<div class="section">
+  <h2 class="section-heading reveal">The Mysteries of Serapis</h2>
+  <div class="serapis-panel reveal">
+    <div class="serapis-symbol">𓂀</div>
+    <div class="serapis-text">
+      <p class="serapis-title">Alexandria's Syncretic God</p>
+      Ptolemy I consciously fused Osiris and Apis into Serapis — a composite deity designed to unite Greek and Egyptian worshippers under a single cult. His underground temple, the Serapeum of Alexandria, contained one of the ancient world's greatest libraries and hosted initiation rites blending Egyptian mystery drama with Greek philosophical contemplation. Hall describes the Serapis Mysteries as the most cosmopolitan of all ancient rites — a deliberate synthesis of East and West that anticipated the great blending movements of late antiquity.
+    </div>
+  </div>
+
+  <div class="serapis-panel reveal" style="margin-top:1px">
+    <div class="serapis-symbol" style="font-size:3rem">🌀</div>
+    <div class="serapis-text">
+      <p class="serapis-title">The Labyrinth as Initiatic Architecture</p>
+      Hall draws a profound connection between the labyrinth symbol and the initiatic journey itself. The winding path with its false turnings and hidden center mirrors the soul's passage through the illusions of matter toward the hidden god at the center. The Cretan labyrinth of Minos, the Egyptian labyrinth near Lake Moeris — both were likely actual mystery-school complexes encoding in architecture what the Gnostics encoded in myth.
+    </div>
+  </div>
+</div>
+
+<!-- ═══ LABYRINTH INTERACTIVE ═══ -->
+<div class="lab-section">
+  <h2 class="section-heading reveal" style="color:var(--gold);">The Initiatic Labyrinth</h2>
+  <p class="body-text reveal" style="max-width:580px;margin:0 auto;text-align:center;">Move your cursor through the labyrinth. The path inward mirrors the soul's journey through illusion toward the hidden center of being.</p>
+  <canvas id="mazeCanvas" width="440" height="440"></canvas>
+  <p class="maze-note" id="mazeNote">Navigate with your cursor</p>
+</div>
+
+<!-- ═══ ODINIC MYSTERIES ═══ -->
+<div class="section">
+  <h2 class="section-heading ice reveal">The Odinic Mysteries</h2>
+  <p class="body-text reveal">
+    The Norse tradition harbored its own esoteric school — the Odinic, or Gothic, Mysteries. Odin's self-sacrifice on the World Tree Yggdrasil for nine days and nights to obtain the runes mirrors precisely the initiatic death-and-rebirth pattern found in Egyptian, Greek, and Mithraic rites. The runes were not merely letters — they were charged symbols, each encoding a cosmic principle.
+  </p>
+  <p class="body-text reveal">Hover each rune below to receive its inner teaching.</p>
+
+  <div class="rune-strip reveal">
+    <div class="rune-item" onmouseenter="showRune(0)" onmouseleave="clearRune()">
+      <div class="rune-glyph">ᚠ</div><div class="rune-name">FEHU</div>
+    </div>
+    <div class="rune-item" onmouseenter="showRune(1)" onmouseleave="clearRune()">
+      <div class="rune-glyph">ᚢ</div><div class="rune-name">URUZ</div>
+    </div>
+    <div class="rune-item" onmouseenter="showRune(2)" onmouseleave="clearRune()">
+      <div class="rune-glyph">ᚦ</div><div class="rune-name">THURISAZ</div>
+    </div>
+    <div class="rune-item" onmouseenter="showRune(3)" onmouseleave="clearRune()">
+      <div class="rune-glyph">ᚨ</div><div class="rune-name">ANSUZ</div>
+    </div>
+    <div class="rune-item" onmouseenter="showRune(4)" onmouseleave="clearRune()">
+      <div class="rune-glyph">ᚱ</div><div class="rune-name">RAIDHO</div>
+    </div>
+    <div class="rune-item" onmouseenter="showRune(5)" onmouseleave="clearRune()">
+      <div class="rune-glyph">ᚲ</div><div class="rune-name">KENAZ</div>
+    </div>
+    <div class="rune-item" onmouseenter="showRune(6)" onmouseleave="clearRune()">
+      <div class="rune-glyph">ᚷ</div><div class="rune-name">GEBO</div>
+    </div>
+    <div class="rune-item" onmouseenter="showRune(7)" onmouseleave="clearRune()">
+      <div class="rune-glyph">ᚹ</div><div class="rune-name">WUNJO</div>
+    </div>
+    <div class="rune-item" onmouseenter="showRune(8)" onmouseleave="clearRune()">
+      <div class="rune-glyph">ᚺ</div><div class="rune-name">HAGALAZ</div>
+    </div>
+  </div>
+  <div class="rune-tooltip" id="runeTooltip">Hover a rune above to receive its hidden meaning</div>
+
+  <div class="quote-block reveal">
+    <p class="quote-text">I know that I hung on a windy tree, nine long nights, wounded with a spear, dedicated to Odin, myself to myself — on that tree of which no man knows from where its roots run.</p>
+    <p class="quote-attr">— The Hávamál, Odin's self-account of runic initiation</p>
+  </div>
+</div>
+
+<!-- ═══ FOOTER NAV ═══ -->
+<nav class="book-nav">
+  <p class="book-nav-series">The Secret Teachings of All Ages · Manly P. Hall · 1928</p>
+  <p class="book-nav-title">Chapter III: The Ancient Mysteries, Part Three</p>
+  <div class="nav-row">
+    <a class="nav-btn prev" href="ch01-ancient-mysteries.html">← Chapter I</a>
+    <a class="nav-btn" href="#">Chapter III →</a>
+  </div>
+</nav>
+
+<script>
+// ── CURSOR ──
+const cursor = document.getElementById('cursor');
+const ring   = document.getElementById('cursorRing');
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top  = e.clientY + 'px';
+  setTimeout(() => {
+    ring.style.left = e.clientX + 'px';
+    ring.style.top  = e.clientY + 'px';
+  }, 90);
+});
+
+// ── HERO LABYRINTH BG ──
+(function() {
+  const c = document.getElementById('labCanvas');
+  const ctx = c.getContext('2d');
+  function resize() { c.width = window.innerWidth; c.height = window.innerHeight; }
+  resize(); window.addEventListener('resize', resize);
+
+  function draw() {
+    ctx.clearRect(0, 0, c.width, c.height);
+    const cx = c.width / 2, cy = c.height / 2;
+    const maxR = Math.max(cx, cy) * 1.4;
+    const now = Date.now() * 0.0002;
+    for (let r = 20; r < maxR; r += 28) {
+      ctx.beginPath();
+      // wavy circle
+      const steps = 180;
+      for (let i = 0; i <= steps; i++) {
+        const angle = (i / steps) * Math.PI * 2;
+        const wave = Math.sin(angle * 7 + now + r * 0.04) * 5;
+        const x = cx + Math.cos(angle) * (r + wave);
+        const y = cy + Math.sin(angle) * (r + wave);
+        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
+      ctx.closePath();
+      ctx.strokeStyle = `rgba(139,26,47,${0.4 - r / maxR * 0.38})`;
+      ctx.lineWidth = 0.6;
+      ctx.stroke();
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ── SCROLL REVEAL ──
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+  });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ── ABRAXAS EMANATION DIAGRAM ──
+(function() {
+  const canvas = document.getElementById('abraxasCanvas');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const cx = W/2, cy = H/2;
+  const info = document.getElementById('abraxasInfo');
+
+  const emanations = [
+    { label: 'ABRAXAS', desc: 'The supreme Basilidean deity — 365 aspects, one for each solar day. Beyond all pairs of opposites.', r: 0, angle: 0, color: '#c42040', size: 32 },
+    { label: 'Nous', desc: 'Mind — the first emanation from Abraxas, pure divine intellect before it enters matter.', r: 100, angle: 270, color: '#c9a84c', size: 18 },
+    { label: 'Logos', desc: 'Word — emanating from Nous, the creative principle that structures reality.', r: 100, angle: 330, color: '#c9a84c', size: 18 },
+    { label: 'Phronesis', desc: 'Prudence / Understanding — practical divine wisdom descending into the lower realms.', r: 100, angle: 30, color: '#c9a84c', size: 18 },
+    { label: 'Sophia', desc: 'Wisdom — the errant aeon whose fall generated the material cosmos.', r: 100, angle: 90, color: '#8b6aaa', size: 18 },
+    { label: 'Dynamis', desc: 'Power — the animating force underlying all phenomena.', r: 100, angle: 150, color: '#c9a84c', size: 18 },
+    { label: 'Dikaiosyne', desc: 'Justice — the principle of cosmic law and equilibrium.', r: 100, angle: 210, color: '#c9a84c', size: 18 },
+    { label: 'Demiurge', desc: 'The craftsman-god — flawed offspring of Sophia, architect of the material prison.', r: 200, angle: 90, color: '#4a4060', size: 16 },
+    { label: '365 Heavens', desc: 'Basilides proposed 365 concentric heavens — one for each day — through which the soul must ascend.', r: 200, angle: 270, color: '#5a3a20', size: 14 },
+  ];
+
+  let hovered = null, t = 0;
+  function toRad(d) { return d * Math.PI / 180; }
+  function pos(e) {
+    if (e.r === 0) return { x: cx, y: cy };
+    const a = toRad(e.angle + t * (e.r < 150 ? 0.4 : -0.25));
+    return { x: cx + Math.cos(a)*e.r, y: cy + Math.sin(a)*e.r };
+  }
+
+  function draw() {
+    ctx.clearRect(0,0,W,H);
+    t += 0.15;
+
+    // Rings
+    [100, 200].forEach(r => {
+      ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2);
+      ctx.strokeStyle = 'rgba(139,26,47,0.15)'; ctx.lineWidth=1; ctx.stroke();
+    });
+
+    // Lines from center
+    emanations.slice(1).forEach(e => {
+      const p = pos(e);
+      ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(p.x,p.y);
+      ctx.strokeStyle='rgba(201,168,76,0.08)'; ctx.lineWidth=0.5; ctx.stroke();
+    });
+
+    // Nodes
+    emanations.forEach(e => {
+      const p = pos(e);
+      const isHov = hovered===e;
+      const rr = isHov ? e.size+8 : e.size;
+      ctx.beginPath(); ctx.arc(p.x,p.y,rr,0,Math.PI*2);
+      ctx.fillStyle = isHov ? e.color+'44' : e.color+'18';
+      ctx.fill();
+      ctx.strokeStyle = isHov ? e.color : e.color+'66';
+      ctx.lineWidth = isHov ? 1.5 : 0.7; ctx.stroke();
+
+      ctx.font = `${e.r===0?'bold ':''} ${isHov?12:10}px 'Cinzel', serif`;
+      ctx.fillStyle = isHov ? '#e8c97a' : e.color;
+      ctx.textAlign = 'center'; ctx.textBaseline='middle';
+      ctx.shadowBlur = isHov ? 10 : 0; ctx.shadowColor = e.color;
+      ctx.fillText(e.label, p.x, p.y);
+      ctx.shadowBlur=0;
+    });
+
+    requestAnimationFrame(draw);
+  }
+
+  canvas.addEventListener('mousemove', ev => {
+    const rect=canvas.getBoundingClientRect();
+    const sx=W/rect.width, sy=H/rect.height;
+    const mx=(ev.clientX-rect.left)*sx, my=(ev.clientY-rect.top)*sy;
+    hovered=null;
+    emanations.forEach(e => {
+      const p=pos(e);
+      const dx=mx-p.x, dy=my-p.y;
+      if(Math.sqrt(dx*dx+dy*dy)<e.size+12) hovered=e;
+    });
+    if(hovered) { info.textContent=`${hovered.label} — ${hovered.desc}`; info.style.color='var(--parchment)'; }
+    else { info.textContent='Click an emanation to learn its nature'; info.style.color=''; }
+  });
+  canvas.addEventListener('mouseleave',()=>{hovered=null;info.textContent='Click an emanation to learn its nature';info.style.color='';});
+  draw();
+})();
+
+// ── RUNES ──
+const runeData = [
+  { name: 'Fehu', meaning: 'Cattle / Wealth — mobile, fertile energy. In Odinic philosophy: the primordial fire of Muspelheim, the creative force that breaks all stasis.' },
+  { name: 'Uruz', meaning: 'Aurochs / Primal Power — untamed life-force. The initiate must confront this raw strength before it can be harnessed.' },
+  { name: 'Thurisaz', meaning: 'Giant / Thorn — the force of chaos that must be faced. Thor wields Mjolnir against the giants; the initiate must master unconscious forces.' },
+  { name: 'Ansuz', meaning: 'God / Mouth — Odin\'s own rune. Breath, speech, divine inspiration. The word that creates. The Logos of the Norse cosmos.' },
+  { name: 'Raidho', meaning: 'Ride / Journey — the soul\'s cosmic journey through the seven realms. The initiatic path is a journey with no certain destination.' },
+  { name: 'Kenaz', meaning: 'Torch / Fire — controlled illumination. The flame of knowledge that must be tended, not extinguished. Inner gnosis.' },
+  { name: 'Gebo', meaning: 'Gift — the sacred exchange between gods and mortals. All true knowledge is received as a gift after sacrifice.' },
+  { name: 'Wunjo', meaning: 'Joy / Perfection — the state of harmony attained by one who has moved through all trials. The goal of all initiatic work.' },
+  { name: 'Hagalaz', meaning: 'Hail — disruption, crisis, the hammer-blow that shatters old structures. Every initiation begins with Hagalaz.' },
+];
+
+const runeTooltip = document.getElementById('runeTooltip');
+function showRune(i) {
+  runeTooltip.style.color='var(--ice)';
+  runeTooltip.style.borderColor='rgba(160,200,216,0.3)';
+  runeTooltip.innerHTML = `<strong style="font-family:'Cinzel',serif;letter-spacing:0.15em;color:var(--ice)">${runeData[i].name}</strong><br>${runeData[i].meaning}`;
+}
+function clearRune() {
+  runeTooltip.style.color='';
+  runeTooltip.style.borderColor='';
+  runeTooltip.textContent='Hover a rune above to receive its hidden meaning';
+}
+
+// ── LABYRINTH CANVAS ──
+(function() {
+  const canvas = document.getElementById('mazeCanvas');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const cx = W/2, cy = H/2;
+  let mx = cx, my = cy;
+  let t = 0;
+
+  // Simple concentric square labyrinth
+  function drawMaze() {
+    ctx.clearRect(0,0,W,H);
+    const rings = 7;
+    const step = Math.min(cx,cy) / rings;
+
+    for(let i=1;i<=rings;i++){
+      const rr = step*i;
+      // Draw partial squares with gaps
+      const gapSize = 30 + i*3;
+      const gapAngle = (i * 137.5 + t*0.3) % 360;
+      ctx.strokeStyle = `rgba(201,168,76,${0.1 + (rings-i)*0.04})`;
+      ctx.lineWidth = 0.8;
+      ctx.beginPath();
+
+      // Square path
+      const x1=cx-rr, y1=cy-rr, x2=cx+rr, y2=cy+rr;
+      // Top
+      const topStart = cx-rr + (gapAngle % 90 > 30 ? 0 : gapSize);
+      ctx.moveTo(topStart, cy-rr);
+      ctx.lineTo(cx+rr - (gapAngle>45&&gapAngle<135 ? gapSize : 0), cy-rr);
+      // Right
+      ctx.lineTo(cx+rr, cy-rr);
+      ctx.lineTo(cx+rr, cy+rr - (gapAngle>135&&gapAngle<225 ? gapSize : 0));
+      // Bottom
+      ctx.lineTo(cx+rr, cy+rr);
+      ctx.lineTo(cx-rr + (gapAngle>225&&gapAngle<315 ? gapSize : 0), cy+rr);
+      // Left
+      ctx.lineTo(cx-rr, cy+rr);
+      ctx.lineTo(cx-rr, cy-rr + (gapAngle>315||gapAngle<45 ? gapSize : 0));
+      ctx.stroke();
+    }
+
+    // Trail from mouse to center
+    const dx=mx-cx, dy=my-cy;
+    const dist=Math.sqrt(dx*dx+dy*dy);
+    if(dist>5){
+      const grad=ctx.createLinearGradient(mx,my,cx,cy);
+      grad.addColorStop(0,'rgba(196,32,64,0)');
+      grad.addColorStop(1,'rgba(196,32,64,0.4)');
+      ctx.strokeStyle=grad; ctx.lineWidth=1.5;
+      ctx.beginPath(); ctx.moveTo(mx,my); ctx.lineTo(cx,cy); ctx.stroke();
+    }
+
+    // Center
+    ctx.beginPath(); ctx.arc(cx,cy,8,0,Math.PI*2);
+    ctx.fillStyle='rgba(201,168,76,0.3)'; ctx.fill();
+    ctx.strokeStyle='rgba(201,168,76,0.8)'; ctx.lineWidth=1; ctx.stroke();
+    // Center eye
+    ctx.beginPath(); ctx.arc(cx,cy,3,0,Math.PI*2);
+    ctx.fillStyle='rgba(196,32,64,0.9)'; ctx.fill();
+
+    // Cursor dot
+    ctx.beginPath(); ctx.arc(mx,my,4,0,Math.PI*2);
+    ctx.fillStyle='rgba(196,32,64,0.7)'; ctx.fill();
+
+    t+=0.5;
+    requestAnimationFrame(drawMaze);
+  }
+
+  canvas.addEventListener('mousemove', e => {
+    const rect=canvas.getBoundingClientRect();
+    mx=(e.clientX-rect.left)*(W/rect.width);
+    my=(e.clientY-rect.top)*(H/rect.height);
+    const dx=mx-cx, dy=my-cy;
+    const dist=Math.sqrt(dx*dx+dy*dy);
+    const note=document.getElementById('mazeNote');
+    if(dist<15) { note.textContent='You have reached the center ✦'; note.style.color='var(--gold)'; }
+    else { note.textContent='Navigate with your cursor'; note.style.color=''; }
+  });
+  canvas.addEventListener('mouseleave',()=>{ mx=cx; my=cy; });
+
+  drawMaze();
+})();
+</script>
+</body>
+</html>

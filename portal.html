@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PORTAL // ENTER</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=VT323&family=Orbitron:wght@400;900&family=Creepster&family=Share+Tech+Mono&display=swap');
+
+  :root {
+    --acid: #00ff41;
+    --blood: #ff003c;
+    --void: #0a0008;
+    --ghost: #c8b8ff;
+    --glitch: #ff00ff;
+    --amber: #ffb300;
+    --ice: #00f0ff;
+    --deep: #06000f;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%; height: 100%;
+    background: var(--deep);
+    overflow: hidden;
+    cursor: none;
+  }
+
+  /* CUSTOM CURSOR */
+  #cursor {
+    position: fixed;
+    width: 20px; height: 20px;
+    border: 2px solid var(--acid);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: width 0.1s, height 0.1s;
+    mix-blend-mode: screen;
+  }
+  #cursor::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 4px; height: 4px;
+    background: var(--acid);
+    border-radius: 50%;
+  }
+  #cursor.click { width: 40px; height: 40px; border-color: var(--glitch); }
+
+  /* SCANLINES OVERLAY */
+  #scanlines {
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.15) 2px,
+      rgba(0,0,0,0.15) 4px
+    );
+    pointer-events: none;
+    z-index: 100;
+    animation: flicker 8s infinite;
+  }
+
+  @keyframes flicker {
+    0%,95%,100% { opacity: 1; }
+    96% { opacity: 0.7; }
+    97% { opacity: 1; }
+    98% { opacity: 0.4; }
+    99% { opacity: 0.9; }
+  }
+
+  /* NOISE TEXTURE */
+  #noise {
+    position: fixed;
+    inset: 0;
+    opacity: 0.03;
+    pointer-events: none;
+    z-index: 99;
+  }
+
+  /* BACKGROUND GRID */
+  #grid {
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,255,65,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,255,65,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    animation: gridpulse 4s ease-in-out infinite;
+  }
+  @keyframes gridpulse {
+    0%,100% { opacity: 0.5; }
+    50% { opacity: 1; }
+  }
+
+  /* VIGNETTE */
+  #vignette {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.9) 100%);
+    pointer-events: none;
+    z-index: 98;
+  }
+
+  /* FLOATING PARTICLES */
+  .particle {
+    position: fixed;
+    width: 2px; height: 2px;
+    background: var(--acid);
+    border-radius: 50%;
+    pointer-events: none;
+    animation: drift linear infinite;
+    opacity: 0;
+  }
+  @keyframes drift {
+    0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(-10vh) translateX(var(--dx)); opacity: 0; }
+  }
+
+  /* MAIN STAGE */
+  #stage {
+    position: relative;
+    width: 100vw; height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+  }
+
+  /* BOOT SEQUENCE */
+  #boot {
+    position: fixed;
+    inset: 0;
+    background: var(--deep);
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 40px 60px;
+    font-family: 'Share Tech Mono', monospace;
+    color: var(--acid);
+    font-size: 14px;
+    line-height: 2;
+    transition: opacity 0.8s ease;
+  }
+  #boot.fade { opacity: 0; pointer-events: none; }
+  .boot-line { opacity: 0; animation: bootappear 0.05s forwards; }
+  @keyframes bootappear { to { opacity: 1; } }
+
+  /* PORTAL CONTAINER */
+  #portal-wrap {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    opacity: 0;
+    transition: opacity 1s ease 0.3s;
+  }
+  #portal-wrap.visible { opacity: 1; }
+
+  /* SIGIL / LOGO */
+  #sigil {
+    position: relative;
+    width: 220px; height: 220px;
+    margin-bottom: 10px;
+  }
+  #sigil svg {
+    width: 100%; height: 100%;
+    animation: sigilspin 20s linear infinite;
+    filter: drop-shadow(0 0 20px var(--ghost)) drop-shadow(0 0 40px var(--glitch));
+  }
+  @keyframes sigilspin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  #sigil-inner {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  #sigil-inner svg {
+    width: 80px; height: 80px;
+    animation: sigilspin 8s linear infinite reverse;
+    filter: drop-shadow(0 0 10px var(--acid));
+  }
+
+  /* TITLE */
+  #title-wrap {
+    text-align: center;
+    position: relative;
+  }
+  #title {
+    font-family: 'Orbitron', monospace;
+    font-weight: 900;
+    font-size: clamp(2rem, 6vw, 4.5rem);
+    color: transparent;
+    background: linear-gradient(135deg, var(--ghost) 0%, var(--glitch) 40%, var(--ice) 70%, var(--acid) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    position: relative;
+    animation: titleglitch 6s infinite;
+  }
+  @keyframes titleglitch {
+    0%,89%,100% { text-shadow: none; transform: none; }
+    90% { text-shadow: -3px 0 var(--blood), 3px 0 var(--ice); transform: skewX(-2deg); }
+    91% { text-shadow: 3px 0 var(--glitch), -3px 0 var(--amber); transform: skewX(1deg); }
+    92% { text-shadow: none; transform: none; }
+    95% { text-shadow: -2px 0 var(--blood); transform: translateX(2px); }
+    96% { text-shadow: none; transform: none; }
+  }
+
+  #subtitle {
+    font-family: 'VT323', monospace;
+    font-size: clamp(1rem, 2.5vw, 1.4rem);
+    color: var(--ghost);
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    margin-top: 6px;
+    opacity: 0.7;
+    animation: subpulse 3s ease-in-out infinite;
+  }
+  @keyframes subpulse {
+    0%,100% { opacity: 0.5; }
+    50% { opacity: 0.9; }
+  }
+
+  /* STATUS BAR */
+  #statusbar {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--acid);
+    letter-spacing: 0.2em;
+    margin-top: 4px;
+    opacity: 0.6;
+  }
+
+  /* ENTER BUTTON */
+  #enter-btn {
+    margin-top: 50px;
+    position: relative;
+    background: none;
+    border: none;
+    cursor: none;
+    outline: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .btn-outer {
+    position: relative;
+    padding: 16px 60px;
+    border: 1px solid var(--ghost);
+    font-family: 'VT323', monospace;
+    font-size: 1.8rem;
+    color: var(--ghost);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    background: rgba(200,184,255,0.04);
+    clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+    transition: all 0.2s ease;
+    overflow: hidden;
+    user-select: none;
+  }
+  .btn-outer::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(200,184,255,0.1), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.5s ease;
+  }
+  .btn-outer:hover {
+    border-color: var(--acid);
+    color: var(--acid);
+    box-shadow: 0 0 30px rgba(0,255,65,0.3), inset 0 0 30px rgba(0,255,65,0.05);
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  }
+  .btn-outer:hover::before { transform: translateX(200%); }
+
+  .btn-hint {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--ghost);
+    opacity: 0.4;
+    letter-spacing: 0.3em;
+    animation: blink 1.5s step-end infinite;
+  }
+  @keyframes blink { 0%,100% { opacity: 0.4; } 50% { opacity: 0; } }
+
+  /* CORNER DECORATIONS */
+  .corner {
+    position: fixed;
+    width: 60px; height: 60px;
+    pointer-events: none;
+    z-index: 50;
+  }
+  .corner svg { width: 100%; height: 100%; }
+  .c-tl { top: 20px; left: 20px; }
+  .c-tr { top: 20px; right: 20px; transform: scaleX(-1); }
+  .c-bl { bottom: 20px; left: 20px; transform: scaleY(-1); }
+  .c-br { bottom: 20px; right: 20px; transform: scale(-1); }
+
+  /* FLOATING GLYPHS */
+  .glyph {
+    position: fixed;
+    font-family: 'Creepster', serif;
+    color: var(--ghost);
+    opacity: 0;
+    pointer-events: none;
+    animation: glyphfloat linear infinite;
+    z-index: 5;
+  }
+  @keyframes glyphfloat {
+    0% { opacity: 0; transform: translateY(20px) rotate(var(--rot)); }
+    20% { opacity: 0.15; }
+    80% { opacity: 0.1; }
+    100% { opacity: 0; transform: translateY(-60px) rotate(calc(var(--rot) + 30deg)); }
+  }
+
+  /* SIDE INFO PANELS */
+  .side-panel {
+    position: fixed;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--acid);
+    opacity: 0.35;
+    writing-mode: vertical-rl;
+    letter-spacing: 0.2em;
+    z-index: 20;
+    animation: sidepulse 4s ease-in-out infinite;
+  }
+  @keyframes sidepulse { 0%,100% { opacity: 0.2; } 50% { opacity: 0.5; } }
+  #panel-l { left: 20px; top: 50%; transform: translateY(-50%); }
+  #panel-r { right: 20px; top: 50%; transform: translateY(-50%) rotate(180deg); }
+
+  /* BOTTOM STATUS */
+  #bottom-bar {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--acid);
+    opacity: 0.4;
+    letter-spacing: 0.25em;
+    z-index: 50;
+    white-space: nowrap;
+  }
+
+  /* GLITCH LINES */
+  .glitch-line {
+    position: fixed;
+    height: 1px;
+    background: var(--glitch);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 150;
+    animation: glitchline var(--dur) ease-out infinite;
+    animation-delay: var(--delay);
+  }
+  @keyframes glitchline {
+    0%,95%,100% { opacity: 0; width: 0; }
+    96% { opacity: 0.8; width: 100vw; }
+    97% { opacity: 0; width: 100vw; }
+    98% { opacity: 0.5; width: 100vw; }
+    99% { opacity: 0; }
+  }
+
+  /* ENTER TRANSITION */
+  #transition-screen {
+    position: fixed;
+    inset: 0;
+    background: var(--deep);
+    z-index: 500;
+    opacity: 0;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Orbitron', monospace;
+    font-size: 1.2rem;
+    color: var(--acid);
+    letter-spacing: 0.5em;
+    transition: opacity 0.3s ease;
+  }
+  #transition-screen.active { opacity: 1; pointer-events: all; }
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div id="scanlines"></div>
+<div id="grid"></div>
+<div id="vignette"></div>
+
+<!-- NOISE SVG -->
+<svg id="noise" xmlns='http://www.w3.org/2000/svg'>
+  <filter id='noisefilter'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/></filter>
+  <rect width='100%' height='100%' filter='url(#noisefilter)'/>
+</svg>
+
+<!-- CORNER DECORATIONS -->
+<div class="corner c-tl">
+  <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M2 58 L2 2 L58 2" stroke="#c8b8ff" stroke-width="1.5" opacity="0.5"/>
+    <path d="M2 30 L15 30" stroke="#00ff41" stroke-width="1" opacity="0.7"/>
+    <path d="M30 2 L30 15" stroke="#00ff41" stroke-width="1" opacity="0.7"/>
+    <circle cx="2" cy="2" r="3" fill="#ff00ff" opacity="0.8"/>
+  </svg>
+</div>
+<div class="corner c-tr">
+  <svg viewBox="0 0 60 60" fill="none">
+    <path d="M2 58 L2 2 L58 2" stroke="#c8b8ff" stroke-width="1.5" opacity="0.5"/>
+    <path d="M2 30 L15 30" stroke="#00ff41" stroke-width="1" opacity="0.7"/>
+    <path d="M30 2 L30 15" stroke="#00ff41" stroke-width="1" opacity="0.7"/>
+    <circle cx="2" cy="2" r="3" fill="#ff00ff" opacity="0.8"/>
+  </svg>
+</div>
+<div class="corner c-bl">
+  <svg viewBox="0 0 60 60" fill="none">
+    <path d="M2 58 L2 2 L58 2" stroke="#c8b8ff" stroke-width="1.5" opacity="0.5"/>
+    <path d="M2 30 L15 30" stroke="#00ff41" stroke-width="1" opacity="0.7"/>
+    <path d="M30 2 L30 15" stroke="#00ff41" stroke-width="1" opacity="0.7"/>
+    <circle cx="2" cy="2" r="3" fill="#ff00ff" opacity="0.8"/>
+  </svg>
+</div>
+<div class="corner c-br">
+  <svg viewBox="0 0 60 60" fill="none">
+    <path d="M2 58 L2 2 L58 2" stroke="#c8b8ff" stroke-width="1.5" opacity="0.5"/>
+    <path d="M2 30 L15 30" stroke="#00ff41" stroke-width="1" opacity="0.7"/>
+    <path d="M30 2 L30 15" stroke="#00ff41" stroke-width="1" opacity="0.7"/>
+    <circle cx="2" cy="2" r="3" fill="#ff00ff" opacity="0.8"/>
+  </svg>
+</div>
+
+<!-- SIDE PANELS -->
+<div class="side-panel" id="panel-l">SYS::REALM_OS v0.∞ // AUTH_REQUIRED // SIGNAL_LOCKED</div>
+<div class="side-panel" id="panel-r">ARCHIVE::ACTIVE // MULTIVERSE_INDEX::LOADING // ENTITIES_DETECTED: ███</div>
+
+<!-- BOTTOM BAR -->
+<div id="bottom-bar">[ LAT:??°??'??" // LON:??°??'??" // DIMENSIONAL_ANCHOR: UNSTABLE ]</div>
+
+<!-- GLITCH LINES -->
+<div class="glitch-line" style="top:23%;--dur:7s;--delay:0s;"></div>
+<div class="glitch-line" style="top:67%;--dur:11s;--delay:3s;"></div>
+<div class="glitch-line" style="top:45%;--dur:9s;--delay:5.5s;"></div>
+
+<!-- BOOT SEQUENCE -->
+<div id="boot">
+  <div id="boot-lines"></div>
+</div>
+
+<!-- MAIN STAGE -->
+<div id="stage">
+  <div id="portal-wrap">
+
+    <!-- OUTER SIGIL RING -->
+    <div id="sigil">
+      <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- outer ring -->
+        <circle cx="100" cy="100" r="95" stroke="#c8b8ff" stroke-width="0.5" stroke-dasharray="4 6" opacity="0.6"/>
+        <!-- middle ring -->
+        <circle cx="100" cy="100" r="78" stroke="#00ff41" stroke-width="0.8" stroke-dasharray="2 8" opacity="0.5"/>
+        <!-- inner ring -->
+        <circle cx="100" cy="100" r="60" stroke="#ff00ff" stroke-width="0.5" stroke-dasharray="6 3" opacity="0.4"/>
+        <!-- rune marks -->
+        <line x1="100" y1="5" x2="100" y2="25" stroke="#c8b8ff" stroke-width="1.5" opacity="0.8"/>
+        <line x1="100" y1="175" x2="100" y2="195" stroke="#c8b8ff" stroke-width="1.5" opacity="0.8"/>
+        <line x1="5" y1="100" x2="25" y2="100" stroke="#c8b8ff" stroke-width="1.5" opacity="0.8"/>
+        <line x1="175" y1="100" x2="195" y2="100" stroke="#c8b8ff" stroke-width="1.5" opacity="0.8"/>
+        <!-- diagonals -->
+        <line x1="33" y1="33" x2="46" y2="46" stroke="#ff00ff" stroke-width="1" opacity="0.6"/>
+        <line x1="167" y1="33" x2="154" y2="46" stroke="#ff00ff" stroke-width="1" opacity="0.6"/>
+        <line x1="33" y1="167" x2="46" y2="154" stroke="#ff00ff" stroke-width="1" opacity="0.6"/>
+        <line x1="167" y1="167" x2="154" y2="154" stroke="#ff00ff" stroke-width="1" opacity="0.6"/>
+        <!-- triangle -->
+        <polygon points="100,25 170,155 30,155" stroke="#00f0ff" stroke-width="0.8" fill="none" opacity="0.3"/>
+        <!-- inverted triangle -->
+        <polygon points="100,175 30,45 170,45" stroke="#ffb300" stroke-width="0.8" fill="none" opacity="0.2"/>
+        <!-- dots -->
+        <circle cx="100" cy="5" r="2" fill="#c8b8ff"/>
+        <circle cx="195" cy="100" r="2" fill="#c8b8ff"/>
+        <circle cx="100" cy="195" r="2" fill="#c8b8ff"/>
+        <circle cx="5" cy="100" r="2" fill="#c8b8ff"/>
+      </svg>
+
+      <!-- INNER SIGIL (counter-rotating) -->
+      <div id="sigil-inner">
+        <svg viewBox="0 0 80 80" fill="none">
+          <polygon points="40,5 73,60 7,60" stroke="#00ff41" stroke-width="1.5" fill="rgba(0,255,65,0.03)"/>
+          <circle cx="40" cy="40" r="18" stroke="#ff00ff" stroke-width="1" stroke-dasharray="3 3"/>
+          <circle cx="40" cy="40" r="5" fill="#00ff41" opacity="0.8"/>
+          <line x1="40" y1="22" x2="40" y2="14" stroke="#00f0ff" stroke-width="1.5"/>
+          <line x1="55" y1="51" x2="62" y2="55" stroke="#00f0ff" stroke-width="1.5"/>
+          <line x1="25" y1="51" x2="18" y2="55" stroke="#00f0ff" stroke-width="1.5"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- TITLE -->
+    <div id="title-wrap">
+      <div id="title">YOUR·REALM</div>
+      <div id="subtitle">∷ eclectic creative archive ∷</div>
+      <div id="statusbar">[ SIGNAL ACQUIRED // ENTITIES PRESENT // NODE_ID:∅∅∅ ]</div>
+    </div>
+
+    <!-- ENTER -->
+    <button id="enter-btn" onclick="enterRealm()">
+      <div class="btn-outer">⟡ ENTER THE REALM ⟡</div>
+      <div class="btn-hint">[ press to cross the threshold ]</div>
+    </button>
+
+  </div>
+</div>
+
+<!-- TRANSITION -->
+<div id="transition-screen">INITIALIZING REALM...</div>
+
+<script>
+  // CURSOR
+  const cursor = document.getElementById('cursor');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+  });
+  document.addEventListener('mousedown', () => cursor.classList.add('click'));
+  document.addEventListener('mouseup', () => cursor.classList.remove('click'));
+
+  // PARTICLES
+  function spawnParticle() {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const colors = ['#00ff41','#ff00ff','#00f0ff','#c8b8ff','#ffb300'];
+    p.style.background = colors[Math.floor(Math.random()*colors.length)];
+    p.style.left = Math.random()*100 + 'vw';
+    p.style.setProperty('--dx', (Math.random()-0.5)*200 + 'px');
+    const dur = 6 + Math.random()*10;
+    p.style.animationDuration = dur + 's';
+    p.style.animationDelay = Math.random()*dur + 's';
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), (dur+5)*1000);
+  }
+  setInterval(spawnParticle, 400);
+
+  // FLOATING GLYPHS
+  const glyphChars = ['✦','⟁','⊕','⋈','⌀','⍟','⊗','⌬','⟆','⋄','⊙','⌘','⍰','⊛','◈','⌖'];
+  function spawnGlyph() {
+    const g = document.createElement('div');
+    g.className = 'glyph';
+    g.textContent = glyphChars[Math.floor(Math.random()*glyphChars.length)];
+    g.style.fontSize = (12 + Math.random()*24) + 'px';
+    g.style.left = (5 + Math.random()*90) + 'vw';
+    g.style.top = (10 + Math.random()*80) + 'vh';
+    g.style.setProperty('--rot', (Math.random()*60-30) + 'deg');
+    g.style.animationDuration = (8+Math.random()*12) + 's';
+    g.style.animationDelay = (Math.random()*5) + 's';
+    document.body.appendChild(g);
+    setTimeout(() => g.remove(), 25000);
+  }
+  setInterval(spawnGlyph, 1200);
+
+  // BOOT SEQUENCE
+  const bootLines = [
+    "REALM_OS v0.∞ // INITIATING...",
+    "SCANNING DIMENSIONAL ANCHORS...",
+    "LOADING MULTIVERSE INDEX................ [OK]",
+    "DETECTING CREATIVE ENTITIES............ [3 FOUND]",
+    "MOUNTING ARCHIVE VOLUMES............... [OK]",
+    "CALIBRATING GLITCH MATRIX.............. [OK]",
+    "ESTABLISHING OCCULT PROTOCOLS.......... [WARNING]",
+    "  >> UNKNOWN SIGNAL ON FREQ 666.6MHz",
+    "  >> CONTINUING ANYWAY",
+    "LOADING CARTOON_NETWORK_DAEMON......... [OK]",
+    "COMPILING Y2K_NOSTALGIA_MODULE......... [OK]",
+    "PORTAL THRESHOLD: READY",
+    "AWAITING TRAVELER INPUT...",
+    "",
+    "█",
+  ];
+
+  const bootContainer = document.getElementById('boot-lines');
+  const bootEl = document.getElementById('boot');
+  let lineIdx = 0;
+
+  function bootNext() {
+    if (lineIdx >= bootLines.length) {
+      setTimeout(() => {
+        bootEl.classList.add('fade');
+        setTimeout(() => {
+          bootEl.style.display = 'none';
+          document.getElementById('portal-wrap').classList.add('visible');
+        }, 900);
+      }, 600);
+      return;
+    }
+    const line = document.createElement('div');
+    line.className = 'boot-line';
+    line.textContent = bootLines[lineIdx];
+    line.style.animationDelay = '0ms';
+    bootContainer.appendChild(line);
+    lineIdx++;
+    const delay = bootLines[lineIdx-1] === '' ? 100 :
+                  bootLines[lineIdx-1].includes('WARNING') ? 600 :
+                  bootLines[lineIdx-1].includes('>>') ? 250 : 140;
+    setTimeout(bootNext, delay);
+  }
+
+  setTimeout(bootNext, 400);
+
+  // ENTER REALM
+  function enterRealm() {
+    const t = document.getElementById('transition-screen');
+    t.classList.add('active');
+    const messages = [
+      'INITIALIZING REALM...',
+      'CROSSING THRESHOLD...',
+      'COMPILING YOUR WORLD...',
+      'LOADING ENTITIES...',
+      'WELCOME, TRAVELER.'
+    ];
+    let i = 0;
+    const cycle = setInterval(() => {
+      i++;
+      if (i < messages.length) {
+        t.textContent = messages[i];
+      } else {
+        clearInterval(cycle);
+        // Here you'd navigate: window.location.href = 'realm.html';
+        setTimeout(() => {
+          t.textContent = '// REALM MAP COMING SOON //';
+        }, 500);
+      }
+    }, 600);
+  }
+
+  // RANDOM TITLE GLITCH
+  const titleEl = document.getElementById('title');
+  const realTitle = 'YOUR·REALM';
+  const glitchChars = '!@#$%^&*∅⊕⌀⍟◈⌘';
+  setInterval(() => {
+    if (Math.random() > 0.85) {
+      const idx = Math.floor(Math.random()*realTitle.length);
+      const arr = realTitle.split('');
+      arr[idx] = glitchChars[Math.floor(Math.random()*glitchChars.length)];
+      titleEl.textContent = arr.join('');
+      setTimeout(() => titleEl.textContent = realTitle, 80);
+    }
+  }, 400);
+
+  // LIVE CLOCK IN STATUS
+  function updateStatus() {
+    const now = new Date();
+    const t = now.toTimeString().split(' ')[0];
+    document.getElementById('statusbar').textContent =
+      `[ SIGNAL ACQUIRED // ${t} // NODE_ID:∅∅∅ ]`;
+  }
+  setInterval(updateStatus, 1000);
+
+  // MOUSE PARALLAX ON SIGIL
+  document.addEventListener('mousemove', e => {
+    const cx = window.innerWidth/2, cy = window.innerHeight/2;
+    const dx = (e.clientX - cx)/cx * 8;
+    const dy = (e.clientY - cy)/cy * 8;
+    document.getElementById('sigil').style.transform =
+      `translate(${dx}px, ${dy}px)`;
+  });
+</script>
+</body>
+</html>

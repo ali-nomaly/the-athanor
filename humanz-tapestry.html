@@ -1,0 +1,1283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HUMANZ — The Tapestry</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Bebas+Neue&family=DM+Serif+Display:ital@0;1&display=swap');
+
+  :root {
+    --void: #050508;
+    --bone: #e8dfc8;
+    --neon-coral: #ff4d4d;
+    --acid-yellow: #d4f000;
+    --bruise: #6b2fa0;
+    --ice: #00cfff;
+    --rust: #c8420a;
+    --static: #3a3a4a;
+    --thread-a: #ff4d4d;
+    --thread-b: #d4f000;
+    --thread-c: #00cfff;
+    --thread-d: #6b2fa0;
+    --thread-e: #ff9a00;
+    --thread-f: #00e5a0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--void);
+    color: var(--bone);
+    font-family: 'Share Tech Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+    cursor: crosshair;
+  }
+
+  /* NOISE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.6;
+  }
+
+  /* SCANLINE */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.08) 2px,
+      rgba(0,0,0,0.08) 4px
+    );
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  /* HEADER */
+  header {
+    position: relative;
+    padding: 60px 40px 30px;
+    border-bottom: 1px solid var(--static);
+    overflow: hidden;
+  }
+
+  .header-bg {
+    position: absolute;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse 80% 60% at 20% 50%, rgba(107,47,160,0.15) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 80% at 80% 30%, rgba(255,77,77,0.08) 0%, transparent 70%);
+  }
+
+  .eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    color: var(--acid-yellow);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    position: relative;
+  }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(72px, 12vw, 160px);
+    letter-spacing: 0.02em;
+    line-height: 0.88;
+    position: relative;
+    background: linear-gradient(135deg, var(--bone) 0%, rgba(232,223,200,0.4) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  h1 .z-glitch {
+    position: relative;
+    -webkit-text-fill-color: var(--neon-coral);
+  }
+  h1 .z-glitch::after {
+    content: 'Z';
+    position: absolute;
+    left: 2px;
+    top: 2px;
+    -webkit-text-fill-color: var(--ice);
+    opacity: 0.5;
+    animation: glitch 3s infinite;
+  }
+
+  @keyframes glitch {
+    0%, 94%, 100% { transform: translate(0); opacity: 0.5; }
+    95% { transform: translate(-3px, 1px); opacity: 0.8; }
+    97% { transform: translate(4px, -1px); opacity: 0.3; }
+  }
+
+  .subtitle {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: clamp(14px, 2vw, 20px);
+    color: rgba(232,223,200,0.55);
+    margin-top: 16px;
+    position: relative;
+    max-width: 600px;
+  }
+
+  .concept-banner {
+    margin-top: 24px;
+    display: inline-block;
+    background: var(--neon-coral);
+    color: var(--void);
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    padding: 6px 14px;
+    position: relative;
+  }
+
+  /* LEGEND */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 24px 40px;
+    border-bottom: 1px solid var(--static);
+    background: rgba(255,255,255,0.015);
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .legend-dot {
+    width: 12px; height: 12px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  /* THREAD COLORS */
+  .t-apocalypse { background: var(--thread-a); }
+  .t-body { background: var(--thread-b); }
+  .t-money { background: var(--thread-c); }
+  .t-ghost { background: var(--thread-d); }
+  .t-survival { background: var(--thread-e); }
+  .t-tender { background: var(--thread-f); }
+
+  /* MAIN GRID */
+  .main {
+    padding: 0 40px 80px;
+  }
+
+  /* SECTION: NARRATIVE ARC */
+  .arc-section {
+    padding: 40px 0;
+    border-bottom: 1px solid var(--static);
+  }
+
+  .section-label {
+    font-size: 9px;
+    letter-spacing: 0.5em;
+    color: var(--acid-yellow);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .arc-timeline {
+    position: relative;
+    height: 80px;
+    margin: 0 0 12px;
+  }
+
+  .arc-line {
+    position: absolute;
+    bottom: 24px;
+    left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, var(--bruise), var(--neon-coral), var(--acid-yellow));
+  }
+
+  .arc-phases {
+    display: flex;
+    position: relative;
+    height: 100%;
+    align-items: flex-end;
+  }
+
+  .arc-phase {
+    flex: 1;
+    text-align: center;
+    position: relative;
+    padding-bottom: 32px;
+  }
+
+  .arc-phase::before {
+    content: '';
+    position: absolute;
+    bottom: 21px;
+    left: 50%;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    transform: translateX(-50%);
+    border: 2px solid currentColor;
+    background: var(--void);
+  }
+
+  .arc-phase.p1 { color: var(--bruise); }
+  .arc-phase.p2 { color: var(--neon-coral); }
+  .arc-phase.p3 { color: var(--rust); }
+  .arc-phase.p4 { color: var(--acid-yellow); }
+
+  .arc-phase-label {
+    font-size: 8px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    line-height: 1.3;
+  }
+
+  /* SONG GRID */
+  .song-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1px;
+    background: var(--static);
+    margin: 40px 0;
+  }
+
+  .song-card {
+    background: var(--void);
+    padding: 16px;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.2s;
+    cursor: default;
+  }
+
+  .song-card:hover {
+    background: rgba(255,255,255,0.03);
+  }
+
+  .song-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+  }
+
+  /* Thread stripe generation */
+  .song-card[data-threads*="a"]::before { background: var(--thread-a); }
+  .song-card[data-threads*="b"]::before { background: var(--thread-b); }
+  .song-card[data-threads*="c"]::before { background: var(--thread-c); }
+  .song-card[data-threads*="d"]::before { background: var(--thread-d); }
+  .song-card[data-threads*="e"]::before { background: var(--thread-e); }
+  .song-card[data-threads*="f"]::before { background: var(--thread-f); }
+
+  /* multi-thread striping */
+  .song-card.multi-thread::before {
+    background: linear-gradient(180deg,
+      var(--t1, var(--thread-a)) 0%,
+      var(--t1, var(--thread-a)) 33%,
+      var(--t2, var(--thread-b)) 33%,
+      var(--t2, var(--thread-b)) 66%,
+      var(--t3, var(--thread-c)) 66%,
+      var(--t3, var(--thread-c)) 100%
+    );
+  }
+
+  .track-num {
+    font-size: 9px;
+    color: rgba(232,223,200,0.3);
+    letter-spacing: 0.2em;
+    margin-bottom: 4px;
+  }
+
+  .track-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    line-height: 1.1;
+    color: var(--bone);
+    margin-bottom: 4px;
+  }
+
+  .track-feat {
+    font-size: 9px;
+    color: rgba(232,223,200,0.45);
+    margin-bottom: 10px;
+    letter-spacing: 0.05em;
+  }
+
+  .thread-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 10px;
+  }
+
+  .thread-tag {
+    font-size: 7px;
+    letter-spacing: 0.2em;
+    padding: 2px 6px;
+    border: 1px solid currentColor;
+    text-transform: uppercase;
+    border-radius: 1px;
+  }
+
+  .thread-tag.ta { color: var(--thread-a); }
+  .thread-tag.tb { color: var(--thread-b); }
+  .thread-tag.tc { color: var(--thread-c); }
+  .thread-tag.td { color: var(--thread-d); }
+  .thread-tag.te { color: var(--thread-e); }
+  .thread-tag.tf { color: var(--thread-f); }
+
+  .track-note {
+    font-size: 9.5px;
+    color: rgba(232,223,200,0.5);
+    line-height: 1.5;
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+  }
+
+  .interlude-card {
+    background: rgba(255,255,255,0.015);
+    border-left: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .interlude-card::before { display: none; }
+
+  .interlude-label {
+    font-size: 8px;
+    letter-spacing: 0.35em;
+    color: rgba(232,223,200,0.25);
+    text-transform: uppercase;
+  }
+
+  .interlude-title {
+    font-size: 11px;
+    color: rgba(232,223,200,0.35);
+    letter-spacing: 0.1em;
+  }
+
+  .interlude-icon {
+    font-size: 20px;
+    opacity: 0.3;
+    flex-shrink: 0;
+  }
+
+  /* THREAD MATRIX */
+  .matrix-section {
+    padding: 40px 0;
+    border-bottom: 1px solid var(--static);
+  }
+
+  .matrix-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    letter-spacing: 0.05em;
+    margin-bottom: 24px;
+  }
+
+  .thread-rivers {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .thread-river {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .river-label {
+    width: 180px;
+    flex-shrink: 0;
+  }
+
+  .river-name {
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+  }
+
+  .river-desc {
+    font-size: 9px;
+    color: rgba(232,223,200,0.4);
+    line-height: 1.4;
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+  }
+
+  .river-flow {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    position: relative;
+    min-height: 32px;
+  }
+
+  .river-flow::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0;
+    top: 50%;
+    height: 1px;
+    opacity: 0.2;
+  }
+
+  .river-node {
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .river-node-inner {
+    width: 28px; height: 28px;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 7px;
+    letter-spacing: 0.05em;
+    text-align: center;
+    line-height: 1.2;
+    color: var(--void);
+    font-weight: bold;
+    cursor: default;
+    position: relative;
+    z-index: 1;
+    transition: transform 0.15s;
+  }
+
+  .river-node-inner:hover {
+    transform: scale(1.2);
+  }
+
+  .river-connector {
+    flex: 1;
+    height: 1px;
+    opacity: 0.25;
+    min-width: 8px;
+  }
+
+  /* THEMES DEEP DIVE */
+  .themes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1px;
+    background: var(--static);
+    margin-top: 24px;
+  }
+
+  .theme-block {
+    background: var(--void);
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .theme-block::after {
+    content: attr(data-symbol);
+    position: absolute;
+    right: 16px;
+    top: 12px;
+    font-size: 48px;
+    opacity: 0.06;
+    line-height: 1;
+  }
+
+  .theme-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+  }
+
+  .theme-pull {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 12px;
+    color: rgba(232,223,200,0.55);
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+
+  .theme-songs {
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(232,223,200,0.35);
+    line-height: 2;
+  }
+
+  /* TENSION DIAGRAM */
+  .tension-section {
+    padding: 40px 0;
+  }
+
+  .tension-pairs {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+    margin-top: 24px;
+  }
+
+  .tension-pair {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    border: 1px solid var(--static);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .tension-pair::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0.03;
+  }
+
+  .tension-side {
+    flex: 1;
+    text-align: center;
+  }
+
+  .tension-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+  }
+
+  .tension-songs {
+    font-size: 8px;
+    letter-spacing: 0.1em;
+    color: rgba(232,223,200,0.35);
+    margin-top: 4px;
+  }
+
+  .tension-vs {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: rgba(232,223,200,0.2);
+    padding: 0 4px;
+    flex-shrink: 0;
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 40px;
+    border-top: 1px solid var(--static);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: gap;
+    gap: 20px;
+  }
+
+  .footer-note {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 12px;
+    color: rgba(232,223,200,0.25);
+    max-width: 500px;
+    line-height: 1.6;
+  }
+
+  .footer-sig {
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    color: rgba(232,223,200,0.15);
+    text-align: right;
+  }
+
+  /* PULSE ANIMATION for accent elements */
+  @keyframes pulse-border {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+  }
+
+  .live-dot {
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--neon-coral);
+    margin-right: 8px;
+    animation: pulse-border 2s ease-in-out infinite;
+    vertical-align: middle;
+  }
+
+  /* DELUXE BONUS indicator */
+  .deluxe-badge {
+    font-size: 7px;
+    letter-spacing: 0.2em;
+    padding: 1px 5px;
+    border: 1px solid var(--acid-yellow);
+    color: var(--acid-yellow);
+    vertical-align: middle;
+    margin-left: 6px;
+  }
+
+  h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(28px, 4vw, 48px);
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
+  }
+
+  .section-intro {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: rgba(232,223,200,0.45);
+    max-width: 600px;
+    line-height: 1.6;
+    margin-bottom: 28px;
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-bg"></div>
+  <div class="eyebrow"><span class="live-dot"></span>Gorillaz · 2017 · Deluxe Edition · 26 Tracks · Thematic Cartography</div>
+  <h1>HUMA N<span class="z-glitch">Z</span></h1>
+  <p class="subtitle">The soundtrack to the last party before the apocalypse — an emotional atlas of what it feels like when everything you believed in gets turned on its head in a single night.</p>
+  <div class="concept-banner">party record for the end of the world · an emotional response to politics, not a protest</div>
+</header>
+
+<!-- LEGEND -->
+<div class="legend">
+  <div style="font-size:9px;letter-spacing:0.3em;color:rgba(232,223,200,0.3);text-transform:uppercase;align-self:center;margin-right:8px;">THREADS →</div>
+  <div class="legend-item"><div class="legend-dot t-apocalypse"></div>APOCALYPSE PARTY</div>
+  <div class="legend-item"><div class="legend-dot t-body"></div>BODY AS ESCAPE</div>
+  <div class="legend-item"><div class="legend-dot t-money"></div>MONEY/POWER WORSHIP</div>
+  <div class="legend-item"><div class="legend-dot t-ghost"></div>HAUNTING / UNREALITY</div>
+  <div class="legend-item"><div class="legend-dot t-survival"></div>BLACK SURVIVAL / RAGE</div>
+  <div class="legend-item"><div class="legend-dot t-tender"></div>TENDER RESISTANCE</div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- NARRATIVE ARC -->
+  <div class="arc-section">
+    <div class="section-label">▸ The night's arc — from denial to dawn</div>
+    <div class="arc-timeline">
+      <div class="arc-line"></div>
+      <div class="arc-phases">
+        <div class="arc-phase p1">
+          <div class="arc-phase-label">ARRIVAL<br>Sirens on</div>
+        </div>
+        <div class="arc-phase p2">
+          <div class="arc-phase-label">FLOOR<br>Body takes over</div>
+        </div>
+        <div class="arc-phase p3">
+          <div class="arc-phase-label">COMEDOWN<br>The ghost creeps in</div>
+        </div>
+        <div class="arc-phase p4">
+          <div class="arc-phase-label">DAWN<br>Reckon or resist</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SONG CARDS -->
+  <div class="section-label" style="margin-top:40px;">▸ Every track — threaded</div>
+  <p class="section-intro">Each card shows the threads a song pulls hardest. The stripe on the left is its dominant thread. Hover to breathe with it.</p>
+
+  <div class="song-grid">
+
+    <!-- INTRO -->
+    <div class="song-card interlude-card">
+      <div class="interlude-icon">◈</div>
+      <div>
+        <div class="interlude-label">Intro</div>
+        <div class="interlude-title">I Switched My Robot Off</div>
+      </div>
+    </div>
+
+    <!-- 2. ASCENSION -->
+    <div class="song-card" data-threads="a,e" style="--t1:var(--thread-a);--t2:var(--thread-e);">
+      <div class="track-num">02</div>
+      <div class="track-title">ASCENSION</div>
+      <div class="track-feat">feat. Vince Staples</div>
+      <div class="thread-tags">
+        <span class="thread-tag ta">Apocalypse</span>
+        <span class="thread-tag te">Black Survival</span>
+      </div>
+      <div class="track-note">"Sky's falling, drop that ass" — hedonism as protest. Vince as the nihilist prophet who still hits the dancefloor.</div>
+    </div>
+
+    <!-- 3. STROBELITE -->
+    <div class="song-card" data-threads="b">
+      <div class="track-num">03</div>
+      <div class="track-title">STROBELITE</div>
+      <div class="track-feat">feat. Peven Everett</div>
+      <div class="thread-tags">
+        <span class="thread-tag tb">Body as Escape</span>
+      </div>
+      <div class="track-note">Pure house euphoria. The club as sanctuary. Built from a drum pattern Albarn tapped on a Seiko watch — the most accidental perfect beat.</div>
+    </div>
+
+    <!-- 4. SATURNZ BARZ -->
+    <div class="song-card" data-threads="d,e">
+      <div class="track-num">04</div>
+      <div class="track-title">SATURNZ BARZ</div>
+      <div class="track-feat">feat. Popcaan</div>
+      <div class="thread-tags">
+        <span class="thread-tag td">Haunting</span>
+        <span class="thread-tag te">Survival</span>
+      </div>
+      <div class="track-note">Popcaan's reggae lore vs. 2D's debt-ghost chorus. Ambition meets the specter of what success costs your soul.</div>
+    </div>
+
+    <!-- 5. MOMENTZ -->
+    <div class="song-card" data-threads="b,a">
+      <div class="track-num">05</div>
+      <div class="track-title">MOMENTZ</div>
+      <div class="track-feat">feat. De La Soul</div>
+      <div class="thread-tags">
+        <span class="thread-tag tb">Body</span>
+        <span class="thread-tag ta">Apocalypse</span>
+      </div>
+      <div class="track-note">De La's joyful legacy energy crashes into end-of-world urgency. Seize this moment because the next one may not exist.</div>
+    </div>
+
+    <!-- INTERLUDE -->
+    <div class="song-card interlude-card">
+      <div class="interlude-icon">◈</div>
+      <div>
+        <div class="interlude-label">Interlude</div>
+        <div class="interlude-title">The Non-conformist Oath</div>
+      </div>
+    </div>
+
+    <!-- 7. SUBMISSION -->
+    <div class="song-card" data-threads="b,d">
+      <div class="track-num">07</div>
+      <div class="track-title">SUBMISSION</div>
+      <div class="track-feat">feat. Danny Brown & Kelela</div>
+      <div class="thread-tags">
+        <span class="thread-tag tb">Body</span>
+        <span class="thread-tag td">Haunting</span>
+      </div>
+      <div class="track-note">Danny Brown's frenetic submission to desire vs. Kelela's smoldering autonomy. The body as the only real sovereignty left.</div>
+    </div>
+
+    <!-- 8. CHARGER -->
+    <div class="song-card" data-threads="a,d">
+      <div class="track-num">08</div>
+      <div class="track-title">CHARGER</div>
+      <div class="track-feat">feat. Grace Jones</div>
+      <div class="thread-tags">
+        <span class="thread-tag ta">Apocalypse</span>
+        <span class="thread-tag td">Haunting</span>
+      </div>
+      <div class="track-note">"I am the ghost / Hahahahaaa / Provocative" — Grace Jones as the spirit of the end, laughing. Fury dressed as glamour.</div>
+    </div>
+
+    <!-- INTERLUDE -->
+    <div class="song-card interlude-card">
+      <div class="interlude-icon">◈</div>
+      <div>
+        <div class="interlude-label">Interlude</div>
+        <div class="interlude-title">Elevator Going Up</div>
+      </div>
+    </div>
+
+    <!-- 10. ANDROMEDA -->
+    <div class="song-card" data-threads="f,d">
+      <div class="track-num">10</div>
+      <div class="track-title">ANDROMEDA</div>
+      <div class="track-feat">feat. D.R.A.M.</div>
+      <div class="thread-tags">
+        <span class="thread-tag tf">Tender Resistance</span>
+        <span class="thread-tag td">Haunting</span>
+      </div>
+      <div class="track-note">"Take it in your heart now, lover." The most emotionally rewarding moment on the album. Distance as intimacy. The galaxy as metaphor for the unreachable other.</div>
+    </div>
+
+    <!-- 11. BUSTED AND BLUE -->
+    <div class="song-card" data-threads="d,f">
+      <div class="track-num">11</div>
+      <div class="track-title">BUSTED AND BLUE</div>
+      <div class="track-feat">(2D alone)</div>
+      <div class="thread-tags">
+        <span class="thread-tag td">Haunting</span>
+        <span class="thread-tag tf">Tender</span>
+      </div>
+      <div class="track-note">"Where do they come from / the wires that connect us" — the album's bruised heart. Humanity dissolved into digital fog. Albarn most himself when most alone.</div>
+    </div>
+
+    <!-- INTERLUDE -->
+    <div class="song-card interlude-card">
+      <div class="interlude-icon">◈</div>
+      <div>
+        <div class="interlude-label">Interlude</div>
+        <div class="interlude-title">Talk Radio</div>
+      </div>
+    </div>
+
+    <!-- 13. CARNIVAL -->
+    <div class="song-card" data-threads="a,b">
+      <div class="track-num">13</div>
+      <div class="track-title">CARNIVAL</div>
+      <div class="track-feat">feat. Anthony Hamilton</div>
+      <div class="thread-tags">
+        <span class="thread-tag ta">Apocalypse</span>
+        <span class="thread-tag tb">Body</span>
+      </div>
+      <div class="track-note">Shortest track, dense with ideas. The carnival as the oldest human coping mechanism — spectacle to mask the void.</div>
+    </div>
+
+    <!-- 14. LET ME OUT -->
+    <div class="song-card" data-threads="e,a">
+      <div class="track-num">14</div>
+      <div class="track-title">LET ME OUT</div>
+      <div class="track-feat">feat. Mavis Staples & Pusha T</div>
+      <div class="thread-tags">
+        <span class="thread-tag te">Black Survival</span>
+        <span class="thread-tag ta">Apocalypse</span>
+      </div>
+      <div class="track-note">Gospel fury meets trap grief. Mavis Staples's civil rights DNA collides with Pusha's street accounting. The most electrifying two-minute argument on the album.</div>
+    </div>
+
+    <!-- INTERLUDE -->
+    <div class="song-card interlude-card">
+      <div class="interlude-icon">◈</div>
+      <div>
+        <div class="interlude-label">Interlude</div>
+        <div class="interlude-title">Penthouse</div>
+      </div>
+    </div>
+
+    <!-- 16. SEX MURDER PARTY -->
+    <div class="song-card" data-threads="b,a">
+      <div class="track-num">16</div>
+      <div class="track-title">SEX MURDER PARTY</div>
+      <div class="track-feat">feat. Jamie Principle & Zebra Katz</div>
+      <div class="thread-tags">
+        <span class="thread-tag tb">Body</span>
+        <span class="thread-tag ta">Apocalypse</span>
+      </div>
+      <div class="track-note">Eros and thanatos on the same dancefloor. The title does the thesis. Chicago house architecture holding up a collapsing world.</div>
+    </div>
+
+    <!-- 17. SHE'S MY COLLAR -->
+    <div class="song-card" data-threads="b,f">
+      <div class="track-num">17</div>
+      <div class="track-title">SHE'S MY COLLAR</div>
+      <div class="track-feat">feat. Kali Uchis</div>
+      <div class="thread-tags">
+        <span class="thread-tag tb">Body</span>
+        <span class="thread-tag tf">Tender</span>
+      </div>
+      <div class="track-note">Kali Uchis as the one anchor in the chaos. Desire as binding agent. The secrecy of intimacy as its own kind of resistance.</div>
+    </div>
+
+    <!-- INTERLUDE -->
+    <div class="song-card interlude-card">
+      <div class="interlude-icon">◈</div>
+      <div>
+        <div class="interlude-label">Interlude</div>
+        <div class="interlude-title">The Elephant</div>
+      </div>
+    </div>
+
+    <!-- 19. HALLELUJAH MONEY -->
+    <div class="song-card" data-threads="c,a">
+      <div class="track-num">19</div>
+      <div class="track-title">HALLELUJAH MONEY</div>
+      <div class="track-feat">feat. Benjamin Clementine</div>
+      <div class="thread-tags">
+        <span class="thread-tag tc">Money/Power</span>
+        <span class="thread-tag ta">Apocalypse</span>
+      </div>
+      <div class="track-note">Released on inauguration eve. Clementine as haunted prophet inside Trump Tower. The hollowest hallelujah ever sung. The album's moral fulcrum.</div>
+    </div>
+
+    <!-- 20. WE GOT THE POWER -->
+    <div class="song-card" data-threads="f,a">
+      <div class="track-num">20</div>
+      <div class="track-title">WE GOT THE POWER</div>
+      <div class="track-feat">feat. Jehnny Beth (+ Noel Gallagher)</div>
+      <div class="thread-tags">
+        <span class="thread-tag tf">Tender Resistance</span>
+        <span class="thread-tag ta">Apocalypse</span>
+      </div>
+      <div class="track-note">Albarn singing with his former nemesis Gallagher. The most improbable peace treaty in Britpop history. Dawn breaks. The answer to Vince Staples's nihilism.</div>
+    </div>
+
+    <!-- DELUXE TRACKS -->
+    <!-- NEW WORLD INTERLUDE -->
+    <div class="song-card interlude-card">
+      <div class="interlude-icon">◈</div>
+      <div>
+        <div class="interlude-label">Deluxe Interlude</div>
+        <div class="interlude-title">New World <span class="deluxe-badge">DLX</span></div>
+      </div>
+    </div>
+
+    <!-- THE APPRENTICE -->
+    <div class="song-card" data-threads="c,d">
+      <div class="track-num">22</div>
+      <div class="track-title">THE APPRENTICE <span class="deluxe-badge">DLX</span></div>
+      <div class="track-feat">feat. Rag'n'Bone Man, Zebra Katz & Ray BLK</div>
+      <div class="thread-tags">
+        <span class="thread-tag tc">Money/Power</span>
+        <span class="thread-tag td">Haunting</span>
+      </div>
+      <div class="track-note">The only track that almost names him. "I am a broken screen / a mad routine." Power as performance as void. The mirror that makes the monster.</div>
+    </div>
+
+    <!-- HALFWAY TO THE HALFWAY HOUSE -->
+    <div class="song-card" data-threads="d,f">
+      <div class="track-num">23</div>
+      <div class="track-title">HALFWAY TO THE HALFWAY HOUSE <span class="deluxe-badge">DLX</span></div>
+      <div class="track-feat">feat. Peven Everett</div>
+      <div class="thread-tags">
+        <span class="thread-tag td">Haunting</span>
+        <span class="thread-tag tf">Tender</span>
+      </div>
+      <div class="track-note">The most liminal space on the album. Neither here nor there. Peven's warmth against the cold of a world mid-collapse.</div>
+    </div>
+
+    <!-- OUT OF BODY -->
+    <div class="song-card" data-threads="d,b">
+      <div class="track-num">24</div>
+      <div class="track-title">OUT OF BODY <span class="deluxe-badge">DLX</span></div>
+      <div class="track-feat">feat. Kilo Kish, Zebra Katz & Imani Vonshà</div>
+      <div class="thread-tags">
+        <span class="thread-tag td">Haunting</span>
+        <span class="thread-tag tb">Body</span>
+      </div>
+      <div class="track-note">The dissociation track. Floating above your own body during the worst timeline. Kilo Kish's voice is glass about to shatter.</div>
+    </div>
+
+    <!-- TICKER TAPE -->
+    <div class="song-card" data-threads="c,d">
+      <div class="track-num">25</div>
+      <div class="track-title">TICKER TAPE <span class="deluxe-badge">DLX</span></div>
+      <div class="track-feat">feat. Carly Simon & Kali Uchis</div>
+      <div class="thread-tags">
+        <span class="thread-tag tc">Money/Power</span>
+        <span class="thread-tag td">Haunting</span>
+      </div>
+      <div class="track-note">Human innovation as pageant, as stock ticker, as spectacle eating itself. Carly Simon's legend-aura makes the past feel like a ghost haunting the present.</div>
+    </div>
+
+    <!-- CIRCLE OF FRIENDZ -->
+    <div class="song-card" data-threads="f,c">
+      <div class="track-num">26</div>
+      <div class="track-title">CIRCLE OF FRIENDZ <span class="deluxe-badge">DLX</span></div>
+      <div class="track-feat">feat. Brandon Markell Holmes</div>
+      <div class="thread-tags">
+        <span class="thread-tag tf">Tender</span>
+        <span class="thread-tag tc">Money/Power</span>
+      </div>
+      <div class="track-note">Intimacy as the last currency. The inner circle vs. the machine outside. Originally meant for Morrissey — makes the reconciliation theme richer for his absence.</div>
+    </div>
+
+  </div>
+
+  <!-- THREAD RIVER MATRIX -->
+  <div class="matrix-section">
+    <div class="section-label">▸ Thread rivers — how each theme flows through the tracklist</div>
+    <h2>The Six Threads</h2>
+    <p class="section-intro">Read left to right as the album plays. Each node is a track where the thread runs. Hover a node to feel the current.</p>
+
+    <div class="thread-rivers">
+
+      <!-- THREAD A: APOCALYPSE PARTY -->
+      <div class="thread-river">
+        <div class="river-label">
+          <div class="river-name" style="color:var(--thread-a);">Apocalypse Party</div>
+          <div class="river-desc">Hedonism as political act. If the world ends tonight, we dance.</div>
+        </div>
+        <div class="river-flow">
+          <div class="river-node"><div class="river-node-inner" style="background:var(--thread-a);width:36px;height:36px;" title="Ascension">ASC</div></div>
+          <div class="river-connector" style="background:var(--thread-a);"></div>
+          <div class="river-node"><div class="river-node-inner" style="background:var(--thread-a);width:36px;height:36px;" title="Momentz">MOM</div></div>
+          <div class="river-connector" style="background:var(--thread-a);"></div>
+          <div class="river-node"><div class="river-node-inner" style="background:var(--thread-a);width:36px;height:36px;" title="Charger">CHG</div></div>
+          <div class="river-connector" style="background:var(--thread-a);"></div>
+          <div class="river-node"><div class="river-node-inner" style="background:var(--thread-a);width:36px;height:36px;" title="Carnival">CRN</div></div>
+          <div class="river-connector" style="background:var(--thread-a);"></div>
+          <div class="river-node"><div class="river-node-inner" style="background:var(--thread-a);width:36px;height:36px;" title="Let Me Out">LMO</div></div>
+          <div class="river-connector" style="background:var(--thread-a);"></div>
+          <div class="river-node"><div class="river-node-inner" style="background:var(--thread-a);width:36px;height:36px;" title="Sex Murder Party">SMP</div></div>
+          <div class="river-connector" style="background:var(--thread-a);"></div>
+          <div class="river-node"><div class="river-node-inner" style="background:var(--thread-a);width:36px;height:36px;" title="Hallelujah Money">HLJ</div></div>
+          <div class="river-connector" style="background:var(--thread-a);"></div>
+          <div class="river-node"><div class="river-node-inner" style="background:var(--thread-a);width:36px;height:36px;" title="We Got the Power">WGP</div></div>
+        </div>
+      </div>
+
+      <!-- THREAD B: BODY AS ESCAPE -->
+      <div class="thread-river">
+        <div class="river-label">
+          <div class="river-name" style="color:var(--thread-b);">Body as Escape</div>
+          <div class="river-desc">The flesh is the last sovereign territory. Sex, dance, desire as resistance.</div>
+        </div>
+        <div class="river-flow">
+          <div class="river-node"><div class="river-node-inner" style="background:var(--thread-b);width:36px;height:36px;" title="Strobelite">STR</div></div>
+          <div class="river-connector" style="background:var(--thread-b);flex:2;"></div>
+          <div class="river-node"><div class="river-node-inner" style="background:var(--thread-b);width:36px;height:36px;" title="Momentz">MOM</div></div>
+          <div class="river-connector" style="background:var(--thread-b);"></div>
+          <div class="river-node"><div class="river-node-inner" style="background:var(--thread-b);width:36px;height:36px;" title="Submission">SUB</div></div>
+          <div class="river-connector" style="background:var(--thread-b);flex:2;"></div>
+          <div class="river-node"><div class="river-node-inner" style="background:var(--thread-b);width:36px;height:36px;" title="Carnival">CRN</div></div>
+          <div class="river-connector" style="background:var(--thread-b);flex:2;"></div>
+          <div class="river-node"><div class="river-node-inner" style="background:var(--thread-b);width:36px;height:36px;" title="Sex Murder Party">SMP</div></div>
+          <div class="river-connector" style="background:var(--thread-b);"></div>
+          <div class="river-node"><div class="river-node-inner" style="background:var(--thread-b);width:36px;height:36px;" title="She's My Collar">SMC</div></div>
+          <div class="river-connector" style="background:var(--thread-b);flex:2;"></div>
+          <div class="river-node"><div class="river-node-inner" style="background:var(--thread-b);width:36px;height:36px;" title="Out of Body">OOB</div></div>
+        </div>
+      </div>
+
+      <!-- THREAD C: MONEY/POWER -->
+      <div class="thread-river">
+        <div class="river-label">
+          <div class="river-name" style="color:var(--thread-c);">Money / Power Worship</div>
+          <div class="river-desc">Capital as false god. What we built the altar to that burned us.</div>
+        </div>
+        <div class="river-flow">
+          <div class="river-connector" style="background:var(--thread-c);flex:8;"></div>
+          <div class="river-node"><div class="river-node-inner" style="background:var(--thread-c);width:36px;height:36px;" title="Hallelujah Money">HLJ</div></div>
+          <div class="river-connector" style="background:var(--thread-c);flex:1;"></div>
+          <div class="river-node"><div class="river-node-inner" style="background:var(--thread-c);width:36px;height:36px;" title="The Apprentice">APP</div></div>
+          <div class="river-connector" style="background:var(--thread-c);flex:2;"></div>
+          <div class="river-node"><div class="river-node-inner" style="background:var(--thread-c);width:36px;height:36px;" title="Ticker Tape">TTK</div></div>
+          <div class="river-connector" style="background:var(--thread-c);"></div>
+          <div class="river-node"><div class="river-node-inner" style="background:var(--thread-c);width:36px;height:36px;" title="Circle of Friendz">COF</div></div>
+        </div>
+      </div>
+
+      <!-- THREAD D: HAUNTING / UNREALITY -->
+      <div class="thread-river">
+        <div class="river-label">
+          <div class="river-name" style="color:var(--thread-d);">Haunting / Unreality</div>
+          <div class="river-desc">The digital self, the ghost self. Are we awake or programmed?</div>
+        </div>
+        <div class="river-flow">
+          <div class="river-connector" style="background:var(--thread-d);"></div>
+          <div class="river-node"><div class="river-node-inner" style="background:var(--thread-d);width:36px;height:36px;" title="Saturnz Barz">SAT</div></div>
+          <div class="river-connector" style="background:var(--thread-d);"></div>
+          <div class="river-node"><div class="river-node-inner" style="background:var(--thread-d);width:36px;height:36px;" title="Submission">SUB</div></div>
+          <div class="river-connector" style="background:var(--thread-d);"></div>
+          <div class="river-node"><div class="river-node-inner" style="background:var(--thread-d);width:36px;height:36px;" title="Charger">CHG</div></div>
+          <div class="river-connector" style="background:var(--thread-d);"></div>
+          <div class="river-node"><div class="river-node-inner" style="background:var(--thread-d);width:36px;height:36px;" title="Andromeda">AND</div></div>
+          <div class="river-connector" style="background:var(--thread-d);"></div>
+          <div class="river-node"><div class="river-node-inner" style="background:var(--thread-d);width:36px;height:36px;" title="Busted and Blue">B&B</div></div>
+          <div class="river-connector" style="background:var(--thread-d);flex:2;"></div>
+          <div class="river-node"><div class="river-node-inner" style="background:var(--thread-d);width:36px;height:36px;" title="The Apprentice">APP</div></div>
+          <div class="river-connector" style="background:var(--thread-d);"></div>
+          <div class="river-node"><div class="river-node-inner" style="background:var(--thread-d);width:36px;height:36px;" title="Halfway">HTH</div></div>
+          <div class="river-connector" style="background:var(--thread-d);"></div>
+          <div class="river-node"><div class="river-node-inner" style="background:var(--thread-d);width:36px;height:36px;" title="Out of Body">OOB</div></div>
+          <div class="river-connector" style="background:var(--thread-d);"></div>
+          <div class="river-node"><div class="river-node-inner" style="background:var(--thread-d);width:36px;height:36px;" title="Ticker Tape">TTK</div></div>
+        </div>
+      </div>
+
+      <!-- THREAD E: BLACK SURVIVAL / RAGE -->
+      <div class="thread-river">
+        <div class="river-label">
+          <div class="river-name" style="color:var(--thread-e);">Black Survival / Rage</div>
+          <div class="river-desc">The guest MCs carry this. Lived experience where the album's politics get a body.</div>
+        </div>
+        <div class="river-flow">
+          <div class="river-node"><div class="river-node-inner" style="background:var(--thread-e);width:36px;height:36px;" title="Ascension">ASC</div></div>
+          <div class="river-connector" style="background:var(--thread-e);flex:2;"></div>
+          <div class="river-node"><div class="river-node-inner" style="background:var(--thread-e);width:36px;height:36px;" title="Saturnz Barz">SAT</div></div>
+          <div class="river-connector" style="background:var(--thread-e);flex:5;"></div>
+          <div class="river-node"><div class="river-node-inner" style="background:var(--thread-e);width:36px;height:36px;" title="Let Me Out">LMO</div></div>
+        </div>
+      </div>
+
+      <!-- THREAD F: TENDER RESISTANCE -->
+      <div class="thread-river">
+        <div class="river-label">
+          <div class="river-name" style="color:var(--thread-f);">Tender Resistance</div>
+          <div class="river-desc">Love, intimacy, connection as the only sane answer. The album's hidden spine.</div>
+        </div>
+        <div class="river-flow">
+          <div class="river-connector" style="background:var(--thread-f);flex:3;"></div>
+          <div class="river-node"><div class="river-node-inner" style="background:var(--thread-f);width:36px;height:36px;" title="Andromeda">AND</div></div>
+          <div class="river-connector" style="background:var(--thread-f);"></div>
+          <div class="river-node"><div class="river-node-inner" style="background:var(--thread-f);width:36px;height:36px;" title="Busted & Blue">B&B</div></div>
+          <div class="river-connector" style="background:var(--thread-f);flex:2;"></div>
+          <div class="river-node"><div class="river-node-inner" style="background:var(--thread-f);width:36px;height:36px;" title="She's My Collar">SMC</div></div>
+          <div class="river-connector" style="background:var(--thread-f);"></div>
+          <div class="river-node"><div class="river-node-inner" style="background:var(--thread-f);width:36px;height:36px;" title="We Got the Power">WGP</div></div>
+          <div class="river-connector" style="background:var(--thread-f);"></div>
+          <div class="river-node"><div class="river-node-inner" style="background:var(--thread-f);width:36px;height:36px;" title="Halfway">HTH</div></div>
+          <div class="river-connector" style="background:var(--thread-f);"></div>
+          <div class="river-node"><div class="river-node-inner" style="background:var(--thread-f);width:36px;height:36px;" title="Circle">COF</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- DEEP THEMES -->
+  <div style="padding:40px 0; border-bottom:1px solid var(--static);">
+    <div class="section-label">▸ The six threads — anatomy</div>
+    <h2>What Each Thread Is Really About</h2>
+
+    <div class="themes-grid">
+
+      <div class="theme-block" data-symbol="☄">
+        <div class="theme-name" style="color:var(--thread-a);">APOCALYPSE PARTY</div>
+        <div class="theme-pull">"The sky's falling baby, drop that ass before it crash." The most Gorillaz idea possible: dancing harder as the ceiling comes down. Not denial — acknowledgment through movement.</div>
+        <div class="theme-songs">Ascension · Momentz · Charger · Carnival<br>Let Me Out · Sex Murder Party · Hallelujah Money · We Got the Power</div>
+      </div>
+
+      <div class="theme-block" data-symbol="⚡">
+        <div class="theme-name" style="color:var(--thread-b);">BODY AS ESCAPE</div>
+        <div class="theme-pull">When the political is unbearable, the body becomes sanctuary. Every house track, every funk groove is a vote against total despair. The flesh as the last thing that belongs to you.</div>
+        <div class="theme-songs">Strobelite · Momentz · Submission<br>Carnival · Sex Murder Party · She's My Collar · Out of Body</div>
+      </div>
+
+      <div class="theme-block" data-symbol="$">
+        <div class="theme-name" style="color:var(--thread-c);">MONEY / POWER WORSHIP</div>
+        <div class="theme-pull">The religion of capital as the root cause. Hallelujah Money is the sermon nobody asked for. The Apprentice is the reflection in the broken screen. Ticker Tape is the ticker that never stops.</div>
+        <div class="theme-songs">Hallelujah Money · The Apprentice<br>Ticker Tape · Circle of Friendz</div>
+      </div>
+
+      <div class="theme-block" data-symbol="◌">
+        <div class="theme-name" style="color:var(--thread-d);">HAUNTING / UNREALITY</div>
+        <div class="theme-pull">"Are we human or are we humanz? Are we awake or programmed?" The digital self eating the embodied self. The wires that connect us that also hollow us. The ghost that the machine makes of you.</div>
+        <div class="theme-songs">Saturnz Barz · Submission · Charger · Andromeda<br>Busted & Blue · The Apprentice · Halfway · Out of Body · Ticker Tape</div>
+      </div>
+
+      <div class="theme-block" data-symbol="✊">
+        <div class="theme-name" style="color:var(--thread-e);">BLACK SURVIVAL / RAGE</div>
+        <div class="theme-pull">The album's political specificity lives here — in the mouths of Vince Staples, Pusha T, Mavis Staples, Popcaan. Where the abstract becomes the lived, the systemic becomes the personal. The thinnest thread but the sharpest.</div>
+        <div class="theme-songs">Ascension · Saturnz Barz · Let Me Out</div>
+      </div>
+
+      <div class="theme-block" data-symbol="♡">
+        <div class="theme-name" style="color:var(--thread-f);">TENDER RESISTANCE</div>
+        <div class="theme-pull">The quiet backbone nobody reviews. Andromeda and Busted & Blue are the album's emotional truth — that love and connection, even damaged, even digital, are the only answers that hold. We Got the Power is this thread claiming the victory.</div>
+        <div class="theme-songs">Andromeda · Busted & Blue · She's My Collar<br>We Got the Power · Halfway to the Halfway House · Circle of Friendz</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TENSION PAIRS -->
+  <div class="tension-section">
+    <div class="section-label">▸ The album's central tensions — what makes it vibrate</div>
+    <h2>Dialectics in the Tapestry</h2>
+    <p class="section-intro">Humanz doesn't resolve — it holds opposites together. These are the live wires.</p>
+
+    <div class="tension-pairs">
+
+      <div class="tension-pair">
+        <div class="tension-side">
+          <div class="tension-title" style="color:var(--thread-e);">VINCE'S NIHILISM</div>
+          <div class="tension-songs">Ascension — "them stars falling, don't chase 'em"</div>
+        </div>
+        <div class="tension-vs">VS</div>
+        <div class="tension-side">
+          <div class="tension-title" style="color:var(--thread-f);">JEHNNY'S HOPE</div>
+          <div class="tension-songs">We Got the Power — "no matter what happens"</div>
+        </div>
+      </div>
+
+      <div class="tension-pair">
+        <div class="tension-side">
+          <div class="tension-title" style="color:var(--thread-b);">BODY EUPHORIA</div>
+          <div class="tension-songs">Strobelite, Submission, Sex Murder Party</div>
+        </div>
+        <div class="tension-vs">VS</div>
+        <div class="tension-side">
+          <div class="tension-title" style="color:var(--thread-d);">DIGITAL DISSOLUTION</div>
+          <div class="tension-songs">Busted & Blue, Out of Body, Ticker Tape</div>
+        </div>
+      </div>
+
+      <div class="tension-pair">
+        <div class="tension-side">
+          <div class="tension-title" style="color:var(--thread-c);">CAPITAL AS GOD</div>
+          <div class="tension-songs">Hallelujah Money — the hollow sermon</div>
+        </div>
+        <div class="tension-vs">VS</div>
+        <div class="tension-side">
+          <div class="tension-title" style="color:var(--thread-f);">LOVE AS ANSWER</div>
+          <div class="tension-songs">Andromeda — "take it in your heart now"</div>
+        </div>
+      </div>
+
+      <div class="tension-pair">
+        <div class="tension-side">
+          <div class="tension-title" style="color:var(--neon-coral);">VIRTUAL AVATARS</div>
+          <div class="tension-songs">2D, Murdoc, Noodle, Russel — the cartoon shell</div>
+        </div>
+        <div class="tension-vs">VS</div>
+        <div class="tension-side">
+          <div class="tension-title" style="color:var(--acid-yellow);">HUMAN GUESTS</div>
+          <div class="tension-songs">Real political urgency, real bodies, real pain</div>
+        </div>
+      </div>
+
+      <div class="tension-pair">
+        <div class="tension-side">
+          <div class="tension-title" style="color:var(--thread-a);">PARTY</div>
+          <div class="tension-songs">The whole first two-thirds of the runtime</div>
+        </div>
+        <div class="tension-vs">VS</div>
+        <div class="tension-side">
+          <div class="tension-title" style="color:var(--bruise);">RECKONING</div>
+          <div class="tension-songs">Hallelujah Money through We Got the Power</div>
+        </div>
+      </div>
+
+      <div class="tension-pair">
+        <div class="tension-side">
+          <div class="tension-title" style="color:var(--ice);">ALBARN/BLUR DAMON</div>
+          <div class="tension-songs">Britpop survivor, post-Brexit grief</div>
+        </div>
+        <div class="tension-vs">VS</div>
+        <div class="tension-side">
+          <div class="tension-title" style="color:var(--neon-coral);">GORILLAZ DAMON</div>
+          <div class="tension-songs">Chameleon host who disappears into his guests</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-note">
+    Humanz was conceived as "an emotional response to politics, not a protest" — Damon Albarn. The album's true subject isn't Trump. It's the night you realize the world you thought you were living in was a different world than the one that actually existed. All six threads are just different ways of asking: what do you do with your body and your heart in that moment?
+  </div>
+  <div class="footer-sig">
+    HUMANZ DELUXE · 26 TRACKS · 2017<br>
+    GORILLAZ — ALBARN / HEWLETT<br>
+    TAPESTRY ANALYSIS · CLAUDE
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Magnum Opus — Alchemical Map of Inner Integration</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;500;600&family=IM+Fell+English:ital@0;1&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap');
+
+  :root {
+    --parchment: #f5edd8;
+    --parchment-dark: #e8d5a8;
+    --ink: #1a1208;
+    --ink-faded: #3d2e10;
+    --gold: #c9a53a;
+    --gold-light: #e8c96b;
+    --gold-dark: #7a5f1a;
+    --nigredo: #1c1410;
+    --albedo: #e8e4d9;
+    --citrinitas: #c9a53a;
+    --rubedo: #8b2020;
+    --rubedo-light: #c43232;
+    --mercury-color: #6b8fa8;
+    --sulfur-color: #b87f20;
+    --salt-color: #8a8272;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background-color: #0f0c07;
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem 4rem;
+  }
+
+  .outer-frame {
+    width: 100%;
+    max-width: 1100px;
+    background: var(--parchment);
+    background-image:
+      radial-gradient(ellipse at 20% 10%, rgba(201,165,58,0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 90%, rgba(139,32,32,0.06) 0%, transparent 50%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    border: 3px solid var(--gold-dark);
+    box-shadow:
+      0 0 0 8px #0f0c07,
+      0 0 0 10px var(--gold-dark),
+      0 0 60px rgba(201,165,58,0.15),
+      inset 0 0 80px rgba(0,0,0,0.06);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Corner ornaments */
+  .corner {
+    position: absolute;
+    width: 70px;
+    height: 70px;
+    z-index: 10;
+  }
+  .corner svg { width: 100%; height: 100%; }
+  .corner-tl { top: 0; left: 0; }
+  .corner-tr { top: 0; right: 0; transform: scaleX(-1); }
+  .corner-bl { bottom: 0; left: 0; transform: scaleY(-1); }
+  .corner-br { bottom: 0; right: 0; transform: scale(-1,-1); }
+
+  .inner-content {
+    padding: 3rem 3rem 4rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* TITLE BLOCK */
+  .title-block {
+    text-align: center;
+    margin-bottom: 0.5rem;
+    position: relative;
+  }
+
+  .title-latin {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.35em;
+    color: var(--gold-dark);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .title-main {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 2rem;
+    color: var(--ink);
+    line-height: 1.1;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.3rem;
+  }
+
+  .title-sub {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--ink-faded);
+    letter-spacing: 0.1em;
+  }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 1rem 0;
+  }
+  .divider-line { flex: 1; height: 1px; background: linear-gradient(to right, transparent, var(--gold-dark), transparent); }
+  .divider-symbol { color: var(--gold-dark); font-size: 1.2rem; }
+
+  /* THE GREAT CENTRAL DIAGRAM */
+  .diagram-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 1rem 0 2rem;
+  }
+
+  .central-diagram {
+    width: 100%;
+    max-width: 700px;
+    position: relative;
+  }
+
+  .central-diagram svg {
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 4px 24px rgba(0,0,0,0.12));
+  }
+
+  /* REFERENCE GRID — the decoding tables */
+  .reference-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    width: 100%;
+    margin-top: 1rem;
+  }
+
+  .ref-panel {
+    border: 1px solid var(--gold-dark);
+    padding: 1.2rem 1.4rem 1.4rem;
+    position: relative;
+    background: rgba(255,255,255,0.25);
+  }
+
+  .ref-panel::before {
+    content: '';
+    position: absolute;
+    top: 4px; left: 4px; right: 4px; bottom: 4px;
+    border: 1px solid rgba(201,165,58,0.3);
+    pointer-events: none;
+  }
+
+  .ref-panel-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold-dark);
+    margin-bottom: 0.9rem;
+    text-align: center;
+  }
+
+  .stage-row {
+    display: grid;
+    grid-template-columns: 28px 80px 1fr;
+    gap: 0.5rem 0.8rem;
+    align-items: start;
+    margin-bottom: 0.85rem;
+    padding-bottom: 0.85rem;
+    border-bottom: 1px solid rgba(201,165,58,0.2);
+  }
+  .stage-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+  .stage-dot {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid var(--gold-dark);
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+
+  .stage-name {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    line-height: 1.6;
+    color: var(--ink);
+  }
+  .stage-name span {
+    display: block;
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 0.78rem;
+    font-weight: 400;
+    letter-spacing: 0;
+    color: var(--ink-faded);
+  }
+
+  .stage-desc {
+    font-size: 0.82rem;
+    line-height: 1.55;
+    color: var(--ink-faded);
+    font-family: 'Cormorant Garamond', serif;
+  }
+  .stage-desc em {
+    font-style: italic;
+    color: var(--ink);
+  }
+
+  /* SYMBOL KEY */
+  .symbol-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.6rem;
+    margin-top: 0.5rem;
+  }
+
+  .symbol-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    text-align: center;
+  }
+
+  .symbol-glyph {
+    font-size: 1.6rem;
+    line-height: 1;
+    color: var(--ink);
+  }
+
+  .symbol-name {
+    font-family: 'Cinzel', serif;
+    font-size: 0.58rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold-dark);
+  }
+
+  .symbol-meaning {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 0.72rem;
+    color: var(--ink-faded);
+    line-height: 1.3;
+  }
+
+  /* PRINCIPLE TRIA PRIMA */
+  .tria-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0.8rem;
+    margin-top: 0.5rem;
+  }
+
+  .tria-item {
+    text-align: center;
+    padding: 0.7rem 0.5rem;
+    border: 1px solid rgba(201,165,58,0.35);
+    background: rgba(255,255,255,0.18);
+  }
+
+  .tria-symbol {
+    font-size: 2rem;
+    line-height: 1;
+    margin-bottom: 0.2rem;
+  }
+
+  .tria-name {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold-dark);
+    margin-bottom: 0.25rem;
+  }
+
+  .tria-principle {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 0.8rem;
+    color: var(--ink);
+    margin-bottom: 0.2rem;
+  }
+
+  .tria-desc {
+    font-size: 0.73rem;
+    color: var(--ink-faded);
+    line-height: 1.4;
+  }
+
+  /* MEDIA DECODING KEY */
+  .decode-table {
+    width: 100%;
+    margin-top: 0.5rem;
+    border-collapse: collapse;
+  }
+
+  .decode-table th {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold-dark);
+    border-bottom: 1px solid var(--gold-dark);
+    padding: 0.3rem 0.5rem;
+    text-align: left;
+    font-weight: 500;
+  }
+
+  .decode-table td {
+    font-size: 0.78rem;
+    color: var(--ink-faded);
+    padding: 0.45rem 0.5rem;
+    border-bottom: 1px solid rgba(201,165,58,0.15);
+    vertical-align: top;
+    line-height: 1.4;
+  }
+
+  .decode-table tr:last-child td { border-bottom: none; }
+
+  .decode-table td:first-child {
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+
+  /* AXIOMS */
+  .axioms-section {
+    margin-top: 2rem;
+    text-align: center;
+    border-top: 1px solid var(--gold-dark);
+    border-bottom: 1px solid var(--gold-dark);
+    padding: 1.2rem 2rem;
+    position: relative;
+  }
+
+  .axiom-row {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    flex-wrap: wrap;
+  }
+
+  .axiom {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 0.9rem;
+    color: var(--ink-faded);
+    max-width: 200px;
+    line-height: 1.5;
+  }
+
+  .axiom strong {
+    font-style: normal;
+    font-family: 'Cinzel', serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold-dark);
+    display: block;
+    margin-bottom: 0.2rem;
+  }
+
+  .footer-text {
+    text-align: center;
+    margin-top: 2rem;
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold-dark);
+    opacity: 0.7;
+  }
+
+  .full-width-panel {
+    grid-column: 1 / -1;
+  }
+
+  @media (max-width: 700px) {
+    .reference-grid { grid-template-columns: 1fr; }
+    .inner-content { padding: 1.5rem 1.2rem 2rem; }
+    .title-main { font-size: 1.3rem; }
+    .symbol-grid { grid-template-columns: repeat(3, 1fr); }
+    .tria-grid { grid-template-columns: 1fr; }
+    .axiom-row { gap: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="outer-frame">
+
+  <!-- CORNER ORNAMENTS -->
+  <div class="corner corner-tl">
+    <svg viewBox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M2 2 L68 2 M2 2 L2 68" stroke="#7a5f1a" stroke-width="1.5"/>
+      <path d="M8 8 L40 8 M8 8 L8 40" stroke="#c9a53a" stroke-width="0.8" opacity="0.6"/>
+      <circle cx="35" cy="35" r="18" stroke="#7a5f1a" stroke-width="0.8" fill="none"/>
+      <path d="M35 17 L35 53 M17 35 L53 35" stroke="#c9a53a" stroke-width="0.6" opacity="0.5"/>
+      <circle cx="35" cy="35" r="4" fill="#7a5f1a" opacity="0.4"/>
+    </svg>
+  </div>
+  <div class="corner corner-tr">
+    <svg viewBox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M2 2 L68 2 M2 2 L2 68" stroke="#7a5f1a" stroke-width="1.5"/>
+      <path d="M8 8 L40 8 M8 8 L8 40" stroke="#c9a53a" stroke-width="0.8" opacity="0.6"/>
+      <circle cx="35" cy="35" r="18" stroke="#7a5f1a" stroke-width="0.8" fill="none"/>
+      <path d="M35 17 L35 53 M17 35 L53 35" stroke="#c9a53a" stroke-width="0.6" opacity="0.5"/>
+      <circle cx="35" cy="35" r="4" fill="#7a5f1a" opacity="0.4"/>
+    </svg>
+  </div>
+  <div class="corner corner-bl">
+    <svg viewBox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M2 2 L68 2 M2 2 L2 68" stroke="#7a5f1a" stroke-width="1.5"/>
+      <path d="M8 8 L40 8 M8 8 L8 40" stroke="#c9a53a" stroke-width="0.8" opacity="0.6"/>
+      <circle cx="35" cy="35" r="18" stroke="#7a5f1a" stroke-width="0.8" fill="none"/>
+      <path d="M35 17 L35 53 M17 35 L53 35" stroke="#c9a53a" stroke-width="0.6" opacity="0.5"/>
+      <circle cx="35" cy="35" r="4" fill="#7a5f1a" opacity="0.4"/>
+    </svg>
+  </div>
+  <div class="corner corner-br">
+    <svg viewBox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M2 2 L68 2 M2 2 L2 68" stroke="#7a5f1a" stroke-width="1.5"/>
+      <path d="M8 8 L40 8 M8 8 L8 40" stroke="#c9a53a" stroke-width="0.8" opacity="0.6"/>
+      <circle cx="35" cy="35" r="18" stroke="#7a5f1a" stroke-width="0.8" fill="none"/>
+      <path d="M35 17 L35 53 M17 35 L53 35" stroke="#c9a53a" stroke-width="0.6" opacity="0.5"/>
+      <circle cx="35" cy="35" r="4" fill="#7a5f1a" opacity="0.4"/>
+    </svg>
+  </div>
+
+  <div class="inner-content">
+
+    <!-- TITLE -->
+    <div class="title-block">
+      <div class="title-latin">Tabula Magna Operis — The Great Work Decoded</div>
+      <div class="title-main">The Alchemical Map of Inner Integration</div>
+      <div class="title-sub">A Reference for Decoding Symbolism in Media, Art &amp; Myth</div>
+    </div>
+
+    <div class="divider">
+      <div class="divider-line"></div>
+      <div class="divider-symbol">⊕</div>
+      <div class="divider-line"></div>
+    </div>
+
+    <!-- CENTRAL SVG DIAGRAM -->
+    <div class="diagram-section">
+      <div class="central-diagram">
+        <svg viewBox="0 0 700 580" xmlns="http://www.w3.org/2000/svg" font-family="'Cinzel', serif">
+          <defs>
+            <radialGradient id="bgGrad" cx="50%" cy="50%">
+              <stop offset="0%" stop-color="#f9f0dc"/>
+              <stop offset="100%" stop-color="#e8d5a8"/>
+            </radialGradient>
+            <radialGradient id="centerGrad" cx="50%" cy="50%">
+              <stop offset="0%" stop-color="#fff8e8"/>
+              <stop offset="100%" stop-color="#e8d5a8"/>
+            </radialGradient>
+            <!-- Stage gradients -->
+            <radialGradient id="niGrad" cx="50%" cy="50%">
+              <stop offset="0%" stop-color="#2e1f0f"/>
+              <stop offset="100%" stop-color="#1a1208"/>
+            </radialGradient>
+            <radialGradient id="alGrad" cx="50%" cy="50%">
+              <stop offset="0%" stop-color="#f0ebe0"/>
+              <stop offset="100%" stop-color="#d8d2c4"/>
+            </radialGradient>
+            <radialGradient id="ciGrad" cx="50%" cy="50%">
+              <stop offset="0%" stop-color="#e8c96b"/>
+              <stop offset="100%" stop-color="#c9a53a"/>
+            </radialGradient>
+            <radialGradient id="ruGrad" cx="50%" cy="50%">
+              <stop offset="0%" stop-color="#c43232"/>
+              <stop offset="100%" stop-color="#8b2020"/>
+            </radialGradient>
+            <radialGradient id="stoneGrad" cx="50%" cy="50%">
+              <stop offset="0%" stop-color="#ffe99a"/>
+              <stop offset="40%" stop-color="#c9a53a"/>
+              <stop offset="100%" stop-color="#7a5f1a"/>
+            </radialGradient>
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="3" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+            <marker id="arrow" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+              <path d="M0,0 L6,3 L0,6 Z" fill="#7a5f1a" opacity="0.7"/>
+            </marker>
+          </defs>
+
+          <!-- Background -->
+          <rect width="700" height="580" fill="url(#bgGrad)" rx="4"/>
+
+          <!-- Outer double ring -->
+          <circle cx="350" cy="290" r="262" stroke="#7a5f1a" stroke-width="1.5" fill="none" opacity="0.4"/>
+          <circle cx="350" cy="290" r="256" stroke="#c9a53a" stroke-width="0.5" fill="none" opacity="0.3"/>
+
+          <!-- Ouroboros ring (implied, as dashed outer track) -->
+          <circle cx="350" cy="290" r="272" stroke="#3d2e10" stroke-width="0.8" stroke-dasharray="4 6" fill="none" opacity="0.35"/>
+
+          <!-- FOUR QUADRANT STAGE CIRCLES (corners) -->
+          <!-- Nigredo — top left -->
+          <circle cx="148" cy="148" r="90" fill="url(#niGrad)" stroke="#3d2e10" stroke-width="1.5"/>
+          <circle cx="148" cy="148" r="84" fill="none" stroke="#7a5f1a" stroke-width="0.6" stroke-dasharray="3 4" opacity="0.5"/>
+
+          <!-- Albedo — top right -->
+          <circle cx="552" cy="148" r="90" fill="url(#alGrad)" stroke="#a8a090" stroke-width="1.5"/>
+          <circle cx="552" cy="148" r="84" fill="none" stroke="#8a8272" stroke-width="0.6" stroke-dasharray="3 4" opacity="0.5"/>
+
+          <!-- Citrinitas — bottom right -->
+          <circle cx="552" cy="432" r="90" fill="url(#ciGrad)" stroke="#7a5f1a" stroke-width="1.5"/>
+          <circle cx="552" cy="432" r="84" fill="none" stroke="#c9a53a" stroke-width="0.6" stroke-dasharray="3 4" opacity="0.4"/>
+
+          <!-- Rubedo — bottom left -->
+          <circle cx="148" cy="432" r="90" fill="url(#ruGrad)" stroke="#5c1010" stroke-width="1.5"/>
+          <circle cx="148" cy="432" r="84" fill="none" stroke="#8b2020" stroke-width="0.6" stroke-dasharray="3 4" opacity="0.5"/>
+
+          <!-- CONNECTING CROSS LINES with arrows suggesting flow -->
+          <line x1="230" y1="185" x2="320" y2="255" stroke="#3d2e10" stroke-width="1" opacity="0.3"/>
+          <line x1="470" y1="185" x2="380" y2="255" stroke="#3d2e10" stroke-width="1" opacity="0.3"/>
+          <line x1="470" y1="395" x2="380" y2="325" stroke="#3d2e10" stroke-width="1" opacity="0.3"/>
+          <line x1="230" y1="395" x2="320" y2="325" stroke="#3d2e10" stroke-width="1" opacity="0.3"/>
+
+          <!-- Spiral path suggestion (clockwise flow) -->
+          <path d="M 200 130 Q 350 60 500 130 Q 620 250 540 400 Q 460 520 350 520 Q 200 510 160 400 Q 90 260 200 130"
+            stroke="#c9a53a" stroke-width="1.2" stroke-dasharray="5 8" fill="none" opacity="0.45" marker-end="url(#arrow)"/>
+
+          <!-- CENTER — Philosopher's Stone / Self -->
+          <circle cx="350" cy="290" r="72" fill="url(#centerGrad)" stroke="#c9a53a" stroke-width="2"/>
+          <circle cx="350" cy="290" r="65" fill="none" stroke="#7a5f1a" stroke-width="1" opacity="0.6"/>
+          <!-- Squared circle inside center -->
+          <rect x="310" y="250" width="80" height="80" fill="none" stroke="#7a5f1a" stroke-width="1" opacity="0.5" transform="rotate(45 350 290)"/>
+          <!-- Triangle inside -->
+          <polygon points="350,240 310,320 390,320" fill="none" stroke="#c9a53a" stroke-width="1" opacity="0.6"/>
+          <!-- Philosopher's Stone dot -->
+          <circle cx="350" cy="290" r="22" fill="url(#stoneGrad)" filter="url(#glow)"/>
+          <circle cx="350" cy="290" r="8" fill="#fff8e8" opacity="0.7"/>
+
+          <!-- CENTER LABELS -->
+          <text x="350" y="336" text-anchor="middle" font-family="'Cinzel', serif" font-size="8" fill="#7a5f1a" letter-spacing="2">THE SELF</text>
+          <text x="350" y="348" text-anchor="middle" font-family="'IM Fell English', serif" font-style="italic" font-size="7.5" fill="#3d2e10" opacity="0.7">Lapis Philosophorum</text>
+
+          <!-- SOL / LUNA axis -->
+          <text x="350" y="247" text-anchor="middle" font-size="14" fill="#c9a53a" opacity="0.8">☉</text>
+          <text x="350" y="228" text-anchor="middle" font-family="'Cinzel', serif" font-size="6.5" fill="#7a5f1a" letter-spacing="1.5">SOL</text>
+          <text x="350" y="356" text-anchor="middle" font-size="14" fill="#8a8272" opacity="0.7">☽</text>
+          <text x="350" y="368" text-anchor="middle" font-family="'Cinzel', serif" font-size="6.5" fill="#3d2e10" letter-spacing="1.5">LUNA</text>
+
+          <!-- SULFUR / MERCURY axis -->
+          <text x="296" y="295" text-anchor="middle" font-size="12" fill="#b87f20" opacity="0.8">🜍</text>
+          <text x="284" y="295" text-anchor="middle" font-family="'Cinzel', serif" font-size="5.5" fill="#7a5f1a" letter-spacing="1">S</text>
+          <text x="405" y="295" text-anchor="middle" font-size="12" fill="#6b8fa8" opacity="0.8">☿</text>
+          <text x="416" y="295" text-anchor="middle" font-family="'Cinzel', serif" font-size="5.5" fill="#7a5f1a" letter-spacing="1">M</text>
+
+          <!-- ============ NIGREDO — top left ============ -->
+          <!-- Symbol: Raven / Saturn / Lead -->
+          <text x="148" y="118" text-anchor="middle" font-size="26" fill="#c9a53a" opacity="0.6">♄</text>
+          <!-- Stage Roman numeral -->
+          <text x="148" y="145" text-anchor="middle" font-family="'Cinzel Decorative', serif" font-size="11" fill="#e8c96b" letter-spacing="2">I</text>
+          <text x="148" y="163" text-anchor="middle" font-family="'Cinzel', serif" font-size="9.5" fill="#e8d5a8" letter-spacing="2.5">NIGREDO</text>
+          <text x="148" y="175" text-anchor="middle" font-family="'IM Fell English', serif" font-style="italic" font-size="8.5" fill="#c9a53a" opacity="0.8">Blackening</text>
+          <!-- Keywords -->
+          <text x="148" y="190" text-anchor="middle" font-family="'Cormorant Garamond', serif" font-size="7.5" fill="#e8d5a8" opacity="0.7">Shadow · Dissolution · Death</text>
+          <text x="148" y="200" text-anchor="middle" font-family="'Cormorant Garamond', serif" font-style="italic" font-size="7" fill="#c9a53a" opacity="0.5">Prima Materia · Dark Night</text>
+
+          <!-- ============ ALBEDO — top right ============ -->
+          <text x="552" y="118" text-anchor="middle" font-size="26" fill="#8a8272" opacity="0.7">☽</text>
+          <text x="552" y="145" text-anchor="middle" font-family="'Cinzel Decorative', serif" font-size="11" fill="#3d2e10" letter-spacing="2">II</text>
+          <text x="552" y="163" text-anchor="middle" font-family="'Cinzel', serif" font-size="9.5" fill="#3d2e10" letter-spacing="2.5">ALBEDO</text>
+          <text x="552" y="175" text-anchor="middle" font-family="'IM Fell English', serif" font-style="italic" font-size="8.5" fill="#8a8272">Whitening</text>
+          <text x="552" y="190" text-anchor="middle" font-family="'Cormorant Garamond', serif" font-size="7.5" fill="#3d2e10" opacity="0.7">Purification · Anima·Animus</text>
+          <text x="552" y="200" text-anchor="middle" font-family="'Cormorant Garamond', serif" font-style="italic" font-size="7" fill="#7a5f1a" opacity="0.6">Silver · Moon · Reflection</text>
+
+          <!-- ============ CITRINITAS — bottom right ============ -->
+          <text x="552" y="402" text-anchor="middle" font-size="24" fill="#fff8e8" opacity="0.85">☀</text>
+          <text x="552" y="420" text-anchor="middle" font-family="'Cinzel Decorative', serif" font-size="11" fill="#1a1208" letter-spacing="2">III</text>
+          <text x="552" y="438" text-anchor="middle" font-family="'Cinzel', serif" font-size="8" fill="#1a1208" letter-spacing="2">CITRINITAS</text>
+          <text x="552" y="450" text-anchor="middle" font-family="'IM Fell English', serif" font-style="italic" font-size="8.5" fill="#3d2e10">Yellowing</text>
+          <text x="552" y="465" text-anchor="middle" font-family="'Cormorant Garamond', serif" font-size="7.5" fill="#1a1208" opacity="0.7">Illumination · Wisdom · Sol</text>
+          <text x="552" y="475" text-anchor="middle" font-family="'Cormorant Garamond', serif" font-style="italic" font-size="7" fill="#3d2e10" opacity="0.6">Peacock's Tail · Dawning</text>
+
+          <!-- ============ RUBEDO — bottom left ============ -->
+          <text x="148" y="402" text-anchor="middle" font-size="26" fill="#ffe9c0" opacity="0.7">🜍</text>
+          <text x="148" y="420" text-anchor="middle" font-family="'Cinzel Decorative', serif" font-size="11" fill="#ffe9c0" letter-spacing="2">IV</text>
+          <text x="148" y="438" text-anchor="middle" font-family="'Cinzel', serif" font-size="9.5" fill="#ffe9c0" letter-spacing="2.5">RUBEDO</text>
+          <text x="148" y="450" text-anchor="middle" font-family="'IM Fell English', serif" font-style="italic" font-size="8.5" fill="#e8c96b">Reddening</text>
+          <text x="148" y="465" text-anchor="middle" font-family="'Cormorant Garamond', serif" font-size="7.5" fill="#e8d5a8" opacity="0.8">Coniunctio · Gold · Wholeness</text>
+          <text x="148" y="475" text-anchor="middle" font-family="'Cormorant Garamond', serif" font-style="italic" font-size="7" fill="#e8c96b" opacity="0.6">Phoenix · Red King · Rebis</text>
+
+          <!-- AXIS LABELS — the two poles of inner man -->
+          <!-- Top label: The Hidden Man / Spirit Pole -->
+          <text x="350" y="28" text-anchor="middle" font-family="'Cinzel', serif" font-size="7.5" fill="#7a5f1a" letter-spacing="2.5" opacity="0.8">SPIRITUS · PNEUMA · DIVINE SPARK</text>
+          <line x1="200" y1="22" x2="310" y2="22" stroke="#c9a53a" stroke-width="0.6" opacity="0.4"/>
+          <line x1="390" y1="22" x2="500" y2="22" stroke="#c9a53a" stroke-width="0.6" opacity="0.4"/>
+
+          <!-- Bottom label: The Earthly Man / Matter Pole -->
+          <text x="350" y="566" text-anchor="middle" font-family="'Cinzel', serif" font-size="7.5" fill="#7a5f1a" letter-spacing="2.5" opacity="0.8">CORPUS · HYLE · PRIMA MATERIA</text>
+          <line x1="200" y1="560" x2="305" y2="560" stroke="#c9a53a" stroke-width="0.6" opacity="0.4"/>
+          <line x1="395" y1="560" x2="500" y2="560" stroke="#c9a53a" stroke-width="0.6" opacity="0.4"/>
+
+          <!-- Left axis: Unconscious / Shadow -->
+          <text x="18" y="294" text-anchor="middle" font-family="'Cinzel', serif" font-size="7" fill="#7a5f1a" letter-spacing="2" opacity="0.7" transform="rotate(-90 18 294)">UNCONSCIOUS · SHADOW</text>
+
+          <!-- Right axis: Conscious / Light -->
+          <text x="682" y="294" text-anchor="middle" font-family="'Cinzel', serif" font-size="7" fill="#7a5f1a" letter-spacing="2" opacity="0.7" transform="rotate(90 682 294)">CONSCIOUS · LIGHT</text>
+
+          <!-- Small glyph labels at the midpoints between stages -->
+          <!-- Between Nigredo and Albedo (top center) — Solve / separation -->
+          <text x="350" y="98" text-anchor="middle" font-family="'Cinzel', serif" font-size="6.5" fill="#7a5f1a" letter-spacing="1.5" opacity="0.6">SOLUTIO</text>
+          <text x="350" y="110" text-anchor="middle" font-size="10" fill="#8a8272" opacity="0.5">≋</text>
+
+          <!-- Between Albedo and Citrinitas (right center) — Sublimatio -->
+          <text x="638" y="294" text-anchor="middle" font-family="'Cinzel', serif" font-size="6.5" fill="#7a5f1a" letter-spacing="1.5" opacity="0.6" transform="rotate(90 638 294)">SUBLIMATIO</text>
+
+          <!-- Between Citrinitas and Rubedo (bottom center) — Coagula -->
+          <text x="350" y="530" text-anchor="middle" font-family="'Cinzel', serif" font-size="6.5" fill="#7a5f1a" letter-spacing="1.5" opacity="0.6">COAGULATIO</text>
+
+          <!-- Between Rubedo and Nigredo (left center) — Calcinatio -->
+          <text x="62" y="294" text-anchor="middle" font-family="'Cinzel', serif" font-size="6.5" fill="#7a5f1a" letter-spacing="1.5" opacity="0.6" transform="rotate(-90 62 294)">CALCINATIO</text>
+        </svg>
+      </div>
+    </div>
+
+    <div class="divider">
+      <div class="divider-line"></div>
+      <div class="divider-symbol">✦</div>
+      <div class="divider-line"></div>
+    </div>
+
+    <!-- REFERENCE GRID -->
+    <div class="reference-grid">
+
+      <!-- PANEL 1: Stage Meanings -->
+      <div class="ref-panel">
+        <div class="ref-panel-title">The Four Stages — Inner & Outer Meaning</div>
+
+        <div class="stage-row">
+          <div class="stage-dot" style="background:#1a1208;"></div>
+          <div class="stage-name">NIGREDO<span>The Blackening</span></div>
+          <div class="stage-desc"><em>Ego death, shadow encounter, crisis.</em> The raw undifferentiated self. Confusion, despair, confrontation with the repressed. In media: dungeons, winter, imprisonment, madness, loss. The hero at their lowest.</div>
+        </div>
+
+        <div class="stage-row">
+          <div class="stage-dot" style="background:#d8d2c4; border-color:#8a8272;"></div>
+          <div class="stage-name">ALBEDO<span>The Whitening</span></div>
+          <div class="stage-desc"><em>Purification, reflection, the inner feminine/masculine emerging.</em> The soul washed clean. Meeting the anima or animus. In media: silver light, the wise guide, water imagery, mirrors, white garments, dawning clarity after chaos.</div>
+        </div>
+
+        <div class="stage-row">
+          <div class="stage-dot" style="background:#c9a53a;"></div>
+          <div class="stage-name">CITRINITAS<span>The Yellowing</span></div>
+          <div class="stage-desc"><em>Illumination, solar wisdom, the Wise Old Man/Woman archetype appearing.</em> Integration of insight into will. In media: golden light, teachers, mountaintop revelation, the peacock's iridescence, sunrise, new purpose.</div>
+        </div>
+
+        <div class="stage-row">
+          <div class="stage-dot" style="background:#8b2020;"></div>
+          <div class="stage-name">RUBEDO<span>The Reddening</span></div>
+          <div class="stage-desc"><em>Coniunctio — sacred marriage of opposites.</em> Full embodiment of the Self. Wholeness lived, not just glimpsed. In media: the return home, the king crowned, red fire, lovers united, the phoenix, sacrifice that completes.</div>
+        </div>
+      </div>
+
+      <!-- PANEL 2: Tria Prima -->
+      <div class="ref-panel">
+        <div class="ref-panel-title">Tria Prima — The Three Principles of All Being</div>
+        <div class="tria-grid">
+          <div class="tria-item">
+            <div class="tria-symbol" style="color:#b87f20;">🜍</div>
+            <div class="tria-name">Sulfur</div>
+            <div class="tria-principle">Soul · Anima</div>
+            <div class="tria-desc">The fiery, active, masculine principle. Desire, will, passion. In media: fire, ambition, the warrior-hero, charisma, solar kings.</div>
+          </div>
+          <div class="tria-item">
+            <div class="tria-symbol" style="color:#6b8fa8;">☿</div>
+            <div class="tria-name">Mercury</div>
+            <div class="tria-principle">Spirit · Mediator</div>
+            <div class="tria-desc">The transformative fluid medium. Mind, communication, the trickster, paradox. In media: the shapeshifter, messenger, androgyne, psychopomp.</div>
+          </div>
+          <div class="tria-item">
+            <div class="tria-symbol" style="color:#8a8272;">🜔</div>
+            <div class="tria-name">Salt</div>
+            <div class="tria-principle">Body · Vessel</div>
+            <div class="tria-desc">The fixed, feminine, receptive principle. The body, crystallized experience, matter as sacred. In media: the earth, the home, silence, the mother, containers.</div>
+          </div>
+        </div>
+
+        <div style="margin-top:1rem; padding-top:0.8rem; border-top:1px solid rgba(201,165,58,0.2);">
+          <div class="ref-panel-title" style="margin-bottom:0.6rem;">Key Dual Symbols — Sol & Luna</div>
+          <div class="stage-desc">
+            <strong style="font-family:'Cinzel',serif; font-size:0.7rem; letter-spacing:0.1em; color:var(--ink);">☉ Sol (Sun / Gold / Red King)</strong> — Consciousness, the ego, rational mind, the masculine pole. The fixed, solar principle seeking embodiment.<br><br>
+            <strong style="font-family:'Cinzel',serif; font-size:0.7rem; letter-spacing:0.1em; color:var(--ink);">☽ Luna (Moon / Silver / White Queen)</strong> — The unconscious, the soul, intuition, the feminine pole. Reflective, receptive, dream-bearing.<br><br>
+            Their <em>coniunctio</em> — the sacred marriage — produces the Rebis (the divine hermaphrodite), the Philosopher's Stone: the fully integrated Self, holding both poles without collapsing either.
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL 3: Media Decoding Key — FULL WIDTH -->
+      <div class="ref-panel full-width-panel">
+        <div class="ref-panel-title">Media & Art Decoding Key — Alchemical Archetypes in Story, Symbol & Image</div>
+        <table class="decode-table">
+          <thead>
+            <tr>
+              <th>Symbol / Motif</th>
+              <th>Alchemical Meaning</th>
+              <th>Stage</th>
+              <th>Examples in Media / Myth</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Descent / Falling</td>
+              <td>Entry into prima materia; ego dissolution into the unconscious</td>
+              <td style="color:#1a1208;font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:0.1em;">NIGREDO</td>
+              <td>Orpheus, Dante's Inferno, The Matrix (red pill), hero "hitting bottom"</td>
+            </tr>
+            <tr>
+              <td>Dark Forest / Cave</td>
+              <td>The unconscious; the shadow realm; undifferentiated psychic material</td>
+              <td style="color:#1a1208;font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:0.1em;">NIGREDO</td>
+              <td>Dante's dark wood, fairy tale forests, the underworld</td>
+            </tr>
+            <tr>
+              <td>Death & Burial</td>
+              <td>Putrefactio — the necessary dissolution before rebirth</td>
+              <td style="color:#1a1208;font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:0.1em;">NIGREDO</td>
+              <td>Christ's entombment, Osiris dismembered, the "dark night of the soul"</td>
+            </tr>
+            <tr>
+              <td>Mirror / Water Reflection</td>
+              <td>The albedo — seeing the unconscious / anima / animus for the first time</td>
+              <td style="color:#8a8272;font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:0.1em;">ALBEDO</td>
+              <td>Narcissus, Snow White's mirror, The Lady of the Lake</td>
+            </tr>
+            <tr>
+              <td>The Wise Guide / Mentor</td>
+              <td>Emergence of the Inner Teacher; beginning of citrinitas</td>
+              <td style="color:#7a5f1a;font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:0.1em;">CITRINITAS</td>
+              <td>Gandalf, Dumbledore, Tiresias, the Crone, the Hermit tarot card</td>
+            </tr>
+            <tr>
+              <td>Androgyne / Hermaphrodite</td>
+              <td>The Rebis — union of Sol and Luna; the integrated Self emerging</td>
+              <td style="color:#c9a53a;font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:0.1em;">RUBEDO</td>
+              <td>Tiresias, Hermaphroditus, Baphomet, David Bowie's Ziggy persona</td>
+            </tr>
+            <tr>
+              <td>Sacred Marriage / Union</td>
+              <td>Coniunctio — the reconciliation of opposites; wholeness achieved</td>
+              <td style="color:#8b2020;font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:0.1em;">RUBEDO</td>
+              <td>The king and queen reunited, Romeo & Juliet (tragic failure of coniunctio), mythic hieros gamos</td>
+            </tr>
+            <tr>
+              <td>The Phoenix / Bird Rising</td>
+              <td>Rebirth from the ashes of Nigredo; the completed Great Work</td>
+              <td style="color:#8b2020;font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:0.1em;">RUBEDO</td>
+              <td>The phoenix, Resurrection, Simba returning, Neo resurrecting in The Matrix</td>
+            </tr>
+            <tr>
+              <td>Gold / The Sun / Light</td>
+              <td>The Philosopher's Stone; solar consciousness fully embodied</td>
+              <td style="color:#c9a53a;font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:0.1em;">CITRINITAS/RUBEDO</td>
+              <td>The Grail, Excalibur drawn, the "golden age," dawn at the end of a film</td>
+            </tr>
+            <tr>
+              <td>The Ouroboros / Snake</td>
+              <td>Cyclical nature of the opus; solve et coagula; death feeding life</td>
+              <td style="color:#7a5f1a;font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:0.1em;">ALL STAGES</td>
+              <td>Jörmungandr, the Midgard Serpent, recurring narrative cycles, the eternal return</td>
+            </tr>
+            <tr>
+              <td>The Dragon / Shadow Monster</td>
+              <td>The prima materia in its threatening form; the unconquered shadow</td>
+              <td style="color:#1a1208;font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:0.1em;">NIGREDO</td>
+              <td>Every dragon in myth; the shadow villain that mirrors the hero's repressed self</td>
+            </tr>
+            <tr>
+              <td>Peacock's Tail (Cauda Pavonis)</td>
+              <td>Iridescent explosion of colors between Albedo and Rubedo — all possibilities before unity</td>
+              <td style="color:#c9a53a;font-family:'Cinzel',serif;font-size:0.65rem;letter-spacing:0.1em;">CITRINITAS</td>
+              <td>Psychedelic imagery, the "thousand faces" of the hero, mystical visions before resolution</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- PANEL 4: Symbol Key -->
+      <div class="ref-panel">
+        <div class="ref-panel-title">Symbol Glyph Key</div>
+        <div class="symbol-grid">
+          <div class="symbol-item">
+            <div class="symbol-glyph">☉</div>
+            <div class="symbol-name">Sol</div>
+            <div class="symbol-meaning">Gold, Sun, Conscious Ego, Red King</div>
+          </div>
+          <div class="symbol-item">
+            <div class="symbol-glyph">☽</div>
+            <div class="symbol-name">Luna</div>
+            <div class="symbol-meaning">Silver, Moon, Unconscious, White Queen</div>
+          </div>
+          <div class="symbol-item">
+            <div class="symbol-glyph">☿</div>
+            <div class="symbol-name">Mercury</div>
+            <div class="symbol-meaning">Spirit, Trickster, Mediator, Androgyne</div>
+          </div>
+          <div class="symbol-item">
+            <div class="symbol-glyph">🜍</div>
+            <div class="symbol-name">Sulfur</div>
+            <div class="symbol-meaning">Soul, Fire, Will, Active Masculine</div>
+          </div>
+          <div class="symbol-item">
+            <div class="symbol-glyph">🜔</div>
+            <div class="symbol-name">Salt</div>
+            <div class="symbol-meaning">Body, Earth, Fixed Feminine, Vessel</div>
+          </div>
+          <div class="symbol-item">
+            <div class="symbol-glyph">♄</div>
+            <div class="symbol-name">Saturn</div>
+            <div class="symbol-meaning">Lead, Time, Prima Materia, Shadow</div>
+          </div>
+          <div class="symbol-item">
+            <div class="symbol-glyph">⊕</div>
+            <div class="symbol-name">Squared Circle</div>
+            <div class="symbol-meaning">Spirit in matter; Philosopher's Stone</div>
+          </div>
+          <div class="symbol-item">
+            <div class="symbol-glyph" style="font-size:1.3rem;">🐍</div>
+            <div class="symbol-name">Ouroboros</div>
+            <div class="symbol-meaning">Solve et Coagula; eternal return</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL 5: The Operations -->
+      <div class="ref-panel">
+        <div class="ref-panel-title">The Seven Operations — Processes Within the Stages</div>
+        <table class="decode-table">
+          <thead>
+            <tr><th>Operation</th><th>Meaning</th><th>In Story</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Calcinatio</td><td>Burning away; fire reduces to ash</td><td>Trials by fire; loss; purification through suffering</td></tr>
+            <tr><td>Solutio</td><td>Dissolving in water; ego boundaries melt</td><td>Grief, surrender, baptism, the flood</td></tr>
+            <tr><td>Coagulatio</td><td>Crystallizing; taking new form</td><td>The moment of commitment; identity consolidating</td></tr>
+            <tr><td>Sublimatio</td><td>Rising as vapor; spiritualization</td><td>Transcendence, vision, ascent, death as liberation</td></tr>
+            <tr><td>Mortificatio</td><td>Ritual death of the old self</td><td>The "death" scene; betrayal; the dark night</td></tr>
+            <tr><td>Separatio</td><td>Distinguishing; sorting what is from what isn't</td><td>Exile, discernment, the ordeal of choice</td></tr>
+            <tr><td>Coniunctio</td><td>Sacred union of opposites</td><td>Integration, the sacred marriage, the return home</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <!-- AXIOMS -->
+    <div class="axioms-section">
+      <div class="axiom-row">
+        <div class="axiom"><strong>Hermetic Axiom</strong>"As above, so below; as within, so without."</div>
+        <div class="axiom"><strong>The Alchemical Paradox</strong>"The stone is found in the dung heap, the gold is hidden in lead."</div>
+        <div class="axiom"><strong>Solve et Coagula</strong>"Dissolve and coagulate — break apart to unite more truly."</div>
+        <div class="axiom"><strong>The Great Work</strong>"Visita Interiora Terrae — visit the interior of the earth and by rectifying, find the hidden stone."</div>
+      </div>
+    </div>
+
+    <div class="footer-text">
+      Magnum Opus · The Philosopher's Stone is not found — it is forged · All media is projection · All projection is the inner man seeking himself
+    </div>
+
+  </div><!-- /inner-content -->
+</div><!-- /outer-frame -->
+
+</body>
+</html>

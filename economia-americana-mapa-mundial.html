@@ -1,0 +1,1307 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LA ECONOMÍA AMERICANA — MAPA MUNDIAL</title>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Special+Elite&family=Permanent+Marker&family=Oswald:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --yellow: #FFD600;
+    --orange: #FF5500;
+    --cyan: #00FFCC;
+    --pink: #FF1744;
+    --green: #39FF14;
+    --purple: #B24BF3;
+    --white: #F5EFD8;
+    --ink: #1a0f00;
+    --border: 4px solid var(--black);
+    --shadow: 6px 6px 0px var(--black);
+    --shadow-lg: 10px 10px 0px var(--black);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Special Elite', monospace;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(255,214,0,0.04) 1px, transparent 1px);
+    background-size: 18px 18px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page { position: relative; z-index: 1; max-width: 960px; margin: 0 auto; padding: 0 20px 80px; }
+
+  /* ===== HERO ===== */
+  .hero {
+    background: var(--yellow);
+    border: var(--border);
+    border-width: 6px;
+    box-shadow: var(--shadow-lg);
+    margin: 24px 0 0;
+    padding: 40px 32px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 12px,
+      rgba(0,0,0,0.04) 12px,
+      rgba(0,0,0,0.04) 14px
+    );
+  }
+
+  .hero-label {
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: var(--black);
+    border: 3px solid var(--black);
+    display: inline-block;
+    padding: 4px 10px;
+    margin-bottom: 16px;
+    background: white;
+  }
+
+  .hero-title {
+    font-family: 'Bangers', cursive;
+    font-size: clamp(52px, 10vw, 96px);
+    color: var(--black);
+    line-height: 0.9;
+    letter-spacing: 2px;
+    position: relative;
+    z-index: 1;
+    text-shadow: 4px 4px 0 rgba(255,85,0,0.4);
+  }
+
+  .hero-subtitle {
+    font-family: 'Bangers', cursive;
+    font-size: clamp(18px, 4vw, 32px);
+    color: var(--orange);
+    letter-spacing: 3px;
+    margin-top: 4px;
+    position: relative;
+    z-index: 1;
+    -webkit-text-stroke: 1.5px var(--black);
+  }
+
+  .hero-desc {
+    margin-top: 20px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--ink);
+    max-width: 680px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-badge {
+    position: absolute;
+    top: 20px;
+    right: 24px;
+    background: var(--orange);
+    color: white;
+    font-family: 'Bangers', cursive;
+    font-size: 13px;
+    letter-spacing: 2px;
+    border: 3px solid var(--black);
+    padding: 6px 12px;
+    transform: rotate(3deg);
+    box-shadow: 3px 3px 0 var(--black);
+    z-index: 2;
+  }
+
+  .star-strip {
+    display: flex;
+    gap: 6px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+  .star-tag {
+    background: var(--black);
+    color: var(--yellow);
+    font-family: 'Bangers', cursive;
+    letter-spacing: 1px;
+    font-size: 12px;
+    padding: 3px 10px;
+  }
+
+  /* ===== SECCIONES ===== */
+  .section { margin-top: 32px; }
+
+  .section-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .section-num {
+    font-family: 'Bangers', cursive;
+    font-size: 48px;
+    color: var(--yellow);
+    -webkit-text-stroke: 3px var(--black);
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .section-title {
+    font-family: 'Bangers', cursive;
+    font-size: clamp(26px, 5vw, 42px);
+    letter-spacing: 2px;
+    color: var(--white);
+    -webkit-text-stroke: 1.5px var(--black);
+    line-height: 1;
+  }
+
+  .section-title span {
+    color: var(--cyan);
+    -webkit-text-stroke: 1.5px var(--black);
+  }
+
+  /* ===== CARDS ===== */
+  .card {
+    background: var(--white);
+    border: var(--border);
+    box-shadow: var(--shadow);
+    padding: 20px;
+    color: var(--ink);
+  }
+
+  .card-title {
+    font-family: 'Bangers', cursive;
+    font-size: 22px;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+  }
+
+  .card-body {
+    font-size: 13px;
+    line-height: 1.8;
+  }
+
+  /* ===== FACCIONES ===== */
+  .faction-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+
+  .faction {
+    border: 4px solid var(--black);
+    box-shadow: var(--shadow);
+    padding: 0;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .faction-header {
+    padding: 14px 16px 10px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .faction-icon { font-size: 36px; flex-shrink: 0; line-height: 1; }
+
+  .faction-name {
+    font-family: 'Bangers', cursive;
+    font-size: 20px;
+    letter-spacing: 2px;
+    line-height: 1.1;
+  }
+
+  .faction-tagline {
+    font-size: 10px;
+    font-family: 'Oswald', sans-serif;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 2px;
+    opacity: 0.8;
+  }
+
+  .faction-body {
+    background: rgba(255,255,255,0.95);
+    color: var(--ink);
+    padding: 12px 16px 14px;
+    font-size: 12.5px;
+    line-height: 1.7;
+    border-top: 3px solid var(--black);
+  }
+
+  .stat-row { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+
+  .stat {
+    border: 2px solid var(--black);
+    padding: 3px 8px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .f1 .faction-header { background: var(--pink); color: white; }
+  .f1 .stat { background: var(--pink); color: white; }
+  .f2 .faction-header { background: #001f5c; color: white; }
+  .f2 .stat { background: #001f5c; color: white; }
+  .f3 .faction-header { background: var(--orange); color: var(--black); }
+  .f3 .stat { background: var(--orange); color: var(--black); }
+  .f4 .faction-header { background: var(--cyan); color: var(--black); }
+  .f4 .stat { background: var(--cyan); color: var(--black); }
+  .f5 .faction-header { background: var(--purple); color: white; }
+  .f5 .stat { background: var(--purple); color: white; }
+  .f6 .faction-header { background: #2d2d2d; color: var(--yellow); }
+  .f6 .stat { background: #2d2d2d; color: var(--yellow); }
+
+  /* ===== BURBUJA ===== */
+  .speech-bubble {
+    background: var(--yellow);
+    border: 4px solid var(--black);
+    box-shadow: var(--shadow);
+    padding: 16px 20px;
+    position: relative;
+    margin: 20px 0;
+    max-width: 600px;
+  }
+
+  .speech-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -22px;
+    left: 32px;
+    width: 0; height: 0;
+    border-left: 16px solid transparent;
+    border-right: 0 solid transparent;
+    border-top: 22px solid var(--black);
+  }
+
+  .speech-bubble::before {
+    content: '';
+    position: absolute;
+    bottom: -16px;
+    left: 34px;
+    width: 0; height: 0;
+    border-left: 13px solid transparent;
+    border-right: 0 solid transparent;
+    border-top: 18px solid var(--yellow);
+    z-index: 1;
+  }
+
+  .bubble-text {
+    font-family: 'Permanent Marker', cursive;
+    font-size: 14px;
+    color: var(--ink);
+    line-height: 1.6;
+  }
+
+  /* ===== FLUJO ===== */
+  .flow-chain {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    align-items: stretch;
+    margin: 16px 0;
+  }
+
+  .flow-node {
+    flex: 1;
+    min-width: 120px;
+    background: var(--white);
+    border: 4px solid var(--black);
+    border-right: 0;
+    padding: 14px 12px;
+    position: relative;
+    text-align: center;
+  }
+
+  .flow-node:last-child { border-right: 4px solid var(--black); }
+
+  .flow-node::after {
+    content: '▶';
+    position: absolute;
+    right: -20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+    color: var(--black);
+    z-index: 5;
+  }
+
+  .flow-node:last-child::after { display: none; }
+
+  .flow-label {
+    font-family: 'Bangers', cursive;
+    font-size: 13px;
+    letter-spacing: 1px;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+
+  .flow-desc { font-size: 10.5px; color: #333; line-height: 1.5; }
+  .flow-node.accent { background: var(--yellow); }
+  .flow-node.hot { background: var(--orange); }
+  .flow-node.hot .flow-label, .flow-node.hot .flow-desc { color: white; }
+  .flow-node.danger { background: var(--pink); }
+  .flow-node.danger .flow-label, .flow-node.danger .flow-desc { color: white; }
+  .flow-node.cool { background: var(--cyan); }
+
+  /* ===== PIRÁMIDE ===== */
+  .pyramid-wrap { margin: 16px 0; position: relative; }
+
+  .pyr-tier { display: flex; justify-content: center; margin-bottom: 0; }
+
+  .pyr-block {
+    border: 4px solid var(--black);
+    text-align: center;
+    padding: 14px 20px;
+    position: relative;
+    box-shadow: var(--shadow);
+  }
+
+  .pyr-block .tier-label { font-family: 'Bangers', cursive; font-size: 18px; letter-spacing: 2px; }
+  .pyr-block .tier-sub { font-size: 10px; font-family: 'Oswald', sans-serif; letter-spacing: 2px; text-transform: uppercase; margin-top: 2px; opacity: 0.85; }
+  .pyr-block .tier-pct { font-family: 'Bangers', cursive; font-size: 28px; margin-top: 4px; -webkit-text-stroke: 1.5px var(--black); }
+  .pyr-block .tier-wealth { font-size: 11px; font-family: 'Oswald', sans-serif; margin-top: 2px; }
+
+  .tier-1 { width: 260px; background: var(--pink); color: white; }
+  .tier-2 { width: 390px; background: var(--orange); color: var(--black); }
+  .tier-3 { width: 520px; background: var(--yellow); color: var(--black); }
+  .tier-4 { width: 650px; background: #aaa; color: var(--black); }
+  .tier-5 { width: 780px; background: #555; color: white; }
+  .tier-6 { width: 910px; background: #222; color: var(--yellow); }
+
+  .pyr-label-right {
+    position: absolute;
+    right: -220px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 11px;
+    line-height: 1.5;
+    color: var(--white);
+    width: 210px;
+    text-align: left;
+  }
+
+  @media (max-width: 700px) { .pyr-label-right { display: none; } }
+
+  /* ===== TABLA ===== */
+  .compare-table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+
+  .compare-table th {
+    background: var(--black);
+    color: var(--yellow);
+    font-family: 'Bangers', cursive;
+    font-size: 16px;
+    letter-spacing: 2px;
+    padding: 12px 16px;
+    text-align: left;
+    border: 3px solid var(--black);
+  }
+
+  .compare-table td {
+    background: var(--white);
+    color: var(--ink);
+    padding: 10px 16px;
+    font-size: 12.5px;
+    border: 3px solid var(--black);
+    vertical-align: top;
+    line-height: 1.6;
+  }
+
+  .compare-table tr:nth-child(even) td { background: #f0e8d0; }
+  .compare-table td.bad { background: #ffe0e0; border-left: 5px solid var(--pink); }
+  .compare-table td.good { background: #d0ffe0; border-left: 5px solid var(--green); }
+  .compare-table td.label { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; background: var(--yellow); border: 3px solid var(--black); }
+
+  /* ===== CAJA DE REGLAS ===== */
+  .rule-box { border: 4px solid var(--black); margin: 10px 0; overflow: hidden; box-shadow: var(--shadow); }
+
+  .rule-head { padding: 10px 16px; display: flex; align-items: center; gap: 10px; }
+  .rule-head .num { font-family: 'Bangers', cursive; font-size: 28px; flex-shrink: 0; line-height: 1; -webkit-text-stroke: 1.5px var(--black); }
+  .rule-head .title { font-family: 'Bangers', cursive; font-size: 18px; letter-spacing: 1.5px; }
+
+  .rule-body {
+    padding: 12px 16px;
+    background: rgba(255,255,255,0.95);
+    color: var(--ink);
+    font-size: 12.5px;
+    line-height: 1.8;
+    border-top: 3px solid var(--black);
+  }
+
+  .rule-box.r-yellow .rule-head { background: var(--yellow); color: var(--black); }
+  .rule-box.r-orange .rule-head { background: var(--orange); color: white; }
+  .rule-box.r-cyan .rule-head { background: var(--cyan); color: var(--black); }
+  .rule-box.r-pink .rule-head { background: var(--pink); color: white; }
+  .rule-box.r-purple .rule-head { background: var(--purple); color: white; }
+  .rule-box.r-green .rule-head { background: var(--green); color: var(--black); }
+  .rule-box.r-dark .rule-head { background: #1a1a1a; color: var(--yellow); }
+
+  /* ===== CALLOUT ===== */
+  .callout {
+    padding: 14px 18px;
+    border: 4px solid var(--black);
+    margin: 16px 0;
+    box-shadow: var(--shadow);
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+
+  .callout-icon { font-size: 28px; flex-shrink: 0; }
+  .callout-text { font-size: 13px; line-height: 1.7; }
+  .callout-text strong { font-family: 'Oswald', sans-serif; letter-spacing: 1px; }
+  .callout.info { background: #001f5c; color: white; }
+  .callout.warn { background: var(--orange); color: var(--black); }
+  .callout.danger { background: var(--pink); color: white; }
+  .callout.tip { background: var(--green); color: var(--black); }
+  .callout.secret { background: var(--purple); color: white; }
+
+  /* ===== MECÁNICAS ===== */
+  .mechanic-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+  }
+
+  .mechanic { border: 4px solid var(--black); overflow: hidden; box-shadow: 4px 4px 0 var(--black); }
+
+  .mechanic-top {
+    padding: 10px 12px 8px;
+    font-family: 'Bangers', cursive;
+    font-size: 16px;
+    letter-spacing: 1.5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .mechanic-body {
+    background: var(--white);
+    color: var(--ink);
+    padding: 10px 12px;
+    font-size: 12px;
+    line-height: 1.7;
+    border-top: 3px solid var(--black);
+  }
+
+  .m-y .mechanic-top { background: var(--yellow); color: var(--black); }
+  .m-o .mechanic-top { background: var(--orange); color: white; }
+  .m-c .mechanic-top { background: var(--cyan); color: var(--black); }
+  .m-p .mechanic-top { background: var(--pink); color: white; }
+  .m-g .mechanic-top { background: var(--green); color: var(--black); }
+  .m-d .mechanic-top { background: #1a1a1a; color: var(--yellow); }
+  .m-pu .mechanic-top { background: var(--purple); color: white; }
+
+  /* ===== DIVISOR ===== */
+  .divider {
+    border: none;
+    border-top: 4px solid var(--yellow);
+    margin: 28px 0;
+    box-shadow: 0 4px 0 rgba(255,214,0,0.15);
+  }
+
+  /* ===== MOVIMIENTOS ===== */
+  .move-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 14px;
+    margin: 16px 0;
+  }
+
+  .move-card { border: 4px solid var(--black); box-shadow: var(--shadow); overflow: hidden; }
+
+  .move-top { padding: 10px 14px; display: flex; align-items: center; gap: 10px; }
+  .move-icon { font-size: 28px; }
+  .move-name { font-family: 'Bangers', cursive; font-size: 18px; letter-spacing: 1.5px; }
+  .move-tier { font-size: 9px; font-family: 'Oswald', sans-serif; letter-spacing: 2px; text-transform: uppercase; margin-top: 1px; opacity: 0.8; }
+
+  .move-body {
+    background: var(--white);
+    color: var(--ink);
+    padding: 10px 14px;
+    font-size: 12px;
+    line-height: 1.7;
+    border-top: 3px solid var(--black);
+  }
+
+  .move-risk { margin-top: 8px; display: flex; gap: 6px; flex-wrap: wrap; }
+
+  .risk-pill {
+    font-family: 'Oswald', sans-serif;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    border: 2px solid var(--black);
+    padding: 2px 7px;
+  }
+
+  .mv-1 .move-top { background: var(--green); color: var(--black); }
+  .mv-2 .move-top { background: var(--cyan); color: var(--black); }
+  .mv-3 .move-top { background: var(--yellow); color: var(--black); }
+  .mv-4 .move-top { background: var(--orange); color: white; }
+  .mv-5 .move-top { background: var(--pink); color: white; }
+  .mv-6 .move-top { background: var(--purple); color: white; }
+
+  /* ===== FOOTER ===== */
+  footer {
+    text-align: center;
+    padding: 40px 0;
+    font-family: 'Bangers', cursive;
+    font-size: 14px;
+    letter-spacing: 3px;
+    color: rgba(245,239,216,0.3);
+  }
+
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: #111; }
+  ::-webkit-scrollbar-thumb { background: var(--yellow); border: 2px solid #111; }
+
+  @keyframes pulse-border {
+    0%, 100% { box-shadow: var(--shadow); }
+    50% { box-shadow: 0 0 0 3px var(--yellow), var(--shadow); }
+  }
+
+  .hero { animation: pulse-border 4s ease-in-out infinite; }
+
+  .tag {
+    display: inline-block;
+    font-family: 'Oswald', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border: 2px solid currentColor;
+    padding: 2px 8px;
+    margin: 2px;
+  }
+
+  .big-quote {
+    border-left: 6px solid var(--yellow);
+    padding: 16px 20px;
+    margin: 20px 0;
+    background: rgba(255,214,0,0.06);
+  }
+
+  .big-quote p {
+    font-family: 'Permanent Marker', cursive;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--white);
+  }
+
+  .big-quote cite {
+    display: block;
+    margin-top: 8px;
+    font-size: 11px;
+    font-family: 'Oswald', sans-serif;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--yellow);
+    font-style: normal;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ===== HERO ===== -->
+  <div class="hero">
+    <div class="hero-badge">CLASIFICADO // DATOS PÚBLICOS</div>
+    <div class="hero-label">Guía de Campo de Teoría de Juegos · Vol. 001</div>
+    <h1 class="hero-title">LA ECONOMÍA<br>AMERICANA</h1>
+    <div class="hero-subtitle">MAPA MUNDIAL DEL JUGADOR</div>
+    <p class="hero-desc">
+      Esto no es un documento político. Es un análisis estructural — un desglose neutral de un sistema con reglas reales, facciones reales, y consecuencias reales para los jugadores que no entienden el tablero en el que están parados. Léelo como un mapa, no como un manifiesto. Al sistema no le importan tus sentimientos. Aprende las reglas y decide cómo juegas.
+    </p>
+    <div class="star-strip">
+      <div class="star-tag">★ FACCIONES</div>
+      <div class="star-tag">★ MOTOR MONETARIO</div>
+      <div class="star-tag">★ ARQUITECTURA FISCAL</div>
+      <div class="star-tag">★ PIRÁMIDE DE PODER</div>
+      <div class="star-tag">★ CAPTURA REGULATORIA</div>
+      <div class="star-tag">★ TRAMPA DE DEUDA</div>
+      <div class="star-tag">★ SALIDAS DEL SISTEMA</div>
+    </div>
+  </div>
+
+  <!-- ===== SECCIÓN 01 ===== -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">01</div>
+      <div class="section-title">LA <span>PREMISA BÁSICA</span></div>
+    </div>
+
+    <div class="callout info">
+      <div class="callout-icon">🎮</div>
+      <div class="callout-text">
+        <strong>ENCUADRE DE TEORÍA DE JUEGOS:</strong> El sistema económico americano funciona como un videojuego multijugador con posiciones de inicio asimétricas, información incompleta, y reglas escritas por — y frecuentemente reescritas por — los jugadores con las puntuaciones más altas. La mayoría entra al juego sin leer el manual. Los que sí lo leen juegan un juego completamente diferente al de todos los demás.
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px;">
+      <div class="card-title" style="color:var(--orange)">LAS MECÁNICAS CENTRALES</div>
+      <div class="card-body">
+        El juego corre sobre un solo motor: <strong>moneda fiduciaria respaldada por deuda</strong>. El dinero no existe primero para luego prestarse — los préstamos crean el dinero, y su pago lo destruye. Esto significa que toda la oferta monetaria requiere deuda constante para existir. El juego no puede funcionar si los jugadores no se endeudan. El sistema está diseñado para necesitar siempre más deuda de la que existe. Eso no es un error. Es la arquitectura.
+        <br><br>
+        Hay dos formas fundamentalmente diferentes de ganar: <strong>vender tu tiempo</strong> (trabajo) o <strong>ser dueño de cosas que generan dinero mientras duermes</strong> (activos). Las reglas tratan estos dos caminos de forma muy distinta — en términos de impuestos, protecciones legales y ventajas acumuladas. Entender esta diferencia es lo más importante que cualquier jugador puede aprender.
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ===== SECCIÓN 02: FACCIONES ===== -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">02</div>
+      <div class="section-title">LAS <span>FACCIONES</span></div>
+    </div>
+    <p style="font-size:13px; line-height:1.7; margin-bottom:16px; color:rgba(245,239,216,0.75)">Todo juego tiene facciones. Estos son los actores clave del sistema económico americano — no partidos políticos, sino grupos estructurales definidos por cómo generan poder y cómo lo protegen.</p>
+
+    <div class="faction-grid">
+
+      <div class="faction f1">
+        <div class="faction-header">
+          <div class="faction-icon">🏦</div>
+          <div>
+            <div class="faction-name">LA CLASE FINANCIERA</div>
+            <div class="faction-tagline">Top 0.1% · Dueños del Capital</div>
+          </div>
+        </div>
+        <div class="faction-body">
+          Multimillonarios, gestores de fondos de cobertura, firmas de capital privado y ejecutivos de megabancos. No ganan salarios — son dueños de capital en sistemas que generan rendimientos automáticamente. Su ingreso principal son las ganancias de capital, gravadas a un máximo federal del 20% versus hasta 37% para salarios. Usan la estrategia "Comprar, Pedir Prestado, Morir" para acceder a riqueza sin desencadenar eventos fiscales. Su influencia política no es exactamente corrupción — es acceso estructurado. <em>Las reglas se construyeron con sus abogados fiscales en la sala.</em>
+          <div class="stat-row">
+            <span class="stat">31% de toda la riqueza de EE.UU.</span>
+            <span class="stat">Ingreso por ganancias de capital</span>
+            <span class="stat">Tasa fiscal efectiva ~8% (Forbes 400)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="faction f2">
+        <div class="faction-header">
+          <div class="faction-icon">🏛️</div>
+          <div>
+            <div class="faction-name">LA RESERVA FEDERAL</div>
+            <div class="faction-tagline">Cuasi-Pública · La Impresora</div>
+          </div>
+        </div>
+        <div class="faction-body">
+          Legalmente es un organismo cuasi-gubernamental. Estructuralmente, los 12 Bancos de la Reserva Federal son propiedad de bancos miembros privados. La Fed fija tasas de interés, controla la oferta monetaria y puede crear dinero comprando activos. No necesita aprobación del Congreso para sus decisiones de política monetaria. Cuando la economía colapsa, la Fed compra activos (principalmente a los ricos) para estabilizar los mercados — inflando el valor de esos activos, lo que beneficia principalmente a quienes ya los poseen. Mandato oficial: estabilidad de precios y empleo máximo. Resultado observado: protección de precios de activos.
+          <div class="stat-row">
+            <span class="stat">Creada en 1913</span>
+            <span class="stat">Balance de $8.8T en su pico (2021)</span>
+            <span class="stat">Fija el precio del dinero</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="faction f3">
+        <div class="faction-header">
+          <div class="faction-icon">🏢</div>
+          <div>
+            <div class="faction-name">LA CLASE CORPORATIVA</div>
+            <div class="faction-tagline">Top 10% · Dueños de Negocios</div>
+          </div>
+        </div>
+        <div class="faction-body">
+          Desde pequeños empresarios hasta CEOs de multinacionales. Su herramienta principal es la <em>estructura legal de entidad</em> — LLCs, S-Corps, C-Corps — que crea una capa legal entre el ingreso personal y el empresarial, habilitando deducciones, depreciaciones y redistribución de ingresos a la que los asalariados no tienen acceso. Las corporaciones también financian cabildeo para proteger su posición en el mercado. La "puerta giratoria" entre agencias reguladoras y juntas corporativas significa que las reglas son efectivamente coescritas por las personas a las que se supone deben regular.
+          <div class="stat-row">
+            <span class="stat">Estructuras legales = herramientas fiscales</span>
+            <span class="stat">$3,500M en cabildeo/año</span>
+            <span class="stat">Redactan las reglas</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="faction f4">
+        <div class="faction-header">
+          <div class="faction-icon">🏘️</div>
+          <div>
+            <div class="faction-name">LA CLASE PROFESIONAL</div>
+            <div class="faction-tagline">Top 10–20% · Trabajo de Alto Sueldo</div>
+          </div>
+        </div>
+        <div class="faction-body">
+          Médicos, abogados, ingenieros, ejecutivos. Ganan salarios altos — y por ello pagan las tasas fiscales efectivas más altas de cualquier grupo. Un salario de $300K puede activar una tasa marginal del 37% más impuestos sobre nómina. Tienen <em>acceso a herramientas de construcción de riqueza</em> (401K, IRA, hipotecas, acciones como compensación) pero siguen siendo fundamentalmente dependientes de vender su tiempo. Muchos confunden ingresos altos con riqueza. La diferencia: el ingreso se detiene cuando ellos se detienen. La riqueza no.
+          <div class="stat-row">
+            <span class="stat">Tasa marginal del 37%</span>
+            <span class="stat">Acceso a herramientas de activos</span>
+            <span class="stat">Ingreso dependiente del tiempo</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="faction f5">
+        <div class="faction-header">
+          <div class="faction-icon">⚙️</div>
+          <div>
+            <div class="faction-name">LA CLASE TRABAJADORA</div>
+            <div class="faction-tagline">80% inferior · Vendedores de Tiempo</div>
+          </div>
+        </div>
+        <div class="faction-body">
+          La mayoría de los trabajadores americanos. Su activo principal es su tiempo — que se deprecia con la edad, la enfermedad y la automatización. Los salarios reales para este grupo apenas crecieron desde los años 70 mientras la productividad se duplicó, lo que significa que generan más valor por hora pero retienen menos. Pagan impuestos sobre nómina (Seguridad Social/Medicare) sobre el 100% de sus ingresos desde el primer dólar — un impuesto que los ultrarricos evitan en la mayor parte de sus ganancias. Su riqueza principal es el valor acumulado en su casa — la clase de activo con menos liquidez y mayor riesgo en recesiones.
+          <div class="stat-row">
+            <span class="stat">Salario → Sin ingreso pasivo</span>
+            <span class="stat">15.3% impuesto sobre nómina</span>
+            <span class="stat">Valor de vivienda = riqueza principal</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="faction f6">
+        <div class="faction-header">
+          <div class="faction-icon">🚫</div>
+          <div>
+            <div class="faction-name">LA ZONA NPC</div>
+            <div class="faction-tagline">20–50% inferior · Valor Neto Negativo</div>
+          </div>
+        </div>
+        <div class="faction-body">
+          Aquí es donde el sistema te mantiene cuando no entiendes el tablero. Patrimonio neto negativo: las deudas superan a los activos. El sistema de puntuación de crédito encarece la pobreza — mal crédito = tasas de interés más altas, primas de seguros más altas, menos opciones de vivienda. Los prestamistas abusivos llenan el vacío dejado por los bancos tradicionales. Esto no es un fracaso moral individual — es una trampa estructural donde el costo de ser pobre es más alto que el costo de ser rico. <em>El 28% de los hogares negros y el 26% de los latinos tenían riqueza nula o negativa en 2019.</em>
+          <div class="stat-row">
+            <span class="stat">Espiral de costos por deuda</span>
+            <span class="stat">Sin capital para invertir</span>
+            <span class="stat">Salidas: educación, negocio propio, activos</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ===== SECCIÓN 03: MOTOR MONETARIO ===== -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">03</div>
+      <div class="section-title">EL <span>MOTOR MONETARIO</span></div>
+    </div>
+    <p style="font-size:13px; line-height:1.7; margin-bottom:16px; color:rgba(245,239,216,0.75)">La mayoría cree que el dinero es una herramienta neutral. No lo es. El dinero es deuda. Entender cómo se crea cambia todo lo que entiendes sobre el juego.</p>
+
+    <div class="speech-bubble">
+      <div class="bubble-text">"El dinero no existe antes del préstamo. El préstamo ES el dinero. Cuando lo pagas, ese dinero deja de existir. El sistema requiere deuda perpetua para funcionar."</div>
+    </div>
+
+    <div style="margin-top:32px;">
+      <div class="flow-chain">
+        <div class="flow-node accent">
+          <div class="flow-label">GOB. GASTA</div>
+          <div class="flow-desc">El Tesoro emite bonos (pagarés) para financiar el gasto que supera la recaudación fiscal</div>
+        </div>
+        <div class="flow-node">
+          <div class="flow-label">BANCOS COMPRAN</div>
+          <div class="flow-desc">Los bancos comerciales compran los bonos del Tesoro</div>
+        </div>
+        <div class="flow-node cool">
+          <div class="flow-label">LA FED COMPRA</div>
+          <div class="flow-desc">La Reserva Federal compra esos bonos a los bancos — extiende cheques contra sí misma (sin límite)</div>
+        </div>
+        <div class="flow-node hot">
+          <div class="flow-label">DINERO NUEVO</div>
+          <div class="flow-desc">El banco ahora tiene reservas — presta múltiplos mediante banca fraccionaria</div>
+        </div>
+        <div class="flow-node danger">
+          <div class="flow-label">INFLACIÓN</div>
+          <div class="flow-desc">Más dinero persiguiendo los mismos bienes — el poder adquisitivo del dinero existente cae</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mechanic-strip" style="margin-top:20px;">
+      <div class="mechanic m-d">
+        <div class="mechanic-top">🖨️ DINERO FIDUCIARIO</div>
+        <div class="mechanic-body">Sin oro. Sin respaldo en materias primas. El valor del dólar está respaldado por la "plena fe y crédito" del gobierno de EE.UU. — es decir, confianza y dominación económica/militar. Desde 1971 (Shock Nixon), el dólar es puramente fiduciario. La Fed puede crear dinero con una tecla.</div>
+      </div>
+      <div class="mechanic m-o">
+        <div class="mechanic-top">🏦 RESERVA FRACCIONARIA</div>
+        <div class="mechanic-body">Cuando depositas $1,000, el banco guarda una fracción como reserva y presta el resto — creando dinero nuevo. Desde 2020, el requisito de reserva en EE.UU. es literalmente 0%. Los bancos están teóricamente limitados solo por requisitos de capital y deudores dispuestos a pedir préstamos.</div>
+      </div>
+      <div class="mechanic m-c">
+        <div class="mechanic-top">📈 FLEXIBILIZACIÓN CUANTITATIVA</div>
+        <div class="mechanic-body">Cuando las tasas llegan a cero y la economía aún necesita estímulo, la Fed compra activos (bonos, valores hipotecarios) directamente a bancos e instituciones financieras — inyectando efectivo al sistema. El balance de la Fed pasó de $4.2T a $8.8T durante el COVID. ¿Quién se beneficia más de que suban los precios de los activos? Los dueños de activos.</div>
+      </div>
+      <div class="mechanic m-p">
+        <div class="mechanic-top">💸 EL IMPUESTO INFLACIONARIO</div>
+        <div class="mechanic-body">Cada dólar impreso diluye el valor de cada dólar existente. Quienes guardan efectivo se empobrecen. Quienes tienen activos que se aprecian (acciones, bienes raíces) se enriquecen. La inflación es efectivamente una transferencia de riqueza de los ahorradores y asalariados hacia los dueños de activos. Es un impuesto que nadie votó.</div>
+      </div>
+    </div>
+
+    <div class="callout warn" style="margin-top:16px;">
+      <div class="callout-icon">⚠️</div>
+      <div class="callout-text">
+        <strong>IMPLICACIÓN PARA EL JUGADOR:</strong> Guardar efectivo a largo plazo es una posición perdedora por diseño. El juego castiga ahorrar en dólares. Premia ser dueño de activos productivos. Eso no es un accidente — es la estructura de incentivos construida dentro de un sistema monetario basado en deuda.
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ===== SECCIÓN 04: PIRÁMIDE ===== -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">04</div>
+      <div class="section-title">LA <span>PIRÁMIDE DE RIQUEZA</span></div>
+    </div>
+    <p style="font-size:13px; line-height:1.7; margin-bottom:20px; color:rgba(245,239,216,0.75)">Datos reales sobre quién posee qué. La concentración es más extrema de lo que la mayoría imagina — y se ha acelerado drásticamente desde 1980.</p>
+
+    <div class="pyramid-wrap">
+      <div class="pyr-tier">
+        <div class="pyr-block tier-1">
+          <div class="tier-label">ULTRA-RICOS</div>
+          <div class="tier-sub">Top 1% de hogares</div>
+          <div class="tier-pct" style="color:var(--yellow)">31%</div>
+          <div class="tier-wealth">de TODA la riqueza de EE.UU.</div>
+          <div class="pyr-label-right">Ingreso principal: ganancias de capital, dividendos, capital empresarial. Usan Comprar-Pedir Prestado-Morir. Tasa fiscal efectiva frecuentemente menor a la clase media.</div>
+        </div>
+      </div>
+      <div class="pyr-tier">
+        <div class="pyr-block tier-2">
+          <div class="tier-label">RICOS</div>
+          <div class="tier-sub">Top 1–10%</div>
+          <div class="tier-pct">38%</div>
+          <div class="tier-wealth">de toda la riqueza de EE.UU.</div>
+          <div class="pyr-label-right">Mezcla de salarios altos + propiedad de activos. Acceso a estructuras fiscalmente ventajosas. Mercado de valores como vehículo principal.</div>
+        </div>
+      </div>
+      <div class="pyr-tier">
+        <div class="pyr-block tier-3">
+          <div class="tier-label">CLASE PROFESIONAL</div>
+          <div class="tier-sub">Top 10–20%</div>
+          <div class="tier-pct">17%</div>
+          <div class="tier-wealth">de toda la riqueza de EE.UU.</div>
+          <div class="pyr-label-right">Ingresos altos, impuestos altos. Valor acumulado en vivienda y cuentas de retiro como principales vehículos de riqueza. Vulnerables a la inflación de estilo de vida.</div>
+        </div>
+      </div>
+      <div class="pyr-tier">
+        <div class="pyr-block tier-4">
+          <div class="tier-label">CLASE MEDIA</div>
+          <div class="tier-sub">Percentil 20–50</div>
+          <div class="tier-pct">10%</div>
+          <div class="tier-wealth">de toda la riqueza de EE.UU.</div>
+          <div class="pyr-label-right">Activo principal: valor acumulado en vivienda. Poca o ninguna exposición al mercado de valores. Una crisis mayor los aleja varios niveles.</div>
+        </div>
+      </div>
+      <div class="pyr-tier">
+        <div class="pyr-block tier-5">
+          <div class="tier-label">TRABAJADORES POBRES</div>
+          <div class="tier-sub">Percentil 10–20 inferior</div>
+          <div class="tier-pct">3%</div>
+          <div class="tier-wealth">de toda la riqueza de EE.UU.</div>
+          <div class="pyr-label-right">Quincena a quincena. Sin activos de inversión. Fondo de emergencia generalmente menor a $400.</div>
+        </div>
+      </div>
+      <div class="pyr-tier">
+        <div class="pyr-block tier-6">
+          <div class="tier-label">PATRIMONIO NETO NEGATIVO</div>
+          <div class="tier-sub">20% inferior — En números rojos</div>
+          <div class="tier-pct" style="color:var(--pink)">-1%</div>
+          <div class="tier-wealth">Deben más de lo que poseen</div>
+          <div class="pyr-label-right">La deuda supera a los activos. La trampa de crédito amplifica los costos. La zona NPC.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="big-quote" style="margin-top:24px;">
+      <p>"El 1% más rico posee más riqueza que el 90% inferior combinado. El 10% más rico posee más de dos tercios de toda la riqueza de EE.UU. El 50% inferior posee el 2.5%."</p>
+      <cite>— Datos de la Reserva Federal, Q1 2024</cite>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ===== SECCIÓN 05: CÓDIGO FISCAL ===== -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">05</div>
+      <div class="section-title">LA <span>HOJA DE TRUCOS FISCAL</span></div>
+    </div>
+    <p style="font-size:13px; line-height:1.7; margin-bottom:16px; color:rgba(245,239,216,0.75)">El código fiscal no es un sistema neutral. Fue escrito a lo largo de décadas con la participación activa de quienes se benefician de su estructura. Las reglas son radicalmente distintas dependiendo de cómo ganas tu dinero.</p>
+
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>FACTOR</th>
+          <th>INGRESO POR TRABAJO (Salario)</th>
+          <th>INGRESO POR CAPITAL (Activos)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="label">Tasa Federal</td>
+          <td class="bad">10–37% progresiva (en cada dólar)</td>
+          <td class="good">0–20% tasa de ganancias de capital a largo plazo</td>
+        </tr>
+        <tr>
+          <td class="label">Impuesto sobre Nómina</td>
+          <td class="bad">15.3% (SS + Medicare) sobre el 100% del salario desde el primer dólar</td>
+          <td class="good">$0 sobre ganancias de capital, dividendos o ingresos por renta</td>
+        </tr>
+        <tr>
+          <td class="label">Cuándo se paga</td>
+          <td class="bad">En cada quincena — sin opción</td>
+          <td class="good">Solo cuando se vende el activo — completamente discrecional</td>
+        </tr>
+        <tr>
+          <td class="label">Ganancias No Realizadas</td>
+          <td class="bad">No aplica — los salarios siempre son realizados</td>
+          <td class="good">No se gravan hasta la venta — pueden crecer décadas sin impuestos</td>
+        </tr>
+        <tr>
+          <td class="label">Disposición al Morir</td>
+          <td class="bad">Ninguna — el salario se detiene cuando dejas de trabajar</td>
+          <td class="good">"Base escalonada" — los herederos reciben los activos al valor de mercado actual, borrando TODA la deuda fiscal acumulada por ganancias de capital</td>
+        </tr>
+        <tr>
+          <td class="label">Endeudamiento</td>
+          <td class="bad">La deuda de consumo es cara y no es deducible</td>
+          <td class="good">Pide prestado contra activos — no se activa impuesto sobre ingreso, el interés a menudo es deducible</td>
+        </tr>
+        <tr>
+          <td class="label">Estructura Empresarial</td>
+          <td class="bad">Acceso limitado a deducciones</td>
+          <td class="good">LLC/Corp habilita deducciones por gastos, depreciación y redistribución de ingresos</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout secret" style="margin-top:16px;">
+      <div class="callout-icon">🔓</div>
+      <div class="callout-text">
+        <strong>LA ESTRATEGIA COMPRAR-PEDIR PRESTADO-MORIR:</strong> Los jugadores ultrarricos nunca venden. Compran activos que se aprecian → piden prestado contra ellos a tasas bajas (los préstamos no generan impuesto sobre ingreso) → viven del dinero prestado → mueren → los herederos reciben los activos con base escalonada (borrando TODA la deuda fiscal de ganancias de capital acumulada de por vida). El Forbes 400 pagó una tasa fiscal efectiva promedio de <strong>8.2%</strong> entre 2010–2018 usando esta y estrategias similares. Un trabajador de clase media paga 22–32% sobre todo.
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ===== SECCIÓN 06: CAPTURA REGULATORIA ===== -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">06</div>
+      <div class="section-title">LA <span>MECÁNICA DE REDACTAR REGLAS</span></div>
+    </div>
+    <p style="font-size:13px; line-height:1.7; margin-bottom:16px; color:rgba(245,239,216,0.75)">La captura regulatoria es la capa meta. Es cómo las reglas mismas se escriben y reescriben para proteger las estructuras de poder existentes.</p>
+
+    <div class="rule-box r-orange">
+      <div class="rule-head"><span class="num">◈</span><span class="title">LA PUERTA GIRATORIA</span></div>
+      <div class="rule-body">
+        Los reguladores gubernamentales y los lobistas corporativos intercambian roles libremente. Un ejecutivo de Goldman Sachs se convierte en Secretario del Tesoro. Una directora de la EPA se convierte en lobista petroquímica. Un comisionado de la FCC aprueba una fusión de Comcast — y cuatro meses después toma un trabajo en Comcast. El ciclo es legal y endémico. Casi dos tercios de los legisladores retirados recientemente terminan en roles que influyen en políticas públicas. El resultado: las agencias diseñadas para proteger al público están compuestas por personas cuyo interés profesional a largo plazo es la industria que se supone deben regular.
+      </div>
+    </div>
+
+    <div class="rule-box r-pink" style="margin-top:12px;">
+      <div class="rule-head"><span class="num">◈</span><span class="title">EL CABILDEO COMO REDACCIÓN DE LEYES</span></div>
+      <div class="rule-body">
+        En 2020 se gastaron más de $15 mil millones en campañas electorales — más de $100 por voto. El economista Nobel George Stigler acuñó la teoría de la captura regulatoria en 1971: las industrias reguladas casi siempre capturarán a sus reguladores porque tienen mayores intereses en los resultados que el público difuso. Martin Gilens y Benjamin Page (Princeton, 2014) encontraron que el impacto estadístico del ciudadano promedio en los resultados de política pública es esencialmente cero. Las élites económicas e intereses organizados determinan los resultados. "Democracia por coincidencia" — cuando la política se alinea con la voluntad pública, es porque también se alineó con los intereses de la élite.
+      </div>
+    </div>
+
+    <div class="rule-box r-purple" style="margin-top:12px;">
+      <div class="rule-head"><span class="num">◈</span><span class="title">ASIMETRÍA DE INFORMACIÓN COMO PODER</span></div>
+      <div class="rule-body">
+        Las industrias reguladas frecuentemente poseen los datos y la experiencia que los reguladores necesitan para hacer su trabajo. Esto crea dependencia estructural: la FCC necesita expertos en telecomunicaciones, que mayormente son ex-empleados de telecomunicaciones. La SEC necesita expertos financieros, que mayormente son ex-empleados de Wall Street. Incluso los reguladores bien intencionados terminan trabajando con una visión del mundo industrial integrada en su análisis. La captura no requiere sobornos. Ocurre a través de supuestos compartidos.
+      </div>
+    </div>
+
+    <div class="callout warn" style="margin-top:16px;">
+      <div class="callout-icon">🎯</div>
+      <div class="callout-text">
+        <strong>NOTA PARA EL JUGADOR:</strong> Las reglas no están rotas. Funcionan exactamente como fueron diseñadas — por las personas que se benefician de ellas. Entender esto no es cinismo; es claridad. El juego tiene reglas. No puedes cambiarlas desde tu nivel actual. Sin embargo, puedes entender cuáles te protegen y cuáles necesitas navegar.
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ===== SECCIÓN 07: TRAMPA DE DEUDA ===== -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">07</div>
+      <div class="section-title">LA <span>CUADRÍCULA DE LA TRAMPA DE DEUDA</span></div>
+    </div>
+    <p style="font-size:13px; line-height:1.7; margin-bottom:16px; color:rgba(245,239,216,0.75)">El sistema de crédito y deuda funciona como una compuerta. Controla el acceso a vivienda, empleo, capital y oportunidad — y está estructuralmente sesgado en contra de quienes comienzan con menos.</p>
+
+    <div class="mechanic-strip">
+      <div class="mechanic m-p">
+        <div class="mechanic-top">💳 EL DISEÑO DEL BURÓ DE CRÉDITO</div>
+        <div class="mechanic-body">El sistema FICO premia tener y usar deuda — no evitarla. Quien ahorra todo su dinero no tiene puntuación. Quien paga todas sus deudas a veces ve caer su puntuación. 150 millones de americanos tienen crédito deficiente o nulo. El sistema es opaco por diseño: los algoritmos son propietarios, 1 de cada 5 americanos tiene un error material en su reporte, y disputar errores es responsabilidad total del consumidor.</div>
+      </div>
+      <div class="mechanic m-o">
+        <div class="mechanic-top">🔄 EL IMPUESTO A LA POBREZA</div>
+        <div class="mechanic-body">Mal crédito = tasas de interés más altas en todo. Tasas más altas = menos dinero para ahorrar. Menos ahorros = más dependencia de deuda. Más deuda = mayor costo de vida. Mayor costo de vida = menos ahorro. Es una espiral diseñada. Los consumidores de bajos ingresos también subsidian los programas de recompensas de las tarjetas de crédito de los ricos a través de las comisiones a comerciantes — una transferencia "Robin Hood al revés" documentada por Brookings.</div>
+      </div>
+      <div class="mechanic m-d">
+        <div class="mechanic-top">🏠 ARRENDATARIO vs PROPIETARIO</div>
+        <div class="mechanic-body">Los arrendatarios pagan renta — que construye el capital del arrendador y no genera ningún beneficio en su historial crediticio. Los propietarios pagan hipotecas — que construyen capital propio Y crédito Y frecuentemente califican para deducciones de intereses hipotecarios. El sistema literalmente no cuenta los pagos de renta como historial crediticio en la mayoría de los casos, mientras cuenta completamente los pagos de hipoteca. Invisibiliza la vida en efectivo.</div>
+      </div>
+      <div class="mechanic m-pu">
+        <div class="mechanic-top">📋 CRÉDITO FUERA DE LOS PRÉSTAMOS</div>
+        <div class="mechanic-body">Mal crédito te cuesta empleos (los empleadores lo usan en contrataciones), vivienda (los arrendadores lo usan en solicitudes) y seguros (primas más altas). Una emergencia médica que genera deuda puede costarte el trabajo que podría pagar esa deuda. El ciclo vicioso va más allá de las finanzas hacia todos los ámbitos de la vida. Por eso la desigualdad crediticia es un determinante social de salud y oportunidad.</div>
+      </div>
+    </div>
+
+    <div class="big-quote" style="margin-top:20px;">
+      <p>"Una buena puntuación de crédito se siente como un pasaporte a la libertad financiera — pero en realidad mide tu disposición a endeudarte y alimentar los márgenes de ganancia del sistema bancario."</p>
+      <cite>— Jay Fleischman, Abogado de Deuda del Consumidor</cite>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ===== SECCIÓN 08: CAPA META ===== -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">08</div>
+      <div class="section-title">LA <span>CAPA META</span> — Por Qué el Sistema Se Sostiene</div>
+    </div>
+    <p style="font-size:13px; line-height:1.7; margin-bottom:16px; color:rgba(245,239,216,0.75)">Sistemas tan desiguales como este normalmente colapsan o se reforman. El sistema americano ha sobrevivido porque varios mecanismos mantienen su estabilidad — no solo por la fuerza, sino a través de narrativa, estructura y consentimiento manufacturado.</p>
+
+    <div class="rule-box r-yellow">
+      <div class="rule-head"><span class="num">①</span><span class="title">EL MITO DE LA MERITOCRACIA</span></div>
+      <div class="rule-body">
+        La narrativa cultural dominante sostiene que la riqueza refleja virtud personal y trabajo duro. Un estudio de 2011 encontró que los americanos subestiman dramáticamente la desigualdad de riqueza — y preferirían una distribución mucho más equitativa. El mito es funcional: evita que el fondo del sistema identifique las causas estructurales de su posición, convirtiendo la crítica estructural en fracaso personal. Los jugadores que internalizan "soy pobre porque no he trabajado lo suficiente" permanecen en la zona NPC más tiempo que quienes entienden el tablero.
+      </div>
+    </div>
+
+    <div class="rule-box r-cyan" style="margin-top:12px;">
+      <div class="rule-head"><span class="num">②</span><span class="title">CAPTURA DEL SISTEMA BIPARTIDISTA</span></div>
+      <div class="rule-body">
+        Ambos partidos principales reciben financiamiento sustancial de intereses financieros y corporativos. La Ventana de Overton — el rango de políticas consideradas políticamente viables — está moldeada por hacia dónde fluye el dinero de los donantes. Políticas con 70–80% de apoyo público (reforma de precios de medicamentos, mayores impuestos a las ganancias de capital, mayor enforcement antimonopolio) frecuentemente mueren en comité porque enfrentan oposición organizada y bien financiada. El sistema bipartidista crea la ilusión de elección mientras estructuralmente impide cambios que amenacen los intereses de la élite.
+      </div>
+    </div>
+
+    <div class="rule-box r-dark" style="margin-top:12px;">
+      <div class="rule-head"><span class="num">③</span><span class="title">EL CICLO DE RETROALIMENTACIÓN DE INFLACIÓN DE ACTIVOS</span></div>
+      <div class="rule-body">
+        Cuando la Fed baja tasas o imprime dinero, infla los precios de los activos (acciones, bienes raíces). El 10% más rico posee más de dos tercios de todas las acciones. Entonces la política monetaria que se vende como "estímulo económico" principalmente enriquece a quienes ya tienen más. Mientras tanto, la inflación en bienes y servicios golpea más duro a los salarios de la clase trabajadora. Cada crisis desde 2008 ha seguido este patrón: los activos se recuperan rápido (porque la Fed los protege), los salarios se recuperan lento o no se recuperan. La brecha de riqueza se amplía en cada recesión.
+      </div>
+    </div>
+
+    <div class="rule-box r-orange" style="margin-top:12px;">
+      <div class="rule-head"><span class="num">④</span><span class="title">LA ARQUITECTURA DE LA BRECHA RACIAL DE RIQUEZA</span></div>
+      <div class="rule-body">
+        La brecha racial de riqueza no es accidental — es estructural y central al sistema. Las políticas que sistemáticamente excluyeron a familias negras y latinas de la propiedad de vivienda (redlining), los beneficios del GI Bill, y el crédito empresarial durante las décadas de construcción de riqueza de los 40–70 crearon una desventaja acumulada que nunca ha sido corregida. La brecha de riqueza entre familias blancas y negras casi se triplicó entre 1984 y 2009 solo. Los hogares blancos poseen el 84.2% de toda la riqueza de EE.UU. siendo el 66% de los hogares. Esto es producto de políticas específicas — no de fracaso personal — y se mantiene por las mismas dinámicas estructurales que mantienen a todos los americanos de menor riqueza en su lugar, con capas adicionales de discriminación encima.
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ===== SECCIÓN 09: SALIDAS ===== -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">09</div>
+      <div class="section-title"><span>SALIDAS DEL SISTEMA</span> — Movimientos Disponibles</div>
+    </div>
+    <p style="font-size:13px; line-height:1.7; margin-bottom:16px; color:rgba(245,239,216,0.75)">
+      Este es el propósito real de la guía del tercero neutral. El sistema existe. Moralizarlo no cambia tu posición. Estos son los movimientos estructurales disponibles para jugadores que entienden el tablero. Ordenados por accesibilidad — no por cuál es más lucrativo.
+    </p>
+
+    <div class="move-grid">
+
+      <div class="move-card mv-1">
+        <div class="move-top">
+          <div class="move-icon">🧮</div>
+          <div>
+            <div class="move-name">EDUCACIÓN FINANCIERA</div>
+            <div class="move-tier">NIVEL 1 — Sin Costo de Entrada</div>
+          </div>
+        </div>
+        <div class="move-body">
+          Entiende el interés compuesto — tanto como arma en tu contra (deuda) como herramienta a tu favor (inversión). Aprende la diferencia entre ingreso y riqueza. Entiende tu tramo fiscal y cómo minimizar tu exposición legalmente. La mayoría de los jugadores operan todo el juego sin entender las reglas básicas. Este es el primer desbloqueo.
+          <div class="move-risk">
+            <span class="risk-pill" style="background:var(--green); color:var(--black)">Riesgo Bajo</span>
+            <span class="risk-pill" style="background:var(--cyan)">Alto Apalancamiento</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="move-card mv-2">
+        <div class="move-top">
+          <div class="move-icon">🏦</div>
+          <div>
+            <div class="move-name">ELIMINACIÓN DE DEUDA</div>
+            <div class="move-tier">NIVEL 1 — Movimiento Defensivo</div>
+          </div>
+        </div>
+        <div class="move-body">
+          La deuda de consumo con interés alto (tarjetas de crédito al 20–30%) es una aspiradora de riqueza. Eliminarla es un rendimiento garantizado libre de impuestos igual a la tasa de interés. Cada dólar de deuda al 24% pagado es un rendimiento del 24%. Ninguna inversión supera consistentemente ese rendimiento ajustado al riesgo. Este movimiento libera flujo de efectivo para los movimientos ofensivos que siguen.
+          <div class="move-risk">
+            <span class="risk-pill" style="background:var(--green); color:var(--black)">Riesgo Bajo</span>
+            <span class="risk-pill" style="background:var(--yellow); color:var(--black)">Movimiento Previo</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="move-card mv-2">
+        <div class="move-top">
+          <div class="move-icon">📈</div>
+          <div>
+            <div class="move-name">FONDOS ÍNDICE</div>
+            <div class="move-tier">NIVEL 2 — Entrada a la Clase de Activos</div>
+          </div>
+        </div>
+        <div class="move-body">
+          El punto de acceso más simple a la propiedad de activos. Los fondos índice del S&P 500 han retornado históricamente ~10% anual antes de inflación. Una cuenta Roth IRA (crecimiento libre de impuestos) es el vehículo fiscal más accesible sin una estructura empresarial. $500/mes invertidos durante 30 años al 8% compuesto = ~$740,000. Así es como la Clase Profesional construye riqueza lentamente.
+          <div class="move-risk">
+            <span class="risk-pill" style="background:var(--yellow); color:var(--black)">Riesgo Medio</span>
+            <span class="risk-pill" style="background:var(--cyan)">Juego Largo</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="move-card mv-3">
+        <div class="move-top">
+          <div class="move-icon">🏠</div>
+          <div>
+            <div class="move-name">PROPIEDAD DE VIVIENDA</div>
+            <div class="move-tier">NIVEL 2 — Ahorro Forzoso + Apalancamiento</div>
+          </div>
+        </div>
+        <div class="move-body">
+          Históricamente el principal vehículo de riqueza de la clase media. El apalancamiento (controlas un activo de $300K con $30K de enganche) amplifica tanto las ganancias como las pérdidas. A diferencia de la renta, los pagos construyen capital propio. El interés frecuentemente es deducible. El riesgo: ilíquido, dependiente del mercado local, y la crisis de 2008 demostró que puede colapsar. Aun así: los propietarios construyen más riqueza que los arrendatarios en casi todos los estudios a largo plazo.
+          <div class="move-risk">
+            <span class="risk-pill" style="background:var(--yellow); color:var(--black)">Riesgo Medio</span>
+            <span class="risk-pill" style="background:var(--orange); color:white">Ilíquido</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="move-card mv-4">
+        <div class="move-top">
+          <div class="move-icon">🏗️</div>
+          <div>
+            <div class="move-name">ENTIDAD EMPRESARIAL</div>
+            <div class="move-tier">NIVEL 3 — Acceso a Reglas Corporativas</div>
+          </div>
+        </div>
+        <div class="move-body">
+          Formar una LLC o S-Corp desbloquea las mismas estructuras de deducción disponibles para corporaciones — gastos empresariales, depreciación, cuentas de retiro con límites mayores (SEP IRA: hasta $66K/año vs $7K para IRA). Este es el mayor desbloqueo fiscal disponible para la mayoría de personas. Incluso un negocio secundario operado como LLC cambia lo que es deducible.
+          <div class="move-risk">
+            <span class="risk-pill" style="background:var(--orange); color:white">Riesgo Medio-Alto</span>
+            <span class="risk-pill" style="background:var(--purple); color:white">Apalancamiento Fiscal</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="move-card mv-4">
+        <div class="move-top">
+          <div class="move-icon">📊</div>
+          <div>
+            <div class="move-name">ACTIVOS QUE GENERAN INGRESO</div>
+            <div class="move-tier">NIVEL 3 — Ingreso Pasivo</div>
+          </div>
+        </div>
+        <div class="move-body">
+          Propiedades en renta, acciones de dividendos, regalías, productos digitales, REITs. El objetivo: ingreso que llega sin intercambiar tiempo. Cada unidad de ingreso pasivo reduce tu dependencia del trabajo. El tratamiento fiscal generalmente es más favorable que el de los salarios. Esta es la transición de la Clase Trabajadora a la Clase de Activos — la frontera de clase más significativa del juego.
+          <div class="move-risk">
+            <span class="risk-pill" style="background:var(--orange); color:white">Requiere Capital</span>
+            <span class="risk-pill" style="background:var(--green); color:var(--black)">Escala</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="move-card mv-5">
+        <div class="move-top">
+          <div class="move-icon">📉</div>
+          <div>
+            <div class="move-name">TRADING CON VENTAJA</div>
+            <div class="move-tier">NIVEL 3–4 — Alta Habilidad, Alto Riesgo</div>
+          </div>
+        </div>
+        <div class="move-body">
+          El camino que ya estás recorriendo. Una ventaja definida, probada retroactivamente — no una intuición, un sistema. Las ganancias de capital a corto plazo se gravan como ingreso ordinario, por lo que la ventaja fiscal de las ganancias de capital aplica principalmente a posiciones mantenidas más de un año. La asimetría: el 80–90% de los traders minoristas no mantienen rentabilidad. Los que sí tienen una ventaja documentada, gestión de riesgo estricta y sistemas psicológicos para ejecutar bajo presión.
+          <div class="move-risk">
+            <span class="risk-pill" style="background:var(--pink); color:white">Alto Riesgo</span>
+            <span class="risk-pill" style="background:var(--yellow); color:var(--black)">Alto Techo de Habilidad</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="move-card mv-6">
+        <div class="move-top">
+          <div class="move-icon">⚡</div>
+          <div>
+            <div class="move-name">PROPIEDAD DE CAPITAL</div>
+            <div class="move-tier">NIVEL 4 — Juega con Reglas Diferentes</div>
+          </div>
+        </div>
+        <div class="move-body">
+          Fundar o adquirir capital en un negocio — especialmente uno que escala sin tu tiempo — es como la mayoría de los ricos realmente se enriquecieron. El capital en una empresa en crecimiento genera ganancias no realizadas (sin impuesto hasta la venta), puede usarse como garantía para préstamos, y puede transferirse a herederos con base escalonada. Este movimiento permite acceder completamente a las reglas del ingreso por capital en lugar de las del ingreso por trabajo.
+          <div class="move-risk">
+            <span class="risk-pill" style="background:var(--pink); color:white">Riesgo Muy Alto</span>
+            <span class="risk-pill" style="background:var(--purple); color:white">Mayor Potencial</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ===== CIERRE ===== -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">∞</div>
+      <div class="section-title">EL <span>VEREDICTO DEL TERCERO NEUTRAL</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title" style="color:var(--orange)">LO QUE MUESTRA EL MAPA</div>
+      <div class="card-body">
+        El sistema económico americano no es aleatorio. Es un juego estructurado con reglas asimétricas, posiciones de inicio asimétricas, y ventajas acumuladas para quienes ya van adelante. Las reglas fueron construidas por y para la Clase de Activos. Han sido reforzadas a través de la captura regulatoria, el financiamiento político y la narrativa cultural.
+        <br><br>
+        El sistema no es imposible de navegar. Pero requiere entender las reglas reales — no la versión de la clase de educación cívica. Los jugadores que mejor lo hacen no son necesariamente más inteligentes o más virtuosos que quienes no. Entienden el tablero.
+        <br><br>
+        <strong>Las condiciones innegociables para cualquier jugador serio:</strong>
+        <br>
+        <span class="tag">Eliminar primero la deuda de alto interés</span>
+        <span class="tag">Entender las diferencias fiscales por tipo de ingreso</span>
+        <span class="tag">Construir activos, no solo ingresos</span>
+        <span class="tag">Usar estructuras legales para acceder a reglas corporativas</span>
+        <span class="tag">Desarrollar habilidades que componen valor</span>
+        <span class="tag">Nunca guardar efectivo como estrategia a largo plazo</span>
+        <br><br>
+        La posición más peligrosa en este juego no es la pobreza — es la ilusión de seguridad. La clase media que gana bien pero no posee activos está a un evento médico, un despido, un divorcio de caer varios niveles. El juego premia la propiedad. Todo lo demás es rentar tu posición.
+      </div>
+    </div>
+
+    <div class="speech-bubble" style="margin-top:24px; border-color:var(--orange); background:var(--orange);">
+      <div class="bubble-text" style="color:var(--black)">"Naciste en el juego cuando ya estaba empezado. El tablero está inclinado. Los dados están cargados. Y el desconocimiento de las reglas no es defensa contra sus consecuencias. Así que lee el mapa. Luego decide cómo juegas."</div>
+    </div>
+  </div>
+
+  <footer>
+    LA ECONOMÍA AMERICANA: MAPA MUNDIAL DEL JUGADOR — GUÍA DE CAMPO VOL. 001<br>
+    BASADO EN DATOS PÚBLICOS · CON FINES EDUCATIVOS · FICHA DE PERSONAJE PRÓXIMAMENTE
+  </footer>
+
+</div>
+</body>
+</html>

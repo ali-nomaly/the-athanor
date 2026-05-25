@@ -1,0 +1,1399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CORDYCEPS PROTOCOL // NERV INTERNAL DOSSIER</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700;800&family=Bodoni+Moda:ital,wght@0,400;0,700;0,900;1,400&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --signal: #C7FF43;
+  --signal-dim: #8FB82E;
+  --signal-deep: #4D6618;
+  --signal-glow: rgba(199, 255, 67, 0.45);
+  --void: #07090A;
+  --void-2: #0D1012;
+  --void-3: #14181B;
+  --bone: #E8E6DD;
+  --bone-dim: #888375;
+  --alert: #FF4D2E;
+  --warn: #FFB23E;
+  --line: rgba(199, 255, 67, 0.18);
+  --line-soft: rgba(199, 255, 67, 0.08);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  background: var(--void);
+  color: var(--bone);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 0%, rgba(199, 255, 67, 0.08), transparent 60%),
+    radial-gradient(ellipse 60% 60% at 80% 100%, rgba(199, 255, 67, 0.04), transparent 60%),
+    repeating-linear-gradient(0deg, transparent 0, transparent 3px, rgba(199, 255, 67, 0.018) 3px, rgba(199, 255, 67, 0.018) 4px);
+  pointer-events: none;
+  z-index: 1;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/><feColorMatrix values='0 0 0 0 0.78 0 0 0 0 1 0 0 0 0 0.26 0 0 0 0.04 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.6;
+  mix-blend-mode: overlay;
+}
+
+.scanline {
+  position: fixed;
+  left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--signal-glow), transparent);
+  pointer-events: none;
+  z-index: 3;
+  animation: scan 9s linear infinite;
+  opacity: 0.5;
+}
+
+@keyframes scan {
+  0% { top: -2%; opacity: 0; }
+  5% { opacity: 0.5; }
+  95% { opacity: 0.5; }
+  100% { top: 102%; opacity: 0; }
+}
+
+main { position: relative; z-index: 5; }
+
+/* ────────── TOP BAR ────────── */
+.topbar {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  align-items: center;
+  gap: 24px;
+  padding: 14px 28px;
+  border-bottom: 1px solid var(--line);
+  background: var(--void-2);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--signal);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  backdrop-filter: blur(8px);
+}
+
+.topbar .logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+  letter-spacing: 0.3em;
+}
+
+.topbar .logo svg { width: 22px; height: 22px; }
+
+.topbar .ticker {
+  display: flex;
+  gap: 32px;
+  color: var(--bone-dim);
+  overflow: hidden;
+  font-size: 10px;
+}
+
+.topbar .ticker span strong { color: var(--signal); font-weight: 500; }
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--signal);
+  box-shadow: 0 0 12px var(--signal-glow);
+  animation: pulse 1.4s ease-in-out infinite;
+  display: inline-block;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.35; transform: scale(0.85); }
+}
+
+.alert-dot { background: var(--alert); box-shadow: 0 0 12px rgba(255, 77, 46, 0.6); }
+
+/* ────────── HERO ────────── */
+.hero {
+  position: relative;
+  padding: 80px 28px 60px;
+  border-bottom: 1px solid var(--line);
+  overflow: hidden;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 60px;
+  max-width: 1400px;
+  margin: 0 auto;
+  align-items: end;
+}
+
+.hero-meta {
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--signal);
+  margin-bottom: 28px;
+  display: flex;
+  gap: 22px;
+  flex-wrap: wrap;
+}
+.hero-meta span { display: flex; align-items: center; gap: 8px; }
+.hero-meta .sep { color: var(--signal-deep); }
+
+.hero h1 {
+  font-family: 'Bodoni Moda', serif;
+  font-weight: 900;
+  font-size: clamp(48px, 9vw, 132px);
+  line-height: 0.85;
+  letter-spacing: -0.04em;
+  color: var(--bone);
+  margin-bottom: 8px;
+}
+
+.hero h1 .jp {
+  display: block;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-weight: 900;
+  font-size: 0.18em;
+  letter-spacing: 0.4em;
+  color: var(--signal);
+  margin-top: 18px;
+  margin-bottom: 6px;
+}
+
+.hero h1 em {
+  font-style: italic;
+  color: var(--signal);
+  font-weight: 400;
+}
+
+.hero-sub {
+  font-family: 'Bodoni Moda', serif;
+  font-style: italic;
+  font-size: 22px;
+  color: var(--bone-dim);
+  margin-top: 30px;
+  max-width: 620px;
+  line-height: 1.4;
+}
+
+.hero-panel {
+  border: 1px solid var(--line);
+  background: rgba(199, 255, 67, 0.02);
+  padding: 24px;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  line-height: 1.7;
+}
+
+.hero-panel h4 {
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: var(--signal);
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed var(--line);
+  display: flex;
+  justify-content: space-between;
+  text-transform: uppercase;
+}
+
+.hero-panel ul { list-style: none; }
+.hero-panel li {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 12px;
+  padding: 6px 0;
+  color: var(--bone-dim);
+  align-items: center;
+}
+.hero-panel li::before {
+  content: attr(data-i);
+  color: var(--signal-deep);
+  font-size: 9px;
+}
+.hero-panel li b { color: var(--bone); font-weight: 500; }
+.hero-panel li .v {
+  color: var(--signal);
+  font-weight: 700;
+  font-size: 10px;
+}
+
+/* big bg numeral */
+.hero-numeral {
+  position: absolute;
+  right: -40px;
+  top: 10px;
+  font-family: 'Bodoni Moda', serif;
+  font-weight: 900;
+  font-style: italic;
+  font-size: 360px;
+  color: var(--signal);
+  opacity: 0.06;
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ────────── SECTION SHELL ────────── */
+section {
+  padding: 80px 28px;
+  border-bottom: 1px solid var(--line);
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.s-head {
+  display: grid;
+  grid-template-columns: 80px 1fr auto;
+  gap: 28px;
+  align-items: end;
+  margin-bottom: 56px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+}
+
+.s-num {
+  font-family: 'Bodoni Moda', serif;
+  font-style: italic;
+  font-weight: 900;
+  font-size: 64px;
+  color: var(--signal);
+  line-height: 0.8;
+}
+
+.s-title {
+  font-family: 'Bodoni Moda', serif;
+  font-weight: 700;
+  font-size: clamp(28px, 4vw, 48px);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--bone);
+}
+.s-title em { font-style: italic; color: var(--signal); font-weight: 400; }
+
+.s-tag {
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--bone-dim);
+  text-align: right;
+  line-height: 1.6;
+}
+.s-tag b { color: var(--signal); font-weight: 500; display: block; }
+
+/* ────────── 01: ORGANISM DIAGRAM ────────── */
+.organism {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 48px;
+  align-items: start;
+}
+
+.organism-text { font-size: 15px; line-height: 1.7; color: var(--bone-dim); }
+.organism-text p { margin-bottom: 18px; }
+.organism-text p:first-of-type::first-letter {
+  font-family: 'Bodoni Moda', serif;
+  font-style: italic;
+  font-size: 64px;
+  float: left;
+  line-height: 0.85;
+  color: var(--signal);
+  padding: 6px 12px 0 0;
+  font-weight: 700;
+}
+.organism-text strong { color: var(--bone); font-weight: 500; }
+.organism-text .hi { color: var(--signal); font-style: italic; font-family: 'Bodoni Moda', serif; font-size: 1.05em; }
+
+.diagram-box {
+  border: 1px solid var(--line);
+  background:
+    linear-gradient(180deg, rgba(199, 255, 67, 0.03) 0%, transparent 100%);
+  padding: 20px;
+  position: relative;
+}
+
+.diagram-box::before {
+  content: 'FIG.01 // SYSTEMIC INTERCONNECT MAP';
+  position: absolute;
+  top: -8px;
+  left: 20px;
+  background: var(--void);
+  padding: 0 10px;
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  color: var(--signal);
+}
+
+.organism-svg { width: 100%; height: auto; display: block; }
+
+.legend {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 16px;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--bone-dim);
+}
+.legend span { display: flex; align-items: center; gap: 8px; }
+.legend .sw {
+  width: 16px;
+  height: 2px;
+  background: var(--signal);
+}
+.legend .sw.dashed { background: repeating-linear-gradient(90deg, var(--signal) 0 4px, transparent 4px 8px); }
+.legend .sw.thick { height: 4px; background: var(--alert); }
+
+/* ────────── 02: CORDYCEPS LIFECYCLE ────────── */
+.cordyceps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  border: 1px solid var(--line);
+}
+
+.life-stage {
+  padding: 28px 24px;
+  border-right: 1px solid var(--line);
+  position: relative;
+  background: var(--void-2);
+  transition: background 0.4s;
+}
+.life-stage:last-child { border-right: none; }
+.life-stage:hover { background: var(--void-3); }
+
+.life-stage .ph {
+  font-family: 'Bodoni Moda', serif;
+  font-style: italic;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--signal);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.life-stage .num {
+  font-family: 'Bodoni Moda', serif;
+  font-weight: 900;
+  font-size: 72px;
+  line-height: 0.9;
+  color: var(--bone);
+  margin-bottom: 16px;
+}
+.life-stage .num span { color: var(--signal); font-style: italic; font-weight: 400; }
+
+.life-stage h3 {
+  font-family: 'Bodoni Moda', serif;
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 1.1;
+  margin-bottom: 12px;
+  color: var(--bone);
+}
+.life-stage p {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--bone-dim);
+  margin-bottom: 14px;
+}
+.life-stage .mech {
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: var(--signal-dim);
+  text-transform: uppercase;
+  padding-top: 10px;
+  border-top: 1px dashed var(--line);
+}
+
+.life-stage svg { width: 100%; height: 60px; margin-bottom: 16px; }
+
+/* ────────── 03: DUAL DECODE ────────── */
+.dual {
+  display: grid;
+  grid-template-columns: 1fr 80px 1fr;
+  gap: 0;
+  align-items: stretch;
+}
+
+.dual-col {
+  padding: 32px;
+  border: 1px solid var(--line);
+  background: var(--void-2);
+}
+
+.dual-col h3 {
+  font-family: 'Bodoni Moda', serif;
+  font-weight: 700;
+  font-size: 28px;
+  margin-bottom: 6px;
+  color: var(--bone);
+}
+.dual-col h3 em { font-style: italic; color: var(--signal); }
+.dual-col .sub {
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--bone-dim);
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--line);
+}
+
+.dual-col dl { display: grid; grid-template-columns: 110px 1fr; gap: 12px 16px; font-size: 12px; }
+.dual-col dt {
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--signal);
+  padding-top: 3px;
+}
+.dual-col dd { color: var(--bone-dim); line-height: 1.6; }
+.dual-col dd b { color: var(--bone); font-weight: 500; }
+
+.dual-mid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  color: var(--signal);
+  text-transform: uppercase;
+  padding: 24px 0;
+}
+.dual-mid .arrow {
+  width: 2px;
+  flex: 1;
+  background: linear-gradient(180deg, transparent, var(--signal) 20%, var(--signal) 80%, transparent);
+  position: relative;
+}
+.dual-mid .arrow::before, .dual-mid .arrow::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--signal);
+  border-top: none;
+  border-left: none;
+  transform: translateX(-50%) rotate(45deg);
+}
+.dual-mid .arrow::before { top: 8px; transform: translateX(-50%) rotate(-135deg); }
+.dual-mid .arrow::after { bottom: 8px; }
+
+/* ────────── 04: DEFENSE MATRIX ────────── */
+.defense-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+}
+
+.def-card {
+  border: 1px solid var(--line);
+  background: var(--void-2);
+  padding: 22px 18px;
+  position: relative;
+  transition: all 0.35s;
+  cursor: default;
+}
+.def-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--signal);
+  transition: width 0.45s ease;
+}
+.def-card:hover::before { width: 100%; }
+.def-card:hover {
+  background: var(--void-3);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px -20px var(--signal-glow);
+}
+
+.def-card .code {
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  color: var(--signal);
+  margin-bottom: 10px;
+}
+.def-card h4 {
+  font-family: 'Bodoni Moda', serif;
+  font-weight: 700;
+  font-style: italic;
+  font-size: 22px;
+  line-height: 1;
+  margin-bottom: 16px;
+  color: var(--bone);
+}
+.def-card p {
+  font-size: 11px;
+  line-height: 1.55;
+  color: var(--bone-dim);
+}
+.def-card .severity {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--line);
+  display: flex;
+  justify-content: space-between;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--signal-dim);
+}
+.def-card .bars { display: flex; gap: 2px; }
+.def-card .bars i {
+  width: 4px;
+  height: 10px;
+  background: var(--signal-deep);
+}
+.def-card .bars i.on { background: var(--signal); box-shadow: 0 0 6px var(--signal-glow); }
+
+/* ────────── 05: NETWORK MAP ────────── */
+.network {
+  position: relative;
+  border: 1px solid var(--line);
+  background: var(--void-2);
+  padding: 32px;
+  min-height: 520px;
+}
+
+.network::before {
+  content: 'FIG.02 // DECENTRALIZED NODE TOPOLOGY — NO CENTRAL ACTOR';
+  position: absolute;
+  top: -8px;
+  left: 32px;
+  background: var(--void);
+  padding: 0 10px;
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  color: var(--signal);
+}
+
+.network-svg { width: 100%; height: auto; display: block; }
+
+.net-meta {
+  position: absolute;
+  top: 22px;
+  right: 22px;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--bone-dim);
+  text-align: right;
+  line-height: 1.8;
+}
+.net-meta b { color: var(--signal); }
+
+/* ────────── 06: TRAUMA TEMPLATES ────────── */
+.templates {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: start;
+}
+
+.templates-intro {
+  font-family: 'Bodoni Moda', serif;
+  font-style: italic;
+  font-size: 28px;
+  line-height: 1.3;
+  color: var(--bone);
+}
+.templates-intro span { color: var(--signal); }
+.templates-intro .small {
+  display: block;
+  font-style: normal;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  color: var(--bone-dim);
+  margin-top: 24px;
+  line-height: 1.7;
+}
+
+.t-list { border-top: 1px solid var(--line); }
+.t-item {
+  display: grid;
+  grid-template-columns: 50px 1fr auto;
+  gap: 18px;
+  align-items: center;
+  padding: 20px 4px;
+  border-bottom: 1px solid var(--line);
+  transition: padding 0.3s, background 0.3s;
+  cursor: default;
+}
+.t-item:hover { padding-left: 16px; background: rgba(199, 255, 67, 0.02); }
+.t-item .num {
+  font-family: 'Bodoni Moda', serif;
+  font-style: italic;
+  font-size: 24px;
+  color: var(--signal);
+}
+.t-item .desc { font-size: 12px; line-height: 1.5; color: var(--bone-dim); }
+.t-item .desc b { color: var(--bone); font-weight: 500; display: block; margin-bottom: 4px; font-family: 'Bodoni Moda', serif; font-size: 15px; }
+.t-item .tag {
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--signal);
+  padding: 4px 10px;
+  border: 1px solid var(--line);
+  white-space: nowrap;
+}
+
+/* ────────── 07: EXIT VECTOR ────────── */
+.exit {
+  text-align: center;
+  padding: 80px 28px 100px;
+  position: relative;
+}
+
+.exit::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 600px;
+  height: 600px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, var(--signal-glow), transparent 65%);
+  opacity: 0.18;
+  pointer-events: none;
+  filter: blur(40px);
+}
+
+.exit-quote {
+  position: relative;
+  font-family: 'Bodoni Moda', serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(28px, 4.5vw, 56px);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  color: var(--bone);
+  max-width: 1100px;
+  margin: 0 auto 40px;
+}
+.exit-quote span { color: var(--signal); font-weight: 700; }
+
+.exit-mantra {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-weight: 900;
+  font-size: 11px;
+  letter-spacing: 0.6em;
+  color: var(--signal);
+  margin-top: 60px;
+}
+
+.exit-stamp {
+  display: inline-block;
+  margin-top: 36px;
+  padding: 12px 28px;
+  border: 2px solid var(--alert);
+  color: var(--alert);
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  font-weight: 700;
+  transform: rotate(-2deg);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* ────────── FOOTER ────────── */
+footer {
+  padding: 32px 28px;
+  border-top: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 24px;
+  align-items: center;
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--bone-dim);
+}
+footer .mid {
+  color: var(--signal);
+  font-family: 'Noto Sans JP', sans-serif;
+  font-weight: 900;
+  letter-spacing: 0.5em;
+}
+footer .right { text-align: right; }
+
+/* ────────── ANIMATIONS ────────── */
+.flicker { animation: flicker 4s infinite; }
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  92% { opacity: 1; }
+  93% { opacity: 0.3; }
+  94% { opacity: 1; }
+  96% { opacity: 0.5; }
+  97% { opacity: 1; }
+}
+
+.draw-line { stroke-dasharray: 1000; stroke-dashoffset: 1000; animation: draw 2.2s ease-out forwards; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+
+.node-pulse { animation: nodePulse 2.4s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
+@keyframes nodePulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.fade-in { opacity: 0; animation: fadeIn 0.9s ease-out forwards; }
+@keyframes fadeIn { to { opacity: 1; } }
+
+/* ────────── RESPONSIVE ────────── */
+@media (max-width: 1100px) {
+  .hero-grid { grid-template-columns: 1fr; }
+  .hero-numeral { font-size: 240px; right: -20px; }
+  .organism { grid-template-columns: 1fr; }
+  .cordyceps { grid-template-columns: 1fr 1fr; }
+  .life-stage:nth-child(2) { border-right: none; }
+  .life-stage:nth-child(1), .life-stage:nth-child(2) { border-bottom: 1px solid var(--line); }
+  .defense-grid { grid-template-columns: 1fr 1fr; }
+  .dual { grid-template-columns: 1fr; }
+  .dual-mid { padding: 16px 0; flex-direction: row; }
+  .dual-mid .arrow { height: 2px; width: auto; flex: 1; background: linear-gradient(90deg, transparent, var(--signal) 20%, var(--signal) 80%, transparent); }
+  .templates { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 640px) {
+  .topbar { grid-template-columns: 1fr auto; padding: 12px 16px; }
+  .topbar .ticker { display: none; }
+  .hero { padding: 50px 16px 40px; }
+  section { padding: 56px 16px; }
+  .s-head { grid-template-columns: 1fr; gap: 12px; }
+  .s-tag { text-align: left; }
+  .cordyceps { grid-template-columns: 1fr; }
+  .life-stage { border-right: none; border-bottom: 1px solid var(--line); }
+  .defense-grid { grid-template-columns: 1fr; }
+  footer { grid-template-columns: 1fr; text-align: center; }
+  footer .right { text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<div class="scanline"></div>
+
+<main>
+
+<!-- ═══════════ TOP BAR ═══════════ -->
+<div class="topbar">
+  <div class="logo">
+    <svg viewBox="0 0 32 32" fill="none">
+      <path d="M16 2 L30 16 L16 30 L2 16 Z" stroke="currentColor" stroke-width="2"/>
+      <path d="M16 8 L24 16 L16 24 L8 16 Z" stroke="currentColor" stroke-width="1.5"/>
+      <circle cx="16" cy="16" r="2.5" fill="currentColor"/>
+    </svg>
+    <span>NERV // INTERNAL</span>
+  </div>
+  <div class="ticker">
+    <span><strong>FILE:</strong> CORDYCEPS-Σ-1108</span>
+    <span><strong>CLASS:</strong> EYES-ONLY</span>
+    <span><strong>RECV:</strong> 2026.05.11</span>
+    <span><strong>HOST-INTEG:</strong> 31.4%</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;"><span class="dot alert-dot"></span> PATTERN: BLUE</div>
+  <div style="display:flex;align-items:center;gap:8px;"><span class="dot"></span> A.T. FIELD ACTIVE</div>
+</div>
+
+<!-- ═══════════ HERO ═══════════ -->
+<section class="hero" style="border-bottom:1px solid var(--line);">
+  <div class="hero-numeral flicker">Σ</div>
+  <div class="hero-grid">
+    <div>
+      <div class="hero-meta">
+        <span>DOSSIER 00 / 07</span>
+        <span class="sep">━━</span>
+        <span>OPERATIONAL DECODE</span>
+        <span class="sep">━━</span>
+        <span>SUBJECT: THE SYSTEM</span>
+      </div>
+      <h1>
+        <span class="jp">コーディセプス・プロトコル</span>
+        Cordyceps<br>
+        <em>Protocol.</em>
+      </h1>
+      <div class="hero-sub">
+        Infrastructure of the parasitic logic that runs this place — not a cabal, not a conspiracy. A self-optimizing pattern installed at the level of structure, gravity not command.
+      </div>
+    </div>
+
+    <aside class="hero-panel">
+      <h4><span>SYSTEM // VITALS</span><span>LIVE</span></h4>
+      <ul>
+        <li data-i="01"><b>Architecture</b><span class="v">DECENTRALIZED</span></li>
+        <li data-i="02"><b>Control Method</b><span class="v">STRUCTURE</span></li>
+        <li data-i="03"><b>Update Cycle</b><span class="v">CONTINUOUS</span></li>
+        <li data-i="04"><b>Discernible Head</b><span class="v">NONE</span></li>
+        <li data-i="05"><b>Reproduction</b><span class="v">VIRAL</span></li>
+        <li data-i="06"><b>Defense Posture</b><span class="v">ABSORPTIVE</span></li>
+        <li data-i="07"><b>Substrate</b><span class="v">CONSCIOUSNESS</span></li>
+        <li data-i="08"><b>Observable</b><span class="v">PARTIAL</span></li>
+      </ul>
+    </aside>
+  </div>
+</section>
+
+<!-- ═══════════ 01 ORGANISM ═══════════ -->
+<section>
+  <div class="s-head">
+    <div class="s-num">01</div>
+    <div>
+      <div style="font-size:10px;letter-spacing:0.25em;text-transform:uppercase;color:var(--signal);margin-bottom:8px;">SECTION ONE — THE ORGANISM</div>
+      <h2 class="s-title">It is not a cabal. It is <em>an organism.</em></h2>
+    </div>
+    <div class="s-tag"><b>READ TIME</b>4 MIN<br><b>CLEARANCE</b>SCAN-A</div>
+  </div>
+
+  <div class="organism">
+    <div class="organism-text">
+      <p>What looks like a chaotic mess of people, ideas, religions, ideologies, corporations, states, and family traditions is, viewed at scale, <strong>a single self-organizing organism</strong>. Nothing in this machine exists by accident. Every belief, ritual, and institutional form has passed the filter of <span class="hi">systemic survival</span> — what persists is what reinforces the whole.</p>
+
+      <p>It needs no meetings, no doctrines, no declarations. Its brilliance is its invisibility. It operates through <strong>structure, not command</strong> — the way gravity operates. Each element supports the others: religions justify the power of states; states regulate education that programs thinking; education teaches obedience and consumption that benefits corporations; corporations manufacture stress and sell the means to suppress it; families transmit the entire frame.</p>
+
+      <p>This is what Foucault dissected, what Baudrillard mapped as simulacra, what Buddhism named māyā. They were all describing different parts of <span class="hi">the same elephant.</span></p>
+    </div>
+
+    <div class="diagram-box">
+      <svg class="organism-svg" viewBox="0 0 600 460" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="coreGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#C7FF43" stop-opacity="0.6"/>
+            <stop offset="100%" stop-color="#C7FF43" stop-opacity="0"/>
+          </radialGradient>
+          <pattern id="hexGrid" width="40" height="46" patternUnits="userSpaceOnUse">
+            <path d="M20 0 L40 11.5 L40 34.5 L20 46 L0 34.5 L0 11.5 Z" fill="none" stroke="#C7FF43" stroke-width="0.3" opacity="0.15"/>
+          </pattern>
+        </defs>
+
+        <rect width="600" height="460" fill="url(#hexGrid)"/>
+
+        <!-- center -->
+        <circle cx="300" cy="230" r="100" fill="url(#coreGlow)"/>
+        <circle cx="300" cy="230" r="48" fill="none" stroke="#C7FF43" stroke-width="1.5"/>
+        <circle cx="300" cy="230" r="36" fill="none" stroke="#C7FF43" stroke-width="0.5" stroke-dasharray="2 3"/>
+        <circle cx="300" cy="230" r="6" fill="#C7FF43"/>
+        <text x="300" y="234" text-anchor="middle" font-family="JetBrains Mono" font-size="9" font-weight="700" fill="#07090A" letter-spacing="2">CORE</text>
+
+        <!-- nodes -->
+        <g font-family="JetBrains Mono" font-size="10" font-weight="500" fill="#E8E6DD" text-anchor="middle">
+          <!-- religion -->
+          <g class="node-pulse" style="animation-delay:0s;">
+            <rect x="240" y="40" width="120" height="42" fill="#0D1012" stroke="#C7FF43" stroke-width="1"/>
+            <text x="300" y="58">RELIGION</text>
+            <text x="300" y="72" font-size="8" fill="#888375" letter-spacing="1.5">guilt · punishment</text>
+          </g>
+          <!-- state -->
+          <g class="node-pulse" style="animation-delay:0.4s;">
+            <rect x="470" y="130" width="120" height="42" fill="#0D1012" stroke="#C7FF43" stroke-width="1"/>
+            <text x="530" y="148">STATE</text>
+            <text x="530" y="162" font-size="8" fill="#888375" letter-spacing="1.5">control · fear</text>
+          </g>
+          <!-- corp -->
+          <g class="node-pulse" style="animation-delay:0.8s;">
+            <rect x="470" y="290" width="120" height="42" fill="#0D1012" stroke="#C7FF43" stroke-width="1"/>
+            <text x="530" y="308">CORPORATIONS</text>
+            <text x="530" y="322" font-size="8" fill="#888375" letter-spacing="1.5">need · consume</text>
+          </g>
+          <!-- family -->
+          <g class="node-pulse" style="animation-delay:1.2s;">
+            <rect x="240" y="378" width="120" height="42" fill="#0D1012" stroke="#C7FF43" stroke-width="1"/>
+            <text x="300" y="396">FAMILY</text>
+            <text x="300" y="410" font-size="8" fill="#888375" letter-spacing="1.5">upbringing · norm</text>
+          </g>
+          <!-- education -->
+          <g class="node-pulse" style="animation-delay:1.6s;">
+            <rect x="10" y="290" width="120" height="42" fill="#0D1012" stroke="#C7FF43" stroke-width="1"/>
+            <text x="70" y="308">EDUCATION</text>
+            <text x="70" y="322" font-size="8" fill="#888375" letter-spacing="1.5">obedience · frame</text>
+          </g>
+          <!-- norms -->
+          <g class="node-pulse" style="animation-delay:2s;">
+            <rect x="10" y="130" width="120" height="42" fill="#0D1012" stroke="#C7FF43" stroke-width="1"/>
+            <text x="70" y="148">SOCIAL NORMS</text>
+            <text x="70" y="162" font-size="8" fill="#888375" letter-spacing="1.5">right · wrong</text>
+          </g>
+        </g>
+
+        <!-- connection lines -->
+        <g stroke="#C7FF43" stroke-width="0.6" fill="none" opacity="0.55">
+          <line class="draw-line" x1="300" y1="82" x2="300" y2="182" style="animation-delay:0.2s"/>
+          <line class="draw-line" x1="470" y1="151" x2="348" y2="218" style="animation-delay:0.4s"/>
+          <line class="draw-line" x1="470" y1="311" x2="348" y2="242" style="animation-delay:0.6s"/>
+          <line class="draw-line" x1="300" y1="378" x2="300" y2="278" style="animation-delay:0.8s"/>
+          <line class="draw-line" x1="130" y1="311" x2="252" y2="242" style="animation-delay:1s"/>
+          <line class="draw-line" x1="130" y1="151" x2="252" y2="218" style="animation-delay:1.2s"/>
+
+          <!-- ring of mutual reinforcement -->
+          <path class="draw-line" d="M300 82 L470 151 L470 311 L300 378 L130 311 L130 151 Z" style="animation-delay:1.6s" stroke-dasharray="3 4"/>
+        </g>
+
+        <!-- corner brackets -->
+        <g stroke="#C7FF43" stroke-width="1" fill="none">
+          <path d="M8 8 L8 22 M8 8 L22 8"/>
+          <path d="M592 8 L592 22 M592 8 L578 8"/>
+          <path d="M8 452 L8 438 M8 452 L22 452"/>
+          <path d="M592 452 L592 438 M592 452 L578 452"/>
+        </g>
+
+        <text x="14" y="446" font-family="JetBrains Mono" font-size="7" fill="#888375" letter-spacing="2">600×460 · ORG.MAP.v3.1</text>
+        <text x="586" y="446" text-anchor="end" font-family="JetBrains Mono" font-size="7" fill="#888375" letter-spacing="2">∮ MUTUAL REINFORCEMENT</text>
+      </svg>
+
+      <div class="legend">
+        <span><span class="sw"></span>Direct dependency</span>
+        <span><span class="sw dashed"></span>Mutual reinforcement</span>
+        <span><span class="sw" style="background:#C7FF43;border-radius:50%;width:8px;height:8px;"></span>Reproducing node</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 02 CORDYCEPS LIFECYCLE ═══════════ -->
+<section>
+  <div class="s-head">
+    <div class="s-num">02</div>
+    <div>
+      <div style="font-size:10px;letter-spacing:0.25em;text-transform:uppercase;color:var(--signal);margin-bottom:8px;">SECTION TWO — INFECTION VECTOR</div>
+      <h2 class="s-title">The <em>cordyceps</em> lifecycle, rewritten for consciousness.</h2>
+    </div>
+    <div class="s-tag"><b>PARALLEL</b>BIOLOGICAL<br><b>SCOPE</b>FULL-STACK</div>
+  </div>
+
+  <div class="cordyceps">
+    <div class="life-stage">
+      <svg viewBox="0 0 100 60" fill="none">
+        <circle cx="20" cy="30" r="2.5" fill="#C7FF43"/>
+        <circle cx="35" cy="20" r="1.5" fill="#C7FF43" opacity="0.7"/>
+        <circle cx="50" cy="35" r="2" fill="#C7FF43" opacity="0.8"/>
+        <circle cx="68" cy="22" r="1.8" fill="#C7FF43" opacity="0.6"/>
+        <circle cx="80" cy="38" r="1.2" fill="#C7FF43" opacity="0.5"/>
+        <path d="M0 30 Q 50 10 100 30" stroke="#C7FF43" stroke-width="0.4" stroke-dasharray="1 2" opacity="0.5"/>
+      </svg>
+      <div class="ph">phase i</div>
+      <div class="num">01<span>.</span></div>
+      <h3>Spore Contact.</h3>
+      <p>Logic enters through ambient atmosphere — culture, language, family, school. No installer screen, no consent. By the time you can think, the framework that decides what counts as thinking is already there.</p>
+      <div class="mech">vector ▸ environment</div>
+    </div>
+
+    <div class="life-stage">
+      <svg viewBox="0 0 100 60" fill="none">
+        <path d="M50 5 L50 55" stroke="#C7FF43" stroke-width="1.5"/>
+        <path d="M30 18 Q 50 28 70 18" stroke="#C7FF43" stroke-width="0.6" fill="none"/>
+        <path d="M28 30 Q 50 40 72 30" stroke="#C7FF43" stroke-width="0.6" fill="none"/>
+        <path d="M30 42 Q 50 52 70 42" stroke="#C7FF43" stroke-width="0.6" fill="none"/>
+        <circle cx="50" cy="5" r="2" fill="#C7FF43"/>
+        <circle cx="50" cy="55" r="2.5" fill="#C7FF43"/>
+      </svg>
+      <div class="ph">phase ii</div>
+      <div class="num">02<span>.</span></div>
+      <h3>Growth Inside.</h3>
+      <p>Code teaches duality: good / bad, success / failure, us / them. Categories install. The world stops being the world and starts requiring a manual. The manual is written by the system <em>for</em> the system.</p>
+      <div class="mech">substrate ▸ neural pathways</div>
+    </div>
+
+    <div class="life-stage">
+      <svg viewBox="0 0 100 60" fill="none">
+        <rect x="20" y="40" width="60" height="2" fill="#C7FF43"/>
+        <path d="M50 40 L50 8" stroke="#C7FF43" stroke-width="1.5"/>
+        <path d="M50 8 L42 14 M50 8 L58 14" stroke="#C7FF43" stroke-width="1"/>
+        <circle cx="50" cy="8" r="2.5" fill="#C7FF43"/>
+        <text x="50" y="58" text-anchor="middle" font-family="JetBrains Mono" font-size="6" fill="#888375">↑ AMBITION</text>
+      </svg>
+      <div class="ph">phase iii</div>
+      <div class="num">03<span>.</span></div>
+      <h3>Climb the Branch.</h3>
+      <p>Host is steered to the highest visible point. It feels like <em>ambition</em>, like <em>my goal</em>, like <em>who I am</em>. The fungus whispers into your identity and pretends it is your voice. The ant never rebels because there is no voice left to question.</p>
+      <div class="mech">disguise ▸ authentic self</div>
+    </div>
+
+    <div class="life-stage">
+      <svg viewBox="0 0 100 60" fill="none">
+        <circle cx="50" cy="30" r="14" fill="none" stroke="#C7FF43" stroke-width="0.8"/>
+        <circle cx="50" cy="30" r="3" fill="#C7FF43"/>
+        <g stroke="#C7FF43" stroke-width="0.6">
+          <line x1="50" y1="16" x2="50" y2="5"/>
+          <line x1="50" y1="44" x2="50" y2="55"/>
+          <line x1="64" y1="30" x2="75" y2="30"/>
+          <line x1="36" y1="30" x2="25" y2="30"/>
+          <line x1="60" y1="20" x2="68" y2="12"/>
+          <line x1="40" y1="20" x2="32" y2="12"/>
+          <line x1="60" y1="40" x2="68" y2="48"/>
+          <line x1="40" y1="40" x2="32" y2="48"/>
+        </g>
+        <circle cx="50" cy="5" r="1.5" fill="#C7FF43"/>
+        <circle cx="50" cy="55" r="1.5" fill="#C7FF43"/>
+        <circle cx="75" cy="30" r="1.5" fill="#C7FF43"/>
+        <circle cx="25" cy="30" r="1.5" fill="#C7FF43"/>
+      </svg>
+      <div class="ph">phase iv</div>
+      <div class="num">04<span>.</span></div>
+      <h3>Release Spores.</h3>
+      <p>The infected consciousness becomes the next infection site. You raise children, mentor juniors, post opinions, enforce norms — all in good faith. The host is the means of transportation. The cycle compounds without anyone choosing it.</p>
+      <div class="mech">payload ▸ self-replication</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 03 HARDWARE vs SOFTWARE ═══════════ -->
+<section>
+  <div class="s-head">
+    <div class="s-num">03</div>
+    <div>
+      <div style="font-size:10px;letter-spacing:0.25em;text-transform:uppercase;color:var(--signal);margin-bottom:8px;">SECTION THREE — STACK DECODE</div>
+      <h2 class="s-title">Your hardware is yours. <em>The software is not.</em></h2>
+    </div>
+    <div class="s-tag"><b>LAYER</b>OS-LEVEL<br><b>OBSERVABILITY</b>LOW</div>
+  </div>
+
+  <div class="dual">
+    <div class="dual-col">
+      <h3><em>Hardware.</em></h3>
+      <div class="sub">// the substrate you were issued</div>
+      <dl>
+        <dt>Cortex</dt><dd><b>~86B neurons.</b> Capable of any pattern, any model, any reframing. Plastic until death.</dd>
+        <dt>Astrocytes</dt><dd>The <b>support layer</b> — coordinates, modulates synapses, fine-tunes signal. Quietly load-bearing.</dd>
+        <dt>Nervous System</dt><dd>Polyvagal architecture. Designed to <b>regulate</b>, not to be permanently activated.</dd>
+        <dt>Body</dt><dd>The honest reporter. Holds what the mind defers. Stores the unprocessed.</dd>
+        <dt>Sensorium</dt><dd>Direct apprehension of <b>what is</b>, prior to interpretation. Pre-categorical.</dd>
+      </dl>
+    </div>
+
+    <div class="dual-mid">
+      <div>HARDWARE</div>
+      <div class="arrow"></div>
+      <div style="color:var(--alert);">SOFTWARE</div>
+    </div>
+
+    <div class="dual-col" style="border-color:var(--alert);background:rgba(255,77,46,0.02);">
+      <h3>Installed <em>Operating System.</em></h3>
+      <div class="sub" style="color:var(--alert);">// the layer that boots before you do</div>
+      <dl>
+        <dt>Dualism</dt><dd><b>Good / bad. Right / wrong.</b> Forces every perception into a position. Pre-categorical experience becomes unreachable.</dd>
+        <dt>Norm Daemon</dt><dd>Background process defining <b>"normal"</b> — what to want, what to fear, what success looks like.</dd>
+        <dt>Inner Monitor</dt><dd>The constant internal chatter. Running <b>diagnostics</b> on your conformity at all times.</dd>
+        <dt>Goal Injector</dt><dd>Plants pursuits that <b>feel like yours</b>. You climb the branch and call it ambition.</dd>
+        <dt>Trauma Engine</dt><dd>Produces suffering as the gap between <b>manufactured reality</b> and authentic self.</dd>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 04 DEFENSE MATRIX ═══════════ -->
+<section>
+  <div class="s-head">
+    <div class="s-num">04</div>
+    <div>
+      <div style="font-size:10px;letter-spacing:0.25em;text-transform:uppercase;color:var(--signal);margin-bottom:8px;">SECTION FOUR — IMMUNE RESPONSE</div>
+      <h2 class="s-title">Defense matrix. <em>How it processes anomalies.</em></h2>
+    </div>
+    <div class="s-tag"><b>THREAT POSTURE</b>ADAPTIVE<br><b>METHOD</b>ABSORB / REFRAME</div>
+  </div>
+
+  <div class="defense-grid">
+    <div class="def-card">
+      <div class="code">DEF-01</div>
+      <h4>Shame</h4>
+      <p>Makes you doubt yourself for the offense of not conforming. Installs the feeling that the problem is <em>you</em>, not the structure.</p>
+      <div class="severity"><span>Severity</span><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span></div>
+    </div>
+
+    <div class="def-card">
+      <div class="code">DEF-02</div>
+      <h4>Mockery</h4>
+      <p>Irony and ridicule belittle the rebel. Insight becomes foolish. The dismissive joke does the work no argument could.</p>
+      <div class="severity"><span>Severity</span><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></div>
+    </div>
+
+    <div class="def-card">
+      <div class="code">DEF-03</div>
+      <h4>Discredit</h4>
+      <p>Labels exposure as paranoia, conspiracy, negativity, overthinking. The label arrives before the argument can be evaluated.</p>
+      <div class="severity"><span>Severity</span><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span></div>
+    </div>
+
+    <div class="def-card">
+      <div class="code">DEF-04</div>
+      <h4>Psychiatrize</h4>
+      <p>If you don't fit the prescribed box, you must be <em>sick</em>. Authenticity becomes diagnosis. The medication makes you tolerable to the structure.</p>
+      <div class="severity"><span>Severity</span><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span></div>
+    </div>
+
+    <div class="def-card">
+      <div class="code">DEF-05</div>
+      <h4>Absorb</h4>
+      <p>Dissent isn't silenced — it's monetized, branded, made into aesthetic. Resistance, unstructurally understood, becomes the next iteration.</p>
+      <div class="severity"><span>Severity</span><span class="bars"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 05 NETWORK TOPOLOGY ═══════════ -->
+<section>
+  <div class="s-head">
+    <div class="s-num">05</div>
+    <div>
+      <div style="font-size:10px;letter-spacing:0.25em;text-transform:uppercase;color:var(--signal);margin-bottom:8px;">SECTION FIVE — NODE TOPOLOGY</div>
+      <h2 class="s-title">No center. <em>You are a node.</em></h2>
+    </div>
+    <div class="s-tag"><b>STRUCTURE</b>DISTRIBUTED<br><b>LEARNING</b>SELF-OPTIMIZING</div>
+  </div>
+
+  <div class="network">
+    <div class="net-meta">
+      NODES: <b>~10⁹⁺</b><br>
+      WEIGHTS: <b>SELF-ADJUSTING</b><br>
+      LATENCY: <b>GENERATIONAL</b>
+    </div>
+
+    <svg class="network-svg" viewBox="0 0 1200 480" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="nodeGlow">
+          <stop offset="0%" stop-color="#C7FF43" stop-opacity="0.4"/>
+          <stop offset="100%" stop-color="#C7FF43" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+
+      <!-- background grid -->
+      <g stroke="#C7FF43" stroke-width="0.2" opacity="0.1">
+        <line x1="0" y1="120" x2="1200" y2="120"/>
+        <line x1="0" y1="240" x2="1200" y2="240"/>
+        <line x1="0" y1="360" x2="1200" y2="360"/>
+        <line x1="200" y1="0" x2="200" y2="480"/>
+        <line x1="400" y1="0" x2="400" y2="480"/>
+        <line x1="600" y1="0" x2="600" y2="480"/>
+        <line x1="800" y1="0" x2="800" y2="480"/>
+        <line x1="1000" y1="0" x2="1000" y2="480"/>
+      </g>
+
+      <!-- connection lines -->
+      <g stroke="#C7FF43" stroke-width="0.35" fill="none" opacity="0.4">
+        <!-- generated mesh of connections -->
+        <line class="draw-line" x1="120" y1="100" x2="280" y2="180" style="animation-delay:0.1s"/>
+        <line class="draw-line" x1="280" y1="180" x2="460" y2="90" style="animation-delay:0.2s"/>
+        <line class="draw-line" x1="460" y1="90" x2="620" y2="200" style="animation-delay:0.3s"/>
+        <line class="draw-line" x1="620" y1="200" x2="780" y2="120" style="animation-delay:0.4s"/>
+        <line class="draw-line" x1="780" y1="120" x2="940" y2="220" style="animation-delay:0.5s"/>
+        <line class="draw-line" x1="940" y1="220" x2="1100" y2="100" style="animation-delay:0.6s"/>
+        <line class="draw-line" x1="120" y1="100" x2="180" y2="280" style="animation-delay:0.15s"/>
+        <line class="draw-line" x1="180" y1="280" x2="340" y2="380" style="animation-delay:0.25s"/>
+        <line class="draw-line" x1="340" y1="380" x2="520" y2="320" style="animation-delay:0.35s"/>
+        <line class="draw-line" x1="520" y1="320" x2="700" y2="400" style="animation-delay:0.45s"/>
+        <line class="draw-line" x1="700" y1="400" x2="880" y2="340" style="animation-delay:0.55s"/>
+        <line class="draw-line" x1="880" y1="340" x2="1060" y2="400" style="animation-delay:0.65s"/>
+        <line class="draw-line" x1="280" y1="180" x2="340" y2="380" style="animation-delay:0.5s"/>
+        <line class="draw-line" x1="460" y1="90" x2="520" y2="320" style="animation-delay:0.6s"/>
+        <line class="draw-line" x1="620" y1="200" x2="700" y2="400" style="animation-delay:0.7s"/>
+        <line class="draw-line" x1="780" y1="120" x2="880" y2="340" style="animation-delay:0.8s"/>
+        <line class="draw-line" x1="940" y1="220" x2="1060" y2="400" style="animation-delay:0.9s"/>
+        <line class="draw-line" x1="180" y1="280" x2="280" y2="180" style="animation-delay:0.4s"/>
+        <line class="draw-line" x1="620" y1="200" x2="780" y2="120" style="animation-delay:0.3s"/>
+        <line class="draw-line" x1="340" y1="380" x2="520" y2="320" style="animation-delay:0.55s"/>
+        <line class="draw-line" x1="700" y1="400" x2="880" y2="340" style="animation-delay:0.6s"/>
+        <line class="draw-line" x1="120" y1="100" x2="280" y2="180" style="animation-delay:1s" stroke="#FF4D2E" stroke-width="0.8"/>
+        <line class="draw-line" x1="620" y1="200" x2="780" y2="120" style="animation-delay:1.1s" stroke="#FF4D2E" stroke-width="0.8"/>
+      </g>
+
+      <!-- nodes -->
+      <g>
+        <!-- top row -->
+        <circle cx="120" cy="100" r="14" fill="url(#nodeGlow)"/>
+        <circle cx="120" cy="100" r="5" fill="#C7FF43" class="node-pulse"/>
+        <text x="120" y="78" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#888375" letter-spacing="1">FAMILY</text>
+
+        <circle cx="280" cy="180" r="14" fill="url(#nodeGlow)"/>
+        <circle cx="280" cy="180" r="5" fill="#C7FF43" class="node-pulse" style="animation-delay:0.3s"/>
+        <text x="280" y="158" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#888375" letter-spacing="1">SCHOOL</text>
+
+        <circle cx="460" cy="90" r="18" fill="url(#nodeGlow)"/>
+        <circle cx="460" cy="90" r="7" fill="#C7FF43" class="node-pulse" style="animation-delay:0.6s"/>
+        <text x="460" y="64" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#888375" letter-spacing="1">MEDIA</text>
+
+        <circle cx="620" cy="200" r="14" fill="url(#nodeGlow)"/>
+        <circle cx="620" cy="200" r="5" fill="#C7FF43" class="node-pulse" style="animation-delay:0.9s"/>
+        <text x="620" y="178" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#888375" letter-spacing="1">LAW</text>
+
+        <circle cx="780" cy="120" r="14" fill="url(#nodeGlow)"/>
+        <circle cx="780" cy="120" r="5" fill="#C7FF43" class="node-pulse" style="animation-delay:1.2s"/>
+        <text x="780" y="98" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#888375" letter-spacing="1">MARKET</text>
+
+        <circle cx="940" cy="220" r="18" fill="url(#nodeGlow)"/>
+        <circle cx="940" cy="220" r="7" fill="#C7FF43" class="node-pulse" style="animation-delay:1.5s"/>
+        <text x="940" y="194" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#888375" letter-spacing="1">ALGORITHM</text>
+
+        <circle cx="1100" cy="100" r="14" fill="url(#nodeGlow)"/>
+        <circle cx="1100" cy="100" r="5" fill="#C7FF43" class="node-pulse" style="animation-delay:1.8s"/>
+        <text x="1100" y="78" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#888375" letter-spacing="1">STATE</text>
+
+        <!-- middle / bottom -->
+        <circle cx="180" cy="280" r="14" fill="url(#nodeGlow)"/>
+        <circle cx="180" cy="280" r="5" fill="#C7FF43" class="node-pulse" style="animation-delay:0.2s"/>
+        <text x="180" y="304" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#888375" letter-spacing="1">RELIGION</text>
+
+        <circle cx="340" cy="380" r="14" fill="url(#nodeGlow)"/>
+        <circle cx="340" cy="380" r="5" fill="#C7FF43" class="node-pulse" style="animation-delay:0.5s"/>
+        <text x="340" y="404" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#888375" letter-spacing="1">LANGUAGE</text>
+
+        <circle cx="520" cy="320" r="18" fill="url(#nodeGlow)"/>
+        <circle cx="520" cy="320" r="7" fill="#FF4D2E" class="node-pulse" style="animation-delay:0.8s"/>
+        <text x="520" y="344" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#FF4D2E" letter-spacing="1.5" font-weight="700">YOU</text>
+
+        <circle cx="700" cy="400" r="14" fill="url(#nodeGlow)"/>
+        <circle cx="700" cy="400" r="5" fill="#C7FF43" class="node-pulse" style="animation-delay:1.1s"/>
+        <text x="700" y="424" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#888375" letter-spacing="1">NORM</text>
+
+        <circle cx="880" cy="340" r="14" fill="url(#nodeGlow)"/>
+        <circle cx="880" cy="340" r="5" fill="#C7FF43" class="node-pulse" style="animation-delay:1.4s"/>
+        <text x="880" y="364" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#888375" letter-spacing="1">RITUAL</text>
+
+        <circle cx="1060" cy="400" r="14" fill="url(#nodeGlow)"/>
+        <circle cx="1060" cy="400" r="5" fill="#C7FF43" class="node-pulse" style="animation-delay:1.7s"/>
+        <text x="1060" y="424" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#888375" letter-spacing="1">CAREER</text>
+      </g>
+
+      <!-- callout for YOU -->
+      <g>
+        <line x1="540" y1="310" x2="600" y2="280" stroke="#FF4D2E" stroke-width="0.6" stroke-dasharray="2 2"/>
+        <text x="608" y="282" font-family="JetBrains Mono" font-size="9" fill="#FF4D2E" letter-spacing="1.5" font-weight="700">← CURRENT NODE</text>
+        <text x="608" y="294" font-family="JetBrains Mono" font-size="8" fill="#888375" letter-spacing="1">SIGNAL: STRONG</text>
+        <text x="608" y="304" font-family="JetBrains Mono" font-size="8" fill="#888375" letter-spacing="1">RESISTANCE: ABSORBABLE</text>
+      </g>
+
+      <!-- center label -->
+      <text x="600" y="50" text-anchor="middle" font-family="Bodoni Moda" font-size="11" font-style="italic" fill="#C7FF43" letter-spacing="3">no central brain · no programmer · no head</text>
+    </svg>
+  </div>
+
+  <div style="margin-top:32px; display:grid; grid-template-columns:repeat(3,1fr); gap:24px; font-size:12px; line-height:1.6; color:var(--bone-dim);">
+    <div>
+      <div style="font-family:'Bodoni Moda',serif; font-style:italic; font-size:20px; color:var(--bone); margin-bottom:8px;">No head.</div>
+      The system has no center to attack. Each interaction, message, law, lesson, and comment is a data point reinforcing pathways. It learns from <strong style="color:var(--bone);">all of us</strong>, including those trying to escape it.
+    </div>
+    <div>
+      <div style="font-family:'Bodoni Moda',serif; font-style:italic; font-size:20px; color:var(--bone); margin-bottom:8px;">No programmer.</div>
+      No single actor designed it. It self-organizes around a unifying principle: <strong style="color:var(--bone);">maintain control, rewrite personality to spec, exclude what doesn't conform.</strong>
+    </div>
+    <div>
+      <div style="font-family:'Bodoni Moda',serif; font-style:italic; font-size:20px; color:var(--bone); margin-bottom:8px;">No edge.</div>
+      It optimizes preemptively. Your resistance, if not understood at the structural level, becomes <strong style="color:var(--bone);">part of its next iteration.</strong> The logic of escape gets assimilated.
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 06 TRAUMA TEMPLATES ═══════════ -->
+<section>
+  <div class="s-head">
+    <div class="s-num">06</div>
+    <div>
+      <div style="font-size:10px;letter-spacing:0.25em;text-transform:uppercase;color:var(--signal);margin-bottom:8px;">SECTION SIX — TRAUMA AS SUB-ROUTINE</div>
+      <h2 class="s-title">Your wound is not <em>uniquely yours.</em></h2>
+    </div>
+    <div class="s-tag"><b>PATTERN</b>RECURRING<br><b>OBSERVATION</b>UNIVERSAL</div>
+  </div>
+
+  <div class="templates">
+    <div class="templates-intro">
+      You think your trauma is yours alone — <span>singular, personal, unrepeatable.</span> Look closer. The toxic parents repeat the same phrases. The manipulators use identical tricks. The relationships are carbon copies. Even the haters write the same comment.
+      <span class="small">These templates are not random. They are not unique to your dysfunctional family or your bad luck. They are <strong style="color:var(--bone);">the system's sub-routines</strong> — pre-programmed responses running on different hardware. A truly authentic individual is unique. The fact that suffering converges into a handful of recognizable shapes is, by itself, evidence of the code underneath.</span>
+    </div>
+
+    <div class="t-list">
+      <div class="t-item">
+        <div class="num">i</div>
+        <div class="desc"><b>Guilt as Currency</b>Love and approval released only when the host pays in self-suppression.</div>
+        <div class="tag">FAMILY</div>
+      </div>
+      <div class="t-item">
+        <div class="num">ii</div>
+        <div class="desc"><b>The Reframe Loop</b>Your concern is treated as the problem. The original violation becomes invisible.</div>
+        <div class="tag">RELATIONAL</div>
+      </div>
+      <div class="t-item">
+        <div class="num">iii</div>
+        <div class="desc"><b>Conditional Belonging</b>Acceptance hinges on suppressing the part of you that doesn't fit.</div>
+        <div class="tag">SOCIAL</div>
+      </div>
+      <div class="t-item">
+        <div class="num">iv</div>
+        <div class="desc"><b>Diagnostic Capture</b>The unusual response gets labeled, prescribed, contained. The structure is never examined.</div>
+        <div class="tag">CLINICAL</div>
+      </div>
+      <div class="t-item">
+        <div class="num">v</div>
+        <div class="desc"><b>Productive Despair</b>Suffering is permitted only in forms that keep producing — overwork, perfectionism, achievement.</div>
+        <div class="tag">ECONOMIC</div>
+      </div>
+      <div class="t-item">
+        <div class="num">vi</div>
+        <div class="desc"><b>The Comment Template</b>Online dissent dismissed with the same five phrases. Different mouths, identical script.</div>
+        <div class="tag">DIGITAL</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 07 EXIT VECTOR ═══════════ -->
+<section class="exit">
+  <div style="font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:var(--signal);margin-bottom:24px;">— SECTION SEVEN · EXIT VECTOR —</div>
+
+  <div class="exit-quote">
+    Once you see the mechanism,<br>
+    once you understand the logic <span>behind the curtain</span>,<br>
+    you no longer have to obey <em>the naked emperor.</em>
+  </div>
+
+  <div style="max-width:720px; margin:40px auto 0; font-size:13px; line-height:1.7; color:var(--bone-dim); position:relative;">
+    The work isn't naming actors or finding an architect to blame. There is no architect. The work is <strong style="color:var(--bone);">seeing the equation</strong> — and refusing to mistake the equation for nature. Nature does not produce existential torment at this scale. When the most perceptive minds are the ones most crushed by the structure, that is not proof of its truth. <span style="color:var(--signal);font-family:'Bodoni Moda',serif;font-style:italic;font-size:1.1em;">It is proof of its infection.</span>
+  </div>
+
+  <div class="exit-stamp">// PATTERN RECOGNIZED — HOST AWARE //</div>
+
+  <div class="exit-mantra">見 ・ 抜 ・ ロ ・ 解 ・ 除</div>
+  <div style="font-size:9px; letter-spacing:0.3em; color:var(--bone-dim); margin-top:12px;">SEE THROUGH · DECODE · DISENGAGE</div>
+</section>
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer>
+  <div>FILE // CORDYCEPS-Σ-1108 · AUTH: PILOT</div>
+  <div class="mid">特務機関 NERV</div>
+  <div class="right">CLASS-A INTERNAL · NOT FOR DISTRIBUTION</div>
+</footer>
+
+</main>
+
+</body>
+</html>

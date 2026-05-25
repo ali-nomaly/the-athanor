@@ -1,0 +1,1405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GAMEPLAN — PLAYER: ALI</title>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Special+Elite&family=Permanent+Marker&family=Oswald:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --yellow: #FFD600;
+    --orange: #FF5500;
+    --cyan: #00FFCC;
+    --pink: #FF1744;
+    --green: #39FF14;
+    --purple: #B24BF3;
+    --white: #F5EFD8;
+    --ink: #1a0f00;
+    --border: 4px solid var(--black);
+    --shadow: 6px 6px 0 var(--black);
+    --shadow-lg: 10px 10px 0 var(--black);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Special Elite', monospace;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: radial-gradient(circle, rgba(255,214,0,0.035) 1px, transparent 1px);
+    background-size: 20px 20px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page { position: relative; z-index: 1; max-width: 960px; margin: 0 auto; padding: 0 20px 80px; }
+
+  /* ===== HERO ===== */
+  .hero {
+    background: var(--orange);
+    border: 6px solid var(--black);
+    box-shadow: var(--shadow-lg);
+    margin: 24px 0 0;
+    padding: 40px 32px 30px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      45deg, transparent, transparent 10px,
+      rgba(0,0,0,0.05) 10px, rgba(0,0,0,0.05) 12px
+    );
+  }
+
+  .hero-label {
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 6px; text-transform: uppercase;
+    color: var(--black); border: 3px solid var(--black);
+    display: inline-block; padding: 4px 10px;
+    margin-bottom: 14px; background: white;
+    position: relative; z-index: 1;
+  }
+
+  .hero-title {
+    font-family: 'Bangers', cursive;
+    font-size: clamp(56px, 11vw, 100px);
+    color: white;
+    line-height: 0.88;
+    letter-spacing: 2px;
+    -webkit-text-stroke: 3px var(--black);
+    position: relative; z-index: 1;
+  }
+
+  .hero-sub {
+    font-family: 'Bangers', cursive;
+    font-size: clamp(18px, 3.5vw, 28px);
+    color: var(--yellow);
+    letter-spacing: 3px;
+    -webkit-text-stroke: 1.5px var(--black);
+    margin-top: 6px;
+    position: relative; z-index: 1;
+  }
+
+  .hero-desc {
+    margin-top: 18px;
+    font-size: 13.5px; line-height: 1.75;
+    color: var(--ink);
+    max-width: 660px;
+    position: relative; z-index: 1;
+  }
+
+  .hero-badges {
+    display: flex; gap: 8px; flex-wrap: wrap;
+    margin-top: 18px;
+    position: relative; z-index: 1;
+  }
+
+  .hbadge {
+    font-family: 'Bangers', cursive;
+    font-size: 13px; letter-spacing: 2px;
+    border: 3px solid var(--black);
+    padding: 5px 12px;
+  }
+
+  .hbadge.b1 { background: var(--black); color: var(--yellow); }
+  .hbadge.b2 { background: var(--pink); color: white; }
+  .hbadge.b3 { background: var(--cyan); color: var(--black); }
+  .hbadge.b4 { background: var(--green); color: var(--black); }
+
+  @keyframes hero-pulse {
+    0%, 100% { box-shadow: var(--shadow-lg); }
+    50% { box-shadow: 0 0 0 5px var(--yellow), var(--shadow-lg); }
+  }
+  .hero { animation: hero-pulse 4s ease-in-out infinite; }
+
+  /* ===== CHAPTER HEADERS ===== */
+  .chapter {
+    margin-top: 36px;
+    border: 5px solid var(--black);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .chapter-banner {
+    padding: 18px 24px 14px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .chapter-num {
+    font-family: 'Bangers', cursive;
+    font-size: 64px;
+    line-height: 1;
+    -webkit-text-stroke: 3px var(--black);
+    flex-shrink: 0;
+  }
+
+  .chapter-info {}
+
+  .chapter-tag {
+    font-family: 'Oswald', sans-serif;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 4px; text-transform: uppercase;
+    border: 2px solid currentColor;
+    display: inline-block;
+    padding: 2px 8px;
+    margin-bottom: 6px;
+    opacity: 0.8;
+  }
+
+  .chapter-title {
+    font-family: 'Bangers', cursive;
+    font-size: clamp(26px, 5vw, 44px);
+    letter-spacing: 2px;
+    line-height: 1;
+  }
+
+  .chapter-timeline {
+    font-size: 11px;
+    font-family: 'Oswald', sans-serif;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 4px;
+    opacity: 0.8;
+  }
+
+  .chapter-body {
+    background: var(--black);
+    padding: 24px;
+    border-top: 4px solid var(--black);
+  }
+
+  /* CHAPTER COLORS */
+  .ch-fire .chapter-banner { background: var(--pink); color: white; }
+  .ch-fire .chapter-num { color: white; }
+  .ch-orange .chapter-banner { background: var(--orange); color: var(--black); }
+  .ch-orange .chapter-num { color: white; }
+  .ch-yellow .chapter-banner { background: var(--yellow); color: var(--black); }
+  .ch-yellow .chapter-num { color: var(--black); }
+  .ch-cyan .chapter-banner { background: var(--cyan); color: var(--black); }
+  .ch-cyan .chapter-num { color: var(--black); }
+  .ch-purple .chapter-banner { background: var(--purple); color: white; }
+  .ch-purple .chapter-num { color: white; }
+  .ch-dark .chapter-banner { background: #1a1a1a; color: var(--yellow); }
+  .ch-dark .chapter-num { color: var(--yellow); }
+
+  /* ===== MISSION CARDS ===== */
+  .mission-stack { display: flex; flex-direction: column; gap: 10px; }
+
+  .mission {
+    background: var(--white);
+    color: var(--ink);
+    border: 4px solid rgba(255,255,255,0.15);
+    display: flex;
+    overflow: hidden;
+    box-shadow: 5px 5px 0 rgba(0,0,0,0.6);
+  }
+
+  .mission-left {
+    width: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+    border-right: 3px solid var(--black);
+    background: var(--black);
+  }
+
+  .mission-content { flex: 1; padding: 11px 14px; }
+
+  .mission-title {
+    font-family: 'Bangers', cursive;
+    font-size: 18px; letter-spacing: 1.5px;
+    margin-bottom: 3px;
+  }
+
+  .mission-desc { font-size: 12.5px; line-height: 1.7; }
+
+  .mission-footer {
+    display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .mission-tag {
+    font-family: 'Oswald', sans-serif;
+    font-size: 9px; font-weight: 700;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    border: 2px solid var(--black);
+    padding: 2px 7px;
+  }
+
+  .mission-tag.urgent { background: var(--pink); color: white; border-color: var(--pink); }
+  .mission-tag.high { background: var(--orange); color: white; border-color: var(--orange); }
+  .mission-tag.medium { background: var(--yellow); color: var(--black); border-color: var(--yellow); }
+  .mission-tag.passive { background: var(--cyan); color: var(--black); border-color: var(--cyan); }
+  .mission-tag.growth { background: var(--purple); color: white; border-color: var(--purple); }
+  .mission-tag.free { background: var(--green); color: var(--black); border-color: var(--green); }
+
+  /* ===== BOSS FIGHT ===== */
+  .boss {
+    border: 5px solid var(--black);
+    overflow: hidden;
+    margin: 16px 0;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+  }
+
+  .boss::before {
+    content: '⚠ BOSS FIGHT ⚠';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    text-align: center;
+    font-family: 'Bangers', cursive;
+    font-size: 11px;
+    letter-spacing: 4px;
+    background: var(--pink);
+    color: white;
+    padding: 4px;
+    border-bottom: 3px solid var(--black);
+  }
+
+  .boss-header {
+    padding: 32px 20px 14px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .boss-icon { font-size: 44px; flex-shrink: 0; }
+
+  .boss-name {
+    font-family: 'Bangers', cursive;
+    font-size: clamp(22px, 4vw, 36px);
+    letter-spacing: 2px;
+    line-height: 1;
+  }
+
+  .boss-sub {
+    font-size: 11px;
+    font-family: 'Oswald', sans-serif;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 3px;
+    opacity: 0.8;
+  }
+
+  .boss-body {
+    background: var(--white);
+    color: var(--ink);
+    padding: 14px 20px;
+    border-top: 3px solid var(--black);
+    font-size: 12.5px;
+    line-height: 1.8;
+  }
+
+  .boss-weakness {
+    margin-top: 10px;
+    padding: 10px 14px;
+    background: rgba(57,255,20,0.12);
+    border: 3px solid var(--green);
+    font-size: 12px;
+  }
+
+  .boss-weakness strong {
+    font-family: 'Oswald', sans-serif;
+    letter-spacing: 1px;
+    color: #006600;
+  }
+
+  .b-pink .boss-header { background: var(--pink); color: white; }
+  .b-dark .boss-header { background: #111; color: var(--yellow); }
+  .b-orange .boss-header { background: var(--orange); color: white; }
+  .b-purple .boss-header { background: var(--purple); color: white; }
+
+  /* ===== RESOURCE BAR ===== */
+  .resource-section { margin: 16px 0; }
+
+  .resource-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .resource-label {
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase;
+    color: var(--white);
+    width: 130px;
+    flex-shrink: 0;
+  }
+
+  .resource-track {
+    flex: 1;
+    height: 22px;
+    background: rgba(255,255,255,0.1);
+    border: 3px solid rgba(255,255,255,0.2);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .resource-fill {
+    height: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding-left: 8px;
+  }
+
+  .resource-fill-text {
+    font-family: 'Bangers', cursive;
+    font-size: 13px;
+    letter-spacing: 1px;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+
+  .resource-amount {
+    font-family: 'Bangers', cursive;
+    font-size: 16px;
+    color: var(--white);
+    letter-spacing: 1px;
+    width: 90px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  /* ===== CHECKPOINT ===== */
+  .checkpoint {
+    border: 4px solid var(--black);
+    overflow: hidden;
+    margin: 20px 0;
+    box-shadow: var(--shadow);
+  }
+
+  .checkpoint-top {
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Bangers', cursive;
+    font-size: 18px;
+    letter-spacing: 2px;
+    border-bottom: 3px solid var(--black);
+  }
+
+  .checkpoint-body {
+    background: var(--white);
+    color: var(--ink);
+    padding: 14px 16px;
+  }
+
+  .check-item {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 5px 0;
+    border-bottom: 1px dashed rgba(0,0,0,0.15);
+    font-size: 12.5px;
+    line-height: 1.6;
+  }
+
+  .check-item:last-child { border-bottom: none; }
+
+  .check-box {
+    width: 18px; height: 18px;
+    border: 2.5px solid var(--black);
+    flex-shrink: 0;
+    margin-top: 2px;
+    background: white;
+  }
+
+  .cp-fire .checkpoint-top { background: var(--pink); color: white; }
+  .cp-orange .checkpoint-top { background: var(--orange); color: var(--black); }
+  .cp-yellow .checkpoint-top { background: var(--yellow); color: var(--black); }
+  .cp-cyan .checkpoint-top { background: var(--cyan); color: var(--black); }
+  .cp-green .checkpoint-top { background: var(--green); color: var(--black); }
+  .cp-purple .checkpoint-top { background: var(--purple); color: white; }
+
+  /* ===== HIDDEN MECHANIC ===== */
+  .hidden {
+    border: 4px dashed var(--yellow);
+    background: rgba(255,214,0,0.05);
+    padding: 14px 18px;
+    margin: 14px 0;
+    position: relative;
+  }
+
+  .hidden-label {
+    position: absolute;
+    top: -14px; left: 14px;
+    font-family: 'Bangers', cursive;
+    font-size: 13px;
+    letter-spacing: 3px;
+    background: var(--yellow);
+    color: var(--black);
+    border: 3px solid var(--black);
+    padding: 2px 10px;
+  }
+
+  .hidden-title {
+    font-family: 'Bangers', cursive;
+    font-size: 18px;
+    letter-spacing: 1.5px;
+    color: var(--yellow);
+    margin-bottom: 6px;
+    margin-top: 4px;
+  }
+
+  .hidden-body {
+    font-size: 12.5px;
+    line-height: 1.75;
+    color: var(--white);
+  }
+
+  /* ===== CALLOUT ===== */
+  .callout {
+    padding: 14px 18px;
+    border: 4px solid var(--black);
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+
+  .callout-icon { font-size: 26px; flex-shrink: 0; }
+  .callout-text { font-size: 13px; line-height: 1.7; }
+  .callout-text strong { font-family: 'Oswald', sans-serif; letter-spacing: 1px; }
+  .callout.info { background: #001f5c; color: white; }
+  .callout.warn { background: var(--orange); color: var(--black); }
+  .callout.danger { background: var(--pink); color: white; }
+  .callout.tip { background: var(--green); color: var(--black); }
+  .callout.secret { background: var(--purple); color: white; }
+  .callout.dark { background: #1a1a1a; color: var(--cyan); }
+
+  /* ===== DIVIDER ===== */
+  .divider { border: none; border-top: 4px solid var(--orange); margin: 28px 0; }
+
+  /* ===== ALLOCATION BLOCK ===== */
+  .alloc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 10px;
+    margin: 14px 0;
+  }
+
+  .alloc-block {
+    border: 4px solid var(--black);
+    overflow: hidden;
+    box-shadow: 4px 4px 0 var(--black);
+  }
+
+  .alloc-top {
+    padding: 8px 12px;
+    font-family: 'Bangers', cursive;
+    font-size: 14px; letter-spacing: 1.5px;
+    border-bottom: 3px solid var(--black);
+  }
+
+  .alloc-amount {
+    padding: 8px 12px 4px;
+    background: var(--white);
+    color: var(--ink);
+    font-family: 'Bangers', cursive;
+    font-size: 26px;
+    line-height: 1;
+  }
+
+  .alloc-note {
+    padding: 0 12px 10px;
+    background: var(--white);
+    color: #444;
+    font-size: 10.5px;
+    line-height: 1.5;
+  }
+
+  .al-tax .alloc-top { background: var(--pink); color: white; }
+  .al-rent .alloc-top { background: #444; color: var(--white); }
+  .al-car .alloc-top { background: #666; color: var(--white); }
+  .al-cc .alloc-top { background: var(--orange); color: white; }
+  .al-efund .alloc-top { background: var(--cyan); color: var(--black); }
+  .al-roth .alloc-top { background: var(--purple); color: white; }
+  .al-life .alloc-top { background: var(--yellow); color: var(--black); }
+  .al-free .alloc-top { background: var(--green); color: var(--black); }
+
+  /* ===== RULE LINE ===== */
+  .rule-line {
+    display: flex;
+    align-items: stretch;
+    border: 4px solid var(--black);
+    overflow: hidden;
+    margin: 8px 0;
+    box-shadow: 4px 4px 0 var(--black);
+  }
+
+  .rule-line-tag {
+    padding: 10px 14px;
+    font-family: 'Bangers', cursive;
+    font-size: 14px; letter-spacing: 1.5px;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    min-width: 80px;
+    text-align: center;
+    justify-content: center;
+    border-right: 3px solid var(--black);
+  }
+
+  .rule-line-body {
+    flex: 1;
+    background: var(--white);
+    color: var(--ink);
+    padding: 10px 14px;
+    font-size: 12.5px;
+    line-height: 1.65;
+  }
+
+  .rl-now .rule-line-tag { background: var(--pink); color: white; }
+  .rl-daily .rule-line-tag { background: var(--orange); color: white; }
+  .rl-weekly .rule-line-tag { background: var(--yellow); color: var(--black); }
+  .rl-monthly .rule-line-tag { background: var(--cyan); color: var(--black); }
+  .rl-never .rule-line-tag { background: #111; color: var(--pink); }
+  .rl-when .rule-line-tag { background: var(--purple); color: white; }
+  .rl-if .rule-line-tag { background: var(--green); color: var(--black); }
+
+  /* ===== QUOTE ===== */
+  .big-quote {
+    border-left: 6px solid var(--orange);
+    padding: 16px 20px;
+    margin: 20px 0;
+    background: rgba(255,85,0,0.06);
+  }
+  .big-quote p {
+    font-family: 'Permanent Marker', cursive;
+    font-size: 15px; line-height: 1.6;
+    color: var(--white);
+  }
+  .big-quote cite {
+    display: block; margin-top: 8px;
+    font-size: 11px; font-family: 'Oswald', sans-serif;
+    letter-spacing: 2px; text-transform: uppercase;
+    color: var(--orange); font-style: normal;
+  }
+
+  /* ===== SPEECH BUBBLE ===== */
+  .speech-bubble {
+    background: var(--yellow);
+    border: 4px solid var(--black);
+    box-shadow: var(--shadow);
+    padding: 16px 20px;
+    position: relative;
+    margin: 20px 0;
+    max-width: 600px;
+  }
+  .speech-bubble::after { content:''; position:absolute; bottom:-22px; left:32px; width:0; height:0; border-left:16px solid transparent; border-top:22px solid var(--black); }
+  .speech-bubble::before { content:''; position:absolute; bottom:-16px; left:34px; width:0; height:0; border-left:13px solid transparent; border-top:18px solid var(--yellow); z-index:1; }
+  .bubble-text { font-family:'Permanent Marker',cursive; font-size:14px; color:var(--ink); line-height:1.6; }
+
+  /* ===== PHASE TRACKER ===== */
+  .phase-track {
+    display: flex;
+    gap: 0;
+    margin: 18px 0;
+    border: 4px solid var(--black);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+
+  .phase-node {
+    flex: 1;
+    text-align: center;
+    padding: 14px 10px;
+    border-right: 3px solid var(--black);
+    position: relative;
+  }
+
+  .phase-node:last-child { border-right: none; }
+
+  .phase-label {
+    font-family: 'Bangers', cursive;
+    font-size: 16px; letter-spacing: 1.5px;
+    line-height: 1.1;
+  }
+
+  .phase-time {
+    font-size: 9px;
+    font-family: 'Oswald', sans-serif;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-top: 4px;
+    opacity: 0.8;
+  }
+
+  .ph-1 { background: var(--pink); color: white; }
+  .ph-2 { background: var(--orange); color: white; }
+  .ph-3 { background: var(--yellow); color: var(--black); }
+  .ph-4 { background: var(--cyan); color: var(--black); }
+  .ph-5 { background: var(--purple); color: white; }
+
+  .phase-node.active::after {
+    content: '◀ NOW';
+    position: absolute;
+    bottom: -26px; left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Bangers', cursive;
+    font-size: 11px; letter-spacing: 2px;
+    color: var(--white);
+    white-space: nowrap;
+  }
+
+  /* ===== FOOTER ===== */
+  footer {
+    text-align: center; padding: 40px 0;
+    font-family: 'Bangers', cursive; font-size: 13px;
+    letter-spacing: 3px; color: rgba(245,239,216,0.25);
+  }
+
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: #111; }
+  ::-webkit-scrollbar-thumb { background: var(--orange); border: 2px solid #111; }
+
+  /* TAG */
+  .tag {
+    display: inline-block;
+    font-family: 'Oswald', sans-serif;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase;
+    border: 2px solid currentColor;
+    padding: 2px 8px; margin: 2px;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ===== HERO ===== -->
+  <div class="hero">
+    <div class="hero-label">System Navigation Walkthrough · Player: Ali · May 2026</div>
+    <h1 class="hero-title">THE<br>GAMEPLAN</h1>
+    <div class="hero-sub">HOW TO ACTUALLY PLAY FROM WHERE YOU ARE</div>
+    <p class="hero-desc">
+      The World Map showed you the board. The Character Sheet showed you your position. This document is different — it tells you exactly what to do, in what order, on what timeline, and why. No theory. No context. Just moves. The only question is whether you execute.
+    </p>
+    <div class="hero-badges">
+      <div class="hbadge b1">★ CHAPTER 1: FIRE SEASON</div>
+      <div class="hbadge b2">★ CHAPTER 2: STABILIZE</div>
+      <div class="hbadge b3">★ CHAPTER 3: BUILD</div>
+      <div class="hbadge b4">★ CHAPTER 4: LAUNCH</div>
+    </div>
+  </div>
+
+  <!-- ===== PHASE TRACKER ===== -->
+  <div style="margin-top:32px;">
+    <div style="font-family:'Oswald',sans-serif; font-size:11px; letter-spacing:4px; text-transform:uppercase; color:rgba(245,239,216,0.5); margin-bottom:8px;">WHERE YOU ARE IN THE JOURNEY</div>
+    <div class="phase-track">
+      <div class="phase-node ph-1 active">
+        <div class="phase-label">FIRE SEASON</div>
+        <div class="phase-time">Now — Month 1</div>
+      </div>
+      <div class="phase-node ph-2">
+        <div class="phase-label">DEBT KILL</div>
+        <div class="phase-time">Month 1–6</div>
+      </div>
+      <div class="phase-node ph-3">
+        <div class="phase-label">CONSOLIDATE</div>
+        <div class="phase-time">Month 6–18</div>
+      </div>
+      <div class="phase-node ph-4">
+        <div class="phase-label">BUILD</div>
+        <div class="phase-time">Year 2–3</div>
+      </div>
+      <div class="phase-node ph-5">
+        <div class="phase-label">LAUNCH</div>
+        <div class="phase-time">Year 3–5</div>
+      </div>
+    </div>
+    <div style="height:20px;"></div>
+  </div>
+
+  <!-- ===== OPERATING RULES ===== -->
+  <div style="margin-top:12px; border:4px solid var(--black); overflow:hidden; box-shadow:var(--shadow-lg);">
+    <div style="background:var(--black); color:var(--yellow); padding:12px 20px; font-family:'Bangers',cursive; font-size:20px; letter-spacing:3px; border-bottom:4px solid var(--black);">
+      ⚡ OPERATING RULES — READ BEFORE ANYTHING ELSE
+    </div>
+    <div style="background:#0f0f0f; padding:16px 20px; display:flex; flex-direction:column; gap:8px;">
+
+      <div class="rule-line rl-now">
+        <div class="rule-line-tag">NOW</div>
+        <div class="rule-line-body"><strong>Open a separate savings account TODAY and label it TAXES.</strong> Transfer $700 this week. Auto-transfer $700 every month. This is the first move. Nothing else unlocks until this is done.</div>
+      </div>
+      <div class="rule-line rl-daily">
+        <div class="rule-line-tag">DAILY</div>
+        <div class="rule-line-body"><strong>Track every mile driven for Uber Eats.</strong> Download Stride or Everlance. Open it before your first delivery every single day. 67¢/mile is tax-deductible. At 800 miles/month this saves you ~$6,400/year in taxable income. You cannot retroactively track. Start now.</div>
+      </div>
+      <div class="rule-line rl-weekly">
+        <div class="rule-line-tag">WEEKLY</div>
+        <div class="rule-line-body"><strong>Check your bank balance and your tax account every Sunday.</strong> Five minutes. No exceptions. Financial awareness is not optional when you're self-employed. The people who get blindsided are the ones who don't look.</div>
+      </div>
+      <div class="rule-line rl-monthly">
+        <div class="rule-line-tag">MONTHLY</div>
+        <div class="rule-line-body"><strong>Pay every bill on time, every month, without exception.</strong> Set up autopay for at minimum the minimum payment on all accounts. Payment history is 35% of your credit score. One miss can cost 60–110 points and takes 12 months to recover.</div>
+      </div>
+      <div class="rule-line rl-never">
+        <div class="rule-line-tag">NEVER</div>
+        <div class="rule-line-body"><strong>Do not touch the Roth IRA.</strong> Not for emergencies, not for opportunities, not for anything. Early withdrawal costs 10% penalty + income taxes, which would wipe out some of the gains that took years to build. It doesn't exist as spending money. It exists as your future.</div>
+      </div>
+      <div class="rule-line rl-never">
+        <div class="rule-line-tag">NEVER</div>
+        <div class="rule-line-body"><strong>Do not apply for new credit cards or loans until your score is above 650.</strong> Every hard inquiry costs points. Every new account lowers your average account age. You don't need more credit lines — you need to fix what's already open.</div>
+      </div>
+      <div class="rule-line rl-if">
+        <div class="rule-line-tag">IF</div>
+        <div class="rule-line-body"><strong>If a financial "opportunity" requires you to act before you fully understand it — don't.</strong> Anyone who tells you the window closes today is using urgency as a weapon. Real opportunities have due diligence windows. This is relevant for everything from investment pitches to "cash advance" apps.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ===== CHAPTER 1: FIRE SEASON ===== -->
+  <div class="chapter ch-fire">
+    <div class="chapter-banner">
+      <div class="chapter-num">01</div>
+      <div class="chapter-info">
+        <div class="chapter-tag">Phase 1</div>
+        <div class="chapter-title">FIRE SEASON</div>
+        <div class="chapter-timeline">Now → End of Month 1 · Stop the Bleeding First</div>
+      </div>
+    </div>
+    <div class="chapter-body">
+
+      <div class="callout danger" style="margin-top:0;">
+        <div class="callout-icon">🔥</div>
+        <div class="callout-text">
+          <strong>THE SITUATION:</strong> There are two active fires: (1) a tax liability accumulating every week that you can't see, and (2) an unfinished 2025 tax return with potential interest accruing since April 2025. These two problems need to be contained before you can do anything productive. Firefighting first. Building later.
+        </div>
+      </div>
+
+      <!-- BOSS: IRS -->
+      <div class="boss b-pink" style="margin-top:18px;">
+        <div class="boss-header">
+          <div class="boss-icon">🏛️</div>
+          <div>
+            <div class="boss-name">BOSS #1: THE IRS CLOCK</div>
+            <div class="boss-sub">Threat Type: Silent Accumulation · Difficulty: High if ignored, Manageable if faced</div>
+          </div>
+        </div>
+        <div class="boss-body">
+          You've been earning ~$2,600/month since January 2026 with zero tax withheld. That's roughly 4 months × $702 = <strong>~$2,800 in owed taxes already in the system</strong> — it just hasn't been billed yet. The 2025 extension bought you time to file, not to pay. If you owed for 2025, the IRS has been adding 8% annual interest since April 2025.
+          <div class="boss-weakness">
+            <strong>WEAKNESS:</strong> This boss only grows when ignored. Faced directly, it becomes manageable. A payment plan with the IRS (called an installment agreement) can be set up online at IRS.gov for a $31 fee and stops the clock on penalties once you're in a plan. The IRS is actually cooperative with people who engage proactively.
+          </div>
+        </div>
+      </div>
+
+      <div class="mission-stack" style="margin-top:16px;">
+        <div class="mission">
+          <div class="mission-left">🏦</div>
+          <div class="mission-content">
+            <div class="mission-title">MISSION 1A — OPEN THE TAX ACCOUNT</div>
+            <div class="mission-desc">Open a free savings account at Ally Bank, Marcus by Goldman Sachs, or SoFi (all free, no minimums, ~4.5% APY). Name it "2026 TAX HOLD." Transfer $700 this week — this represents your outstanding tax liability from the most recent month. Set an automatic monthly transfer of $700 on your pay cycle.</div>
+            <div class="mission-footer">
+              <span class="mission-tag urgent">DO THIS WEEK</span>
+              <span class="mission-tag free">COSTS $0</span>
+              <span class="mission-tag high">HIGHEST PRIORITY</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mission">
+          <div class="mission-left">📋</div>
+          <div class="mission-content">
+            <div class="mission-title">MISSION 1B — FINISH 2025 TAXES</div>
+            <div class="mission-desc">Gather all 2025 income documents. File using FreeTaxUSA (free for federal if income under $45K) or pay ~$50 for TurboTax Self-Employed. If you owe: do not panic. Go to IRS.gov → "Payment Plans" → set up an installment agreement online. $31 fee. Do this before the system sends a notice — proactive gets better treatment than reactive.</div>
+            <div class="mission-footer">
+              <span class="mission-tag urgent">THIS MONTH</span>
+              <span class="mission-tag medium">$0–$50 COST</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mission">
+          <div class="mission-left">📍</div>
+          <div class="mission-content">
+            <div class="mission-title">MISSION 1C — ACTIVATE MILEAGE TRACKING</div>
+            <div class="mission-desc">Download Stride Tax (free). Create account. Hit "Start Tracking" before your first Uber Eats delivery today. Every tracked mile = 67¢ in deductions. If you drive 600 miles/month for deliveries, that's $4,824/year removed from your taxable income — potentially saving you $1,300–$1,800 in actual taxes. You cannot retroactively claim miles you didn't track. This is one of the highest-leverage free moves available to you.</div>
+            <div class="mission-footer">
+              <span class="mission-tag urgent">TODAY</span>
+              <span class="mission-tag free">FREE APP</span>
+              <span class="mission-tag high">$1,000+ ANNUAL SAVINGS</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mission">
+          <div class="mission-left">💳</div>
+          <div class="mission-content">
+            <div class="mission-title">MISSION 1D — AUTOPAY ALL ACCOUNTS</div>
+            <div class="mission-desc">Log into Discover and the California credit union. Set up autopay for at minimum the minimum payment on both. This is not optional. You are rebuilding a credit score that was at 780 — the single most damaging thing you can do is miss a payment during recovery. Autopay the minimum. You'll pay more on top of that, but the minimum is the floor that protects your history.</div>
+            <div class="mission-footer">
+              <span class="mission-tag urgent">THIS WEEK</span>
+              <span class="mission-tag free">COSTS $0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mission">
+          <div class="mission-left">📊</div>
+          <div class="mission-content">
+            <div class="mission-title">MISSION 1E — PULL YOUR CREDIT REPORT</div>
+            <div class="mission-desc">Go to AnnualCreditReport.com (the only official free one — ignore look-alikes). Pull all three bureaus: Equifax, Experian, TransUnion. Look for: errors in personal info, accounts you don't recognize, late payments that aren't yours, balances that look wrong. 1 in 5 Americans has a material error. Dispute anything inaccurate directly through each bureau's website. This costs nothing and can move your score 20–50 points if you find something wrong.</div>
+            <div class="mission-footer">
+              <span class="mission-tag high">THIS MONTH</span>
+              <span class="mission-tag free">COMPLETELY FREE</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="checkpoint cp-fire" style="margin-top:20px;">
+        <div class="checkpoint-top">🏁 CHAPTER 1 CLEAR CONDITIONS</div>
+        <div class="checkpoint-body">
+          <div class="check-item"><div class="check-box"></div><div>Tax savings account open and funded with first $700</div></div>
+          <div class="check-item"><div class="check-box"></div><div>Auto-transfer of $700/month active</div></div>
+          <div class="check-item"><div class="check-box"></div><div>2025 taxes filed — or payment plan with IRS established</div></div>
+          <div class="check-item"><div class="check-box"></div><div>Mileage tracking app running daily</div></div>
+          <div class="check-item"><div class="check-box"></div><div>Autopay active on both debt accounts (Discover + auto loan)</div></div>
+          <div class="check-item"><div class="check-box"></div><div>Free credit report pulled and reviewed</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== CHAPTER 2: DEBT KILL ===== -->
+  <div class="chapter ch-orange" style="margin-top:28px;">
+    <div class="chapter-banner">
+      <div class="chapter-num">02</div>
+      <div class="chapter-info">
+        <div class="chapter-tag">Phase 2</div>
+        <div class="chapter-title">THE DEBT KILL</div>
+        <div class="chapter-timeline">Month 1–6 · Eliminate the High-Interest Position</div>
+      </div>
+    </div>
+    <div class="chapter-body">
+
+      <div class="callout warn" style="margin-top:0;">
+        <div class="callout-icon">🎯</div>
+        <div class="callout-text">
+          <strong>THE OBJECTIVE:</strong> Your Discover card at ~24% APR is the most expensive money in your life. At $2,159, it can be gone in 5 months at $500/month — paying only $123 in interest. Every dollar sitting on that card is costing you 24% annually. Eliminating it also drops your credit utilization ratio, which is 30% of your FICO score. This is two wins from one move.
+        </div>
+      </div>
+
+      <!-- MONTHLY ALLOCATION -->
+      <div style="margin-top:18px; font-family:'Oswald',sans-serif; font-size:11px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:rgba(245,239,216,0.6); margin-bottom:10px;">MONTHLY MONEY ALLOCATION — PHASE 2</div>
+
+      <div class="alloc-grid">
+        <div class="alloc-block al-tax">
+          <div class="alloc-top">🧾 TAX HOLD</div>
+          <div class="alloc-amount">$700</div>
+          <div class="alloc-note">Non-negotiable. Goes to dedicated savings account before anything else.</div>
+        </div>
+        <div class="alloc-block al-rent">
+          <div class="alloc-top">🏠 RENT</div>
+          <div class="alloc-amount">$550</div>
+          <div class="alloc-note">To parents. Pays for below-market housing advantage.</div>
+        </div>
+        <div class="alloc-block al-car">
+          <div class="alloc-top">🚗 AUTO LOAN</div>
+          <div class="alloc-amount">$276</div>
+          <div class="alloc-note">Minimum only. Do not overpay until the CC is dead.</div>
+        </div>
+        <div class="alloc-block al-cc">
+          <div class="alloc-top">💳 CC ATTACK</div>
+          <div class="alloc-amount">$400–500</div>
+          <div class="alloc-note">The primary offensive move. $500/mo = gone in 5 months.</div>
+        </div>
+        <div class="alloc-block al-efund">
+          <div class="alloc-top">🛡️ E-FUND</div>
+          <div class="alloc-amount">$100</div>
+          <div class="alloc-note">Building toward $1,000 in a high-yield savings account.</div>
+        </div>
+        <div class="alloc-block al-life">
+          <div class="alloc-top">🌮 LIFE</div>
+          <div class="alloc-amount">~$450–550</div>
+          <div class="alloc-note">Food, phone, gas, car maintenance, personal. Track loosely.</div>
+        </div>
+      </div>
+
+      <div class="hidden" style="margin-top:18px;">
+        <div class="hidden-label">🔍 HIDDEN MECHANIC UNLOCKED</div>
+        <div class="hidden-title" style="margin-top:8px;">THE MILEAGE DEDUCTION COULD CHANGE YOUR ACTUAL TAX RATE</div>
+        <div class="hidden-body">
+          The 27% tax hold is a conservative estimate without deductions. Once you track mileage for a full quarter, calculate: (miles driven for work × $0.67) + phone bill percentage used for work + any car maintenance costs. These reduce your net profit, which is what's actually taxed. If you drive 700 miles/month for Uber Eats, that's $5,628/year in deductions. On a $31,200 gross income, your taxable net could drop to ~$22,000 — changing your effective rate significantly. After your first full quarter of tracking, revisit the $700/month hold with a CPA or TurboTax self-employed calculator. You may be able to redirect some of that to the CC attack.
+        </div>
+      </div>
+
+      <!-- BOSS: CREDIT SCORE -->
+      <div class="boss b-dark" style="margin-top:18px;">
+        <div class="boss-header">
+          <div class="boss-icon">📉</div>
+          <div>
+            <div class="boss-name">BOSS #2: THE 537 TRAP</div>
+            <div class="boss-sub">Threat Type: Score Stagnation · Difficulty: Medium — Patience Required</div>
+          </div>
+        </div>
+        <div class="boss-body">
+          A 537 score costs you money every day in the form of higher insurance premiums, higher interest rates on any future borrowing, and lost opportunities (some Chicago-area apartments require 650+, some employers check credit). You were at 780 — this was a self-inflicted drop, which means it's fully recoverable. But you need clean data going into the bureaus for 12+ months to see the full recovery.
+          <div class="boss-weakness">
+            <strong>WEAKNESSES:</strong> (1) Pay on time, every time — this is 35% of the score. (2) Get the Discover utilization below 30% — 30% of score. Every $100 you pay down on Discover is a direct attack on this boss. At $2,159 balance: getting below $900 (30% of a $3K limit) is a visible score jump. Getting to $300 (10%) is a major jump.
+          </div>
+        </div>
+      </div>
+
+      <div class="mission-stack" style="margin-top:16px;">
+
+        <div class="mission">
+          <div class="mission-left">💡</div>
+          <div class="mission-content">
+            <div class="mission-title">MISSION 2A — KNOW YOUR DISCOVER LIMIT</div>
+            <div class="mission-desc">Log into Discover and find your credit limit. Divide your $2,159 balance by that limit. That percentage is your utilization rate. If it's above 30%, every payment you make directly attacks your credit score. If it's above 50%, you're in the danger zone. Write down: your limit, your current utilization %, and your target (get below 30%, then below 10%).</div>
+            <div class="mission-footer">
+              <span class="mission-tag urgent">THIS WEEK</span>
+              <span class="mission-tag free">COSTS $0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mission">
+          <div class="mission-left">🚗</div>
+          <div class="mission-content">
+            <div class="mission-title">MISSION 2B — PROTECT THE INCOME MACHINE</div>
+            <div class="mission-desc">The 2013 Honda Fit is your primary income generator. Maintenance is not optional expense — it's business investment. Track oil change mileage intervals (every 5,000 miles for conventional oil). Check tires monthly (under-inflation increases wear and fuel use). Keep windshield washer fluid full. A single major breakdown with no emergency fund means going back into CC debt. The car keeps you in the game.</div>
+            <div class="mission-footer">
+              <span class="mission-tag medium">ONGOING</span>
+              <span class="mission-tag high">PROTECTS INCOME</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mission">
+          <div class="mission-left">🏗️</div>
+          <div class="mission-content">
+            <div class="mission-title">MISSION 2C — BUILD THE $1,000 EMERGENCY FUND IN PARALLEL</div>
+            <div class="mission-desc">The CC attack is your primary offensive move. But you need a $1,000 floor in a separate HYSA (high-yield savings — Ally, Marcus, SoFi) at the same time. This is the shield that keeps an unexpected expense from sending you back to the credit card. The minimum in that account is $1,000. Don't dip below it. Don't touch it for non-emergencies. A car repair is an emergency. A new gaming setup is not.</div>
+            <div class="mission-footer">
+              <span class="mission-tag medium">MONTHS 1–3</span>
+              <span class="mission-tag passive">DEFENSIVE</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="checkpoint cp-orange" style="margin-top:20px;">
+        <div class="checkpoint-top">🏁 CHAPTER 2 CLEAR CONDITIONS — MONTH 5–6</div>
+        <div class="checkpoint-body">
+          <div class="check-item"><div class="check-box"></div><div>Discover card balance: $0</div></div>
+          <div class="check-item"><div class="check-box"></div><div>Emergency fund: $1,000 in HYSA</div></div>
+          <div class="check-item"><div class="check-box"></div><div>Credit score: visible upward movement (est. 580–620 range)</div></div>
+          <div class="check-item"><div class="check-box"></div><div>Zero missed payments across all accounts for 6 consecutive months</div></div>
+          <div class="check-item"><div class="check-box"></div><div>Mileage logs running for 6 months — first quarter deduction calculation done</div></div>
+          <div class="check-item"><div class="check-box"></div><div>2026 Q1 estimated tax payment made (if required — check with IRS.gov)</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== CHAPTER 3: CONSOLIDATE ===== -->
+  <div class="chapter ch-yellow" style="margin-top:28px;">
+    <div class="chapter-banner">
+      <div class="chapter-num">03</div>
+      <div class="chapter-info">
+        <div class="chapter-tag">Phase 3</div>
+        <div class="chapter-title">CONSOLIDATE + REDIRECT</div>
+        <div class="chapter-timeline">Month 6–18 · Turn Freed Cash Into Momentum</div>
+      </div>
+    </div>
+    <div class="chapter-body">
+
+      <div class="callout info" style="margin-top:0;">
+        <div class="callout-icon">⚡</div>
+        <div class="callout-text">
+          <strong>THE SHIFT:</strong> The CC is dead. The emergency fund exists. Your credit score is recovering. Now the cash that was going to Discover ($400–500/month) doesn't disappear — it redirects. This phase is about building momentum across three tracks simultaneously: debt elimination, wealth building, and score recovery — while keeping the day-to-day clean.
+        </div>
+      </div>
+
+      <!-- ALLOCATION SHIFT -->
+      <div style="margin-top:18px; font-family:'Oswald',sans-serif; font-size:11px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:rgba(245,239,216,0.6); margin-bottom:10px;">MONTHLY ALLOCATION — PHASE 3 (CC GONE)</div>
+
+      <div class="alloc-grid">
+        <div class="alloc-block al-tax">
+          <div class="alloc-top">🧾 TAX HOLD</div>
+          <div class="alloc-amount">$600–700</div>
+          <div class="alloc-note">Adjusted based on mileage deductions tracked. May drop as deductions become clear.</div>
+        </div>
+        <div class="alloc-block al-rent">
+          <div class="alloc-top">🏠 RENT</div>
+          <div class="alloc-amount">$550</div>
+          <div class="alloc-note">Unchanged. Still the best housing deal in Chicago.</div>
+        </div>
+        <div class="alloc-block al-car">
+          <div class="alloc-top">🚗 AUTO LOAN</div>
+          <div class="alloc-amount">$676+</div>
+          <div class="alloc-note">Minimum $276 + redirect $400 from old CC payment. Accelerate payoff 2–3 years.</div>
+        </div>
+        <div class="alloc-block al-roth">
+          <div class="alloc-top">📊 ROTH IRA</div>
+          <div class="alloc-amount">$100/mo</div>
+          <div class="alloc-note">Resumed contributions. Compounding restarts. Works in background.</div>
+        </div>
+        <div class="alloc-block al-efund">
+          <div class="alloc-top">🛡️ E-FUND GROW</div>
+          <div class="alloc-amount">$100/mo</div>
+          <div class="alloc-note">Building toward $3,000 (3-month buffer). Takes pressure off car risks.</div>
+        </div>
+        <div class="alloc-block al-life">
+          <div class="alloc-top">🌮 LIFE</div>
+          <div class="alloc-amount">~$374–474</div>
+          <div class="alloc-note">Tighter but cleaner. No credit card as a crutch.</div>
+        </div>
+      </div>
+
+      <div class="mission-stack" style="margin-top:18px;">
+
+        <div class="mission">
+          <div class="mission-left">📊</div>
+          <div class="mission-content">
+            <div class="mission-title">MISSION 3A — RESUME ROTH IRA CONTRIBUTIONS</div>
+            <div class="mission-desc">Log into Fidelity. Set up automatic monthly contribution of $100. Direct it to FSKAX (Fidelity Total Market Index) — your largest and best-positioned holding. You don't need to change the allocation — just feed the machine. The account is already well-structured: a blend of total US market, international, real estate, bonds, and inflation protection. The 2025 max contribution is $7,000. You won't hit that immediately, but every dollar you add now compounds tax-free for potentially 30+ years.</div>
+            <div class="mission-footer">
+              <span class="mission-tag high">MONTH 6</span>
+              <span class="mission-tag growth">LONG GAME</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mission">
+          <div class="mission-left">🚗</div>
+          <div class="mission-content">
+            <div class="mission-title">MISSION 3B — ACCELERATE AUTO LOAN PAYOFF</div>
+            <div class="mission-desc">Redirect the $400–500/month that was attacking the CC to the auto loan. Call or log in to the California credit union and confirm: (1) your current interest rate, (2) whether there's a prepayment penalty (there almost certainly isn't). Make extra payments toward principal — specify "apply to principal" when paying extra. At $676/month total, the $11,850 loan is gone in ~18 months from when you start. Car paid off = $276/month freed permanently.</div>
+            <div class="mission-footer">
+              <span class="mission-tag high">MONTH 6+</span>
+              <span class="mission-tag medium">FREES $276/MO PERMANENTLY</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mission">
+          <div class="mission-left">💳</div>
+          <div class="mission-content">
+            <div class="mission-title">MISSION 3C — WEAPONIZE THE DISCOVER CARD</div>
+            <div class="mission-desc">The card that was your enemy is now your credit score tool. After the balance hits $0: keep it open (do not close it — account age matters). Put ONE recurring subscription on it (Spotify, Netflix, or a monthly gas fill-up). Set the full balance to autopay monthly. Your utilization will be near 0%. You get credit score benefit from an active, paid-in-full account. You get the subscription you were going to buy anyway. You build habit of paying cards in full — the right way to use them.</div>
+            <div class="mission-footer">
+              <span class="mission-tag passive">ONGOING</span>
+              <span class="mission-tag free">COSTS $0 EXTRA</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mission">
+          <div class="mission-left">📚</div>
+          <div class="mission-content">
+            <div class="mission-title">MISSION 3D — QUARTERLY ESTIMATED TAXES (IF APPLICABLE)</div>
+            <div class="mission-desc">As a self-employed worker earning over $1,000 in annual profit, the IRS expects quarterly estimated payments: April 15, June 15, September 15, January 15. Failing to pay quarterly means a penalty on top of your annual bill. The money is already in your TAX HOLD account — you're just sending it in four installments instead of one. IRS Form 1040-ES guides the calculation. Or use IRS Direct Pay online (free). Your CPA or TurboTax will tell you the amounts after year 1 is filed.</div>
+            <div class="mission-footer">
+              <span class="mission-tag medium">QUARTERLY</span>
+              <span class="mission-tag high">PREVENTS PENALTIES</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="hidden" style="margin-top:18px;">
+        <div class="hidden-label">🔍 HIDDEN MECHANIC UNLOCKED</div>
+        <div class="hidden-title" style="margin-top:8px;">THE FAMILY ECOSYSTEM IS A FINANCIAL ASSET</div>
+        <div class="hidden-body">
+          9 people. Paid-off house. Open backyard. Chicago zip code. This isn't a burden — it's a platform. A family that understands the credit system avoids predatory loans. A family with a small garden reduces food costs and builds community. A family with one financially literate member who shares knowledge — that's a generational lift that no individual paycheck can match. Your role as the bridge isn't charity. It's infrastructure. The people around you are more financially stable if you are. That's a compounding return nobody accounts for.
+        </div>
+      </div>
+
+      <div class="checkpoint cp-yellow" style="margin-top:20px;">
+        <div class="checkpoint-top">🏁 CHAPTER 3 CLEAR — MONTH 18</div>
+        <div class="checkpoint-body">
+          <div class="check-item"><div class="check-box"></div><div>Credit score: 680–720 range</div></div>
+          <div class="check-item"><div class="check-box"></div><div>Auto loan: significantly reduced, likely under $5,000 remaining</div></div>
+          <div class="check-item"><div class="check-box"></div><div>Roth IRA: contributions running for 12 months, account value ~$2,500–3,000</div></div>
+          <div class="check-item"><div class="check-box"></div><div>Emergency fund: $3,000 in HYSA</div></div>
+          <div class="check-item"><div class="check-box"></div><div>Quarterly tax payments: in a consistent rhythm</div></div>
+          <div class="check-item"><div class="check-box"></div><div>Net worth: no longer negative — crossing into positive territory</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== CHAPTER 4: BUILD ===== -->
+  <div class="chapter ch-cyan" style="margin-top:28px;">
+    <div class="chapter-banner">
+      <div class="chapter-num">04</div>
+      <div class="chapter-info">
+        <div class="chapter-tag">Phase 4</div>
+        <div class="chapter-title">BUILD THE BRIDGE BUSINESS</div>
+        <div class="chapter-timeline">Year 2–3 · From Gig Worker to Business Owner</div>
+      </div>
+    </div>
+    <div class="chapter-body">
+
+      <div class="callout dark" style="margin-top:0;">
+        <div class="callout-icon">🏗️</div>
+        <div class="callout-text">
+          <strong>THE TRANSITION:</strong> By this point your debt is nearly gone, your credit score is good, your emergency fund is real, and your Roth IRA is growing. You've built the internal infrastructure. Now you build the external one. This phase is about creating a legal business entity and identifying the specific form your bridge capacity will take as an income source.
+        </div>
+      </div>
+
+      <div class="boss b-purple" style="margin-top:18px;">
+        <div class="boss-header">
+          <div class="boss-icon">🪞</div>
+          <div>
+            <div class="boss-name">BOSS #3: THE AUTHORITY GAP</div>
+            <div class="boss-sub">Threat Type: Internal · Difficulty: The Hardest Boss in the Game</div>
+          </div>
+        </div>
+        <div class="boss-body">
+          You named this one yourself. You know the maps. You understand systems most people around you don't. But you hesitate to take authority over the bridge role because self-esteem gets in the way. This is the real boss of Chapter 4 — not the business registration, not the client acquisition, not the tax structure. Those are mechanical. The authority gap is the only thing that can actually stop you.
+          <br><br>
+          The Adlerian frame you've been working with is useful here: the courage to be disliked is the same muscle as the courage to be the guide. Both require accepting that your contribution has value regardless of whether everyone approves of you offering it. The people who pay for your knowledge don't need to like you first. They need to find what you know useful.
+          <div class="boss-weakness">
+            <strong>WEAKNESS:</strong> The authority gap closes through reps, not insight. You already have the insight. The next step is one small offer — to one person — for actual money. Not a gift. Not a favor. A transaction. The first time someone pays you for what you know, the identity shift begins.
+          </div>
+        </div>
+      </div>
+
+      <div class="mission-stack" style="margin-top:16px;">
+
+        <div class="mission">
+          <div class="mission-left">🏢</div>
+          <div class="mission-content">
+            <div class="mission-title">MISSION 4A — FORM THE LLC</div>
+            <div class="mission-desc">Register a single-member LLC in Illinois. Go to Illinois.gov → Business Services → LLC formation. Filing fee: ~$150. Takes 1–2 weeks. Get an EIN (Employer Identification Number) from IRS.gov immediately after — it's free and instant online. Open a separate business checking account (a basic free one at a local credit union works). This entity separates your personal and business finances, unlocks business deductions, and makes you a business owner on paper — which is the starting position for everything that follows.</div>
+            <div class="mission-footer">
+              <span class="mission-tag high">YEAR 2 TARGET</span>
+              <span class="mission-tag medium">$150 COST</span>
+              <span class="mission-tag growth">UNLOCKS TAX TOOLS</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mission">
+          <div class="mission-left">🧠</div>
+          <div class="mission-content">
+            <div class="mission-title">MISSION 4B — IDENTIFY THE BRIDGE OFFER</div>
+            <div class="mission-desc">What you know: financial systems, credit mechanics, Jungian/depth frameworks, how institutions actually work vs. what they claim, cultural navigation between Spanish-English worlds, systems thinking. What people around you need: someone who can translate these things into actionable understanding without condescension. The offer could be: 1-on-1 financial literacy sessions for Spanish-speaking families in Chicago. Community workshops on credit and debt. A paid newsletter. A small cohort course. The form matters less than starting. Pick one. Price it. Offer it to one person.</div>
+            <div class="mission-footer">
+              <span class="mission-tag growth">YEAR 2 CORE MISSION</span>
+              <span class="mission-tag high">HIGHEST LONG-TERM LEVERAGE</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mission">
+          <div class="mission-left">📁</div>
+          <div class="mission-content">
+            <div class="mission-title">MISSION 4C — OPEN A SEP IRA (AFTER LLC IS FORMED)</div>
+            <div class="mission-desc">A SEP IRA is a self-employed retirement account that lets you contribute up to 25% of your net self-employment income — up to $66,000/year (vs $7,000 for a Roth IRA). Contributions are tax-deductible, reducing your taxable income immediately. Even at modest business income, this becomes a significant tool. Open it at Fidelity alongside your existing Roth IRA. Once the LLC generates consistent income, maxing the SEP IRA is one of the most powerful legal tax reduction tools available to you.</div>
+            <div class="mission-footer">
+              <span class="mission-tag growth">YEAR 2–3</span>
+              <span class="mission-tag passive">REQUIRES LLC INCOME</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mission">
+          <div class="mission-left">🌿</div>
+          <div class="mission-content">
+            <div class="mission-title">MISSION 4D — ACTIVATE THE BACKYARD</div>
+            <div class="mission-desc">The family garden is a slow-burn asset. Chicago growing season: May–October. Starting investment: $100–200 in seeds, soil amendment, basic tools. Returns: reduced food costs, improved family nutrition, shared project that builds cohesion across 9 people, potential Chicago farmers market income. More importantly: it's a visible demonstration of the principle the whole gameplan runs on — you plant something now that you eat later. The timeline for a garden is the same as the timeline for compound interest.</div>
+            <div class="mission-footer">
+              <span class="mission-tag medium">SPRING 2027</span>
+              <span class="mission-tag free">LOW COST HIGH SYMBOLISM</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="checkpoint cp-cyan" style="margin-top:20px;">
+        <div class="checkpoint-top">🏁 CHAPTER 4 CLEAR — YEAR 3</div>
+        <div class="checkpoint-body">
+          <div class="check-item"><div class="check-box"></div><div>LLC formed, EIN obtained, business checking account open</div></div>
+          <div class="check-item"><div class="check-box"></div><div>First paid offer made to a real person for real money</div></div>
+          <div class="check-item"><div class="check-box"></div><div>Auto loan: paid off</div></div>
+          <div class="check-item"><div class="check-box"></div><div>Credit score: 740+ (Very Good)</div></div>
+          <div class="check-item"><div class="check-box"></div><div>Roth IRA: contributions continuing, account approaching $5,000–8,000</div></div>
+          <div class="check-item"><div class="check-box"></div><div>Zero consumer debt</div></div>
+          <div class="check-item"><div class="check-box"></div><div>At least one income stream outside of Uber Eats — even if small</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== CHAPTER 5: LAUNCH ===== -->
+  <div class="chapter ch-purple" style="margin-top:28px;">
+    <div class="chapter-banner">
+      <div class="chapter-num">05</div>
+      <div class="chapter-info">
+        <div class="chapter-tag">Phase 5 · End Game</div>
+        <div class="chapter-title">THE LAUNCH</div>
+        <div class="chapter-timeline">Year 3–5 · Business Running · Internal Freedom Operational</div>
+      </div>
+    </div>
+    <div class="chapter-body">
+
+      <div class="callout secret" style="margin-top:0;">
+        <div class="callout-icon">🌅</div>
+        <div class="callout-text">
+          <strong>THE WIN CONDITION:</strong> Not a number. Not a title. Your stated win: staying home, occupying time as you desire, not stressing about financial issues or time limits. Multiple income streams. A business that reflects your actual knowledge and values. A family ecosystem that runs better because you're in it. That's the target. Everything in Chapters 1–4 is infrastructure for this.
+        </div>
+      </div>
+
+      <div class="mission-stack" style="margin-top:16px;">
+
+        <div class="mission">
+          <div class="mission-left">📈</div>
+          <div class="mission-content">
+            <div class="mission-title">MISSION 5A — STACK THE INCOME STREAMS</div>
+            <div class="mission-desc">By year 5, the goal is: business income (consulting, workshops, digital products, or whatever form it's taken) + investment growth (Roth IRA compounding, potentially taxable brokerage) + no debt payments (both loans gone). The math: if business generates $2,000/month and Uber Eats or part-time work adds $1,500, you're at $3,500/month with zero debt — a completely different financial texture than today. Each stream makes you less dependent on any single one.</div>
+            <div class="mission-footer">
+              <span class="mission-tag growth">YEAR 4–5</span>
+              <span class="mission-tag passive">MULTIPLE STREAMS</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mission">
+          <div class="mission-left">🏠</div>
+          <div class="mission-content">
+            <div class="mission-title">MISSION 5B — EVALUATE HOUSING TRANSITION</div>
+            <div class="mission-desc">By year 5, if credit is 740+ and you have a stable documented business income, you qualify for a mortgage. The question to ask at that point: does the family house become a multi-generational investment opportunity? (Convert part of the property, help family buy adjacent property, contribute to estate planning.) Or do you transition to your own place? The decision depends on the state of relationships, the business, and the Spain question. Don't decide this in year 1. But don't ignore that the paid-off family home you're living in is itself a major asset to the broader picture.</div>
+            <div class="mission-footer">
+              <span class="mission-tag growth">YEAR 5 DECISION</span>
+              <span class="mission-tag medium">CONTEXT DEPENDENT</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mission">
+          <div class="mission-left">🌍</div>
+          <div class="mission-content">
+            <div class="mission-title">MISSION 5C — SPAIN OPTION: WHEN IT BECOMES VIABLE</div>
+            <div class="mission-desc">The Spain relocation interest is real. The Digital Nomad or Autónomo visa pathways are viable for someone with a functioning remote business. The prerequisites: (1) business generating documented income ($2,100+/month to meet Spain's minimum income threshold for DNV), (2) US tax situation clean and in rhythm, (3) no remaining consumer debt, (4) Roth IRA well-funded and working autonomously. None of these are impossible by year 3–4. Spain doesn't require you to abandon Chicago — it requires you to have built something portable enough to bring.</div>
+            <div class="mission-footer">
+              <span class="mission-tag growth">YEAR 4–5 WINDOW</span>
+              <span class="mission-tag passive">REQUIRES BUSINESS INCOME</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="checkpoint cp-purple" style="margin-top:20px;">
+        <div class="checkpoint-top">🏁 FINAL CHECKPOINT — YEAR 5 WIN CONDITIONS</div>
+        <div class="checkpoint-body">
+          <div class="check-item"><div class="check-box"></div><div>Zero consumer debt — all loans eliminated</div></div>
+          <div class="check-item"><div class="check-box"></div><div>Business generating consistent income — documented, trackable, tax-structured</div></div>
+          <div class="check-item"><div class="check-box"></div><div>Roth IRA: $15,000–25,000+ and compounding</div></div>
+          <div class="check-item"><div class="check-box"></div><div>Credit score: 750+ — qualifies for best available rates</div></div>
+          <div class="check-item"><div class="check-box"></div><div>Emergency fund: 3–6 months of expenses</div></div>
+          <div class="check-item"><div class="check-box"></div><div>Tax situation: clean, quarterly, in rhythm — no surprises</div></div>
+          <div class="check-item"><div class="check-box"></div><div>Family ecosystem: financially healthier because you're in it</div></div>
+          <div class="check-item"><div class="check-box"></div><div>Internal: time allocated to what matters, not to survival</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ===== THE DAILY SYSTEM ===== -->
+  <div style="margin-top:4px; border:5px solid var(--black); overflow:hidden; box-shadow:var(--shadow-lg);">
+    <div style="background:var(--black); color:var(--green); padding:14px 22px; font-family:'Bangers',cursive; font-size:22px; letter-spacing:3px; border-bottom:4px solid var(--black);">
+      ⚡ THE DAILY/WEEKLY OPERATING SYSTEM
+    </div>
+    <div style="background:#0a0a0a; padding:20px; display:flex; flex-direction:column; gap:8px;">
+
+      <div class="rule-line rl-daily">
+        <div class="rule-line-tag">MORNING</div>
+        <div class="rule-line-body">Open Stride before your first delivery. Track starts. This takes 10 seconds and saves thousands. Non-negotiable every driving day.</div>
+      </div>
+      <div class="rule-line rl-daily">
+        <div class="rule-line-tag">EVENING</div>
+        <div class="rule-line-body">Confirm Stride logged your miles. Check bank balance in under 2 minutes. You don't need to analyze — just look. Awareness is the first layer of control.</div>
+      </div>
+      <div class="rule-line rl-weekly">
+        <div class="rule-line-tag">SUNDAY</div>
+        <div class="rule-line-body">5-minute financial check-in: bank balance, tax account balance, Discover balance (Phase 1–2), emergency fund balance. No analysis required — just a scan. The people who get blindsided by money are the ones who never look.</div>
+      </div>
+      <div class="rule-line rl-monthly">
+        <div class="rule-line-tag">1ST OF MONTH</div>
+        <div class="rule-line-body">Confirm all autopays processed. Confirm $700 transferred to tax account. Review last month's mileage total (Stride generates this). Update your running balance on the CC or auto loan paydown. 15 minutes total.</div>
+      </div>
+      <div class="rule-line rl-monthly">
+        <div class="rule-line-tag">QUARTERLY</div>
+        <div class="rule-line-body">Submit IRS estimated tax payment from your tax hold account (April, June, September, January). Pull one credit report (rotate bureaus — Equifax one quarter, Experian the next, TransUnion after). Review your mileage deduction calculation — adjust tax hold if your rate changes.</div>
+      </div>
+      <div class="rule-line rl-when">
+        <div class="rule-line-tag">ANNUALLY</div>
+        <div class="rule-line-body">File taxes using mileage logs + all Uber Eats income from your 1099. Maximize Roth IRA contribution before April 15 deadline. Review the gameplan — are you still on chapter? What chapter did you clear? What's the next move?</div>
+      </div>
+      <div class="rule-line rl-never">
+        <div class="rule-line-tag">NEVER</div>
+        <div class="rule-line-body">Don't make a financial decision when you're stressed, tired, or angry. Don't "invest" in anything someone pitched you urgently. Don't loan money you need. Don't close old credit accounts. Don't co-sign for anyone right now.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ===== CLOSING ===== -->
+  <div style="margin-top:4px;">
+    <div style="font-family:'Bangers',cursive; font-size: clamp(28px, 5vw, 40px); letter-spacing:2px; color:var(--white); -webkit-text-stroke:1.5px var(--black); margin-bottom:16px;">
+      THE <span style="color:var(--orange)">THIRD-PARTY</span> FINAL WORD
+    </div>
+
+    <div class="callout dark">
+      <div class="callout-icon">🔭</div>
+      <div class="callout-text">
+        <strong>WHAT THIS GAMEPLAN IS ACTUALLY ABOUT:</strong> The financial moves in this document are not the goal. They are the medium. The goal — as you stated it — is a stable internal way of living where your material life doesn't create noise that drowns out what actually matters to you. Money problems are loud. They occupy cognitive bandwidth, generate shame, and create time pressure. This plan eliminates all of that systematically, so what's left is the actual texture of your life: the relationships, the knowledge, the creative and psychological work, the garden, the bridge role. The plan is a noise reduction strategy. The quieter your material life, the louder everything else gets to be.
+      </div>
+    </div>
+
+    <div class="speech-bubble" style="margin-top:24px;">
+      <div class="bubble-text">"The system is tilted. The rules favor capital. The tax code rewards owners over laborers. None of that changes. What changes is whether you play knowing that — or not knowing it. You know it now. Go play."</div>
+    </div>
+  </div>
+
+  <footer>
+    PLAYER: ALI · THE GAMEPLAN · SYSTEM NAVIGATION WALKTHROUGH<br>
+    WORLD MAP VOL. 001 · CHARACTER SHEET · GAMEPLAN · MAY 2026
+  </footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Durango — Raíces Musicales</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --tierra: #8B4513;
+    --ocre: #C47A2B;
+    --arena: #D4A96A;
+    --paja: #E8D5A3;
+    --cielo: #7B9FB5;
+    --noche: #1A1208;
+    --humo: #2D2416;
+    --carbon: #0F0A04;
+    --sangre: #7A1F1F;
+    --verde-sierra: #3D5A3E;
+    --gris-polvo: #9A8E7A;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background-color: var(--carbon);
+    color: var(--paja);
+    font-family: 'Libre Baskerville', serif;
+    overflow-x: hidden;
+  }
+
+  /* ─── GRAIN OVERLAY ─── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    background: radial-gradient(ellipse at 30% 60%, #2A1A08 0%, var(--carbon) 70%);
+    padding: 4rem 2rem;
+    text-align: center;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(196,122,43,0.03) 2px,
+        rgba(196,122,43,0.03) 4px
+      );
+  }
+
+  .hero-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--ocre);
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    animation: fadeUp 1s ease 0.3s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3.5rem, 12vw, 9rem);
+    font-weight: 900;
+    line-height: 0.88;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 1s ease 0.6s forwards;
+  }
+
+  .hero-title span {
+    display: block;
+    color: var(--ocre);
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--arena);
+    font-size: 0.6em;
+    display: block;
+    letter-spacing: 0.05em;
+  }
+
+  .hero-subtitle {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: clamp(1rem, 2.5vw, 1.4rem);
+    color: var(--gris-polvo);
+    max-width: 500px;
+    line-height: 1.6;
+    opacity: 0;
+    animation: fadeUp 1s ease 0.9s forwards;
+    margin-bottom: 3rem;
+  }
+
+  .scroll-hint {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    color: var(--ocre);
+    opacity: 0;
+    animation: fadeUp 1s ease 1.2s forwards, pulse 2s ease 2s infinite;
+  }
+
+  .hero-ornament {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    border: 1px solid rgba(196,122,43,0.08);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: rotate 60s linear infinite;
+  }
+
+  .hero-ornament::before {
+    content: '';
+    position: absolute;
+    inset: 40px;
+    border-radius: 50%;
+    border: 1px solid rgba(196,122,43,0.05);
+  }
+
+  /* ─── SECTIONS ─── */
+  section {
+    padding: 6rem 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--ocre);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, var(--ocre), transparent);
+    max-width: 120px;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 2rem;
+    color: var(--paja);
+  }
+
+  .section-title em {
+    font-style: italic;
+    color: var(--arena);
+  }
+
+  p {
+    font-size: 1.05rem;
+    line-height: 1.85;
+    color: #B8A88A;
+    margin-bottom: 1.5rem;
+    max-width: 65ch;
+  }
+
+  /* ─── DIVIDER ─── */
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--tierra), transparent);
+    margin: 0;
+  }
+
+  /* ─── LAYER CARDS ─── */
+  .layer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2px;
+    margin-top: 4rem;
+  }
+
+  .layer-card {
+    padding: 2.5rem 2rem;
+    background: var(--humo);
+    position: relative;
+    overflow: hidden;
+    cursor: default;
+    transition: background 0.4s ease;
+  }
+
+  .layer-card:hover {
+    background: #231A0D;
+  }
+
+  .layer-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+  }
+
+  .layer-card.indigena::before { background: linear-gradient(to right, #6B4226, #9B6B3A); }
+  .layer-card.colonial::before { background: linear-gradient(to right, #7A5C2E, #B08040); }
+  .layer-card.europeo::before { background: linear-gradient(to right, #4A6B7A, #7BAAB5); }
+  .layer-card.norteño::before { background: linear-gradient(to right, #6B4040, #A06060); }
+  .layer-card.diaspora::before { background: linear-gradient(to right, #3A5A3B, #5A8A5C); }
+  .layer-card.moderno::before { background: linear-gradient(to right, #4A3A6B, #7A5AA0); }
+
+  .card-era {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+    opacity: 0.6;
+  }
+
+  .layer-card.indigena .card-era { color: #9B6B3A; }
+  .layer-card.colonial .card-era { color: #B08040; }
+  .layer-card.europeo .card-era { color: #7BAAB5; }
+  .layer-card.norteño .card-era { color: #A06060; }
+  .layer-card.diaspora .card-era { color: #5A8A5C; }
+  .layer-card.moderno .card-era { color: #7A5AA0; }
+
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--paja);
+    line-height: 1.2;
+  }
+
+  .card-body {
+    font-size: 0.92rem;
+    line-height: 1.75;
+    color: #9A8E7A;
+    max-width: 100%;
+  }
+
+  .card-instruments {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    padding: 0.25rem 0.6rem;
+    border: 1px solid;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .layer-card.indigena .tag { border-color: #6B4226; color: #9B6B3A; }
+  .layer-card.colonial .tag { border-color: #7A5C2E; color: #B08040; }
+  .layer-card.europeo .tag { border-color: #4A6B7A; color: #7BAAB5; }
+  .layer-card.norteño .tag { border-color: #6B4040; color: #A06060; }
+  .layer-card.diaspora .tag { border-color: #3A5A3B; color: #5A8A5C; }
+  .layer-card.moderno .tag { border-color: #4A3A6B; color: #7A5AA0; }
+
+  /* ─── PULL QUOTE ─── */
+  .pull-quote {
+    background: var(--humo);
+    border-left: 4px solid var(--ocre);
+    padding: 2.5rem 3rem;
+    margin: 4rem 0;
+    position: relative;
+  }
+
+  .pull-quote::before {
+    content: '"';
+    font-family: 'Playfair Display', serif;
+    font-size: 8rem;
+    color: var(--ocre);
+    opacity: 0.15;
+    position: absolute;
+    top: -1rem;
+    left: 1.5rem;
+    line-height: 1;
+  }
+
+  .pull-quote p {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+    color: var(--arena);
+    line-height: 1.5;
+    max-width: 100%;
+    margin: 0;
+  }
+
+  .pull-quote cite {
+    display: block;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--gris-polvo);
+    margin-top: 1rem;
+    font-style: normal;
+    text-transform: uppercase;
+  }
+
+  /* ─── TIMELINE ─── */
+  .timeline {
+    position: relative;
+    padding-left: 3rem;
+    margin-top: 3rem;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--ocre), var(--tierra), transparent);
+  }
+
+  .timeline-item {
+    position: relative;
+    padding-bottom: 3rem;
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -3.25rem;
+    top: 0.4rem;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--ocre);
+    box-shadow: 0 0 12px rgba(196,122,43,0.5);
+  }
+
+  .timeline-year {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--ocre);
+    letter-spacing: 0.2em;
+    margin-bottom: 0.4rem;
+  }
+
+  .timeline-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--paja);
+    margin-bottom: 0.5rem;
+  }
+
+  .timeline-body {
+    font-size: 0.9rem;
+    color: var(--gris-polvo);
+    max-width: 55ch;
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  /* ─── CARDENCHE FEATURE ─── */
+  .feature-block {
+    background: linear-gradient(135deg, #1A1208, #120D05);
+    border: 1px solid rgba(196,122,43,0.15);
+    padding: 4rem;
+    margin: 4rem 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .feature-block::after {
+    content: '♪';
+    font-size: 20rem;
+    position: absolute;
+    right: -2rem;
+    bottom: -3rem;
+    color: var(--ocre);
+    opacity: 0.03;
+    font-family: serif;
+    line-height: 1;
+  }
+
+  .feature-block h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    font-weight: 900;
+    color: var(--paja);
+    margin-bottom: 1.5rem;
+    line-height: 1.1;
+  }
+
+  .feature-block h3 em {
+    font-style: italic;
+    color: var(--arena);
+  }
+
+  /* ─── DIASPORA SECTION ─── */
+  .diaspora-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    margin-top: 2rem;
+  }
+
+  @media (max-width: 640px) {
+    .diaspora-grid { grid-template-columns: 1fr; }
+    .feature-block { padding: 2rem; }
+    section { padding: 4rem 1.5rem; }
+  }
+
+  .diaspora-col h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--verde-sierra);
+    margin-bottom: 1rem;
+    letter-spacing: 0.02em;
+  }
+
+  /* ─── CLOSING ─── */
+  .closing {
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 8rem 2rem;
+    background: radial-gradient(ellipse at center, #1E1406 0%, var(--carbon) 70%);
+    position: relative;
+  }
+
+  .closing-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 6vw, 4rem);
+    font-weight: 700;
+    font-style: italic;
+    color: var(--arena);
+    max-width: 700px;
+    line-height: 1.2;
+    margin-bottom: 2rem;
+  }
+
+  .closing p {
+    max-width: 50ch;
+    text-align: center;
+    margin: 0 auto 1.5rem;
+  }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+  }
+
+  @keyframes rotate {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+
+  /* ─── STAT STRIP ─── */
+  .stat-strip {
+    display: flex;
+    gap: 0;
+    background: var(--humo);
+    overflow-x: auto;
+  }
+
+  .stat {
+    flex: 1;
+    min-width: 140px;
+    padding: 2rem 1.5rem;
+    border-right: 1px solid rgba(196,122,43,0.1);
+    text-align: center;
+  }
+
+  .stat:last-child { border-right: none; }
+
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: var(--ocre);
+    display: block;
+    line-height: 1;
+    margin-bottom: 0.4rem;
+  }
+
+  .stat-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gris-polvo);
+  }
+
+  /* ─── INSTRUMENT SHOWCASE ─── */
+  .instruments-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 2px;
+    margin: 3rem 0;
+  }
+
+  .instrument-cell {
+    background: var(--humo);
+    padding: 2rem 1.5rem;
+    text-align: center;
+    transition: background 0.3s;
+  }
+
+  .instrument-cell:hover { background: #1E1608; }
+
+  .instrument-glyph {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 0.8rem;
+    filter: grayscale(0.3);
+  }
+
+  .instrument-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem;
+    color: var(--paja);
+    margin-bottom: 0.3rem;
+  }
+
+  .instrument-origin {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    color: var(--gris-polvo);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<div class="hero">
+  <div class="hero-ornament"></div>
+  <p class="hero-eyebrow">Análisis multifacético · México</p>
+  <h1 class="hero-title">
+    <span>DURANGO</span>
+    <em>tierra de voces</em>
+  </h1>
+  <p class="hero-subtitle">
+    Seis estratos de tiempo musical, desde el arco de percusión tepehuán hasta el pasito en Chicago.
+  </p>
+  <p class="scroll-hint">↓ desplázate</p>
+</div>
+
+<!-- ═══════════════ STAT STRIP ═══════════════ -->
+<div class="stat-strip">
+  <div class="stat">
+    <span class="stat-num">~1600</span>
+    <span class="stat-label">Primeras misiones<br>musicales jesuitas</span>
+  </div>
+  <div class="stat">
+    <span class="stat-num">5+</span>
+    <span class="stat-label">Pueblos indígenas<br>con tradición propia</span>
+  </div>
+  <div class="stat">
+    <span class="stat-num">1943</span>
+    <span class="stat-label">Nace el Corrido<br>de Durango</span>
+  </div>
+  <div class="stat">
+    <span class="stat-num">2003</span>
+    <span class="stat-label">Duranguense lidera<br>Billboard Latino</span>
+  </div>
+  <div class="stat">
+    <span class="stat-num">∞</span>
+    <span class="stat-label">Cardenche: voces<br>sin instrumento</span>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════ INTRO ═══════════════ -->
+<section>
+  <p class="section-label">Introducción</p>
+  <h2 class="section-title">La sierra que canta<br><em>en tres lenguas a la vez</em></h2>
+  <p>
+    Durango no es un estado musicalmente uniforme. Es una superposición de capas geológicas humanas: el grito ceremonial del tepehuan que convoca al mitote, el canto grave del cardenche que nace entre algodón y polvo, la polka que llegó con inmigrantes centroeuropeos en el siglo XIX, y el teclado electrónico que un migrante duranguense aceleró en un club de Chicago en los noventa.
+  </p>
+  <p>
+    Cada una de estas tradiciones habita en Durango simultáneamente — no como museo, sino como cuerpo vivo que se transforma, emigra y regresa transformado. Esta es su historia en seis capas.
+  </p>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════ LAYERS ═══════════════ -->
+<section>
+  <p class="section-label">Las seis capas</p>
+  <h2 class="section-title">Estratos del<br><em>alma sonora</em></h2>
+
+  <div class="layer-grid">
+
+    <div class="layer-card indigena">
+      <div class="card-era">Prehispánico — siglo XVI</div>
+      <h3 class="card-title">La raíz indígena:<br>Tepehuanes, Huicholes<br>y el mitote</h3>
+      <p class="card-body">
+        Los pueblos originarios de Durango —tepehuanes, huicholes, mexicaneros, tarahumaras de la sierra— desarrollaron sistemas musicales íntimamente ligados a rituales cosmológicos. El <em>mitote</em> tepehuán, ceremonia nocturna de renovación del pacto con las deidades, era inseparable del arco de percusión: un instrumento donde la cuerda tensada sobre una calabaza de resonancia se golpea con dos flechas, produciendo un sonido grave y monótono que acompaña a la voz shamánica.
+      </p>
+      <p class="card-body">
+        El violín —paradójicamente de origen español— fue adoptado por estas comunidades y reinterpretado como instrumento sagrado, especialmente en la danza de los matachines, que fusionó la iconografía de la Conquista con la danza ritual indígena.
+      </p>
+      <div class="card-instruments">
+        <span class="tag">Arco de percusión</span>
+        <span class="tag">Violín reinterpretado</span>
+        <span class="tag">Tambor de cuero</span>
+        <span class="tag">Voz ceremonial</span>
+      </div>
+    </div>
+
+    <div class="layer-card colonial">
+      <div class="card-era">Siglo XVII — XVIII</div>
+      <h3 class="card-title">La catedral y<br>el alabado:<br>música de misión</h3>
+      <p class="card-body">
+        En 1597 se fundó la primera misión jesuita en Tepehuanes. Con ella llegó el canto litúrgico católico, y algo notable ocurrió: los cantos religiosos fueron enseñados y delegados a mujeres indígenas. Esos <em>alabados</em> —himnos a cappella de devoción popular— se mezclaron con las formas vocales preexistentes de la sierra y sembraron la semilla de lo que siglos después sería el canto cardenche.
+      </p>
+      <p class="card-body">
+        La Catedral de Durango (fundada en 1635) desarrolló una capilla musical que fue laboratorio de sincretismo sonoro durante casi doscientos años, con músicos que transitaban entre la liturgia y los espacios seculares del Teatro Coliseo.
+      </p>
+      <div class="card-instruments">
+        <span class="tag">Bajón</span>
+        <span class="tag">Órgano de tubos</span>
+        <span class="tag">Canto gregoriano</span>
+        <span class="tag">Alabados</span>
+      </div>
+    </div>
+
+    <div class="layer-card europeo">
+      <div class="card-era">Siglo XIX — 1860s</div>
+      <h3 class="card-title">La ola centroeuropea:<br>polka, chotis<br>y cuadrilla</h3>
+      <p class="card-body">
+        A mediados del siglo XIX llegaron a Durango oleadas de inmigrantes alemanes, checos y bohemios. Trajeron consigo la polka, el chotis (Schottische) y el acordeón —instrumento que redefinió el norte de México entero. En el municipio de Tepehuanes, la ocupación francesa de los 1860s dejó como regalo inesperado la <em>cuadrilla</em>, baile de salón de origen francés que persiste hasta hoy.
+      </p>
+      <p class="card-body">
+        Esta herencia europea nunca fue meramente importada: fue absorbida y mestizada. Las polkas duranguenses tienen nombres propios: <em>La palmita, La cacerola, El jaral</em> — ya no suenan a Europa Central sino a tierra caliente del norte.
+      </p>
+      <div class="card-instruments">
+        <span class="tag">Acordeón diatónico</span>
+        <span class="tag">Bajo sexto</span>
+        <span class="tag">Tololoche</span>
+        <span class="tag">Polka / Chotis</span>
+      </div>
+    </div>
+
+    <div class="layer-card norteño">
+      <div class="card-era">Siglo XX</div>
+      <h3 class="card-title">Corrido y tamborazo:<br>la épica<br>duranguense</h3>
+      <p class="card-body">
+        El corrido llegó a Durango como forma narrativa de la Revolución y nunca se fue. En 1943, Miguel Ángel Gallardo compuso <em>El Corrido de Durango</em>, que se convirtió en segundo himno del estado —una carta de amor de un migrante que nombra calles, plazas y cerritos de la ciudad. El corrido en Durango es cartografía emocional.
+      </p>
+      <p class="card-body">
+        El tamborazo —ensemble de tuba, trombones, clarinetes y tarola— es el cuerpo percusivo que anima bodas, fiestas patronales y quinceañeras en la sierra. La tambora sinaloense y el tamborazo zacatecano son parientes, pero el duranguense tiene su propio temperamento: más íntimo, más serrano.
+      </p>
+      <div class="card-instruments">
+        <span class="tag">Tambora</span>
+        <span class="tag">Clarinete</span>
+        <span class="tag">Tuba</span>
+        <span class="tag">Corrido</span>
+        <span class="tag">Trombón</span>
+      </div>
+    </div>
+
+    <div class="layer-card diaspora">
+      <div class="card-era">1996 — 2004</div>
+      <h3 class="card-title">Chicago la inventa:<br>el duranguense<br>como género</h3>
+      <p class="card-body">
+        Aquí ocurre algo extraño y hermoso: un género que lleva el nombre de un estado mexicano nació en Illinois. Migrantes duranguenses en Chicago —principalmente en el barrio de Pilsen y Little Village— comenzaron a mezclar la tambora tradicional con teclados electrónicos y ritmos acelerados. El resultado fue el <em>duranguense</em>: música que suena al futuro sintetizando el pasado.
+      </p>
+      <p class="card-body">
+        Montéz de Durango, Alacranes Musical, Los Horóscopos de Durango, K-Paz de la Sierra. Para 2003 el género lideraba las listas Billboard Latinas. Junto al sonido llegó el baile: el <em>pasito duranguense</em>, un paso acelerado de cuadrilla reimaginado en pista de club.
+      </p>
+      <div class="card-instruments">
+        <span class="tag">Teclado electrónico</span>
+        <span class="tag">Tambora eléctrica</span>
+        <span class="tag">Bajo eléctrico</span>
+        <span class="tag">Voz grupera</span>
+      </div>
+    </div>
+
+    <div class="layer-card moderno">
+      <div class="card-era">Hoy</div>
+      <h3 class="card-title">Sierreño y corridos<br>tumbados: la herencia<br>continúa</h3>
+      <p class="card-body">
+        La estética serrana de Durango permeó el sierreño —subgénero que combina acordeón y tololoche con producción contemporánea. Artistas como El Komander, Espinoza Paz y El Fantasma llevan la gramática narrativa del corrido duranguense hacia el siglo XXI. Y los corridos tumbados de Natanael Cano y Peso Pluma son nietos directos de esa tradición.
+      </p>
+      <p class="card-body">
+        Mientras tanto, en la sierra misma, el cardenche agoniza: las generaciones jóvenes no aprenden a cantar en esa polifonía dolida sin instrumentos. Su extinción sería la pérdida de uno de los géneros más singulares de México.
+      </p>
+      <div class="card-instruments">
+        <span class="tag">Sierreño</span>
+        <span class="tag">Corrido tumbado</span>
+        <span class="tag">Trap regional</span>
+        <span class="tag">Producción digital</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════ CARDENCHE DEEP DIVE ═══════════════ -->
+<section>
+  <p class="section-label">Caso profundo</p>
+  <h2 class="section-title">El canto<br><em>cardenche</em></h2>
+  <p>
+    Si existiera un sonido que concentrara todo el dolor geológico del norte mexicano, sería el cardenche. Un canto a tres voces, sin instrumento, sin partitura, transmitido en el desierto de la Comarca Lagunera entre jornaleros del algodón y peones del río Nazas.
+  </p>
+
+  <div class="feature-block">
+    <h3>Voces sin<br><em>ningún instrumento</em></h3>
+    <p>
+      El cardenche es polifonía vocal pura. Tres hombres cantan en capas: una voz base, una que bordea, una que flota. El resultado es disonante, tenso, como si la tristeza necesitara tres garganta para salir. Los temas son el amor perdido, el desierto, el trabajo, la muerte. Nombrado por la planta del cardón — espinosa, resistente, que florece en lo más árido.
+    </p>
+    <p>
+      Su origen es plural: los <em>alabados</em> misioneros del siglo XVII se mezclaron con formas vocales chichimecas del norte, y con el lamento de trabajadores sometidos al ritmo del algodón industrial del siglo XIX. No tiene un padre; tiene una historia de sufrimiento compartido.
+    </p>
+    <p>
+      Hoy lo cantan Lila Downs, artistas de vanguardia latinoamericana, productores de ambient. Pero los cardencheros originales de Sapioriz, Durango, son una comunidad pequeñísima, mayor de edad, en un pueblo que se seca. El cardenche es patrimonio en riesgo de extinción.
+    </p>
+  </div>
+</section>
+
+<!-- ═══════════════ PULL QUOTE ═══════════════ -->
+<div style="max-width:1100px; margin:0 auto; padding: 0 2rem;">
+  <div class="pull-quote">
+    <p>No es posible determinar un origen puro y reciente del canto acardenchado — nació de la acumulación de siglos: misión, desierto, algodón, dolor, y tres gargantas que aprendieron a llorar juntas.</p>
+    <cite>— Síntesis del trabajo de investigadoras cardencheras, UNAM Internacional 2024</cite>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════ INSTRUMENTOS ═══════════════ -->
+<section>
+  <p class="section-label">Organología</p>
+  <h2 class="section-title">Los instrumentos<br><em>que construyeron Durango</em></h2>
+  <p>Cada instrumento es un mapa de contacto cultural. El arco de percusión no viajó; esperó a que el mundo llegara a él. El acordeón cruzó el Atlántico y se quedó. La tambora se reencarnó digital en Chicago.</p>
+
+  <div class="instruments-row">
+    <div class="instrument-cell">
+      <span class="instrument-glyph">🏹</span>
+      <div class="instrument-name">Arco de percusión</div>
+      <div class="instrument-origin">Tepehuan — prehispánico</div>
+    </div>
+    <div class="instrument-cell">
+      <span class="instrument-glyph">🎻</span>
+      <div class="instrument-name">Violín serrano</div>
+      <div class="instrument-origin">Español → indígena</div>
+    </div>
+    <div class="instrument-cell">
+      <span class="instrument-glyph">🪗</span>
+      <div class="instrument-name">Acordeón</div>
+      <div class="instrument-origin">Centroeuropeo · s.XIX</div>
+    </div>
+    <div class="instrument-cell">
+      <span class="instrument-glyph">🥁</span>
+      <div class="instrument-name">Tambora</div>
+      <div class="instrument-origin">Regional mexicano</div>
+    </div>
+    <div class="instrument-cell">
+      <span class="instrument-glyph">🎷</span>
+      <div class="instrument-name">Clarinete</div>
+      <div class="instrument-origin">Tamborazo serrano</div>
+    </div>
+    <div class="instrument-cell">
+      <span class="instrument-glyph">🎹</span>
+      <div class="instrument-name">Teclado electrónico</div>
+      <div class="instrument-origin">Chicago · 1996</div>
+    </div>
+    <div class="instrument-cell">
+      <span class="instrument-glyph">🗣️</span>
+      <div class="instrument-name">Voz — tres partes</div>
+      <div class="instrument-origin">Cardenche · Laguna</div>
+    </div>
+    <div class="instrument-cell">
+      <span class="instrument-glyph">🎸</span>
+      <div class="instrument-name">Bajo sexto</div>
+      <div class="instrument-origin">Norteño mestizo</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════ TIMELINE ═══════════════ -->
+<section>
+  <p class="section-label">Cronología</p>
+  <h2 class="section-title">Cuatrocientos años<br><em>en ocho momentos</em></h2>
+
+  <div class="timeline">
+
+    <div class="timeline-item">
+      <div class="timeline-year">~1000 a.C. — 1500 d.C.</div>
+      <div class="timeline-title">Rituales tepehuanes y huicholes</div>
+      <p class="timeline-body">El mitote, ceremonia nocturna de renovación cósmica, integra arco de percusión, voz shamánica y danza. La música no existe separada del rito.</p>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-year">1597</div>
+      <div class="timeline-title">Primera misión en Tepehuanes</div>
+      <p class="timeline-body">Los jesuitas introducen cantos litúrgicos. La enseñanza del canto se delega a mujeres indígenas. Los <em>alabados</em> comienzan su vida mestiza.</p>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-year">1635 — 1836</div>
+      <div class="timeline-title">Catedral de Durango: laboratorio musical</div>
+      <p class="timeline-body">La capilla catedralicia es el primer espacio formal de síntesis musical en el estado. Los músicos transitan entre lo sacro y lo secular, fundando una tradición de profesionalismo musical.</p>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-year">1860s</div>
+      <div class="timeline-title">Inmigración centroeuropea y ocupación francesa</div>
+      <p class="timeline-body">Alemanes, checos y bohemios traen el acordeón y la polka. La ocupación francesa deja la cuadrilla en Tepehuanes. Europa entra por la sierra.</p>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-year">1943</div>
+      <div class="timeline-title">El Corrido de Durango</div>
+      <p class="timeline-body">Miguel Ángel Gallardo compone el segundo himno del estado. Es una canción de amor escrita desde el exilio interno del migrante duranguense.</p>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-year">Siglo XX tardío</div>
+      <div class="timeline-title">El cardenche, en su crepúsculo</div>
+      <p class="timeline-body">Los cardencheros de Sapioriz cantan en un pueblo del desierto lagunero. Nadie graba. Nadie documenta todavía. El canto existe porque los viejos siguen vivos.</p>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-year">1996 — 2004</div>
+      <div class="timeline-title">Nace el duranguense en Chicago</div>
+      <p class="timeline-body">Montéz de Durango, los Alacranes, Los Horóscopos. La diáspora duranguense en Illinois inventa un género que en 2003 lidera Billboard en Estados Unidos.</p>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-year">Hoy</div>
+      <div class="timeline-title">Urgencia y continuidad</div>
+      <p class="timeline-body">El cardenche está en peligro crítico. El sierreño y los corridos tumbados globalizan la gramática serrana. Durango existe en dos planos simultáneos: extinción y explosión.</p>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════ DIASPORA ═══════════════ -->
+<section>
+  <p class="section-label">La paradoja de la diáspora</p>
+  <h2 class="section-title">Durango se inventó<br><em>en Chicago</em></h2>
+  <p>
+    Quizás la historia más extraña de la música duranguense es que su género más reconocido internacionalmente no nació en Durango. El duranguense es un producto de la migración: los que se fueron llevaron consigo la tambora y el corrido, y en los clubes de Pilsen los aceleraron, los electrificaron, los bailaron de otra manera.
+  </p>
+  <div class="diaspora-grid">
+    <div class="diaspora-col">
+      <h4>Lo que la diáspora llevó</h4>
+      <p style="font-size:0.9rem;">La estructura rítmica de la tambora, los patrones de polka acelerada, la voz norteña, el corrido como forma narrativa, el orgullo regional como identidad.</p>
+    </div>
+    <div class="diaspora-col">
+      <h4>Lo que la diáspora inventó</h4>
+      <p style="font-size:0.9rem;">El teclado electrónico como voz principal, el tempo hipnótico y acelerado, el <em>pasito duranguense</em> como danza de club, una identidad musical transfronteriza que reimagina qué significa ser del norte.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════ CLOSING ═══════════════ -->
+<div class="closing">
+  <h2 class="closing-title">La sierra guarda todo lo que el desierto no pudo borrar</h2>
+  <p>Durango es el estado mexicano que más claramente demuestra que la identidad musical no es estática ni pura — es negociación continua entre lo que se recibe, lo que se transforma y lo que se pierde.</p>
+  <p>Del arco tepehuán al teclado de Chicago: cuatrocientos años de escucha, resistencia y reinvención.</p>
+  <p style="font-family:'Space Mono',monospace; font-size:0.6rem; letter-spacing:0.3em; color:var(--ocre); margin-top:3rem; text-transform:uppercase;">
+    ♪ &nbsp; &nbsp; durango · méxico &nbsp; &nbsp; ♪
+  </p>
+</div>
+
+</body>
+</html>

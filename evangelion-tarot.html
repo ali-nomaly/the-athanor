@@ -1,0 +1,1495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAGI SYSTEM // TAROT ANALYSIS UNIT // 19.05.26</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Zen+Antique+Softened&family=Sawarabi+Mincho&display=swap');
+
+  :root {
+    --eva-orange: #FF6B00;
+    --eva-green: #00FF41;
+    --eva-red: #FF0033;
+    --eva-purple: #6A0DAD;
+    --eva-white: #E8E8D0;
+    --eva-dark: #0A0A0A;
+    --eva-panel: #0D0D1A;
+    --eva-border: #1A1A3A;
+    --eva-amber: #FFA500;
+    --eva-cyan: #00CCFF;
+    --eva-gold: #C9A84C;
+    --scan-speed: 8s;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--eva-dark);
+    color: var(--eva-white);
+    font-family: 'Share Tech Mono', monospace;
+    overflow-x: hidden;
+    cursor: crosshair;
+  }
+
+  /* SCANLINE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.15) 2px,
+      rgba(0,0,0,0.15) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* NOISE TEXTURE */
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9998;
+    opacity: 0.4;
+  }
+
+  /* HEADER — NERV COMMAND */
+  .nerv-header {
+    position: relative;
+    border-bottom: 2px solid var(--eva-orange);
+    padding: 0;
+    background: #050510;
+    overflow: hidden;
+  }
+
+  .nerv-header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(90deg, transparent 0%, rgba(255,107,0,0.05) 50%, transparent 100%);
+    animation: headerSweep 4s linear infinite;
+  }
+
+  @keyframes headerSweep {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  .header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 24px 8px;
+    border-bottom: 1px solid rgba(255,107,0,0.3);
+  }
+
+  .nerv-logo {
+    font-size: 10px;
+    color: var(--eva-orange);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    line-height: 1.4;
+  }
+
+  .nerv-logo .big {
+    font-size: 22px;
+    letter-spacing: 8px;
+    display: block;
+    font-weight: bold;
+    text-shadow: 0 0 20px rgba(255,107,0,0.8);
+  }
+
+  .header-status {
+    text-align: right;
+    font-size: 9px;
+    color: var(--eva-green);
+    letter-spacing: 2px;
+    line-height: 1.8;
+  }
+
+  .status-blink {
+    animation: blink 1.2s step-end infinite;
+  }
+
+  @keyframes blink {
+    50% { opacity: 0; }
+  }
+
+  .header-title-bar {
+    padding: 10px 24px;
+    display: flex;
+    align-items: baseline;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .main-title {
+    font-family: 'Zen Antique Softened', serif;
+    font-size: 28px;
+    color: var(--eva-white);
+    letter-spacing: 6px;
+    text-shadow: 2px 2px 0 var(--eva-orange), 0 0 40px rgba(255,107,0,0.4);
+  }
+
+  .sub-title {
+    font-size: 10px;
+    color: var(--eva-orange);
+    letter-spacing: 3px;
+    padding-bottom: 3px;
+  }
+
+  .header-meta {
+    display: flex;
+    gap: 24px;
+    padding: 8px 24px;
+    border-top: 1px solid rgba(255,107,0,0.2);
+    font-size: 9px;
+    color: rgba(232,232,208,0.5);
+    letter-spacing: 2px;
+  }
+
+  .meta-item span { color: var(--eva-amber); }
+
+  /* MAGI BAR */
+  .magi-bar {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    border-bottom: 1px solid var(--eva-border);
+  }
+
+  .magi-unit {
+    padding: 8px 16px;
+    border-right: 1px solid var(--eva-border);
+    font-size: 9px;
+    letter-spacing: 2px;
+  }
+
+  .magi-unit:last-child { border-right: none; }
+  .magi-unit .magi-name { color: var(--eva-cyan); margin-bottom: 2px; }
+  .magi-unit .magi-verdict { color: var(--eva-green); font-size: 8px; }
+
+  /* MAIN GRID */
+  .main-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  /* LUNAR CONTEXT PANEL */
+  .lunar-panel {
+    border: 1px solid var(--eva-orange);
+    background: rgba(255,107,0,0.04);
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 24px;
+    align-items: center;
+  }
+
+  .lunar-panel::before {
+    content: '◈ ENVIRONMENTAL CONDITION REPORT';
+    position: absolute;
+    top: -9px;
+    left: 16px;
+    font-size: 8px;
+    color: var(--eva-orange);
+    background: var(--eva-dark);
+    padding: 0 8px;
+    letter-spacing: 2px;
+  }
+
+  .lunar-icon {
+    font-size: 48px;
+    line-height: 1;
+    filter: drop-shadow(0 0 12px rgba(201,168,76,0.6));
+    animation: lunarPulse 4s ease-in-out infinite;
+  }
+
+  @keyframes lunarPulse {
+    0%, 100% { filter: drop-shadow(0 0 8px rgba(201,168,76,0.4)); }
+    50% { filter: drop-shadow(0 0 20px rgba(201,168,76,0.9)); }
+  }
+
+  .lunar-data { line-height: 2; }
+  .lunar-data .ld-label { font-size: 8px; color: rgba(232,232,208,0.4); letter-spacing: 2px; }
+  .lunar-data .ld-value { font-size: 14px; color: var(--eva-gold); letter-spacing: 3px; font-family: 'Zen Antique Softened', serif; }
+
+  .lunar-analysis {
+    font-size: 10px;
+    line-height: 1.9;
+    color: rgba(232,232,208,0.75);
+    border-left: 2px solid rgba(255,107,0,0.3);
+    padding-left: 20px;
+    max-width: 600px;
+  }
+
+  .lunar-analysis .highlight { color: var(--eva-amber); }
+  .lunar-analysis .warn { color: var(--eva-red); }
+
+  /* SPREAD MAP */
+  .spread-map {
+    border: 1px solid var(--eva-border);
+    background: var(--eva-panel);
+    padding: 20px;
+    margin-bottom: 20px;
+    position: relative;
+  }
+
+  .spread-map::before {
+    content: '◈ POSITIONAL ARRAY // WAXING CRESCENT SPREAD';
+    position: absolute;
+    top: -9px;
+    left: 16px;
+    font-size: 8px;
+    color: var(--eva-green);
+    background: var(--eva-panel);
+    padding: 0 8px;
+    letter-spacing: 2px;
+  }
+
+  .spread-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 8px;
+  }
+
+  .spread-node {
+    border: 1px solid var(--eva-border);
+    padding: 12px;
+    position: relative;
+    transition: border-color 0.3s, background 0.3s;
+    cursor: default;
+  }
+
+  .spread-node:hover {
+    border-color: var(--eva-orange);
+    background: rgba(255,107,0,0.06);
+  }
+
+  .spread-node .pos-number {
+    font-size: 32px;
+    color: rgba(255,107,0,0.12);
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    line-height: 1;
+    font-family: 'Zen Antique Softened', serif;
+  }
+
+  .spread-node .pos-label {
+    font-size: 8px;
+    color: var(--eva-cyan);
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+  }
+
+  .spread-node .card-name {
+    font-family: 'Zen Antique Softened', serif;
+    font-size: 15px;
+    color: var(--eva-white);
+    margin-bottom: 4px;
+    letter-spacing: 1px;
+  }
+
+  .spread-node .card-name.reversed { color: var(--eva-red); }
+  .spread-node .card-reversed-tag {
+    font-size: 7px;
+    color: var(--eva-red);
+    letter-spacing: 2px;
+    border: 1px solid rgba(255,0,51,0.4);
+    padding: 1px 4px;
+    display: inline-block;
+    margin-bottom: 4px;
+  }
+
+  .spread-node .card-attrib {
+    font-size: 8px;
+    color: rgba(232,232,208,0.45);
+    letter-spacing: 1px;
+    line-height: 1.7;
+  }
+
+  .spread-node .card-attrib .attr-val { color: var(--eva-amber); }
+
+  /* CONNECTOR LINES — visual only */
+  .spread-node.node-1 { border-top: 2px solid rgba(255,107,0,0.4); }
+  .spread-node.node-3 { border-top: 2px solid rgba(0,204,255,0.4); }
+  .spread-node.node-4 { border-top: 2px solid rgba(255,0,51,0.4); }
+  .spread-node.node-6 { border-top: 2px solid rgba(0,255,65,0.4); }
+
+  /* MAIN ANALYSIS PANELS */
+  .analysis-section {
+    margin-bottom: 20px;
+  }
+
+  .card-panel {
+    border: 1px solid var(--eva-border);
+    background: var(--eva-panel);
+    margin-bottom: 12px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+
+  .card-panel:hover { border-color: rgba(255,107,0,0.5); }
+
+  .card-panel::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--eva-orange), transparent);
+    animation: scanLine var(--scan-speed) linear infinite;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .card-panel:hover::after { opacity: 1; }
+
+  @keyframes scanLine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  .card-header {
+    display: grid;
+    grid-template-columns: 48px auto 1fr auto;
+    align-items: center;
+    gap: 0;
+    border-bottom: 1px solid var(--eva-border);
+    cursor: pointer;
+  }
+
+  .card-number {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Zen Antique Softened', serif;
+    font-size: 20px;
+    border-right: 1px solid var(--eva-border);
+    background: rgba(255,107,0,0.08);
+    color: var(--eva-orange);
+    flex-shrink: 0;
+  }
+
+  .card-header-label {
+    padding: 4px 14px;
+    border-right: 1px solid var(--eva-border);
+    min-width: 160px;
+    flex-shrink: 0;
+  }
+
+  .chl-position {
+    font-size: 7px;
+    color: rgba(232,232,208,0.4);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+
+  .chl-name {
+    font-family: 'Zen Antique Softened', serif;
+    font-size: 16px;
+    letter-spacing: 2px;
+  }
+
+  .chl-name.rev { color: var(--eva-red); }
+  .chl-name.major { color: var(--eva-gold); }
+  .chl-name.fire { color: var(--eva-orange); }
+  .chl-name.water { color: var(--eva-cyan); }
+
+  .card-header-meta {
+    padding: 6px 16px;
+    font-size: 8px;
+    color: rgba(232,232,208,0.45);
+    letter-spacing: 1px;
+    line-height: 2;
+  }
+
+  .card-header-meta .mhm-row { display: flex; gap: 20px; }
+  .card-header-meta .mhm-key { color: rgba(232,232,208,0.3); }
+  .card-header-meta .mhm-val { color: var(--eva-amber); }
+
+  .card-threat {
+    padding: 8px 16px;
+    text-align: right;
+    border-left: 1px solid var(--eva-border);
+    min-width: 100px;
+    flex-shrink: 0;
+  }
+
+  .threat-label { font-size: 7px; color: rgba(232,232,208,0.3); letter-spacing: 2px; margin-bottom: 4px; }
+  .threat-bar {
+    height: 4px;
+    background: rgba(255,255,255,0.1);
+    margin-bottom: 4px;
+    position: relative;
+  }
+  .threat-fill {
+    height: 100%;
+    position: absolute;
+    left: 0;
+    transition: width 1s ease;
+  }
+  .threat-val { font-size: 9px; letter-spacing: 1px; }
+
+  .card-body {
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .cb-left, .cb-right {
+    padding: 16px 20px;
+  }
+
+  .cb-left { border-right: 1px solid var(--eva-border); }
+
+  .analysis-block {
+    margin-bottom: 14px;
+  }
+
+  .ab-label {
+    font-size: 7px;
+    color: var(--eva-orange);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid rgba(255,107,0,0.2);
+  }
+
+  .ab-text {
+    font-size: 10px;
+    line-height: 2;
+    color: rgba(232,232,208,0.8);
+    font-family: 'Sawarabi Mincho', serif;
+  }
+
+  .ab-text em {
+    font-style: normal;
+    color: var(--eva-amber);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+  }
+
+  .ab-text .key-term {
+    color: var(--eva-white);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    border-bottom: 1px solid rgba(255,107,0,0.4);
+  }
+
+  .ab-text .danger { color: var(--eva-red); }
+  .ab-text .safe { color: var(--eva-green); }
+  .ab-text .water-term { color: var(--eva-cyan); }
+  .ab-text .fire-term { color: var(--eva-orange); }
+  .ab-text .gold-term { color: var(--eva-gold); }
+
+  /* CORRESPONDENCE TABLE */
+  .corr-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9px;
+    margin-top: 6px;
+  }
+
+  .corr-table td {
+    padding: 4px 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    line-height: 1.6;
+  }
+
+  .corr-table td:first-child {
+    color: rgba(232,232,208,0.35);
+    letter-spacing: 2px;
+    font-size: 7px;
+    width: 100px;
+    white-space: nowrap;
+  }
+
+  .corr-table td:last-child { color: var(--eva-amber); }
+
+  /* SYNTHESIS PANEL */
+  .synthesis-panel {
+    border: 1px solid var(--eva-green);
+    background: rgba(0,255,65,0.03);
+    padding: 24px;
+    margin-bottom: 20px;
+    position: relative;
+  }
+
+  .synthesis-panel::before {
+    content: '◈ MAGI SYNTHESIS // PATTERN RECOGNITION COMPLETE';
+    position: absolute;
+    top: -9px;
+    left: 16px;
+    font-size: 8px;
+    color: var(--eva-green);
+    background: var(--eva-dark);
+    padding: 0 8px;
+    letter-spacing: 2px;
+  }
+
+  .synthesis-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  .syn-block { margin-bottom: 16px; }
+
+  .syn-label {
+    font-size: 8px;
+    color: var(--eva-green);
+    letter-spacing: 3px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .syn-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(0,255,65,0.2);
+  }
+
+  .syn-text {
+    font-size: 11px;
+    line-height: 2;
+    color: rgba(232,232,208,0.85);
+    font-family: 'Sawarabi Mincho', serif;
+  }
+
+  .syn-text em {
+    font-style: normal;
+    color: var(--eva-green);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+  }
+
+  /* ELEMENTAL TENSION DIAGRAM */
+  .tension-diagram {
+    border: 1px solid var(--eva-border);
+    padding: 20px;
+    margin-bottom: 20px;
+    position: relative;
+    background: var(--eva-panel);
+  }
+
+  .tension-diagram::before {
+    content: '◈ ELEMENTAL OPPOSITION MATRIX';
+    position: absolute;
+    top: -9px;
+    left: 16px;
+    font-size: 8px;
+    color: var(--eva-cyan);
+    background: var(--eva-panel);
+    padding: 0 8px;
+    letter-spacing: 2px;
+  }
+
+  .tension-grid {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 16px;
+    align-items: center;
+    margin-top: 8px;
+  }
+
+  .tension-pole {
+    padding: 16px;
+    border: 1px solid var(--eva-border);
+  }
+
+  .tp-label {
+    font-size: 8px;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+
+  .tp-cards {
+    font-size: 10px;
+    line-height: 2;
+    color: rgba(232,232,208,0.7);
+  }
+
+  .tp-fire { border-color: rgba(255,107,0,0.5); background: rgba(255,107,0,0.04); }
+  .tp-fire .tp-label { color: var(--eva-orange); }
+  .tp-water { border-color: rgba(0,204,255,0.5); background: rgba(0,204,255,0.04); }
+  .tp-water .tp-label { color: var(--eva-cyan); }
+
+  .tension-center {
+    text-align: center;
+    font-size: 10px;
+    line-height: 2;
+  }
+
+  .tc-vs {
+    font-size: 24px;
+    color: var(--eva-red);
+    display: block;
+    text-shadow: 0 0 20px rgba(255,0,51,0.8);
+    animation: vsGlow 2s ease-in-out infinite alternate;
+  }
+
+  @keyframes vsGlow {
+    from { text-shadow: 0 0 10px rgba(255,0,51,0.5); }
+    to { text-shadow: 0 0 30px rgba(255,0,51,1); }
+  }
+
+  .tc-label { font-size: 7px; color: rgba(232,232,208,0.4); letter-spacing: 2px; }
+
+  /* VERDICT PANEL */
+  .verdict-panel {
+    border: 1px solid var(--eva-amber);
+    background: rgba(255,165,0,0.04);
+    padding: 24px;
+    margin-bottom: 20px;
+    position: relative;
+  }
+
+  .verdict-panel::before {
+    content: '◈ FINAL ASSESSMENT // DIRECTIVE OUTPUT';
+    position: absolute;
+    top: -9px;
+    left: 16px;
+    font-size: 8px;
+    color: var(--eva-amber);
+    background: var(--eva-dark);
+    padding: 0 8px;
+    letter-spacing: 2px;
+  }
+
+  .verdict-text {
+    font-family: 'Zen Antique Softened', serif;
+    font-size: 15px;
+    line-height: 2.2;
+    color: rgba(232,232,208,0.9);
+    letter-spacing: 1px;
+  }
+
+  .verdict-text .vt-em {
+    color: var(--eva-amber);
+    font-size: 16px;
+  }
+
+  .verdict-text .vt-warn {
+    color: var(--eva-red);
+  }
+
+  .verdict-text .vt-affirm {
+    color: var(--eva-green);
+  }
+
+  /* PROGRESS BARS — elemental composition */
+  .element-bars {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    padding: 16px 20px;
+    border-top: 1px solid var(--eva-border);
+    font-size: 8px;
+    letter-spacing: 1px;
+  }
+
+  .elem-bar { }
+  .eb-label { margin-bottom: 4px; letter-spacing: 2px; }
+  .eb-label.fire { color: var(--eva-orange); }
+  .eb-label.water { color: var(--eva-cyan); }
+  .eb-label.air { color: var(--eva-green); }
+  .eb-label.earth { color: var(--eva-gold); }
+
+  .eb-track {
+    height: 6px;
+    background: rgba(255,255,255,0.08);
+    position: relative;
+    margin-bottom: 3px;
+  }
+
+  .eb-fill {
+    height: 100%;
+    position: absolute;
+    left: 0;
+    animation: fillIn 2s ease-out both;
+  }
+
+  @keyframes fillIn {
+    from { width: 0%; }
+  }
+
+  .eb-fill.fire { background: var(--eva-orange); box-shadow: 0 0 8px rgba(255,107,0,0.6); }
+  .eb-fill.water { background: var(--eva-cyan); box-shadow: 0 0 8px rgba(0,204,255,0.6); }
+  .eb-fill.air { background: var(--eva-green); box-shadow: 0 0 8px rgba(0,255,65,0.6); }
+  .eb-fill.earth { background: var(--eva-gold); box-shadow: 0 0 8px rgba(201,168,76,0.6); }
+
+  .eb-pct { color: rgba(232,232,208,0.5); font-size: 7px; }
+
+  /* TREE PATH DIAGRAM */
+  .path-diagram {
+    border: 1px solid var(--eva-border);
+    background: var(--eva-panel);
+    padding: 20px;
+    margin-bottom: 20px;
+    position: relative;
+  }
+
+  .path-diagram::before {
+    content: '◈ KABBALISTIC PATHWORKING // ACTIVE SEPHIROTH';
+    position: absolute;
+    top: -9px;
+    left: 16px;
+    font-size: 8px;
+    color: var(--eva-purple);
+    background: var(--eva-panel);
+    padding: 0 8px;
+    letter-spacing: 2px;
+  }
+
+  .path-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 9px;
+  }
+
+  .seph-node {
+    min-width: 120px;
+    padding: 6px 10px;
+    border: 1px solid rgba(106,13,173,0.5);
+    background: rgba(106,13,173,0.08);
+    color: #BB88FF;
+    font-size: 8px;
+    letter-spacing: 1px;
+    text-align: center;
+    line-height: 1.5;
+  }
+
+  .seph-node .sn-num { color: rgba(187,136,255,0.5); font-size: 7px; }
+  .seph-node .sn-name { color: #BB88FF; }
+
+  .path-arrow {
+    color: rgba(106,13,173,0.6);
+    font-size: 14px;
+  }
+
+  .path-card {
+    font-size: 9px;
+    color: rgba(232,232,208,0.6);
+    padding: 4px 8px;
+    border: 1px solid rgba(255,255,255,0.08);
+    font-family: 'Zen Antique Softened', serif;
+  }
+
+  /* FOOTER */
+  .eva-footer {
+    border-top: 2px solid var(--eva-orange);
+    padding: 12px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 8px;
+    color: rgba(232,232,208,0.3);
+    letter-spacing: 2px;
+    background: #050510;
+  }
+
+  .footer-left { line-height: 1.8; }
+  .footer-right { text-align: right; line-height: 1.8; }
+  .footer-right .eva-mark { color: var(--eva-orange); font-size: 11px; }
+
+  /* SCROLL ANIMATION */
+  .card-panel {
+    animation: fadeSlideIn 0.6s ease both;
+  }
+
+  .card-panel:nth-child(1) { animation-delay: 0.1s; }
+  .card-panel:nth-child(2) { animation-delay: 0.2s; }
+  .card-panel:nth-child(3) { animation-delay: 0.3s; }
+  .card-panel:nth-child(4) { animation-delay: 0.4s; }
+  .card-panel:nth-child(5) { animation-delay: 0.5s; }
+  .card-panel:nth-child(6) { animation-delay: 0.6s; }
+
+  @keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 800px) {
+    .card-body { grid-template-columns: 1fr; }
+    .cb-left { border-right: none; border-bottom: 1px solid var(--eva-border); }
+    .spread-grid { grid-template-columns: 1fr 1fr; }
+    .synthesis-grid { grid-template-columns: 1fr; }
+    .tension-grid { grid-template-columns: 1fr; }
+    .element-bars { grid-template-columns: 1fr 1fr; }
+    .lunar-panel { grid-template-columns: auto 1fr; }
+    .lunar-analysis { grid-column: 1/-1; border-left: none; border-top: 1px solid rgba(255,107,0,0.3); padding: 12px 0 0; }
+    .card-header { grid-template-columns: 48px 1fr; }
+    .card-header-meta { display: none; }
+    .card-threat { display: none; }
+    .header-top { flex-direction: column; gap: 8px; }
+  }
+
+  /* PATTERN BACKGROUND */
+  .main-container {
+    position: relative;
+  }
+
+  .hexgrid-bg {
+    position: fixed;
+    top: 0; right: 0;
+    width: 300px;
+    height: 100vh;
+    opacity: 0.03;
+    pointer-events: none;
+    z-index: 0;
+    background-image: 
+      repeating-linear-gradient(60deg, rgba(255,107,0,0.5) 0, rgba(255,107,0,0.5) 1px, transparent 0, transparent 50%),
+      repeating-linear-gradient(120deg, rgba(255,107,0,0.5) 0, rgba(255,107,0,0.5) 1px, transparent 0, transparent 50%),
+      repeating-linear-gradient(0deg, rgba(255,107,0,0.5) 0, rgba(255,107,0,0.5) 1px, transparent 0, transparent 50%);
+    background-size: 40px 70px;
+  }
+</style>
+</head>
+<body>
+
+<div class="hexgrid-bg"></div>
+
+<!-- NERV HEADER -->
+<header class="nerv-header">
+  <div class="header-top">
+    <div class="nerv-logo">
+      <span class="big">MAGI</span>
+      TAROT ANALYSIS SYSTEM // SPECIAL OPERATIONS DIVISION
+    </div>
+    <div class="header-status">
+      <div class="status-blink">● SYSTEM ACTIVE</div>
+      <div>PATTERN MATCH: 94.7%</div>
+      <div>DATE: 19.MAY.2026 // 22:31 CST</div>
+      <div>LOCATION: NORTHERN ILLINOIS SECTOR</div>
+    </div>
+  </div>
+  <div class="header-title-bar">
+    <div class="main-title">陰陽 // WAXING CRESCENT READING</div>
+    <div class="sub-title">FIRE/WATER OPPOSITION // SPREAD TYPE: 6-CARD LUNAR INTENTION</div>
+  </div>
+  <div class="header-meta">
+    <div class="meta-item">QUERENT: <span>CLASSIFIED</span></div>
+    <div class="meta-item">DECK: <span>RIDER-WAITE-SMITH</span></div>
+    <div class="meta-item">LUNAR PHASE: <span>WAXING CRESCENT Ↄ</span></div>
+    <div class="meta-item">ILLUMINATION: <span>15.0%</span></div>
+    <div class="meta-item">REVERSALS: <span>ACTIVE [2 DETECTED]</span></div>
+    <div class="meta-item">CARDS DRAWN: <span>6 / 78</span></div>
+  </div>
+  <!-- MAGI BAR -->
+  <div class="magi-bar">
+    <div class="magi-unit">
+      <div class="magi-name">BALTHASAR</div>
+      <div class="magi-verdict">FIRE DOMINANT :: WILLFUL ACTION INDICATED</div>
+    </div>
+    <div class="magi-unit">
+      <div class="magi-name">CASPAR</div>
+      <div class="magi-verdict">WATER SUPPRESSED :: RECEPTIVE CHANNEL BLOCKED</div>
+    </div>
+    <div class="magi-unit">
+      <div class="magi-name">MELCHIOR</div>
+      <div class="magi-verdict">MERCURY ACTIVE :: OPERATIVE INTELLIGENCE AVAILABLE</div>
+    </div>
+  </div>
+</header>
+
+<div class="main-container">
+
+  <!-- ELEMENTAL COMPOSITION BAR -->
+  <div class="element-bars" style="border:1px solid var(--eva-border); margin-bottom:20px; background:var(--eva-panel);">
+    <div class="elem-bar">
+      <div class="eb-label fire">FIRE</div>
+      <div class="eb-track"><div class="eb-fill fire" style="width:72%; animation-delay:0.3s;"></div></div>
+      <div class="eb-pct">72% // 4 of 6 POSITIONS</div>
+    </div>
+    <div class="elem-bar">
+      <div class="eb-label water">WATER</div>
+      <div class="eb-track"><div class="eb-fill water" style="width:12%; animation-delay:0.5s;"></div></div>
+      <div class="eb-pct">12% // REVERSED · INOPERATIVE</div>
+    </div>
+    <div class="elem-bar">
+      <div class="eb-label air">AIR</div>
+      <div class="eb-track"><div class="eb-fill air" style="width:8%; animation-delay:0.7s;"></div></div>
+      <div class="eb-pct">8% // MERCURY CHANNEL</div>
+    </div>
+    <div class="elem-bar">
+      <div class="eb-label earth">EARTH</div>
+      <div class="eb-track"><div class="eb-fill earth" style="width:8%; animation-delay:0.9s;"></div></div>
+      <div class="eb-pct">8% // PAGE (EARTH OF FIRE)</div>
+    </div>
+  </div>
+
+  <!-- LUNAR CONTEXT -->
+  <div class="lunar-panel">
+    <div class="lunar-icon">☽</div>
+    <div class="lunar-data">
+      <div class="ld-label">PHASE</div>
+      <div class="ld-value">WAXING CRESCENT</div>
+      <div class="ld-label" style="margin-top:6px;">SIGN</div>
+      <div class="ld-value">CANCER ♋ — DOMICILE</div>
+      <div class="ld-label" style="margin-top:6px;">STATUS</div>
+      <div class="ld-value">15.0% ILLUMINATED · DAY 4</div>
+    </div>
+    <div class="lunar-analysis">
+      The Moon in <span class="highlight">Cancer occupies her own domicile</span> — the strongest possible dignification by house. In classical doctrine, a planet in domicile acts from its own nature without interference. Yet here this creates a <span class="warn">paradox</span>: the crescent phase demands outward declaration of intent, while Cancer by nature is nocturnal, enclosing, and inward-turning. The Moon wishes to <em>hold</em>; the crescent phase demands she <em>speak</em>.<br><br>
+      The <span class="highlight">Ace of Cups reversed</span> in position 4 (What Cannot Change) mirrors this Cancerian condition: the Water element — which should be most at home in this lunar atmosphere — is structurally inverted and unavailable as a resource. The reading does not ask you to fix this. It names it as fixed law for this cycle.
+    </div>
+  </div>
+
+  <!-- SPREAD MAP -->
+  <div class="spread-map">
+    <div class="spread-grid">
+      <div class="spread-node node-1">
+        <div class="pos-number">1</div>
+        <div class="pos-label">YOUR TALENTS</div>
+        <div class="card-name fire">ACE OF WANDS</div>
+        <div class="card-attrib">
+          SUIT: <span class="attr-val">FIRE (WANDS)</span><br>
+          TREE: <span class="attr-val">KETHER OF FIRE // ACE = KETHER</span><br>
+          ELEMENT: <span class="attr-val">YOD OF FIRE — ROOT IMPULSE</span>
+        </div>
+      </div>
+      <div class="spread-node node-2">
+        <div class="pos-number">2</div>
+        <div class="pos-label">YOUR ENVIRONMENT</div>
+        <div class="card-reversed-tag">⬇ REVERSED</div>
+        <div class="card-name reversed">PAGE OF WANDS</div>
+        <div class="card-attrib">
+          COURT: <span class="attr-val">EARTH OF FIRE</span><br>
+          GOLDEN DAWN: <span class="attr-val">PRINCESS OF WANDS</span><br>
+          ELEMENT: <span class="attr-val">EARTH IN THE FIRE COURT</span>
+        </div>
+      </div>
+      <div class="spread-node node-3">
+        <div class="pos-number">3</div>
+        <div class="pos-label">YOUR RESOURCES</div>
+        <div class="card-name major">THE MAGICIAN</div>
+        <div class="card-attrib">
+          TRUMP: <span class="attr-val">I — BETH (ב)</span><br>
+          PATH: <span class="attr-val">12 // KETHER → BINAH</span><br>
+          PLANET: <span class="attr-val">MERCURY ☿</span>
+        </div>
+      </div>
+      <div class="spread-node node-4">
+        <div class="pos-number">4</div>
+        <div class="pos-label">WHAT CANNOT CHANGE</div>
+        <div class="card-reversed-tag">⬇ REVERSED</div>
+        <div class="card-name reversed water">ACE OF CUPS</div>
+        <div class="card-attrib">
+          SUIT: <span class="attr-val">WATER (CUPS)</span><br>
+          TREE: <span class="attr-val">KETHER OF WATER // YOD OF WATER</span><br>
+          FIXED CONDITION: <span class="attr-val">INOPERATIVE THIS CYCLE</span>
+        </div>
+      </div>
+      <div class="spread-node node-5">
+        <div class="pos-number">5</div>
+        <div class="pos-label">WHAT MUST CHANGE</div>
+        <div class="card-name fire">FIVE OF WANDS</div>
+        <div class="card-attrib">
+          DECAN: <span class="attr-val">♄ SATURN IN LEO ♌</span><br>
+          DECAN: <span class="attr-val">1ST DECAN LEO</span><br>
+          NUMBER: <span class="attr-val">FIVE // GEBURAH</span>
+        </div>
+      </div>
+      <div class="spread-node node-6">
+        <div class="pos-number">6</div>
+        <div class="pos-label">OUTCOME</div>
+        <div class="card-name fire">KNIGHT OF WANDS</div>
+        <div class="card-attrib">
+          COURT: <span class="attr-val">FIRE OF FIRE</span><br>
+          ASTRO: <span class="attr-val">SCORPIO ♏ – SAGITTARIUS ♐</span><br>
+          ELEMENT: <span class="attr-val">PURE FIERY DYNAMISM</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ELEMENTAL TENSION DIAGRAM -->
+  <div class="tension-diagram">
+    <div class="tension-grid">
+      <div class="tension-pole tp-fire">
+        <div class="tp-label">FIRE DOMINANT ↑</div>
+        <div class="tp-cards">
+          Ace of Wands — raw ignition<br>
+          Page Rx — suppressed Fire<br>
+          Five of Wands — Saturn/Leo friction<br>
+          Knight of Wands — Fire of Fire<br>
+          The Magician — Mercury directs Fire
+        </div>
+      </div>
+      <div class="tension-center">
+        <span class="tc-vs">⚔</span>
+        <div class="tc-label">OPPOSITION<br>AXIS</div>
+        <div style="margin-top:12px; font-size:8px; color:rgba(232,232,208,0.35); letter-spacing:1px; line-height:2;">
+          Moon in Cancer<br>
+          seeks Water<br>
+          but finds Fire<br>
+          dominant
+        </div>
+      </div>
+      <div class="tension-pole tp-water">
+        <div class="tp-label">WATER SUPPRESSED ↓</div>
+        <div class="tp-cards">
+          Ace of Cups Rx — FIXED CONDITION<br>
+          Moon in Cancer — domicile, inward<br>
+          Cancerian phase tension<br>
+          Emotional receptivity:<br>
+          &nbsp;&nbsp;unavailable this cycle
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD ANALYSES -->
+  <div class="analysis-section">
+
+    <!-- CARD 1: ACE OF WANDS -->
+    <div class="card-panel">
+      <div class="card-header">
+        <div class="card-number" style="color:var(--eva-orange);">Ⅰ</div>
+        <div class="card-header-label">
+          <div class="chl-position">POSITION 1 // YOUR TALENTS</div>
+          <div class="chl-name fire">ACE OF WANDS</div>
+        </div>
+        <div class="card-header-meta">
+          <div class="mhm-row">
+            <span><span class="mhm-key">SUIT</span> <span class="mhm-val">FIRE / WANDS</span></span>
+            <span><span class="mhm-key">TREE</span> <span class="mhm-val">KETHER OF ATZILUTH</span></span>
+            <span><span class="mhm-key">ELEMENT</span> <span class="mhm-val">YOD — FIRE ROOT</span></span>
+            <span><span class="mhm-key">DIGNITY</span> <span class="mhm-val">UPRIGHT // OPERATING</span></span>
+          </div>
+        </div>
+        <div class="card-threat">
+          <div class="threat-label">POTENCY</div>
+          <div class="threat-bar"><div class="threat-fill fire" style="width:95%; background:var(--eva-orange);"></div></div>
+          <div class="threat-val" style="color:var(--eva-orange);">95%</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="cb-left">
+          <div class="analysis-block">
+            <div class="ab-label">ICONOGRAPHIC READING</div>
+            <div class="ab-text">
+              A disembodied hand — unattributed to any mortal figure, emerging from cloud — proffers a living wand whose tip still sprouts green leaves. This is Pamela Smith's most significant visual statement here: the wand is <span class="key-term">not dead wood</span> but a living branch, actively growing even while held. In the distance, a castle sits atop a verdant hill, unreached. The hand of god gives a living thing — the potential is not theoretical but <span class="fire-term">actively alive</span>. Clouds at right suggest the unmanifest, from which this emerges.
+            </div>
+          </div>
+          <div class="analysis-block">
+            <div class="ab-label">KABBALISTIC ATTRIBUTION</div>
+            <div class="ab-text">
+              All Aces correspond to <span class="key-term">Kether</span> — the first Sephira, the Crown, the point of first emanation before differentiation. The Ace of Wands is Kether expressed through <em>Atziluth</em>, the world of Fire and pure Archetype. This is the <span class="fire-term">Yod of the Tetragrammaton</span> — the seed-letter, the point of divine paternity before it condenses into form. You carry into this cycle the most undiluted form of fiery Will-force available. It has not yet been shaped, spent, or misdirected.
+            </div>
+          </div>
+        </div>
+        <div class="cb-right">
+          <div class="analysis-block">
+            <div class="ab-label">OPERATIVE SIGNIFICANCE — POSITION 1</div>
+            <div class="ab-text">
+              As <em>Your Talents</em>, the Ace names what you bring to the waxing crescent's task of declaration. What you bring is the <span class="fire-term">original spark before form</span> — not skill, not experience, but the raw generative impulse itself. This is the condition of the wand still budding: <span class="key-term">genuine creative fire</span> not yet expended on strategy. In the context of this spread, the Ace feeds directly into the Magician (Position 3): the spark is there; the Magician provides the operative intelligence to direct it. The Ace also rhymes ominously with the Five of Wands (Position 5) — what happens to Fire without that direction is shown there.
+            </div>
+          </div>
+          <table class="corr-table">
+            <tr><td>HEBREW</td><td>N/A — Ace corresponds to Kether, not a Path</td></tr>
+            <tr><td>PLANET</td><td>Solar energy (Fire triplicity: Leo, Aries, Sagittarius)</td></tr>
+            <tr><td>TREE POSITION</td><td>Kether — Crown — First Point</td></tr>
+            <tr><td>NUMBER</td><td>1 = Unity, undivided potential, the monad</td></tr>
+            <tr><td>CONNECTS TO</td><td>Magician (Trump I) — both express the number 1</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 2: PAGE OF WANDS RX -->
+    <div class="card-panel">
+      <div class="card-header">
+        <div class="card-number" style="color:var(--eva-red);">Ⅱ</div>
+        <div class="card-header-label">
+          <div class="chl-position">POSITION 2 // YOUR ENVIRONMENT</div>
+          <div class="chl-name rev">PAGE OF WANDS — REVERSED</div>
+        </div>
+        <div class="card-header-meta">
+          <div class="mhm-row">
+            <span><span class="mhm-key">COURT</span> <span class="mhm-val">EARTH OF FIRE</span></span>
+            <span><span class="mhm-key">G.D.</span> <span class="mhm-val">PRINCESS OF WANDS</span></span>
+            <span><span class="mhm-key">STATUS</span> <span class="mhm-val">REVERSED — INVERTED FUNCTION</span></span>
+          </div>
+        </div>
+        <div class="card-threat">
+          <div class="threat-label">OBSTRUCTION</div>
+          <div class="threat-bar"><div class="threat-fill" style="width:78%; background:var(--eva-red);"></div></div>
+          <div class="threat-val" style="color:var(--eva-red);">78%</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="cb-left">
+          <div class="analysis-block">
+            <div class="ab-label">ICONOGRAPHIC READING</div>
+            <div class="ab-text">
+              The Page stands in an arid landscape, holding a tall wand and gazing at it with rapt attention — but upright, this figure is oriented correctly, wearing a tunic decorated with <span class="key-term">salamanders</span> (the alchemical creatures of Fire who live within flame). <span class="danger">Reversed</span>, the entire figure inverts: the wand tip drives toward earth, the salamanders hang upside-down, the figure's gaze is now directed downward. The feathered hat — a marker of the Page's breezy, inexperienced nature — now falls away from the head. The desert landscape becomes the sky.
+            </div>
+          </div>
+          <div class="analysis-block">
+            <div class="ab-label">COURT CARD ELEMENTAL ANALYSIS</div>
+            <div class="ab-text">
+              In the Golden Dawn system, court cards blend two elemental principles. The Page/Princess is <span class="key-term">Earth of its suit</span> — the densest, most material expression. The Page of Wands is therefore <span class="fire-term">Earth of Fire</span>: the grounding or crystallization of the fiery impulse. Upright, this suggests the capacity to embody and carry Fire into material reality. <span class="danger">Reversed</span>, this Earth-of-Fire quality becomes literal misdirection: the Fire is being driven into the ground before it can rise and act.
+            </div>
+          </div>
+        </div>
+        <div class="cb-right">
+          <div class="analysis-block">
+            <div class="ab-label">OPERATIVE SIGNIFICANCE — POSITION 2</div>
+            <div class="ab-text">
+              As <em>Your Environment</em>, this reversed Page diagnoses the field in which you are operating. The surroundings are characterized by <span class="danger">Fire that cannot properly ignite</span>: scattered initiatives, premature assertions, ideas without strategic follow-through, perhaps agents in your environment who carry enthusiasm without the discipline to direct it. The desert landscape of the Page (Leo's Solar heat) is present — the raw material exists — but nothing is properly oriented. This environmental friction directly causes the chaos of the Five of Wands (Position 5). The Page reversed is the <span class="key-term">medium before the melee</span>.
+            </div>
+          </div>
+          <table class="corr-table">
+            <tr><td>ELEMENT BLEND</td><td>Earth of Fire — materialization of impulse</td></tr>
+            <tr><td>REVERSED EFFECT</td><td>Fire driven downward; cannot rise to ignite</td></tr>
+            <tr><td>ENVIRONMENT TYPE</td><td>Immature, disoriented Fire — high friction</td></tr>
+            <tr><td>RELATIONSHIP</td><td>Feeds directly into Five of Wands (Position 5)</td></tr>
+            <tr><td>CONTRAST WITH</td><td>Knight of Wands (Pos 6) — mature, directed Fire</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 3: THE MAGICIAN -->
+    <div class="card-panel">
+      <div class="card-header">
+        <div class="card-number" style="color:var(--eva-gold);">Ⅲ</div>
+        <div class="card-header-label">
+          <div class="chl-position">POSITION 3 // YOUR RESOURCES</div>
+          <div class="chl-name major">THE MAGICIAN — TRUMP I</div>
+        </div>
+        <div class="card-header-meta">
+          <div class="mhm-row">
+            <span><span class="mhm-key">HEBREW</span> <span class="mhm-val">BETH (ב) — HOUSE</span></span>
+            <span><span class="mhm-key">PATH</span> <span class="mhm-val">12 // KETHER → BINAH</span></span>
+            <span><span class="mhm-key">PLANET</span> <span class="mhm-val">MERCURY ☿</span></span>
+            <span><span class="mhm-key">TRUMP</span> <span class="mhm-val">I — MONAD</span></span>
+          </div>
+        </div>
+        <div class="card-threat">
+          <div class="threat-label">RESOURCE</div>
+          <div class="threat-bar"><div class="threat-fill" style="width:98%; background:var(--eva-gold);"></div></div>
+          <div class="threat-val" style="color:var(--eva-gold);">MAXIMUM</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="cb-left">
+          <div class="analysis-block">
+            <div class="ab-label">ICONOGRAPHIC READING</div>
+            <div class="ab-text">
+              The figure stands before a table bearing all four elemental implements simultaneously: <span class="gold-term">Cup, Wand, Sword, Pentacle</span> — Water, Fire, Air, Earth. His right hand raises a white wand toward a yellow sky; his left index finger points to the earth. Above his head: the <span class="key-term">lemniscate</span> (∞), the sign of rectified, continuous will that generates without depletion. He wears a white inner robe (purity of intent) beneath a red outer garment (active application of will). Roses and lilies border the image — desire purified through thought. The solar yellow background declares this an intellective, Solar operation. Crucially, the Magician does not <em>possess</em> the four implements — he has them <em>available</em> for directed deployment.
+            </div>
+          </div>
+          <div class="analysis-block">
+            <div class="ab-label">PATH 12: KETHER TO BINAH</div>
+            <div class="ab-text">
+              Hebrew <span class="key-term">Beth</span> means <em>house</em> — the container, the structured space within which raw potential finds form. Path 12 descends from <span class="gold-term">Kether</span> (the undifferentiated Crown) toward <span class="gold-term">Binah</span> (the Great Mother, Understanding, the form-giver). The Magician is the first act of directed consciousness: the moment pure Being turns toward form-giving intelligence. He does not create — he <span class="key-term">transmits and directs</span> what already exists in Kether.
+            </div>
+          </div>
+        </div>
+        <div class="cb-right">
+          <div class="analysis-block">
+            <div class="ab-label">OPERATIVE SIGNIFICANCE — POSITION 3</div>
+            <div class="ab-text">
+              As <em>Your Resources</em>, the Magician is the reading's most extraordinary card. A Major Arcanum in the resource position means the operative intelligence available to you is not merely personal or situational — it is <span class="gold-term">archetypal and complete</span>. Mercury's function here is <em>discrimination</em>: knowing which instrument to deploy, in what sequence, with what intent. The Magician is the <span class="key-term">answer to the Five of Wands</span>: where the Five shows all fires burning simultaneously and chaotically, the Magician selects, sequences, and directs. This card also completes the Ace of Wands (Position 1): the Ace provides the raw spark; the Magician, the operative framework to use it. Beth = the house that contains without extinguishing.
+            </div>
+          </div>
+          <table class="corr-table">
+            <tr><td>HEBREW</td><td>Beth (ב) — House // Container of potential</td></tr>
+            <tr><td>PATH</td><td>12th Path: Kether → Binah (Crown to Understanding)</td></tr>
+            <tr><td>PLANET</td><td>Mercury ☿ — Art, craft, discrimination, transmission</td></tr>
+            <tr><td>TRUMP NUMBER</td><td>I — same number as Ace of Wands: unity operating</td></tr>
+            <tr><td>FUNCTION HERE</td><td>Transforms chaos (Pos 5) → direction (Pos 6)</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 4: ACE OF CUPS RX -->
+    <div class="card-panel">
+      <div class="card-header">
+        <div class="card-number" style="color:var(--eva-cyan);">Ⅳ</div>
+        <div class="card-header-label">
+          <div class="chl-position">POSITION 4 // WHAT CANNOT CHANGE</div>
+          <div class="chl-name rev water">ACE OF CUPS — REVERSED</div>
+        </div>
+        <div class="card-header-meta">
+          <div class="mhm-row">
+            <span><span class="mhm-key">SUIT</span> <span class="mhm-val">WATER / CUPS</span></span>
+            <span><span class="mhm-key">TREE</span> <span class="mhm-val">KETHER OF BRIAH</span></span>
+            <span><span class="mhm-key">STATUS</span> <span class="mhm-val">REVERSED — FIXED // DO NOT ATTEMPT</span></span>
+          </div>
+        </div>
+        <div class="card-threat">
+          <div class="threat-label">FIXITY</div>
+          <div class="threat-bar"><div class="threat-fill" style="width:100%; background:var(--eva-cyan);"></div></div>
+          <div class="threat-val" style="color:var(--eva-cyan);">ABSOLUTE</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="cb-left">
+          <div class="analysis-block">
+            <div class="ab-label">ICONOGRAPHIC READING</div>
+            <div class="ab-text">
+              The upright Ace of Cups presents the <span class="water-term">Grail</span>: an ornate golden chalice overflowing with five streams into a lotus-covered lake, while a dove descends from above bearing the eucharistic wafer into the cup's mouth. The scene encapsulates <span class="key-term">divine love received</span>, Water in its most pristine, abundant, grace-filled form. <span class="danger">Reversed</span>, the cup pours its contents downward and away, the dove cannot enter, the streams cannot collect. The M-glyph on the cup's face (visible reversed) — often read as Maria or as a Hermetic monogram — is now inverted. What was a vessel receiving from above becomes a vessel spilling downward without collection.
+            </div>
+          </div>
+          <div class="analysis-block">
+            <div class="ab-label">THE FIXED LAW OF THIS CYCLE</div>
+            <div class="ab-text">
+              Position 4 explicitly names what <span class="danger">cannot be altered</span>. The reversed Ace of Cups as fixed law means: the purely receptive, grace-receiving faculty of consciousness — the Grail-function of being filled from above — is structurally <span class="danger">unavailable</span> in this cycle. This is not failure. It is a cosmological weather report. The Moon in Cancer (her domicile, Water at its most natural) cannot access her own gift here. The Cancerian impulse to receive, contain, and nourish is temporarily inverted. Force directed toward opening this channel is <span class="key-term">force wasted</span>.
+            </div>
+          </div>
+        </div>
+        <div class="cb-right">
+          <div class="analysis-block">
+            <div class="ab-label">DEEP STRUCTURAL READING</div>
+            <div class="ab-text">
+              Two Aces appear in this spread — <span class="fire-term">Ace of Wands</span> (operating) and <span class="water-term">Ace of Cups</span> (inverted). These are Kether of Fire and Kether of Water respectively — the two primal, opposing elemental roots. Their juxtaposition in one spread, one upright and one reversed, encodes the fundamental tension this reading addresses: <span class="gold-term">the waxing crescent intention is being set in a field where Fire-root is active and Water-root is sealed</span>. The intention must therefore be structured entirely through Fire and the Mercurial faculty. Any attempt to ground it in emotional nourishment or receptive grace will find no purchase this cycle. The castle in the Ace of Wands (distant but visible) is the destination — reached only through Fire's directed motion, not through Water's magnetic attraction.
+            </div>
+          </div>
+          <table class="corr-table">
+            <tr><td>HEBREW</td><td>N/A — Ace = Kether, not a Path letter</td></tr>
+            <tr><td>WORLD</td><td>Kether of Briah — Crown of the World of Water</td></tr>
+            <tr><td>LUNAR LINK</td><td>Moon in Cancer seeks this Water; it is sealed</td></tr>
+            <tr><td>DIRECTIVE</td><td>Do not expend force trying to open this channel</td></tr>
+            <tr><td>DURATION</td><td>Fixed for this lunar cycle only (crescent to dark)</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 5: FIVE OF WANDS -->
+    <div class="card-panel">
+      <div class="card-header">
+        <div class="card-number" style="color:var(--eva-red);">Ⅴ</div>
+        <div class="card-header-label">
+          <div class="chl-position">POSITION 5 // WHAT MUST CHANGE</div>
+          <div class="chl-name fire">FIVE OF WANDS</div>
+        </div>
+        <div class="card-header-meta">
+          <div class="mhm-row">
+            <span><span class="mhm-key">DECAN</span> <span class="mhm-val">SATURN ♄ IN LEO ♌</span></span>
+            <span><span class="mhm-key">SEPHIRA</span> <span class="mhm-val">GEBURAH (5) — SEVERITY</span></span>
+            <span><span class="mhm-key">ASTROLOGICAL</span> <span class="mhm-val">1ST DECAN OF LEO</span></span>
+          </div>
+        </div>
+        <div class="card-threat">
+          <div class="threat-label">URGENCY</div>
+          <div class="threat-bar"><div class="threat-fill" style="width:85%; background:var(--eva-red);"></div></div>
+          <div class="threat-val" style="color:var(--eva-red);">85%</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="cb-left">
+          <div class="analysis-block">
+            <div class="ab-label">ICONOGRAPHIC READING</div>
+            <div class="ab-text">
+              Five young men, each gripping a wand, appear in a chaotic melee — but Smith's composition resists easy violence. Study the image: no figure is clearly <span class="key-term">attacking another</span>. The wands cross and clash in mid-air as all five push simultaneously without coordination. There are no casualties, no fallen figures, no strategic positions. This is not war — it is <span class="danger">simultaneous assertion without hierarchy</span>. Each fires launches at the same moment from its own center. The ground is barren and undefined. Sky is blank blue — no higher context. Five people, five intentions, five simultaneous volleys, zero resolution.
+            </div>
+          </div>
+          <div class="analysis-block">
+            <div class="ab-label">SATURN IN LEO — DECAN ANALYSIS</div>
+            <div class="ab-text">
+              The Golden Dawn assigns the Five of Wands to <span class="key-term">Saturn in Leo</span>, the 1st decan. Leo is the Sun's domicile, the sign of radiating self-expression, theatrical assertion, Solar pride. Saturn is the <span class="danger">principle of contraction, limit, form, and gravity</span> — the planet classically most antithetical to Leo's expansive Solar nature. When Saturn occupies Leo's decan, Will-force is not simply blocked — it is <em>frustrated</em>: it expands, then hits a wall, expands again, hits again. The result is energy dissipated in repeated cycles of assertion-and-rebound. <span class="fire-term">Fire's nature is to rise</span>; Saturn pulls it back. This decan describes exactly the image: force meeting its own counter-force, wearing itself out without direction.
+            </div>
+          </div>
+        </div>
+        <div class="cb-right">
+          <div class="analysis-block">
+            <div class="ab-label">OPERATIVE SIGNIFICANCE — POSITION 5</div>
+            <div class="ab-text">
+              As <em>What Must Change</em>, the Five names the specific mode of operation that must be abandoned. What must cease is the <span class="danger">simultaneous, unsequenced expenditure of Fire</span>. Whether this is internal — multiple competing intentions, inability to prioritize — or external (the chaotic environment described by the reversed Page of Wands), the result is the same: Saturn-in-Leo frustration, wands crossing without resolution. The Magician (Position 3) is the direct answer: Mercury's capacity for <span class="gold-term">discrimination and sequencing</span> dissolves the Saturn-in-Leo deadlock. Not by adding more force, but by <span class="key-term">choosing which wand to raise first</span> and holding the others until the field is clear.
+            </div>
+          </div>
+          <table class="corr-table">
+            <tr><td>SEPHIRA</td><td>Geburah (5) — Severity, disruption of stable Four</td></tr>
+            <tr><td>DECAN</td><td>Saturn ♄ in Leo ♌ — contraction vs expansion</td></tr>
+            <tr><td>NUMBER 5</td><td>Mars principle: will-force disrupting stability</td></tr>
+            <tr><td>DYNAMIC</td><td>Uncoordinated multi-directional Fire (Saturn-frustrated)</td></tr>
+            <tr><td>RESOLUTION</td><td>Mercurial discrimination → Knight of Wands (Pos 6)</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 6: KNIGHT OF WANDS -->
+    <div class="card-panel">
+      <div class="card-header">
+        <div class="card-number" style="color:var(--eva-green);">Ⅵ</div>
+        <div class="card-header-label">
+          <div class="chl-position">POSITION 6 // OUTCOME</div>
+          <div class="chl-name fire">KNIGHT OF WANDS</div>
+        </div>
+        <div class="card-header-meta">
+          <div class="mhm-row">
+            <span><span class="mhm-key">COURT</span> <span class="mhm-val">FIRE OF FIRE</span></span>
+            <span><span class="mhm-key">ASTRO</span> <span class="mhm-val">SCORPIO ♏ — SAGITTARIUS ♐</span></span>
+            <span><span class="mhm-key">ELEMENT</span> <span class="mhm-val">PURE FIERY DYNAMISM</span></span>
+            <span><span class="mhm-key">STATUS</span> <span class="mhm-val">UPRIGHT // FULLY OPERATIVE</span></span>
+          </div>
+        </div>
+        <div class="card-threat">
+          <div class="threat-label">MOMENTUM</div>
+          <div class="threat-bar"><div class="threat-fill" style="width:90%; background:var(--eva-green);"></div></div>
+          <div class="threat-val" style="color:var(--eva-green);">90%</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="cb-left">
+          <div class="analysis-block">
+            <div class="ab-label">ICONOGRAPHIC READING</div>
+            <div class="ab-text">
+              The Knight of Wands charges on a rearing horse across an arid landscape; in the far distance, <span class="key-term">three pyramids</span> — ancient Egypt, the eternal, the already-accomplished architecture of vast civilizations — mark the horizon. The Knight's armor is covered with <span class="fire-term">salamanders</span> (Fire-creatures; the same motif as the Page's tunic, but now armored, no longer adolescent). His plume is a blaze of orange-red. He holds his wand loosely, tilted, with the ease of one already in motion — not bracing to launch but already launched. His horse rears but is <em>controlled</em>. The tension in that rearing is the paradox of the Knight: maximum speed <span class="key-term">held within form</span>.
+            </div>
+          </div>
+          <div class="analysis-block">
+            <div class="ab-label">COURT ELEMENTAL ANALYSIS</div>
+            <div class="ab-text">
+              The Knight is <span class="fire-term">Fire of his suit</span> — the most dynamic, aggressive, offensive court-card element. Knight of Wands is therefore <span class="key-term">Fire of Fire</span>: the element at its most purely kinetic expression. Nothing dilutes, nothing grounds. The Golden Dawn assigns Knights to the mutable-to-fixed cusp of the zodiacal arc. Here: <span class="gold-term">latter Scorpio into early Sagittarius</span> — crossing from fixed water (Scorpio, depth, fixed purpose) into mutable fire (Sagittarius, expansive quest). The Knight has the concentrated purposefulness of Scorpio and the directional momentum of Sagittarius. He knows where he is going and will not be deflected.
+            </div>
+          </div>
+        </div>
+        <div class="cb-right">
+          <div class="analysis-block">
+            <div class="ab-label">OPERATIVE SIGNIFICANCE — POSITION 6</div>
+            <div class="ab-text">
+              The Outcome is <span class="gold-term">Fire disciplined into forward movement</span>. The arc of the reading resolves here: the raw spark of the Ace, operating through the complete Mercurial apparatus of the Magician, clearing the Saturn-in-Leo deadlock of the Five — arrives at the Knight's directed, solitary charge. The <span class="key-term">three pyramids</span> behind him are crucial: they are not destinations but context. They represent the ancient, the enduring, the already-built — indicating that the Knight moves not in a void but against a backdrop of existing structures. He does not build them; he moves across the landscape they anchor. The outcome is not arrival — it is the <em>condition of properly directed motion itself</em>. The waxing crescent's mandate is fulfilled: the intention has been declared, mounted, and set in motion.
+            </div>
+          </div>
+          <table class="corr-table">
+            <tr><td>ELEMENT</td><td>Fire of Fire — most purely kinetic court card</td></tr>
+            <tr><td>ASTROLOGY</td><td>Scorpio ♏ (late) — Sagittarius ♐ (early)</td></tr>
+            <tr><td>CONTRAST</td><td>Page Rx (immature Fire) resolved into Knight (mature)</td></tr>
+            <tr><td>PYRAMIDS</td><td>Ancient backdrop — movement across existing structures</td></tr>
+            <tr><td>READING ARC</td><td>Ace spark → Magician focus → Knight's directed charge</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TREE OF LIFE PATHWORKING -->
+  <div class="path-diagram">
+    <div style="font-size:9px; color:rgba(232,232,208,0.4); letter-spacing:2px; margin-bottom:16px;">
+      Active Sephiroth and Paths invoked by this reading, per Golden Dawn schema:
+    </div>
+    <div class="path-row">
+      <div class="seph-node"><div class="sn-num">SEPHIRA 1</div><div class="sn-name">KETHER</div></div>
+      <div class="path-arrow">→</div>
+      <div class="path-card">Ace of Wands (Kether of Fire) + Ace of Cups Rx (Kether of Water, sealed)</div>
+    </div>
+    <div class="path-row">
+      <div class="seph-node"><div class="sn-num">PATH 12</div><div class="sn-name">BETH ב</div></div>
+      <div class="path-arrow">→</div>
+      <div class="path-card">The Magician — Kether to Binah via Mercury</div>
+    </div>
+    <div class="path-row">
+      <div class="seph-node"><div class="sn-num">SEPHIRA 5</div><div class="sn-name">GEBURAH</div></div>
+      <div class="path-arrow">→</div>
+      <div class="path-card">Five of Wands — Severity // Disruption // Saturn-in-Leo frustration</div>
+    </div>
+    <div class="path-row">
+      <div class="seph-node"><div class="sn-num">COURTS</div><div class="sn-name">FIRE AXIS</div></div>
+      <div class="path-arrow">→</div>
+      <div class="path-card">Page (Earth of Fire) Rx → Knight (Fire of Fire) — maturation of the fiery impulse within this cycle</div>
+    </div>
+    <div style="margin-top:12px; font-size:9px; color:rgba(232,232,208,0.35); letter-spacing:1px; border-top:1px solid var(--eva-border); padding-top:12px; line-height:2;">
+      NOTE: The two sealed Sephirot of Water (Kether of Briah, Ace of Cups Rx) remain outside the active pathworking. They cannot be accessed via any willed operation during this cycle. The Tree's Water column is muted; all available force flows through the Pillar of Severity (Fire, Mars, Geburah) and is mediated through the Middle Pillar's Mercurial capacity (Trump I, The Magician).
+    </div>
+  </div>
+
+  <!-- SYNTHESIS -->
+  <div class="synthesis-panel">
+    <div class="synthesis-grid">
+      <div>
+        <div class="syn-block">
+          <div class="syn-label">CENTRAL TENSION</div>
+          <div class="syn-text">
+            This reading is structured around a single irreducible opposition: <em>Fire against Water</em>, with Water sealed by fixed decree (Ace of Cups reversed, Position 4). The Moon in Cancer, who ought by classical right to preside over this lunation through her Watery domicile, cannot access the Grail-function. The cup pours out; the dove cannot descend. What remains is an overwhelmingly Fiery spread (four Wands cards plus the Magician's Mercurial fire-direction) operating under a Moon who would prefer to receive and contain. The waxing crescent's demand to declare and plant the intention is answered — but entirely through Fire's agency, not through Water's magnetic drawing power.
+          </div>
+        </div>
+        <div class="syn-block">
+          <div class="syn-label">THE TRANSFORMATION ARC</div>
+          <div class="syn-text">
+            The reading encodes a precise metamorphosis of the Fire element across six positions. <em>Position 1</em> (Ace of Wands): Fire as undifferentiated, living spark — pure potential. <em>Position 2</em> (Page Rx): Fire driven downward, disoriented in its environment — potential wasted. <em>Position 3</em> (Magician): Mercury's operative apparatus made available — the capacity to direct Fire through all four instruments. <em>Position 5</em> (Five of Wands): Fire in its most dysfunctional expression — Saturn-frustrated, simultaneous, self-defeating. <em>Position 6</em> (Knight of Wands): Fire in its most functional court-card expression — mounted, directed, already-moving. The arc is: spark → disorientation → capacity for direction → chaos → resolved motion.
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="syn-block">
+          <div class="syn-label">THE MAGICIAN AS FULCRUM</div>
+          <div class="syn-text">
+            The Magician occupies the structural center of the reading's logic, though not its geometric center. He is the only Major Arcanum, and his Path-12 function — transmitting Kether's undifferentiated force through Mercury toward Binah's form-giving intelligence — is precisely what the surrounding minor cards require. The Ace of Wands provides the force; the Magician provides the <em>operative framework</em>; the Knight of Wands is the result when this framework is applied. Between the Magician and the Knight lies the Five of Wands: the Saturn-in-Leo chaos that is this cycle's specific obstacle. The Magician's Mercurial discrimination — knowing which wand to raise first, which element to deploy in what sequence — is the only faculty capable of dissolving the Five's deadlock without adding to its noise.
+          </div>
+        </div>
+        <div class="syn-block">
+          <div class="syn-label">LUNAR PARADOX — RESOLUTION</div>
+          <div class="syn-text">
+            The Moon in Cancer in her domicile paradoxically cannot fulfill her Cancerian nature (receptivity, containment, nourishment) within this reading's structure. This is not a failure of the lunation — it is information about the specific intention being seeded. What is being planted in this waxing crescent is <em>not</em> a Water-natured intention (emotional, relational, nurturing). It is a Fire-natured intention (creative, willful, kinetic). The spread's elemental composition confirms: <em>this is a cycle for acting, not receiving</em>. The Moon in Cancer will return to Water's gifts. This crescent belongs to the Knight who is already moving across the ancient desert.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VERDICT -->
+  <div class="verdict-panel">
+    <div class="verdict-text">
+      The reading presents a single directive, encoded across six positions: <span class="vt-em">consolidate your fires into one direction and move.</span><br><br>
+
+      The Ace of Wands confirms that the generative impulse is genuine — this is not wishful fire but living fire, still budding. The Magician confirms that the operative intelligence to direct it is fully available — all four implements are on the table; you need not acquire what you lack. The Ace of Cups reversed delivers the cycle's one immovable law: <span class="vt-warn">do not wait to feel nourished before acting, do not wait for the emotional ground to feel stable, do not wait for reception before transmission.</span> The Water door is closed this cycle. Use the Fire door.<br><br>
+
+      The Five of Wands names the specific failure mode: <span class="vt-warn">multiple simultaneous assertions, each genuine, none prioritized, all wearing each other down under Saturn's grinding pressure in Leo's field.</span> Saturn in Leo does not defeat Fire — it frustrates it into self-exhaustion. The correction is not more force. It is Mercury's sequencing: one wand raised first, clearly, with intention. The others lowered until the field is clear.<br><br>
+
+      The Knight of Wands is the outcome when this correction is made. He is already moving. The three pyramids behind him — ancient, enduring, unhurried — tell you that the larger structures will persist regardless of your motion. You ride across them, not through them. The intention planted under this waxing crescent is <span class="vt-affirm">kinetic, solitary, and directional.</span> Not a building but a charge. Not a nest but a trajectory.<br><br>
+
+      <span class="vt-em">The Moon in Cancer will tend her waters in another cycle. This one belongs to Fire.</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="eva-footer">
+  <div class="footer-left">
+    MAGI ANALYSIS SYSTEM // SPECIAL OPERATIONS TAROT DIVISION<br>
+    READING DATE: 19.MAY.2026 // 22:31 CST // NORTHERN ILLINOIS<br>
+    SPREAD: WAXING CRESCENT LUNAR INTENTION (6-CARD)
+  </div>
+  <div class="footer-right">
+    <div class="eva-mark">⬡</div>
+    FRAMEWORK: GOLDEN DAWN // CLASSICAL ASTROLOGY // KABBALAH<br>
+    DECK: RIDER-WAITE-SMITH // REVERSALS: ACTIVE<br>
+    PATTERN CONFIDENCE: 94.7% // BALTHASAR · CASPAR · MELCHIOR
+  </div>
+</footer>
+
+</body>
+</html>

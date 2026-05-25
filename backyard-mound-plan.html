@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Mound — Your Hugelkultur Garden Plan</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+:root {
+  --soil:   #2d1a08;
+  --bark:   #5c3820;
+  --rust:   #8b4513;
+  --clay:   #a0622a;
+  --sand:   #c9a06a;
+  --straw:  #e8d090;
+  --cream:  #faf5e8;
+  --oat:    #f0e4cc;
+  --leaf:   #3a6b30;
+  --moss:   #5a8a4a;
+  --sage:   #7aaa60;
+  --fern:   #a8cc90;
+  --mint:   #d8ecc8;
+  --gold:   #c88010;
+  --sun:    #e8a820;
+  --ink:    #1a0e04;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  color: var(--ink);
+}
+
+/* ===== HERO ===== */
+.hero {
+  background: linear-gradient(160deg, #1a0e04 0%, #2d1a08 55%, #1a300a 100%);
+  padding: 2.5rem 1.5rem 2rem;
+  text-align: center;
+  border-bottom: 3px solid var(--gold);
+}
+
+.hero-tag { font-size: 0.65rem; letter-spacing: 0.5em; text-transform: uppercase; color: var(--sage); margin-bottom: 0.6rem; }
+.hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 5vw, 3rem); color: var(--cream); line-height: 1.1; margin-bottom: 0.4rem; }
+.hero h1 em { font-style: italic; color: var(--fern); }
+.hero-sub { font-size: 0.85rem; color: var(--sand); margin-bottom: 1.2rem; }
+.hero-stats { display: flex; justify-content: center; gap: 0.5rem; flex-wrap: wrap; }
+.stat-pill { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); border-radius: 20px; padding: 0.3rem 0.9rem; font-size: 0.72rem; color: var(--straw); }
+
+/* ===== SECTIONS ===== */
+.band-a { background: var(--cream); }
+.band-b { background: #f5eed8; }
+.band-dark { background: var(--soil); }
+
+.wrap { max-width: 1060px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+
+.sec-head { display: flex; align-items: baseline; gap: 0.8rem; margin-bottom: 1.5rem; border-bottom: 2px solid rgba(0,0,0,0.08); padding-bottom: 0.7rem; }
+.sec-num { font-family: 'Playfair Display', serif; font-size: 2.5rem; color: rgba(0,0,0,0.08); font-weight: 700; line-height: 1; flex-shrink: 0; }
+.sec-head h2 { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--soil); line-height: 1.2; }
+.sec-head p { font-size: 0.82rem; color: var(--clay); font-style: italic; margin-top: 2px; }
+
+/* ===== DIAGRAM BOXES ===== */
+.diagram-box {
+  background: white;
+  border-radius: 12px;
+  padding: 1.2rem;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.09);
+  margin-bottom: 1.2rem;
+}
+
+.diagram-box svg { width: 100%; height: auto; display: block; }
+
+.diag-label {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.95rem;
+  color: var(--soil);
+  font-style: italic;
+  margin-bottom: 0.2rem;
+}
+
+.diag-sub { font-size: 0.7rem; color: var(--clay); margin-bottom: 0.8rem; }
+
+/* ===== CALLOUTS ===== */
+.callout-earth {
+  background: linear-gradient(135deg, var(--bark), var(--rust));
+  color: white;
+  border-radius: 10px;
+  padding: 1rem 1.2rem;
+  font-size: 0.82rem;
+  line-height: 1.6;
+  margin: 1rem 0;
+}
+
+.callout-green {
+  background: linear-gradient(135deg, var(--leaf), var(--moss));
+  color: white;
+  border-radius: 10px;
+  padding: 1rem 1.2rem;
+  font-size: 0.82rem;
+  line-height: 1.6;
+  margin: 1rem 0;
+}
+
+.callout-earth strong, .callout-green strong { font-weight: 700; }
+
+/* ===== PLANT ZONES ===== */
+.zones-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.9rem;
+  margin-bottom: 1.2rem;
+}
+
+.zone-card {
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+}
+
+.zone-head {
+  padding: 0.7rem 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.zone-dot {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.78rem; font-weight: 700;
+  color: white; flex-shrink: 0;
+}
+
+.zone-head h3 { font-size: 0.82rem; font-weight: 700; color: var(--soil); line-height: 1.2; }
+.zone-head p  { font-size: 0.65rem; color: var(--clay); margin-top: 1px; }
+
+.zone-body { padding: 0.4rem 0.9rem 0.8rem; }
+
+.plant-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.3rem 0;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  font-size: 0.74rem;
+}
+
+.plant-row:last-child { border-bottom: none; }
+.p-em { font-size: 1rem; flex-shrink: 0; line-height: 1.4; }
+.p-text strong { color: var(--soil); font-weight: 600; }
+.p-text span   { color: var(--clay); font-size: 0.67rem; display: block; }
+
+/* ===== LAYERS ===== */
+.layers-stack { display: flex; flex-direction: column; gap: 0; border-radius: 10px; overflow: hidden; box-shadow: 0 3px 14px rgba(0,0,0,0.08); }
+
+.layer-row {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(0,0,0,0.07);
+}
+
+.layer-row:last-child { border-bottom: none; }
+
+.layer-swatch {
+  width: 42px; height: 34px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+}
+
+.layer-text h5 { font-size: 0.8rem; font-weight: 700; color: var(--soil); }
+.layer-text p  { font-size: 0.7rem; color: var(--clay); line-height: 1.4; margin-top: 1px; }
+.layer-num { font-size: 0.62rem; color: var(--clay); font-weight: 700; margin-left: auto; flex-shrink: 0; white-space: nowrap; }
+
+/* ===== BUILD STEPS ===== */
+.steps { display: flex; flex-direction: column; gap: 0.65rem; }
+
+.step {
+  background: white;
+  border-radius: 10px;
+  padding: 0.9rem 1rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  display: flex;
+  gap: 0.9rem;
+  align-items: flex-start;
+  border-left: 4px solid var(--moss);
+}
+
+.step.warn { border-left-color: var(--gold); }
+
+.step-n {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  background: var(--leaf);
+  color: white;
+  font-family: 'Playfair Display', serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+.step.warn .step-n { background: var(--gold); }
+
+.step h4 { font-size: 0.83rem; font-weight: 700; color: var(--soil); margin-bottom: 2px; }
+.step p  { font-size: 0.75rem; color: var(--clay); line-height: 1.5; }
+.step strong { color: var(--soil); }
+
+/* ===== TIMELINE ===== */
+.tl-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.8rem; }
+
+.tl-card {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 10px;
+  padding: 1rem;
+}
+
+.tl-card h4 { font-family: 'Playfair Display', serif; font-size: 0.85rem; color: var(--fern); margin-bottom: 0.6rem; font-style: italic; }
+
+.tl-item { display: flex; gap: 0.4rem; font-size: 0.72rem; color: rgba(255,255,255,0.65); padding: 0.2rem 0; line-height: 1.4; }
+.tl-dot { color: var(--sage); font-weight: 700; flex-shrink: 0; }
+
+/* UTIL */
+.mt { margin-top: 1.2rem; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+
+@media (max-width: 700px) {
+  .zones-row { grid-template-columns: 1fr; }
+  .two-col { grid-template-columns: 1fr; }
+  .tl-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 420px) {
+  .tl-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">Your Backyard · One Continuous Hugelkultur Mound · Season 2025</div>
+  <h1>The Mound —<br><em>One Living Landform</em></h1>
+  <div class="hero-sub">23 ft long · 4 ft wide · Peaks 18–24 in center · No planks · No frame · No purchase</div>
+  <div class="hero-stats">
+    <span class="stat-pill">📐 23 ft × 4 ft footprint</span>
+    <span class="stat-pill">⛰️ 18–24 in center peak</span>
+    <span class="stat-pill">🪵 Continuous log base</span>
+    <span class="stat-pill">🌻 Bookend sunflowers</span>
+    <span class="stat-pill">🧱 Brick front edge</span>
+  </div>
+</div>
+
+
+<!-- SECTION 1: BIRD'S EYE VIEW -->
+<div class="band-a">
+<div class="wrap">
+  <div class="sec-head">
+    <div class="sec-num">01</div>
+    <div>
+      <h2>The Plan — Two Views</h2>
+      <p>Bird's eye from above · Profile cross-section from the side</p>
+    </div>
+  </div>
+
+  <!-- BIRD'S EYE -->
+  <div class="diagram-box">
+    <div class="diag-label">🗺️ View from Above — Full 23 ft Mound</div>
+    <div class="diag-sub">Looking straight down · Fence runs across the top · You stand at the bottom looking up at it</div>
+
+    <svg viewBox="0 0 960 310" xmlns="http://www.w3.org/2000/svg" font-family="'DM Sans',sans-serif">
+
+      <!-- Background: lawn -->
+      <rect width="960" height="310" fill="#d0e8a8" rx="6"/>
+
+      <!-- FENCE -->
+      <rect x="0" y="0" width="960" height="36" fill="#e8e2d4" rx="0"/>
+      <rect x="4"   y="2" width="12" height="32" fill="#d8d0c0" rx="2"/>
+      <rect x="167" y="2" width="12" height="32" fill="#d8d0c0" rx="2"/>
+      <rect x="330" y="2" width="12" height="32" fill="#d8d0c0" rx="2"/>
+      <rect x="493" y="2" width="12" height="32" fill="#d8d0c0" rx="2"/>
+      <rect x="656" y="2" width="12" height="32" fill="#d8d0c0" rx="2"/>
+      <rect x="819" y="2" width="12" height="32" fill="#d8d0c0" rx="2"/>
+      <rect x="944" y="2" width="12" height="32" fill="#d8d0c0" rx="2"/>
+      <line x1="0" y1="14" x2="960" y2="14" stroke="#ccc4b4" stroke-width="0.7" opacity="0.6"/>
+      <line x1="0" y1="26" x2="960" y2="26" stroke="#ccc4b4" stroke-width="0.7" opacity="0.6"/>
+      <text x="480" y="22" text-anchor="middle" font-size="9" fill="#8a8070" letter-spacing="3" font-weight="700">WHITE VINYL FENCE — NORTH WALL</text>
+
+      <!-- 6–8 inch gap from fence -->
+      <rect x="0" y="36" width="960" height="10" fill="#d8c8a0" opacity="0.5"/>
+      <text x="480" y="44" text-anchor="middle" font-size="7" fill="#8a7050" letter-spacing="1">air gap (6–8 in)</text>
+
+      <!-- THE MOUND — elongated oval shape, widest in center -->
+      <!-- Mound shadow/base -->
+      <ellipse cx="480" cy="130" rx="462" ry="84" fill="#7a5018" opacity="0.25"/>
+
+      <!-- Mound main body — darker soil color -->
+      <ellipse cx="480" cy="122" rx="455" ry="78" fill="#8b6020" opacity="0.9"/>
+
+      <!-- Mound crown highlight — center peak zone -->
+      <ellipse cx="480" cy="110" rx="180" ry="42" fill="#a07828" opacity="0.75"/>
+
+      <!-- Mound surface texture / topsoil -->
+      <ellipse cx="480" cy="112" rx="450" ry="74" fill="none" stroke="#c09040" stroke-width="1" stroke-dasharray="3,4" opacity="0.4"/>
+
+      <!-- ZONE COLORS overlaid on mound -->
+
+      <!-- LEFT END — Sunflower zone -->
+      <ellipse cx="82" cy="118" rx="68" ry="46" fill="#4a6830" opacity="0.55"/>
+
+      <!-- LEFT-CENTER — Solanums (tomato/pepper) -->
+      <ellipse cx="270" cy="110" rx="148" ry="58" fill="#8b3010" opacity="0.4"/>
+
+      <!-- CENTER CROWN — Root crops (potato) -->
+      <ellipse cx="480" cy="104" rx="120" ry="48" fill="#6b4818" opacity="0.55"/>
+
+      <!-- RIGHT-CENTER — Alliums (onion/garlic) -->
+      <ellipse cx="690" cy="110" rx="148" ry="58" fill="#604880" opacity="0.35"/>
+
+      <!-- RIGHT END — Sunflower zone -->
+      <ellipse cx="878" cy="118" rx="68" ry="46" fill="#4a6830" opacity="0.55"/>
+
+      <!-- FRONT EDGE — flowers strip -->
+      <rect x="30" y="172" width="900" height="22" fill="#c89020" opacity="0.6" rx="4"/>
+      <text x="480" y="187" text-anchor="middle" font-size="8" fill="white" font-weight="700" letter-spacing="1">FRONT EDGE — MARIGOLD · ZINNIA · CALENDULA · BASIL</text>
+
+      <!-- BRICK LINE -->
+      <rect x="28" y="194" width="904" height="8" fill="#a06030" opacity="0.8" rx="2"/>
+      <text x="480" y="201" text-anchor="middle" font-size="6.5" fill="#faf0e0" font-weight="700" letter-spacing="1.5">BRICK EDGE</text>
+
+      <!-- WALKING PATH -->
+      <rect x="0" y="202" width="960" height="22" fill="#c8b888" opacity="0.5" rx="0"/>
+      <text x="480" y="217" text-anchor="middle" font-size="8" fill="#6a5030" letter-spacing="2">— walking path —</text>
+
+      <!-- LAWN -->
+      <text x="480" y="270" text-anchor="middle" font-size="11" fill="#5a7a3a" opacity="0.55" font-style="italic">lawn</text>
+
+      <!-- ===== PLANT ICONS on mound ===== -->
+
+      <!-- LEFT SUNFLOWERS -->
+      <text x="58"  y="120" text-anchor="middle" font-size="18">🌻</text>
+      <text x="102" y="115" text-anchor="middle" font-size="18">🌻</text>
+
+      <!-- TOMATOES (left-center) -->
+      <text x="175" y="105" text-anchor="middle" font-size="15">🍅</text>
+      <text x="215" y="100" text-anchor="middle" font-size="15">🍅</text>
+      <text x="255" y="98"  text-anchor="middle" font-size="15">🍅</text>
+      <text x="295" y="100" text-anchor="middle" font-size="15">🍅</text>
+
+      <!-- PEPPERS -->
+      <text x="185" y="130" text-anchor="middle" font-size="13">🌶️</text>
+      <text x="225" y="126" text-anchor="middle" font-size="13">🌶️</text>
+      <text x="265" y="124" text-anchor="middle" font-size="13">🌶️</text>
+      <text x="305" y="126" text-anchor="middle" font-size="13">🌶️</text>
+
+      <!-- BASIL between tomatoes -->
+      <text x="195" y="112" text-anchor="middle" font-size="10">🌿</text>
+      <text x="235" y="110" text-anchor="middle" font-size="10">🌿</text>
+      <text x="275" y="108" text-anchor="middle" font-size="10">🌿</text>
+
+      <!-- POTATOES (crown center) -->
+      <text x="415" y="96"  text-anchor="middle" font-size="14">🥔</text>
+      <text x="450" y="93"  text-anchor="middle" font-size="14">🥔</text>
+      <text x="485" y="92"  text-anchor="middle" font-size="14">🥔</text>
+      <text x="520" y="93"  text-anchor="middle" font-size="14">🥔</text>
+      <text x="555" y="96"  text-anchor="middle" font-size="14">🥔</text>
+
+      <!-- CARROTS (just off crown, right of center) -->
+      <text x="420" y="118" text-anchor="middle" font-size="12">🥕</text>
+      <text x="448" y="115" text-anchor="middle" font-size="12">🥕</text>
+      <text x="476" y="114" text-anchor="middle" font-size="12">🥕</text>
+      <text x="504" y="115" text-anchor="middle" font-size="12">🥕</text>
+      <text x="532" y="118" text-anchor="middle" font-size="12">🥕</text>
+
+      <!-- ONIONS (right-center) -->
+      <text x="615" y="100" text-anchor="middle" font-size="13">🧅</text>
+      <text x="648" y="97"  text-anchor="middle" font-size="13">🧅</text>
+      <text x="681" y="96"  text-anchor="middle" font-size="13">🧅</text>
+      <text x="714" y="97"  text-anchor="middle" font-size="13">🧅</text>
+      <text x="747" y="100" text-anchor="middle" font-size="13">🧅</text>
+
+      <!-- GARLIC (right-center, below onions) -->
+      <text x="625" y="122" text-anchor="middle" font-size="12">🧄</text>
+      <text x="655" y="119" text-anchor="middle" font-size="12">🧄</text>
+      <text x="685" y="118" text-anchor="middle" font-size="12">🧄</text>
+      <text x="715" y="119" text-anchor="middle" font-size="12">🧄</text>
+      <text x="745" y="122" text-anchor="middle" font-size="12">🧄</text>
+
+      <!-- CILANTRO -->
+      <text x="640" y="140" text-anchor="middle" font-size="10">🌿</text>
+      <text x="665" y="138" text-anchor="middle" font-size="10">🌿</text>
+
+      <!-- RIGHT SUNFLOWERS -->
+      <text x="858" y="115" text-anchor="middle" font-size="18">🌻</text>
+      <text x="902" y="120" text-anchor="middle" font-size="18">🌻</text>
+
+      <!-- MARIGOLDS front strip -->
+      <text x="65"  y="181" text-anchor="middle" font-size="11">🌼</text>
+      <text x="115" y="181" text-anchor="middle" font-size="11">🌺</text>
+      <text x="168" y="181" text-anchor="middle" font-size="11">🌼</text>
+      <text x="222" y="181" text-anchor="middle" font-size="11">🌺</text>
+      <text x="278" y="181" text-anchor="middle" font-size="11">🌼</text>
+      <text x="335" y="181" text-anchor="middle" font-size="11">🌺</text>
+      <text x="392" y="181" text-anchor="middle" font-size="11">🌼</text>
+      <text x="450" y="181" text-anchor="middle" font-size="11">🌺</text>
+      <text x="508" y="181" text-anchor="middle" font-size="11">🌼</text>
+      <text x="565" y="181" text-anchor="middle" font-size="11">🌺</text>
+      <text x="622" y="181" text-anchor="middle" font-size="11">🌼</text>
+      <text x="678" y="181" text-anchor="middle" font-size="11">🌺</text>
+      <text x="735" y="181" text-anchor="middle" font-size="11">🌼</text>
+      <text x="792" y="181" text-anchor="middle" font-size="11">🌺</text>
+      <text x="848" y="181" text-anchor="middle" font-size="11">🌼</text>
+      <text x="905" y="181" text-anchor="middle" font-size="11">🌺</text>
+
+      <!-- ZONE LABELS -->
+      <rect x="34" y="58" width="100" height="28" fill="rgba(0,0,0,0.5)" rx="4"/>
+      <text x="84" y="70" text-anchor="middle" font-size="8" fill="white" font-weight="700">SUNFLOWERS</text>
+      <text x="84" y="81" text-anchor="middle" font-size="7" fill="#a8cc90">bookend left</text>
+
+      <rect x="150" y="52" width="178" height="28" fill="rgba(139,48,16,0.7)" rx="4"/>
+      <text x="239" y="64" text-anchor="middle" font-size="8" fill="white" font-weight="700">SOLANUMS</text>
+      <text x="239" y="75" text-anchor="middle" font-size="7" fill="#fde8dc">tomato · pepper · basil</text>
+
+      <rect x="368" y="46" width="222" height="28" fill="rgba(60,30,10,0.7)" rx="4"/>
+      <text x="479" y="58" text-anchor="middle" font-size="8" fill="white" font-weight="700">CROWN — ROOT CROPS</text>
+      <text x="479" y="69" text-anchor="middle" font-size="7" fill="#e8d090">potato · carrot (pure soil strip)</text>
+
+      <rect x="632" y="52" width="176" height="28" fill="rgba(80,60,120,0.7)" rx="4"/>
+      <text x="720" y="64" text-anchor="middle" font-size="8" fill="white" font-weight="700">ALLIUMS</text>
+      <text x="720" y="75" text-anchor="middle" font-size="7" fill="#f4e8fc">onion · garlic · cilantro</text>
+
+      <rect x="826" y="58" width="108" height="28" fill="rgba(0,0,0,0.5)" rx="4"/>
+      <text x="880" y="70" text-anchor="middle" font-size="8" fill="white" font-weight="700">SUNFLOWERS</text>
+      <text x="880" y="81" text-anchor="middle" font-size="7" fill="#a8cc90">bookend right</text>
+
+      <!-- DIMENSION ARROWS -->
+      <line x1="8" y1="46" x2="8" y2="194" stroke="#8a7050" stroke-width="1.2" opacity="0.7"/>
+      <text x="16" y="124" font-size="7.5" fill="#8a7050" font-weight="600" transform="rotate(90 16 124)">4 ft wide</text>
+
+      <line x1="30" y1="230" x2="930" y2="230" stroke="#8a7050" stroke-width="1" opacity="0.5"/>
+      <text x="480" y="244" text-anchor="middle" font-size="7.5" fill="#8a7050" font-weight="600">← 23 ft (3 fence bays) →</text>
+    </svg>
+  </div>
+
+  <!-- PROFILE / CROSS SECTION -->
+  <div class="diagram-box">
+    <div class="diag-label">📐 Cross-Section Profile — Looking from the Side</div>
+    <div class="diag-sub">Sliced through the center of the mound at its tallest point · Shows the internal layer structure</div>
+
+    <svg viewBox="0 0 960 280" xmlns="http://www.w3.org/2000/svg" font-family="'DM Sans',sans-serif">
+
+      <rect width="960" height="280" fill="#f0ead8" rx="6"/>
+
+      <!-- SKY -->
+      <rect width="960" height="40" fill="#c8dce8" rx="0"/>
+      <text x="480" y="25" text-anchor="middle" font-size="9" fill="#5a7090" letter-spacing="2">sky</text>
+
+      <!-- FENCE post and planks (back) -->
+      <rect x="0" y="40" width="960" height="55" fill="#e8e2d4"/>
+      <line x1="0" y1="60" x2="960" y2="60" stroke="#d0c8b8" stroke-width="1" opacity="0.7"/>
+      <line x1="0" y1="76" x2="960" y2="76" stroke="#d0c8b8" stroke-width="1" opacity="0.7"/>
+      <line x1="0" y1="88" x2="960" y2="88" stroke="#d0c8b8" stroke-width="1" opacity="0.7"/>
+      <text x="480" y="68" text-anchor="middle" font-size="9" fill="#8a8070" letter-spacing="3" font-weight="700">WHITE VINYL FENCE (7 ft tall)</text>
+
+      <!-- GROUND LEVEL LINE -->
+      <line x1="0" y1="172" x2="960" y2="172" stroke="#8a6030" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.6"/>
+      <text x="18" y="169" font-size="7" fill="#8a6030" font-weight="700">GROUND LEVEL</text>
+
+      <!-- TRENCH (below ground) -->
+      <rect x="80" y="172" width="800" height="52" fill="#4a2808" opacity="0.85" rx="0"/>
+      <text x="480" y="202" text-anchor="middle" font-size="8" fill="#c9a06a" font-weight="600">TRENCH — 12 to 18 inches deep</text>
+
+      <!-- LOG LAYER (in trench) -->
+      <!-- Individual log circles to suggest the logs -->
+      <ellipse cx="130" cy="190" rx="28" ry="14" fill="#6b3a10" stroke="#8b5020" stroke-width="1"/>
+      <ellipse cx="185" cy="187" rx="30" ry="15" fill="#5c3010" stroke="#7a4018" stroke-width="1"/>
+      <ellipse cx="242" cy="190" rx="26" ry="13" fill="#6b3a10" stroke="#8b5020" stroke-width="1"/>
+      <ellipse cx="296" cy="188" rx="28" ry="14" fill="#5c3010" stroke="#7a4018" stroke-width="1"/>
+      <ellipse cx="350" cy="190" rx="28" ry="14" fill="#6b3a10" stroke="#8b5020" stroke-width="1"/>
+      <ellipse cx="406" cy="187" rx="32" ry="16" fill="#5c3010" stroke="#7a4018" stroke-width="1"/>
+      <ellipse cx="464" cy="186" rx="34" ry="17" fill="#6b3a10" stroke="#8b5020" stroke-width="1"/><!-- center = biggest -->
+      <ellipse cx="524" cy="187" rx="32" ry="16" fill="#5c3010" stroke="#7a4018" stroke-width="1"/>
+      <ellipse cx="580" cy="190" rx="28" ry="14" fill="#6b3a10" stroke="#8b5020" stroke-width="1"/>
+      <ellipse cx="634" cy="188" rx="28" ry="14" fill="#5c3010" stroke="#7a4018" stroke-width="1"/>
+      <ellipse cx="688" cy="190" rx="26" ry="13" fill="#6b3a10" stroke="#8b5020" stroke-width="1"/>
+      <ellipse cx="742" cy="187" rx="30" ry="15" fill="#5c3010" stroke="#7a4018" stroke-width="1"/>
+      <ellipse cx="798" cy="190" rx="28" ry="14" fill="#6b3a10" stroke="#8b5020" stroke-width="1"/>
+      <ellipse cx="848" cy="188" rx="24" ry="12" fill="#5c3010" stroke="#7a4018" stroke-width="1"/>
+
+      <!-- ORGANIC FILL layer (branches / scraps) — above logs in trench -->
+      <path d="M82,172 Q200,162 480,158 Q760,162 878,172 L878,178 Q760,172 480,168 Q200,172 82,178 Z" fill="#6a8030" opacity="0.7"/>
+
+      <!-- THE MOUND PROFILE — above ground -->
+      <!-- Mound shape: bell curve, 18-24 in peak center -->
+      <path d="M 80,172
+               C 100,172 140,165 200,152
+               C 280,134 360,108 480,94
+               C 600,108 680,134 760,152
+               C 820,165 860,172 880,172
+               Z"
+            fill="#8b6020" opacity="0.95"/>
+
+      <!-- Topsoil / compost layer highlight on mound surface -->
+      <path d="M 80,172
+               C 100,172 140,165 200,153
+               C 280,135 360,110 480,96
+               C 600,110 680,135 760,153
+               C 820,165 860,172 880,172
+               C 870,172 828,168 762,158
+               C 682,143 600,118 480,104
+               C 360,118 278,143 198,158
+               C 132,168 92,172 80,172 Z"
+            fill="#a07828" opacity="0.6"/>
+
+      <!-- Straw mulch top -->
+      <path d="M 80,172
+               C 100,172 140,166 200,154
+               C 280,136 360,111 480,97
+               C 600,111 680,136 760,154
+               C 820,166 860,172 880,172
+               C 872,172 832,170 764,156
+               C 684,141 602,116 480,102
+               C 358,116 276,141 196,156
+               C 128,170 88,172 80,172 Z"
+            fill="#c8a030" opacity="0.45"/>
+
+      <!-- PEAK HEIGHT ANNOTATION -->
+      <line x1="480" y1="94" x2="480" y2="172" stroke="#c88010" stroke-width="1.5" stroke-dasharray="3,3"/>
+      <line x1="465" y1="94" x2="495" y2="94" stroke="#c88010" stroke-width="1.5"/>
+      <line x1="465" y1="172" x2="495" y2="172" stroke="#c88010" stroke-width="1.5"/>
+      <rect x="490" y="120" width="82" height="22" fill="rgba(200,128,16,0.9)" rx="4"/>
+      <text x="531" y="128" text-anchor="middle" font-size="7" fill="white" font-weight="700">18–24 inches</text>
+      <text x="531" y="138" text-anchor="middle" font-size="6.5" fill="white">at center peak</text>
+
+      <!-- PLANTS on profile -->
+      <!-- Left sunflower (tall) -->
+      <line x1="118" y1="95" x2="118" y2="164" stroke="#5a7a20" stroke-width="2"/>
+      <text x="118" y="90" text-anchor="middle" font-size="20">🌻</text>
+
+      <!-- Tomatoes with stakes -->
+      <line x1="210" y1="90" x2="210" y2="150" stroke="#8a6030" stroke-width="1.5" stroke-dasharray="2,2"/>
+      <text x="210" y="85" text-anchor="middle" font-size="16">🍅</text>
+      <line x1="265" y1="83" x2="265" y2="140" stroke="#8a6030" stroke-width="1.5" stroke-dasharray="2,2"/>
+      <text x="265" y="78" text-anchor="middle" font-size="16">🍅</text>
+      <line x1="320" y1="78" x2="320" y2="132" stroke="#8a6030" stroke-width="1.5" stroke-dasharray="2,2"/>
+      <text x="320" y="73" text-anchor="middle" font-size="16">🍅</text>
+
+      <!-- Pepper -->
+      <text x="362" y="110" text-anchor="middle" font-size="14">🌶️</text>
+
+      <!-- Potato (crown) -->
+      <text x="440" y="100" text-anchor="middle" font-size="14">🥔</text>
+      <text x="480" y="96"  text-anchor="middle" font-size="14">🥔</text>
+      <text x="520" y="100" text-anchor="middle" font-size="14">🥔</text>
+
+      <!-- Onion -->
+      <text x="598" y="110" text-anchor="middle" font-size="13">🧅</text>
+      <text x="638" y="106" text-anchor="middle" font-size="13">🧅</text>
+      <text x="678" y="110" text-anchor="middle" font-size="13">🧅</text>
+
+      <!-- Right sunflower -->
+      <line x1="842" y1="95" x2="842" y2="164" stroke="#5a7a20" stroke-width="2"/>
+      <text x="842" y="90" text-anchor="middle" font-size="20">🌻</text>
+
+      <!-- Marigolds at base front -->
+      <text x="150" y="175" text-anchor="middle" font-size="13">🌼</text>
+      <text x="200" y="175" text-anchor="middle" font-size="13">🌸</text>
+
+      <!-- LAYER LABELS right side -->
+      <line x1="890" y1="97"  x2="920" y2="97"  stroke="#8a7050" stroke-width="1" opacity="0.7"/>
+      <text x="924" y="101" font-size="7" fill="#6a5030" font-weight="600">Mulch</text>
+
+      <line x1="890" y1="120" x2="920" y2="120" stroke="#8a7050" stroke-width="1" opacity="0.7"/>
+      <text x="924" y="124" font-size="7" fill="#6a5030" font-weight="600">Soil+Compost</text>
+
+      <line x1="890" y1="155" x2="920" y2="155" stroke="#8a7050" stroke-width="1" opacity="0.7"/>
+      <text x="924" y="159" font-size="7" fill="#6a5030" font-weight="600">Organics</text>
+
+      <line x1="890" y1="172" x2="920" y2="172" stroke="#8a7050" stroke-width="1.5" opacity="0.8"/>
+      <text x="924" y="169" font-size="7" fill="#c88010" font-weight="700">Ground</text>
+
+      <line x1="890" y1="192" x2="920" y2="192" stroke="#8a7050" stroke-width="1" opacity="0.7"/>
+      <text x="924" y="196" font-size="7" fill="#6a5030" font-weight="600">Logs</text>
+
+      <!-- FRONT EDGE / BRICK -->
+      <rect x="72" y="170" width="12" height="8" fill="#a06030" rx="1"/>
+      <rect x="72" y="162" width="12" height="8" fill="#b07040" rx="1"/>
+      <text x="52" y="175" text-anchor="middle" font-size="7" fill="#8a5020" font-weight="700">brick</text>
+      <text x="52" y="184" text-anchor="middle" font-size="7" fill="#8a5020" font-weight="700">edge</text>
+
+      <!-- LAWN -->
+      <rect x="0" y="172" width="72" height="108" fill="#c8e0a8"/>
+      <rect x="880" y="172" width="80" height="108" fill="#c8e0a8"/>
+      <rect x="0" y="220" width="960" height="60" fill="#c8e0a8"/>
+      <text x="38" y="230" text-anchor="middle" font-size="8" fill="#5a7a3a" font-style="italic">lawn</text>
+      <text x="916" y="230" text-anchor="middle" font-size="8" fill="#5a7a3a" font-style="italic">lawn</text>
+
+      <!-- Width annotation -->
+      <line x1="72" y1="252" x2="880" y2="252" stroke="#8a7050" stroke-width="1" opacity="0.6"/>
+      <text x="480" y="266" text-anchor="middle" font-size="7.5" fill="#8a7050" font-weight="600">← 4 ft wide (fence to brick edge) →</text>
+    </svg>
+  </div>
+
+  <div class="callout-green">
+    <strong>What you're looking at:</strong> The mound rises from flat at both ends to 18–24 inches at the center peak. Your sunflowers anchor each end visually. The tallest plants — tomatoes with stakes — sit on the high left shoulder where they get maximum light without shading anything behind them. The crown holds your potatoes because they love the deep log mass beneath. The front base edge is your flower strip, spilling over the brick line toward the lawn.
+  </div>
+</div>
+</div>
+
+
+<!-- SECTION 2: PLANT ZONES -->
+<div class="band-b">
+<div class="wrap">
+  <div class="sec-head">
+    <div class="sec-num">02</div>
+    <div>
+      <h2>The Five Zones — What Goes Where</h2>
+      <p>Moving left to right across the full 23 ft mound</p>
+    </div>
+  </div>
+
+  <div class="zones-row">
+    <div class="zone-card">
+      <div class="zone-head" style="background:#e8f4e8;">
+        <div class="zone-dot" style="background:#3a6b30;">L</div>
+        <div>
+          <h3>Left End — Anchor</h3>
+          <p>~3 ft · against fence · tallest zone</p>
+        </div>
+      </div>
+      <div class="zone-body">
+        <div class="plant-row">
+          <span class="p-em">🌻</span>
+          <div class="p-text"><strong>Sunflower × 2</strong><span>Mammoth variety · plant seeds direct · 12 in apart · will hit 6–8 ft · frames the whole mound on this end</span></div>
+        </div>
+        <div class="plant-row">
+          <span class="p-em">🌼</span>
+          <div class="p-text"><strong>Calendula × 2</strong><span>Base of sunflowers · medicinal + edible · repels nematodes · orange holds the eye</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="zone-card">
+      <div class="zone-head" style="background:#fde8dc;">
+        <div class="zone-dot" style="background:#c83020;">S</div>
+        <div>
+          <h3>Left Shoulder — Solanums</h3>
+          <p>~7 ft · high and warm · heat lovers</p>
+        </div>
+      </div>
+      <div class="zone-body">
+        <div class="plant-row">
+          <span class="p-em">🍅</span>
+          <div class="p-text"><strong>Tomato × 3–4</strong><span>Back row near fence · staked · 60 cm apart · determinate for canning · benefits from fence heat</span></div>
+        </div>
+        <div class="plant-row">
+          <span class="p-em">🌶️</span>
+          <div class="p-text"><strong>Chile/Pepper × 3–4</strong><span>Mid slope · 45 cm apart · jalapeño + poblano + bell · warm slope suits them perfectly</span></div>
+        </div>
+        <div class="plant-row">
+          <span class="p-em">🌿</span>
+          <div class="p-text"><strong>Basil × 3</strong><span>Between tomatoes · repels whitefly · harvest constantly to prevent bolting</span></div>
+        </div>
+        <div class="plant-row">
+          <span class="p-em">🌼</span>
+          <div class="p-text"><strong>Marigold × 3–4</strong><span>Scattered · pest control + pollinators · fill any gap</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="zone-card">
+      <div class="zone-head" style="background:#f4ece0;">
+        <div class="zone-dot" style="background:#8b4513;">C</div>
+        <div>
+          <h3>Crown — Root Crops</h3>
+          <p>~5 ft · highest point · deepest log mass</p>
+        </div>
+      </div>
+      <div class="zone-body">
+        <div class="plant-row">
+          <span class="p-em">🥔</span>
+          <div class="p-text"><strong>Potato × 8–10</strong><span>Across the crown · loves the deep log layer · hill up as they grow · most calories per sq ft</span></div>
+        </div>
+        <div class="plant-row">
+          <span class="p-em">🥕</span>
+          <div class="p-text"><strong>Carrot — pure soil strip</strong><span>Important: fill one 10-inch-wide strip with pure soil only, no wood beneath · roots fork if they hit logs</span></div>
+        </div>
+        <div class="plant-row">
+          <span class="p-em">🌿</span>
+          <div class="p-text"><strong>Oregano × 1</strong><span>Edge of crown · perennial · will grow back every year · essential for your kitchen</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="zone-card">
+      <div class="zone-head" style="background:#f0e8f8;">
+        <div class="zone-dot" style="background:#604880;">A</div>
+        <div>
+          <h3>Right Shoulder — Alliums</h3>
+          <p>~7 ft · Year 1 powerhouse · dense plant</p>
+        </div>
+      </div>
+      <div class="zone-body">
+        <div class="plant-row">
+          <span class="p-em">🧅</span>
+          <div class="p-text"><strong>Onion × 12–15</strong><span>Back + mid rows · 10–15 cm apart · plant sets not seeds · harvest when tops fall · stores 6 months</span></div>
+        </div>
+        <div class="plant-row">
+          <span class="p-em">🧄</span>
+          <div class="p-text"><strong>Garlic × 15–20 cloves</strong><span>Dense grid · 10 cm apart · also plant some in fall for next year · repels everything</span></div>
+        </div>
+        <div class="plant-row">
+          <span class="p-em">🌿</span>
+          <div class="p-text"><strong>Cilantro × 1 small patch</strong><span>Corner · succession sow every 3 weeks · let some bolt for coriander seed</span></div>
+        </div>
+        <div class="plant-row">
+          <span class="p-em">🌺</span>
+          <div class="p-text"><strong>Zinnia × 3–4</strong><span>Mixed in · tall beauties · attract butterflies · easy from seed · cut-and-come-again</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="zone-card">
+      <div class="zone-head" style="background:#e8f4e8;">
+        <div class="zone-dot" style="background:#3a6b30;">R</div>
+        <div>
+          <h3>Right End — Anchor</h3>
+          <p>~3 ft · mirror of left · bookend</p>
+        </div>
+      </div>
+      <div class="zone-body">
+        <div class="plant-row">
+          <span class="p-em">🌻</span>
+          <div class="p-text"><strong>Sunflower × 2</strong><span>Mirrors left end · frames the mound symmetrically · seeds for pantry · draws bees to whole garden</span></div>
+        </div>
+        <div class="plant-row">
+          <span class="p-em">🌼</span>
+          <div class="p-text"><strong>Calendula × 2</strong><span>Base of sunflowers · same as left end for visual unity · medicine cabinet herb</span></div>
+        </div>
+        <div class="plant-row">
+          <span class="p-em">🌿</span>
+          <div class="p-text"><strong>Rosemary × 1</strong><span>One corner plant · permanent perennial · evergreen year-round structure · repels pests</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FRONT EDGE NOTE -->
+  <div class="callout-earth">
+    <strong>The Front Edge Strip — runs the full 23 ft:</strong> The lowest front face of the mound, before the brick line, gets a continuous ribbon of marigold and zinnia the entire length. This is what makes it look like a designed garden from across the yard. Plant seeds now — they'll fill in fast. One packet of each covers the whole length. Orange and red against white fence is the color story. Let it be loud.
+  </div>
+</div>
+</div>
+
+
+<!-- SECTION 3: LAYERS -->
+<div class="band-a">
+<div class="wrap">
+  <div class="sec-head">
+    <div class="sec-num">03</div>
+    <div>
+      <h2>The Layers — What Goes In</h2>
+      <p>Bottom of the trench to the top of the mound · in order</p>
+    </div>
+  </div>
+
+  <div class="layers-stack">
+    <div class="layer-row" style="background:#e8d8c8;">
+      <div class="layer-swatch" style="background:#d8b870;">🌾</div>
+      <div class="layer-text">
+        <h5>Layer 5 — Straw Mulch (top)</h5>
+        <p>3–4 inches across the entire mound surface including all slopes. Goes on after planting. Critical on a mound — bare sloped soil erodes on first heavy rain. One bale covers everything.</p>
+      </div>
+      <div class="layer-num">3–4 in</div>
+    </div>
+    <div class="layer-row" style="background:#d8e8c0;">
+      <div class="layer-swatch" style="background:#6a9040;">🌱</div>
+      <div class="layer-text">
+        <h5>Layer 4 — Excavated Soil + Compost</h5>
+        <p>Your tilled dirt shoveled back, mixed with at least 1 bag of compost per bay equivalent. This is where roots live. More of this goes in the center to build the peak shape. Aim for 8–10 inches above the wood everywhere.</p>
+      </div>
+      <div class="layer-num">8–10 in</div>
+    </div>
+    <div class="layer-row" style="background:#d0d8b8;">
+      <div class="layer-swatch" style="background:#7a9830;">🍂</div>
+      <div class="layer-text">
+        <h5>Layer 3 — Green + Brown Organics</h5>
+        <p>Grass clippings, kitchen scraps (no meat), dried leaves, straw, coffee grounds continuously across the full length. Fills gaps in the wood, introduces microbial life, and compensates for first-year nitrogen draw from the fresh logs. Don't skip or skimp this layer.</p>
+      </div>
+      <div class="layer-num">4–6 in</div>
+    </div>
+    <div class="layer-row" style="background:#c8c0a8;">
+      <div class="layer-swatch" style="background:#6a4820;">🌿</div>
+      <div class="layer-text">
+        <h5>Layer 2 — Branches + Smaller Wood</h5>
+        <p>Pack into every gap between logs along the full 23 ft. Nothing loose or airy — dense is the goal. Smaller wood decomposes faster and starts releasing nutrients in the first season.</p>
+      </div>
+      <div class="layer-num">3–5 in</div>
+    </div>
+    <div class="layer-row" style="background:#b8a888;">
+      <div class="layer-swatch" style="background:#5c3010;">🪵</div>
+      <div class="layer-text">
+        <h5>Layer 1 — Logs (bottom of trench)</h5>
+        <p>Your log stack goes in first. Biggest pieces in the trench center (where the peak will be), slightly smaller toward the ends. Lay flat, side by side, densely packed. Soak thoroughly once laid — the logs need to be saturated from day one to begin their moisture-reservoir function.</p>
+      </div>
+      <div class="layer-num">12–18 in trench</div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<!-- SECTION 4: BUILD STEPS -->
+<div class="band-b">
+<div class="wrap">
+  <div class="sec-head">
+    <div class="sec-num">04</div>
+    <div>
+      <h2>The Build — Step by Step</h2>
+      <p>One morning dig · one afternoon shape and plant</p>
+    </div>
+  </div>
+
+  <div class="steps">
+    <div class="step warn">
+      <div class="step-n">!</div>
+      <div>
+        <h4>Remove the tires — before anything else</h4>
+        <p>Both photos show tires against the fence inside your build zone. These must come out before you plant food. Local tire shops accept them free or for a small fee. Non-negotiable for a food garden.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-n">1</div>
+      <div>
+        <h4>Run the string line</h4>
+        <p>Measure 4 feet out from the fence along the full 23 ft and run a string or lay a hose. This is your front edge. Everything inside the string is your build zone. Stake both ends.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-n">2</div>
+      <div>
+        <h4>Tiller first, then shovels</h4>
+        <p>Run the tiller across the whole 4×23 ft footprint to loosen the soil. Then the team shovels the loose earth out of the trench — <strong>12 to 18 inches deep</strong> — piling all excavated soil on the lawn side of the string. You'll use every bit of it back.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-n">3</div>
+      <div>
+        <h4>Roll in the logs — big ones first, center first</h4>
+        <p>Lay your biggest logs in the center of the trench where the peak will be, slightly smaller toward the ends. Pack tightly side by side. <strong>Soak with hose thoroughly</strong> before moving on. Wet logs are activated logs.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-n">4</div>
+      <div>
+        <h4>Pack branches and organic fill</h4>
+        <p>Fill every gap with branches and twigs. Then spread grass clippings, kitchen scraps, and dried leaves continuously across the full length. Be generous here — this is the nitrogen buffer that protects your Year 1 planting from wood-draw.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-n">5</div>
+      <div>
+        <h4>Shovel soil back — build the shape as you go</h4>
+        <p>Mix your excavated soil with compost and shovel it back over the whole structure. <strong>Here's where the mound gets made:</strong> pile more soil in the center over the biggest logs, taper toward the ends, and slope gently from fence to front edge. Rough in the shape first, then refine with a rake. Step back and look at the silhouette often.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-n">6</div>
+      <div>
+        <h4>Lay the brick edge</h4>
+        <p>Set your existing bricks along the front base of the mound before planting. Single row is enough. This defines the garden boundary, keeps soil from washing onto lawn, and makes the whole thing look finished and intentional from day one.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-n">7</div>
+      <div>
+        <h4>Plant, then mulch</h4>
+        <p>Plants go in before straw. Start with transplants (tomatoes, peppers), then seeds (carrot, marigold, sunflower, zinnia, cilantro), then bulbs (onion sets, garlic). Once everything is in the ground, lay 3–4 inches of straw across the entire mound surface including slopes. Water everything deeply.</p>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<!-- TIMELINE -->
+<div class="band-dark">
+<div class="wrap">
+  <h2 style="font-family:'Playfair Display',serif; font-size:1.5rem; color:var(--cream); font-weight:400; text-align:center; margin-bottom:0.3rem;">Your Timeline</h2>
+  <p style="text-align:center; color:rgba(255,255,255,0.4); font-size:0.8rem; font-style:italic; margin-bottom:1.5rem;">From bare ground to living mound</p>
+
+  <div class="tl-grid">
+    <div class="tl-card">
+      <h4>This Week</h4>
+      <div class="tl-item"><span class="tl-dot">▶</span>Remove tires — call tire shop</div>
+      <div class="tl-item"><span class="tl-dot">▶</span>Run string line · mark 4 ft out</div>
+      <div class="tl-item"><span class="tl-dot">▶</span>Buy onion sets + compost bags</div>
+      <div class="tl-item"><span class="tl-dot">▶</span>Collect cardboard for path edges</div>
+      <div class="tl-item"><span class="tl-dot">▶</span>Sow marigold + carrot seeds now</div>
+    </div>
+    <div class="tl-card">
+      <h4>Build Weekend</h4>
+      <div class="tl-item"><span class="tl-dot">▶</span>Full team: tiller + dig trench</div>
+      <div class="tl-item"><span class="tl-dot">▶</span>Roll in logs · soak them</div>
+      <div class="tl-item"><span class="tl-dot">▶</span>Pack branches + organic fill</div>
+      <div class="tl-item"><span class="tl-dot">▶</span>Backfill soil · shape the mound</div>
+      <div class="tl-item"><span class="tl-dot">▶</span>Lay brick edge · plant onion sets</div>
+    </div>
+    <div class="tl-card">
+      <h4>After Last Frost</h4>
+      <div class="tl-item"><span class="tl-dot">▶</span>Transplant tomatoes + peppers</div>
+      <div class="tl-item"><span class="tl-dot">▶</span>Plant potato pieces</div>
+      <div class="tl-item"><span class="tl-dot">▶</span>Transplant basil + oregano</div>
+      <div class="tl-item"><span class="tl-dot">▶</span>Direct sow sunflower + zinnia</div>
+      <div class="tl-item"><span class="tl-dot">▶</span>Lay straw over entire mound</div>
+    </div>
+    <div class="tl-card">
+      <h4>Harvest Season</h4>
+      <div class="tl-item"><span class="tl-dot">▶</span>Tomatoes: July–September</div>
+      <div class="tl-item"><span class="tl-dot">▶</span>Peppers: August–September</div>
+      <div class="tl-item"><span class="tl-dot">▶</span>Onions: July (when tops fall)</div>
+      <div class="tl-item"><span class="tl-dot">▶</span>Potatoes: August</div>
+      <div class="tl-item"><span class="tl-dot">▶</span>Plant garlic in October for next year</div>
+    </div>
+  </div>
+
+  <p style="text-align:center; margin-top:1.8rem; font-size:0.68rem; color:rgba(255,255,255,0.2); letter-spacing:0.1em;">
+    The Mound · Your Backyard · Prototype Season 2025 · Getting better every year
+  </p>
+</div>
+</div>
+
+</body>
+</html>

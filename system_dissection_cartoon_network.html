@@ -1,0 +1,236 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bangers&family=Space+Mono:wght@400;700&display=swap');
+  :root {
+    --acid: #C7FF43;
+    --black: #0a0a0a;
+    --white: #F5F5EE;
+    --border: 3px solid #0a0a0a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  .cn-wrap {
+    background: var(--white);
+    padding: 0;
+    font-family: 'Space Mono', monospace;
+    border: 4px solid var(--black);
+  }
+  .cn-header {
+    background: var(--black);
+    padding: 18px 24px 14px;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    border-bottom: 4px solid var(--black);
+  }
+  .cn-logo {
+    font-family: 'Bangers', cursive;
+    font-size: 42px;
+    color: var(--acid);
+    letter-spacing: 2px;
+    line-height: 1;
+  }
+  .cn-sub {
+    font-size: 10px;
+    color: var(--acid);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    opacity: 0.7;
+  }
+  .cn-ticker {
+    margin-left: auto;
+    font-size: 10px;
+    color: var(--white);
+    letter-spacing: 0.1em;
+    opacity: 0.5;
+    text-transform: uppercase;
+  }
+  .cn-body { padding: 0; }
+  .claim-block {
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    border-bottom: 3px solid var(--black);
+    min-height: 120px;
+  }
+  .claim-block:last-child { border-bottom: none; }
+  .claim-num-col {
+    background: var(--acid);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 3px solid var(--black);
+    writing-mode: vertical-rl;
+  }
+  .claim-num-label {
+    font-family: 'Bangers', cursive;
+    font-size: 22px;
+    color: var(--black);
+    letter-spacing: 3px;
+    transform: rotate(180deg);
+  }
+  .claim-inner { padding: 16px 20px; }
+  .claim-title {
+    font-family: 'Bangers', cursive;
+    font-size: 20px;
+    color: var(--black);
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
+  .claim-body {
+    font-size: 11px;
+    color: #333;
+    line-height: 1.65;
+    margin-bottom: 10px;
+  }
+  .ref-row { display: flex; flex-wrap: wrap; gap: 5px; }
+  .ref-tag {
+    font-size: 10px;
+    font-family: 'Space Mono', monospace;
+    padding: 3px 8px;
+    background: var(--black);
+    color: var(--acid);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    outline: 2px solid var(--black);
+    outline-offset: 2px;
+  }
+  .ref-tag.inv {
+    background: var(--acid);
+    color: var(--black);
+    outline-color: var(--black);
+  }
+  .cn-footer {
+    background: var(--acid);
+    border-top: 4px solid var(--black);
+    padding: 10px 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .cn-footer-dot {
+    width: 10px;
+    height: 10px;
+    background: var(--black);
+    border-radius: 50%;
+  }
+  .cn-footer-text {
+    font-size: 10px;
+    font-family: 'Bangers', cursive;
+    letter-spacing: 2px;
+    color: var(--black);
+    text-transform: uppercase;
+    font-size: 14px;
+  }
+  .noise-bar {
+    height: 6px;
+    background: repeating-linear-gradient(90deg, var(--black) 0px, var(--black) 6px, var(--acid) 6px, var(--acid) 12px);
+    border-bottom: 3px solid var(--black);
+  }
+  .alt-bg { background: #F0F0E8; }
+</style>
+
+<h2 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Six core claims from the system video, styled as a 90s Cartoon Network broadcast</h2>
+
+<div class="cn-wrap">
+  <div class="noise-bar"></div>
+  <div class="cn-header">
+    <div>
+      <div class="cn-logo">THE SYSTEM</div>
+      <div class="cn-sub">a field dissection · 6 core claims</div>
+    </div>
+    <div class="cn-ticker">signal detected · transmission active</div>
+  </div>
+
+  <div class="cn-body">
+
+    <div class="claim-block">
+      <div class="claim-num-col"><span class="claim-num-label">01</span></div>
+      <div class="claim-inner">
+        <div class="claim-title">No author. Self-organizing.</div>
+        <div class="claim-body">Power doesn't flow top-down from a throne. It runs laterally through institutions — schools, hospitals, prisons — that normalize certain behaviors and pathologize others. No meeting. No cabal. Just structure.</div>
+        <div class="ref-row">
+          <span class="ref-tag">Foucault — Discipline &amp; Punish</span>
+          <span class="ref-tag inv">Luhmann — Systems Theory</span>
+          <span class="ref-tag">Althusser — ISAs</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="claim-block alt-bg">
+      <div class="claim-num-col"><span class="claim-num-label">02</span></div>
+      <div class="claim-inner">
+        <div class="claim-title">Reality is a copy without an original.</div>
+        <div class="claim-body">Representations of things replaced the things themselves so completely that the map became more real than the territory. We live in a world of simulacra — and most people never notice the switch happened.</div>
+        <div class="ref-row">
+          <span class="ref-tag">Baudrillard — Simulacra &amp; Simulation</span>
+          <span class="ref-tag inv">Debord — The Spectacle</span>
+          <span class="ref-tag">Buddhist — Maya</span>
+          <span class="ref-tag">Plato — the Cave</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="claim-block">
+      <div class="claim-num-col"><span class="claim-num-label">03</span></div>
+      <div class="claim-inner">
+        <div class="claim-title">Culture is software running on wet hardware.</div>
+        <div class="claim-body">Before the code installed itself, the world just was. No categories. No judgment. Then duality booted up — good/bad, us/them, success/failure — and suddenly you needed a manual. Written by the system. For the system.</div>
+        <div class="ref-row">
+          <span class="ref-tag">Nietzsche — Genealogy of Morality</span>
+          <span class="ref-tag inv">Dawkins — Meme Theory</span>
+          <span class="ref-tag">Lacan — Symbolic Order</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="claim-block alt-bg">
+      <div class="claim-num-col"><span class="claim-num-label">04</span></div>
+      <div class="claim-inner">
+        <div class="claim-title">Dissent gets absorbed, not suppressed.</div>
+        <div class="claim-body">Rebellion that doesn't understand the structural level gets reclassified — repackaged as aesthetic, pathologized, monetized, or mocked. The system evolves by preemptively digesting the logic of escape. Your resistance feeds its next iteration.</div>
+        <div class="ref-row">
+          <span class="ref-tag">Marcuse — One-Dimensional Man</span>
+          <span class="ref-tag inv">Gramsci — Cultural Hegemony</span>
+          <span class="ref-tag">Mark Fisher — Capitalist Realism</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="claim-block">
+      <div class="claim-num-col"><span class="claim-num-label">05</span></div>
+      <div class="claim-inner">
+        <div class="claim-title">Trauma is systemic, not personal.</div>
+        <div class="claim-body">Identical manipulation scripts. The same toxic phrases across unrelated families. Haters using the same templates. This universality isn't coincidence — it's subroutines. Pre-installed pathways. A true individual is unique. These patterns are not individual.</div>
+        <div class="ref-row">
+          <span class="ref-tag">Bourdieu — Habitus</span>
+          <span class="ref-tag inv">Alice Miller — Gifted Child</span>
+          <span class="ref-tag">van der Kolk — The Body Keeps Score</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="claim-block alt-bg">
+      <div class="claim-num-col"><span class="claim-num-label">06</span></div>
+      <div class="claim-inner">
+        <div class="claim-title">Seeing it is the leverage point.</div>
+        <div class="claim-body">The exit isn't revolt — it's vision. The system's power depends entirely on appearing as natural reality rather than constructed logic. Name the water. Show the code. Once you see the mechanism, you no longer have to obey the naked emperor.</div>
+        <div class="ref-row">
+          <span class="ref-tag">Gnostic — Gnosis as liberation</span>
+          <span class="ref-tag inv">Jung — Individuation</span>
+          <span class="ref-tag">Freire — Pedagogy of the Oppressed</span>
+          <span class="ref-tag">Wittgenstein — limits of language</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="noise-bar"></div>
+  <div class="cn-footer">
+    <div class="cn-footer-dot"></div>
+    <div class="cn-footer-dot"></div>
+    <div class="cn-footer-text">You are watching. That is already the beginning.</div>
+    <div class="cn-footer-dot" style="margin-left:auto"></div>
+    <div class="cn-footer-dot"></div>
+  </div>
+</div>

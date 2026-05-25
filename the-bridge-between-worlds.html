@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THE BRIDGE BETWEEN WORLDS // PRANAYAMA_INTERFACE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;700&family=Outfit:wght@200;300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --nerv-bg: #0A0B0D;
+    --nerv-panel: #11131A;
+    --nerv-border: #1E2230;
+    --nerv-green: #C7FF43;
+    --nerv-green-dim: #7A9E29;
+    --nerv-amber: #FF6B1A;
+    --nerv-cyan: #43E5FF;
+    --nerv-text: #D4D7DD;
+    --nerv-text-dim: #6B6F78;
+    --nerv-warning: #FF3838;
+    --grid-line: rgba(199, 255, 67, 0.04);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--nerv-bg);
+    color: var(--nerv-text);
+    font-family: 'DM Sans', sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+    min-height: 100vh;
+    position: relative;
+  }
+
+  /* Grid overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Scanline */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(transparent 50%, rgba(199, 255, 67, 0.015) 50%);
+    background-size: 100% 4px;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.5;
+  }
+
+  /* Top status bar */
+  .status-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 32px;
+    background: var(--nerv-panel);
+    border-bottom: 1px solid var(--nerv-border);
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--nerv-green-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    z-index: 100;
+    gap: 24px;
+  }
+
+  .status-item { display: flex; align-items: center; gap: 8px; }
+  .status-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--nerv-green); box-shadow: 0 0 8px var(--nerv-green);
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+  @keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+  .status-bar .right { margin-left: auto; display: flex; gap: 24px; }
+
+  /* Main container */
+  .container {
+    position: relative;
+    z-index: 2;
+    padding: 80px 5vw 60px;
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+
+  /* Header section */
+  .header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 40px;
+    margin-bottom: 60px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--nerv-border);
+  }
+
+  .designation {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--nerv-green);
+    letter-spacing: 0.2em;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+
+  .designation::before { content: '> '; }
+
+  h1.title {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 200;
+    font-size: clamp(48px, 8vw, 112px);
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    color: var(--nerv-text);
+  }
+
+  h1.title .accent {
+    color: var(--nerv-green);
+    font-weight: 700;
+    display: block;
+  }
+
+  .subtitle {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--nerv-text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-top: 24px;
+    max-width: 500px;
+  }
+
+  .header-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--nerv-text-dim);
+    text-align: right;
+    line-height: 2;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .header-meta .val { color: var(--nerv-green); }
+
+  /* The thesis panel */
+  .thesis {
+    position: relative;
+    padding: 48px 56px;
+    margin-bottom: 80px;
+    background:
+      linear-gradient(135deg, rgba(199, 255, 67, 0.02) 0%, transparent 60%),
+      var(--nerv-panel);
+    border: 1px solid var(--nerv-border);
+  }
+
+  .corner {
+    position: absolute;
+    width: 16px; height: 16px;
+    border: 1.5px solid var(--nerv-green);
+  }
+  .corner.tl { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+  .corner.tr { top: -1px; right: -1px; border-left: none; border-bottom: none; }
+  .corner.bl { bottom: -1px; left: -1px; border-right: none; border-top: none; }
+  .corner.br { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+
+  .thesis-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--nerv-green);
+    letter-spacing: 0.25em;
+    margin-bottom: 24px;
+    text-transform: uppercase;
+  }
+
+  .thesis-text {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 300;
+    font-size: clamp(22px, 2.4vw, 32px);
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+    max-width: 1100px;
+  }
+
+  .thesis-text em {
+    color: var(--nerv-green);
+    font-style: normal;
+    font-weight: 500;
+  }
+
+  /* Central diagram section */
+  .diagram-section {
+    margin-bottom: 100px;
+    position: relative;
+  }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--nerv-green);
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .section-label::before { content: '[ '; color: var(--nerv-text-dim); }
+  .section-label::after { content: ' ]'; color: var(--nerv-text-dim); }
+
+  .section-title {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 300;
+    font-size: clamp(32px, 4.5vw, 56px);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 40px;
+    text-transform: uppercase;
+  }
+
+  .section-title strong {
+    color: var(--nerv-green);
+    font-weight: 700;
+  }
+
+  /* The convergence diagram */
+  .diagram-wrap {
+    background: var(--nerv-panel);
+    border: 1px solid var(--nerv-border);
+    padding: 40px;
+    position: relative;
+    min-height: 600px;
+  }
+
+  .diagram-svg {
+    width: 100%;
+    height: auto;
+    max-height: 700px;
+  }
+
+  /* Synchronization readouts */
+  .sync-readouts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-top: 32px;
+    padding-top: 32px;
+    border-top: 1px dashed var(--nerv-border);
+  }
+
+  .readout {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--nerv-text-dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .readout .key { display: block; margin-bottom: 4px; }
+  .readout .val { color: var(--nerv-green); font-size: 16px; letter-spacing: 0.05em; }
+
+  /* Pilot/Eva frame */
+  .frame-section {
+    margin-bottom: 100px;
+  }
+
+  .frame-grid {
+    display: grid;
+    grid-template-columns: 1fr 80px 1fr;
+    gap: 0;
+    margin-top: 40px;
+  }
+
+  .frame-column {
+    background: var(--nerv-panel);
+    border: 1px solid var(--nerv-border);
+    padding: 40px;
+    position: relative;
+  }
+
+  .frame-column.pilot { border-right-color: transparent; }
+  .frame-column.eva { border-left-color: transparent; }
+
+  .frame-bridge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 0 8px;
+  }
+
+  .frame-bridge::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, var(--nerv-border) 0%, var(--nerv-green) 50%, var(--nerv-border) 100%);
+  }
+
+  .bridge-icon {
+    width: 48px; height: 48px;
+    background: var(--nerv-bg);
+    border: 1.5px solid var(--nerv-green);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    box-shadow: 0 0 24px rgba(199, 255, 67, 0.3);
+    animation: breathe 6s ease-in-out infinite;
+  }
+
+  @keyframes breathe {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 24px rgba(199, 255, 67, 0.3); }
+    50% { transform: scale(1.15); box-shadow: 0 0 40px rgba(199, 255, 67, 0.6); }
+  }
+
+  .bridge-icon::before {
+    content: '';
+    width: 12px; height: 12px;
+    background: var(--nerv-green);
+    border-radius: 50%;
+    box-shadow: 0 0 12px var(--nerv-green);
+  }
+
+  .bridge-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--nerv-green);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-top: 16px;
+    text-align: center;
+    z-index: 2;
+    background: var(--nerv-bg);
+    padding: 4px 8px;
+  }
+
+  .frame-header {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .frame-column.pilot .frame-header { color: var(--nerv-cyan); }
+  .frame-column.eva .frame-header { color: var(--nerv-amber); }
+
+  .frame-title {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    margin-bottom: 24px;
+  }
+
+  .frame-column.pilot .frame-title { color: var(--nerv-cyan); }
+  .frame-column.eva .frame-title { color: var(--nerv-amber); }
+
+  .frame-body p {
+    font-size: 15px;
+    color: var(--nerv-text);
+    margin-bottom: 16px;
+    line-height: 1.7;
+  }
+
+  .frame-body p:last-child { margin-bottom: 0; }
+
+  .frame-list {
+    list-style: none;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px dashed var(--nerv-border);
+  }
+
+  .frame-list li {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--nerv-text-dim);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 6px 0;
+    padding-left: 16px;
+    position: relative;
+  }
+
+  .frame-list li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+  }
+
+  .frame-column.pilot .frame-list li::before { color: var(--nerv-cyan); }
+  .frame-column.eva .frame-list li::before { color: var(--nerv-amber); }
+
+  /* Convergence claims */
+  .convergence-section {
+    margin-bottom: 100px;
+  }
+
+  .convergence-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 20px;
+    margin-top: 40px;
+  }
+
+  .convergence-card {
+    background: var(--nerv-panel);
+    border: 1px solid var(--nerv-border);
+    padding: 32px;
+    position: relative;
+    transition: all 0.3s ease;
+  }
+
+  .convergence-card:hover {
+    border-color: var(--nerv-green);
+    background: linear-gradient(135deg, rgba(199, 255, 67, 0.03) 0%, var(--nerv-panel) 50%);
+  }
+
+  .conv-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--nerv-text-dim);
+    letter-spacing: 0.2em;
+    margin-bottom: 16px;
+  }
+
+  .conv-ancient {
+    font-family: 'Outfit', sans-serif;
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--nerv-text);
+    margin-bottom: 4px;
+    letter-spacing: -0.01em;
+  }
+
+  .conv-ancient .term {
+    color: var(--nerv-cyan);
+    font-style: italic;
+    font-weight: 300;
+  }
+
+  .conv-arrow {
+    font-family: 'DM Mono', monospace;
+    color: var(--nerv-green);
+    font-size: 11px;
+    margin: 12px 0;
+    letter-spacing: 0.2em;
+  }
+
+  .conv-modern {
+    font-family: 'Outfit', sans-serif;
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--nerv-text);
+    margin-bottom: 16px;
+    letter-spacing: -0.01em;
+  }
+
+  .conv-modern .term {
+    color: var(--nerv-amber);
+    font-weight: 500;
+  }
+
+  .conv-body {
+    font-size: 14px;
+    color: var(--nerv-text-dim);
+    line-height: 1.7;
+    border-top: 1px dashed var(--nerv-border);
+    padding-top: 16px;
+    margin-top: 16px;
+  }
+
+  /* Archive nav (sub-page links) */
+  .archive-section {
+    margin-bottom: 80px;
+  }
+
+  .archive-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    margin-top: 40px;
+  }
+
+  .archive-card {
+    background: var(--nerv-panel);
+    border: 1px solid var(--nerv-border);
+    padding: 36px 32px;
+    position: relative;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s ease;
+    display: block;
+    overflow: hidden;
+  }
+
+  .archive-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(199, 255, 67, 0.05) 0%, transparent 50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .archive-card:hover {
+    border-color: var(--nerv-green);
+    transform: translateY(-2px);
+  }
+
+  .archive-card:hover::before { opacity: 1; }
+
+  .archive-card .index {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--nerv-green);
+    letter-spacing: 0.2em;
+    margin-bottom: 16px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .archive-card .title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 1.1;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    margin-bottom: 12px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .archive-card .desc {
+    font-size: 13px;
+    color: var(--nerv-text-dim);
+    line-height: 1.6;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 20px;
+  }
+
+  .archive-card .access {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--nerv-green);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .archive-card .access::after {
+    content: '→';
+    transition: transform 0.3s;
+  }
+
+  .archive-card:hover .access::after { transform: translateX(4px); }
+
+  /* Teleology / Adlerian panel */
+  .teleology {
+    background:
+      repeating-linear-gradient(
+        45deg,
+        rgba(255, 107, 26, 0.02),
+        rgba(255, 107, 26, 0.02) 10px,
+        transparent 10px,
+        transparent 20px
+      ),
+      var(--nerv-panel);
+    border: 1px solid var(--nerv-amber);
+    border-style: solid;
+    padding: 40px 48px;
+    margin-bottom: 80px;
+    position: relative;
+  }
+
+  .teleology .corner { border-color: var(--nerv-amber); }
+
+  .teleology-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--nerv-amber);
+    letter-spacing: 0.25em;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+
+  .teleology-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 28px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    margin-bottom: 20px;
+    color: var(--nerv-text);
+  }
+
+  .teleology-title strong { color: var(--nerv-amber); font-weight: 700; }
+
+  .teleology-body {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--nerv-text);
+    max-width: 900px;
+  }
+
+  .teleology-body p { margin-bottom: 12px; }
+
+  .teleology-question {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--nerv-amber);
+    letter-spacing: 0.1em;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px dashed var(--nerv-amber);
+    text-transform: uppercase;
+  }
+
+  /* Footer */
+  .footer {
+    border-top: 1px solid var(--nerv-border);
+    padding-top: 32px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 24px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--nerv-text-dim);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .footer .athanor { color: var(--nerv-green); }
+
+  /* SVG animations */
+  @keyframes pulse-inhale {
+    0%, 100% { opacity: 0.3; transform: scale(0.95); }
+    50% { opacity: 1; transform: scale(1.05); }
+  }
+
+  @keyframes flow-up {
+    0% { transform: translateY(20px); opacity: 0; }
+    50% { opacity: 0.6; }
+    100% { transform: translateY(-20px); opacity: 0; }
+  }
+
+  @keyframes flow-down {
+    0% { transform: translateY(-20px); opacity: 0; }
+    50% { opacity: 0.6; }
+    100% { transform: translateY(20px); opacity: 0; }
+  }
+
+  .breath-ring {
+    transform-origin: center;
+    animation: breath-ring 6s ease-in-out infinite;
+  }
+
+  @keyframes breath-ring {
+    0%, 100% { transform: scale(0.92); opacity: 0.4; }
+    50% { transform: scale(1.08); opacity: 0.9; }
+  }
+
+  .data-flow {
+    stroke-dasharray: 4 4;
+    animation: dash-flow 3s linear infinite;
+  }
+
+  @keyframes dash-flow {
+    from { stroke-dashoffset: 0; }
+    to { stroke-dashoffset: -16; }
+  }
+
+  /* Mobile */
+  @media (max-width: 900px) {
+    .container { padding: 60px 5vw 40px; }
+    .header { grid-template-columns: 1fr; }
+    .header-meta { text-align: left; }
+    .thesis { padding: 32px 24px; }
+    .frame-grid { grid-template-columns: 1fr; }
+    .frame-column.pilot { border-right-color: var(--nerv-border); border-bottom-color: transparent; }
+    .frame-column.eva { border-left-color: var(--nerv-border); }
+    .frame-bridge { padding: 16px 0; }
+    .frame-bridge::before { left: 50%; right: auto; top: 0; bottom: 0; width: 1px; height: auto; background: linear-gradient(180deg, var(--nerv-border) 0%, var(--nerv-green) 50%, var(--nerv-border) 100%); }
+    .diagram-wrap { padding: 16px; }
+    .teleology { padding: 28px 24px; }
+    .status-bar { font-size: 9px; padding: 0 12px; gap: 12px; }
+    .status-bar .right { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="status-bar">
+  <div class="status-item"><span class="status-dot"></span>SYS.PRANAYAMA_INTERFACE</div>
+  <div class="status-item">SUBJECT_01</div>
+  <div class="status-item">SYNC.READY</div>
+  <div class="right">
+    <div class="status-item">NODE.00 // BRIDGE</div>
+    <div class="status-item">ATHANOR.ARCHIVE</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div>
+      <div class="designation">FILE_00 // OPERATIONS_MANUAL // ENTRY_POINT</div>
+      <h1 class="title">
+        The Bridge<br>
+        Between<br>
+        <span class="accent">Worlds</span>
+      </h1>
+      <p class="subtitle">On breath as the interface between consciousness and the autonomic — where ancient seers and modern science describe the same machinery in different vocabularies.</p>
+    </div>
+    <div class="header-meta">
+      Class.................<span class="val">CONVERGENCE</span><br>
+      Lineage...............<span class="val">YOGIC / NEURO</span><br>
+      Status................<span class="val">ACTIVE</span><br>
+      Sync.Rate.............<span class="val">VARIABLE</span><br>
+      Pilot.................<span class="val">YOU</span>
+    </div>
+  </header>
+
+  <!-- THESIS -->
+  <section class="thesis">
+    <span class="corner tl"></span><span class="corner tr"></span>
+    <span class="corner bl"></span><span class="corner br"></span>
+    <div class="thesis-label">// CORE_THESIS</div>
+    <p class="thesis-text">
+      Breath is the only autonomic function that is also <em>voluntary</em>. It is the single channel through which the pilot reaches directly into the machinery of the Eva — the one place where conscious agency touches the unconscious body without translation. The yogis mapped this interface experientially. The neuroscientists are now describing its mechanism. <em>They are pointing at the same thing.</em>
+    </p>
+  </section>
+
+  <!-- CENTRAL DIAGRAM -->
+  <section class="diagram-section">
+    <div class="section-label">// FIG.01 — SYNCHRONIZATION_DIAGRAM</div>
+    <h2 class="section-title">The <strong>Synchronization</strong> Interface</h2>
+
+    <div class="diagram-wrap">
+      <span class="corner tl"></span><span class="corner tr"></span>
+      <span class="corner bl"></span><span class="corner br"></span>
+
+      <svg class="diagram-svg" viewBox="0 0 1200 700" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="coreGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#C7FF43" stop-opacity="0.9"/>
+            <stop offset="50%" stop-color="#C7FF43" stop-opacity="0.2"/>
+            <stop offset="100%" stop-color="#C7FF43" stop-opacity="0"/>
+          </radialGradient>
+          <linearGradient id="leftSide" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#43E5FF" stop-opacity="0.1"/>
+            <stop offset="100%" stop-color="#43E5FF" stop-opacity="0.4"/>
+          </linearGradient>
+          <linearGradient id="rightSide" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#FF6B1A" stop-opacity="0.4"/>
+            <stop offset="100%" stop-color="#FF6B1A" stop-opacity="0.1"/>
+          </linearGradient>
+          <filter id="softGlow">
+            <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+            <feMerge>
+              <feMergeNode in="coloredBlur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+        </defs>
+
+        <!-- Section labels -->
+        <g font-family="DM Mono, monospace" font-size="11" letter-spacing="2">
+          <text x="60" y="40" fill="#43E5FF">[ PILOT // CONSCIOUSNESS ]</text>
+          <text x="60" y="60" fill="#6B6F78">YOGIC FRAME</text>
+          <text x="1140" y="40" fill="#FF6B1A" text-anchor="end">[ EVA // AUTONOMIC ]</text>
+          <text x="1140" y="60" fill="#6B6F78" text-anchor="end">NEURAL FRAME</text>
+          <text x="600" y="40" fill="#C7FF43" text-anchor="middle">[ INTERFACE // BREATH ]</text>
+        </g>
+
+        <!-- LEFT SIDE - YOGIC -->
+        <!-- Crown -->
+        <g transform="translate(200, 130)">
+          <circle r="22" fill="none" stroke="#43E5FF" stroke-width="1.5" opacity="0.7"/>
+          <circle r="6" fill="#43E5FF" opacity="0.8"/>
+          <text y="-32" font-family="DM Mono" font-size="9" fill="#43E5FF" text-anchor="middle" letter-spacing="1.5">SAHASRARA</text>
+          <text y="42" font-family="DM Sans" font-size="10" fill="#6B6F78" text-anchor="middle">crown</text>
+        </g>
+
+        <!-- Throat / Vishuddha -->
+        <g transform="translate(200, 230)">
+          <circle r="16" fill="none" stroke="#43E5FF" stroke-width="1.5" opacity="0.6"/>
+          <circle r="4" fill="#43E5FF" opacity="0.7"/>
+          <text y="-26" font-family="DM Mono" font-size="9" fill="#43E5FF" text-anchor="middle" letter-spacing="1.5">VISHUDDHA</text>
+          <text y="34" font-family="DM Sans" font-size="10" fill="#6B6F78" text-anchor="middle">throat</text>
+        </g>
+
+        <!-- Heart / Anahata -->
+        <g transform="translate(200, 340)">
+          <circle r="20" fill="none" stroke="#43E5FF" stroke-width="1.5" opacity="0.7"/>
+          <circle r="5" fill="#43E5FF" opacity="0.8"/>
+          <text y="-30" font-family="DM Mono" font-size="9" fill="#43E5FF" text-anchor="middle" letter-spacing="1.5">ANAHATA</text>
+          <text y="38" font-family="DM Sans" font-size="10" fill="#6B6F78" text-anchor="middle">heart center</text>
+        </g>
+
+        <!-- Solar plexus / Manipura -->
+        <g transform="translate(200, 450)">
+          <circle r="18" fill="none" stroke="#43E5FF" stroke-width="1.5" opacity="0.6"/>
+          <circle r="5" fill="#43E5FF" opacity="0.7"/>
+          <text y="-28" font-family="DM Mono" font-size="9" fill="#43E5FF" text-anchor="middle" letter-spacing="1.5">MANIPURA</text>
+          <text y="36" font-family="DM Sans" font-size="10" fill="#6B6F78" text-anchor="middle">solar plexus</text>
+        </g>
+
+        <!-- Sacral / Svadhisthana -->
+        <g transform="translate(200, 550)">
+          <circle r="14" fill="none" stroke="#43E5FF" stroke-width="1.5" opacity="0.5"/>
+          <circle r="4" fill="#43E5FF" opacity="0.6"/>
+          <text y="-24" font-family="DM Mono" font-size="9" fill="#43E5FF" text-anchor="middle" letter-spacing="1.5">SVADHISTHANA</text>
+          <text y="32" font-family="DM Sans" font-size="10" fill="#6B6F78" text-anchor="middle">sacral</text>
+        </g>
+
+        <!-- Sushumna line -->
+        <line x1="200" y1="155" x2="200" y2="540" stroke="#43E5FF" stroke-width="1" opacity="0.3" stroke-dasharray="2 4"/>
+
+        <!-- Prana flow arrows on left -->
+        <g opacity="0.5">
+          <path d="M 130 250 L 130 200" stroke="#43E5FF" stroke-width="1" fill="none" marker-end="url(#arrowUp)"/>
+          <path d="M 270 480 L 270 530" stroke="#43E5FF" stroke-width="1" fill="none" marker-end="url(#arrowDown)"/>
+          <text x="130" y="270" font-family="DM Mono" font-size="8" fill="#43E5FF" text-anchor="middle" letter-spacing="1">PRANA ↑</text>
+          <text x="270" y="465" font-family="DM Mono" font-size="8" fill="#43E5FF" text-anchor="middle" letter-spacing="1">APANA ↓</text>
+        </g>
+
+        <!-- RIGHT SIDE - NEURAL -->
+        <!-- Brain stem region -->
+        <g transform="translate(1000, 130)">
+          <rect x="-40" y="-12" width="80" height="24" fill="none" stroke="#FF6B1A" stroke-width="1.5" opacity="0.7"/>
+          <text font-family="DM Mono" font-size="8" fill="#FF6B1A" text-anchor="middle" dy="3" letter-spacing="1">preBötC</text>
+          <text y="-22" font-family="DM Mono" font-size="9" fill="#FF6B1A" text-anchor="middle" letter-spacing="1.5">BRAINSTEM</text>
+          <text y="38" font-family="DM Sans" font-size="10" fill="#6B6F78" text-anchor="middle">pacemaker</text>
+        </g>
+
+        <!-- Insula -->
+        <g transform="translate(1000, 230)">
+          <ellipse rx="32" ry="14" fill="none" stroke="#FF6B1A" stroke-width="1.5" opacity="0.6"/>
+          <text font-family="DM Mono" font-size="8" fill="#FF6B1A" text-anchor="middle" dy="3" letter-spacing="1">INSULA</text>
+          <text y="-22" font-family="DM Mono" font-size="9" fill="#FF6B1A" text-anchor="middle" letter-spacing="1.5">INTEROCEPTION</text>
+          <text y="34" font-family="DM Sans" font-size="10" fill="#6B6F78" text-anchor="middle">body-sensing</text>
+        </g>
+
+        <!-- Vagus -->
+        <g transform="translate(1000, 340)">
+          <path d="M -30 0 Q 0 -8 30 0 Q 0 8 -30 0" fill="none" stroke="#FF6B1A" stroke-width="1.5" opacity="0.7"/>
+          <text font-family="DM Mono" font-size="8" fill="#FF6B1A" text-anchor="middle" dy="3" letter-spacing="1">VAGUS</text>
+          <text y="-22" font-family="DM Mono" font-size="9" fill="#FF6B1A" text-anchor="middle" letter-spacing="1.5">CN X</text>
+          <text y="34" font-family="DM Sans" font-size="10" fill="#6B6F78" text-anchor="middle">parasympathetic</text>
+        </g>
+
+        <!-- Diaphragm -->
+        <g transform="translate(1000, 450)">
+          <path d="M -36 0 Q 0 -16 36 0" fill="none" stroke="#FF6B1A" stroke-width="1.5" opacity="0.6"/>
+          <path d="M -36 0 Q 0 8 36 0" fill="none" stroke="#FF6B1A" stroke-width="1" opacity="0.4"/>
+          <text y="-22" font-family="DM Mono" font-size="9" fill="#FF6B1A" text-anchor="middle" letter-spacing="1.5">DIAPHRAGM</text>
+          <text y="22" font-family="DM Sans" font-size="10" fill="#6B6F78" text-anchor="middle">primary effector</text>
+        </g>
+
+        <!-- Autonomic balance -->
+        <g transform="translate(1000, 550)">
+          <line x1="-30" y1="0" x2="30" y2="0" stroke="#FF6B1A" stroke-width="1.5" opacity="0.6"/>
+          <circle cx="0" cy="0" r="5" fill="#FF6B1A" opacity="0.7"/>
+          <text x="-30" y="-8" font-family="DM Mono" font-size="8" fill="#43E5FF" text-anchor="middle">PNS</text>
+          <text x="30" y="-8" font-family="DM Mono" font-size="8" fill="#FF3838" text-anchor="middle">SNS</text>
+          <text y="22" font-family="DM Sans" font-size="10" fill="#6B6F78" text-anchor="middle">ANS balance</text>
+        </g>
+
+        <!-- Right side spine -->
+        <line x1="1000" y1="155" x2="1000" y2="540" stroke="#FF6B1A" stroke-width="1" opacity="0.25" stroke-dasharray="2 4"/>
+
+        <!-- CENTER - The breath as bridge -->
+        <g transform="translate(600, 340)">
+          <!-- Outer rings (breathing) -->
+          <circle r="160" fill="url(#coreGlow)" class="breath-ring"/>
+          <circle r="130" fill="none" stroke="#C7FF43" stroke-width="0.5" opacity="0.3" class="breath-ring" style="animation-delay: -0.5s"/>
+          <circle r="100" fill="none" stroke="#C7FF43" stroke-width="0.8" opacity="0.5" class="breath-ring" style="animation-delay: -1s"/>
+          <circle r="70" fill="none" stroke="#C7FF43" stroke-width="1" opacity="0.7" class="breath-ring" style="animation-delay: -1.5s"/>
+
+          <!-- Core -->
+          <circle r="40" fill="#0A0B0D" stroke="#C7FF43" stroke-width="1.5" filter="url(#softGlow)"/>
+          <circle r="8" fill="#C7FF43" filter="url(#softGlow)"/>
+
+          <!-- Crosshair -->
+          <line x1="-55" y1="0" x2="-45" y2="0" stroke="#C7FF43" stroke-width="1"/>
+          <line x1="45" y1="0" x2="55" y2="0" stroke="#C7FF43" stroke-width="1"/>
+          <line x1="0" y1="-55" x2="0" y2="-45" stroke="#C7FF43" stroke-width="1"/>
+          <line x1="0" y1="45" x2="0" y2="55" stroke="#C7FF43" stroke-width="1"/>
+
+          <!-- Labels -->
+          <text y="-180" font-family="DM Mono" font-size="11" fill="#C7FF43" text-anchor="middle" letter-spacing="2">[ BREATH ]</text>
+          <text y="195" font-family="Outfit" font-weight="700" font-size="14" fill="#C7FF43" text-anchor="middle" letter-spacing="3">THE INTERFACE</text>
+          <text y="215" font-family="DM Mono" font-size="9" fill="#6B6F78" text-anchor="middle" letter-spacing="1">voluntary ⟷ autonomic</text>
+        </g>
+
+        <!-- Connection lines from left to center -->
+        <g class="data-flow" opacity="0.4">
+          <line x1="222" y1="230" x2="445" y2="320" stroke="#43E5FF" stroke-width="1" fill="none"/>
+          <line x1="220" y1="340" x2="450" y2="340" stroke="#43E5FF" stroke-width="1" fill="none"/>
+          <line x1="222" y1="450" x2="445" y2="360" stroke="#43E5FF" stroke-width="1" fill="none"/>
+        </g>
+
+        <!-- Connection lines from center to right -->
+        <g class="data-flow" opacity="0.4">
+          <line x1="755" y1="320" x2="960" y2="230" stroke="#FF6B1A" stroke-width="1" fill="none"/>
+          <line x1="760" y1="340" x2="970" y2="340" stroke="#FF6B1A" stroke-width="1" fill="none"/>
+          <line x1="755" y1="360" x2="960" y2="450" stroke="#FF6B1A" stroke-width="1" fill="none"/>
+        </g>
+
+        <!-- Bottom data strip -->
+        <g transform="translate(0, 650)" font-family="DM Mono" font-size="10" fill="#6B6F78" letter-spacing="1.5">
+          <line x1="60" y1="0" x2="1140" y2="0" stroke="#1E2230"/>
+          <text x="60" y="20">// DIAGRAM_01: BREATH AS BIDIRECTIONAL INTERFACE</text>
+          <text x="1140" y="20" text-anchor="end">FIG.01 / 5</text>
+        </g>
+
+        <defs>
+          <marker id="arrowUp" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#43E5FF" opacity="0.7"/>
+          </marker>
+          <marker id="arrowDown" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#43E5FF" opacity="0.7"/>
+          </marker>
+        </defs>
+      </svg>
+
+      <div class="sync-readouts">
+        <div class="readout">
+          <span class="key">→ left.channel</span>
+          <span class="val">YOGIC FRAME</span>
+        </div>
+        <div class="readout">
+          <span class="key">→ center.node</span>
+          <span class="val">BREATH</span>
+        </div>
+        <div class="readout">
+          <span class="key">→ right.channel</span>
+          <span class="val">NEURAL FRAME</span>
+        </div>
+        <div class="readout">
+          <span class="key">→ signal.flow</span>
+          <span class="val">BIDIRECTIONAL</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PILOT / EVA FRAME -->
+  <section class="frame-section">
+    <div class="section-label">// FRAME.02 — OPERATIONAL_MODEL</div>
+    <h2 class="section-title">The Pilot, The <strong>Eva</strong>, The Interface</h2>
+
+    <div class="frame-grid">
+      <div class="frame-column pilot">
+        <span class="corner tl"></span><span class="corner bl"></span>
+        <div class="frame-header">[ NODE_A // PILOT ]</div>
+        <div class="frame-title">Consciousness</div>
+        <div class="frame-body">
+          <p>The seat of attention. The voluntary. The witnessing self that can <em>decide</em> to lengthen an exhale, hold a retention, soften the throat. The pilot does not run the machinery — but it can <em>reach</em> the machinery.</p>
+          <p>In yogic frame: <em>purusha</em>, the witness. The seer behind the seen.</p>
+        </div>
+        <ul class="frame-list">
+          <li>Attention / Awareness</li>
+          <li>Voluntary motor control</li>
+          <li>Prefrontal regulation</li>
+          <li>The capacity to choose</li>
+        </ul>
+      </div>
+
+      <div class="frame-bridge">
+        <div class="bridge-icon"></div>
+        <div class="bridge-label">BREATH<br>INTERFACE</div>
+      </div>
+
+      <div class="frame-column eva">
+        <span class="corner tr"></span><span class="corner br"></span>
+        <div class="frame-header">[ NODE_B // EVA ]</div>
+        <div class="frame-title">Autonomic Body</div>
+        <div class="frame-body">
+          <p>The machinery beneath. Heart rhythm, vascular tone, digestion, hormonal cascade, the entire orchestrated involuntary system. It runs without you. It has its own logic, its own memory, its own protective intelligence.</p>
+          <p>In yogic frame: <em>prakriti</em>, the embodied vehicle. The field in which experience occurs.</p>
+        </div>
+        <ul class="frame-list">
+          <li>Sympathetic / Parasympathetic</li>
+          <li>HPA axis / Stress cascade</li>
+          <li>Heart rate variability</li>
+          <li>The body's own knowing</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONVERGENCE -->
+  <section class="convergence-section">
+    <div class="section-label">// LOG.03 — TERMINOLOGY_CORRESPONDENCE</div>
+    <h2 class="section-title">Same Phenomenon. <strong>Two Vocabularies.</strong></h2>
+
+    <div class="convergence-grid">
+      <div class="convergence-card">
+        <span class="corner tl"></span><span class="corner br"></span>
+        <div class="conv-num">CORRESPONDENCE.01</div>
+        <div class="conv-ancient"><span class="term">Ida</span> & <span class="term">Pingala</span> Nadis</div>
+        <div class="conv-arrow">— maps to —</div>
+        <div class="conv-modern"><span class="term">Parasympathetic & Sympathetic</span> Branches</div>
+        <div class="conv-body">The yogic distinction between lunar (cooling, receptive, left-channel) and solar (warming, mobilizing, right-channel) currents is the autonomic balance described millennia before it had electrodes.</div>
+      </div>
+
+      <div class="convergence-card">
+        <span class="corner tl"></span><span class="corner br"></span>
+        <div class="conv-num">CORRESPONDENCE.02</div>
+        <div class="conv-ancient">The <span class="term">Five Vayus</span></div>
+        <div class="conv-arrow">— maps to —</div>
+        <div class="conv-modern"><span class="term">Functional Body Systems</span></div>
+        <div class="conv-body">Prana (intake), apana (elimination), samana (digestion), udana (expression), vyana (circulation) — the directional currents are organ-system functions described as movement rather than anatomy.</div>
+      </div>
+
+      <div class="convergence-card">
+        <span class="corner tl"></span><span class="corner br"></span>
+        <div class="conv-num">CORRESPONDENCE.03</div>
+        <div class="conv-ancient"><span class="term">Pranayama</span> as Practice</div>
+        <div class="conv-arrow">— maps to —</div>
+        <div class="conv-modern"><span class="term">Vagal Tone Modulation</span></div>
+        <div class="conv-body">Slow, lengthened, controlled breath — the central pranayamic prescription — directly stimulates vagal afferents, raising HRV and parasympathetic tone. Same operation, different language.</div>
+      </div>
+
+      <div class="convergence-card">
+        <span class="corner tl"></span><span class="corner br"></span>
+        <div class="conv-num">CORRESPONDENCE.04</div>
+        <div class="conv-ancient"><span class="term">Kumbhaka</span> (Retention)</div>
+        <div class="conv-arrow">— maps to —</div>
+        <div class="conv-modern"><span class="term">CO₂ Tolerance Training</span></div>
+        <div class="conv-body">Breath retention raises tolerance to CO₂. Higher tolerance means the Bohr effect releases more oxygen to tissues. The yogis prescribed this for spiritual reasons; the physiology vindicates the practice.</div>
+      </div>
+
+      <div class="convergence-card">
+        <span class="corner tl"></span><span class="corner br"></span>
+        <div class="conv-num">CORRESPONDENCE.05</div>
+        <div class="conv-ancient"><span class="term">Sushumna</span> Flow State</div>
+        <div class="conv-arrow">— maps to —</div>
+        <div class="conv-modern"><span class="term">Coherence / Integrated State</span></div>
+        <div class="conv-body">When ida and pingala balance, breath enters the central channel — sushumna. Modern frame: autonomic coherence, HRV resonance, the integrated nervous system state where sympathetic and parasympathetic harmonize.</div>
+      </div>
+
+      <div class="convergence-card">
+        <span class="corner tl"></span><span class="corner br"></span>
+        <div class="conv-num">CORRESPONDENCE.06</div>
+        <div class="conv-ancient"><span class="term">Bhramari</span> & Sound Practice</div>
+        <div class="conv-arrow">— maps to —</div>
+        <div class="conv-modern"><span class="term">Nitric Oxide & Vagal Stimulation</span></div>
+        <div class="conv-body">Humming during exhale increases nasal nitric oxide 15-fold and engages vagal pathways through laryngeal vibration. The bee-breath of the Upanishads is a precise neuro-vascular intervention.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TELEOLOGY -->
+  <section class="teleology">
+    <span class="corner tl"></span><span class="corner tr"></span>
+    <span class="corner bl"></span><span class="corner br"></span>
+    <div class="teleology-label">// ADVISORY // TELEOLOGY_PROTOCOL</div>
+    <h3 class="teleology-title">On the <strong>Purpose</strong> of the Practice</h3>
+    <div class="teleology-body">
+      <p>Standard advisories speak of <em>contraindication</em> — what is dangerous, what to avoid. This frame is insufficient. Following Adler: behavior is teleological. Every practice is in service of an underlying goal, often unconscious.</p>
+      <p>The question is therefore not <em>"is this technique safe?"</em> but <em>"what am I attempting to accomplish with it?"</em></p>
+      <p>Aggressive hyperventilation practiced compulsively may serve a goal of <em>bypassing feeling</em> — using altered states to avoid present contact. Extreme retention in someone with somatic trauma history may serve a goal of <em>proving mastery over the body</em> — recapitulating the original injury through control rather than metabolism. Even "calming" practices, used compulsively, may serve <em>suppression</em> dressed as regulation.</p>
+      <p>The technique itself is not the danger. The unexamined goal it serves is.</p>
+    </div>
+    <div class="teleology-question">
+      Before each practice, the diagnostic question: <span style="color: var(--nerv-green)">→ what is this in service of?</span>
+    </div>
+  </section>
+
+  <!-- ARCHIVE NAVIGATION -->
+  <section class="archive-section">
+    <div class="section-label">// DIRECTORY — DEEP_DIVE_NODES</div>
+    <h2 class="section-title">The <strong>Sub-Archives</strong></h2>
+
+    <div class="archive-grid">
+      <a href="#" class="archive-card" data-coming-soon>
+        <span class="corner tl"></span><span class="corner br"></span>
+        <div class="index">NODE_01 // NEUROSCIENCE</div>
+        <div class="title">The Science of Breath</div>
+        <div class="desc">preBötzinger complex, vagal afferents, CO₂ tolerance, nitric oxide, interoception, the diaphragm as dual organ.</div>
+        <div class="access">[ ACCESS NODE ]</div>
+      </a>
+
+      <a href="./the-map-of-prana.html" class="archive-card">
+        <span class="corner tl"></span><span class="corner br"></span>
+        <div class="index">NODE_02 // CONVERGENCE_CORE</div>
+        <div class="title">The Map of Prana</div>
+        <div class="desc">The five vayus and three nadis. Where yogic energy anatomy and the autonomic nervous system describe the same machinery.</div>
+        <div class="access">[ ACCESS NODE ]</div>
+      </a>
+
+      <a href="#" class="archive-card" data-coming-soon>
+        <span class="corner tl"></span><span class="corner br"></span>
+        <div class="index">NODE_03 // TECHNIQUES</div>
+        <div class="title">The Techniques</div>
+        <div class="desc">Pranayama as catalogue. Each technique with mechanism, effect, indication. Selector by intended state.</div>
+        <div class="access">[ ACCESS NODE ]</div>
+      </a>
+
+      <a href="#" class="archive-card" data-coming-soon>
+        <span class="corner tl"></span><span class="corner br"></span>
+        <div class="index">NODE_04 // PROTOCOLS</div>
+        <div class="title">Practice Protocols</div>
+        <div class="desc">Sequenced applications for specific states. Interactive guided pacer. Morning, sleep, stress, focus, release.</div>
+        <div class="access">[ ACCESS NODE ]</div>
+      </a>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div>// THE ATHANOR / OPERATIONS_MANUAL / <span class="athanor">PRANAYAMA_INTERFACE</span></div>
+    <div>FILE_00 // END_OF_TRANSMISSION</div>
+  </footer>
+
+</div>
+
+<script>
+  // Coming soon handlers
+  document.querySelectorAll('[data-coming-soon]').forEach(el => {
+    el.addEventListener('click', (e) => {
+      e.preventDefault();
+      const card = e.currentTarget;
+      const orig = card.querySelector('.access').textContent;
+      card.querySelector('.access').textContent = '[ NODE PENDING // SYNC IN PROGRESS ]';
+      setTimeout(() => {
+        card.querySelector('.access').textContent = orig;
+      }, 2000);
+    });
+  });
+
+  // Live clock in status bar
+  function updateTime() {
+    const now = new Date();
+    const t = now.toTimeString().split(' ')[0];
+    // Could add a time display if needed
+  }
+  setInterval(updateTime, 1000);
+</script>
+
+</body>
+</html>

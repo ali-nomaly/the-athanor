@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Peculiar House — A Creative Curriculum</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #1a0f05;
+    --cream: #f5efe3;
+    --parchment: #ede4d0;
+    --gold: #c8922a;
+    --gold-light: #e8b84b;
+    --rust: #9b3a1a;
+    --teal: #2a6b6e;
+    --lavender: #6b5b8a;
+    --rose: #8a3a52;
+    --moss: #4a6b3a;
+    --midnight: #0d1b2e;
+    --shadow: rgba(26,15,5,0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'Crimson Pro', Georgia, serif;
+    overflow-x: hidden;
+  }
+
+  /* GRAIN OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.6;
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 4rem 2rem;
+    background: var(--midnight);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(200,146,42,0.18) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 40% at 20% 100%, rgba(107,91,138,0.15) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 30% at 80% 80%, rgba(42,107,110,0.12) 0%, transparent 60%);
+  }
+
+  .hero-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 8vw, 7rem);
+    font-weight: 900;
+    font-style: italic;
+    color: var(--cream);
+    line-height: 0.9;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.4s forwards;
+    position: relative;
+  }
+
+  .hero-title span {
+    color: var(--gold-light);
+  }
+
+  .hero-subtitle {
+    font-family: 'Crimson Pro', serif;
+    font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+    font-weight: 300;
+    font-style: italic;
+    color: rgba(245,239,227,0.7);
+    max-width: 600px;
+    line-height: 1.5;
+    margin-bottom: 3rem;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.6s forwards;
+  }
+
+  .hero-premise {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    color: rgba(200,146,42,0.6);
+    text-transform: uppercase;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.8s forwards;
+  }
+
+  /* HOUSE ILLUSTRATION SVG */
+  .house-svg-wrap {
+    position: relative;
+    margin: 2.5rem 0;
+    opacity: 0;
+    animation: fadeUp 1.2s 0.5s forwards;
+  }
+
+  /* SCROLL INDICATOR */
+  .scroll-hint {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    opacity: 0;
+    animation: fadeIn 1s 1.5s forwards;
+  }
+  .scroll-hint span {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.5rem;
+    letter-spacing: 0.2em;
+    color: rgba(200,146,42,0.5);
+    text-transform: uppercase;
+  }
+  .scroll-line {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+
+  /* PHILOSOPHY SECTION */
+  .philosophy {
+    padding: 6rem 2rem;
+    background: var(--parchment);
+    position: relative;
+  }
+
+  .philosophy::before {
+    content: '❧';
+    position: absolute;
+    top: 3rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 2rem;
+    color: var(--gold);
+    opacity: 0.4;
+  }
+
+  .section-inner {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    display: block;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 2rem;
+    color: var(--ink);
+  }
+
+  .drop-cap p:first-of-type::first-letter {
+    font-family: 'Playfair Display', serif;
+    font-size: 4.5em;
+    font-weight: 900;
+    float: left;
+    line-height: 0.75;
+    margin: 0.05em 0.08em 0 0;
+    color: var(--gold);
+  }
+
+  .body-text {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: rgba(26,15,5,0.85);
+    max-width: 660px;
+  }
+
+  .body-text + .body-text {
+    margin-top: 1.2rem;
+  }
+
+  .callout-box {
+    border-left: 3px solid var(--gold);
+    padding: 1.5rem 2rem;
+    margin: 3rem 0;
+    background: rgba(200,146,42,0.06);
+    font-style: italic;
+    font-size: 1.25rem;
+    line-height: 1.65;
+    color: var(--ink);
+  }
+
+  /* THREE HOUSES SECTION */
+  .houses {
+    padding: 5rem 2rem;
+    background: var(--midnight);
+  }
+
+  .houses .section-title {
+    color: var(--cream);
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .houses .section-label {
+    text-align: center;
+    display: block;
+  }
+
+  .house-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .house-card {
+    padding: 3rem 2.5rem;
+    position: relative;
+    cursor: default;
+    transition: transform 0.4s ease;
+  }
+
+  .house-card:hover {
+    transform: translateY(-6px);
+  }
+
+  .house-card:nth-child(1) { background: rgba(155, 58, 26, 0.25); border-top: 2px solid var(--rust); }
+  .house-card:nth-child(2) { background: rgba(42, 107, 110, 0.2); border-top: 2px solid var(--teal); }
+  .house-card:nth-child(3) { background: rgba(107, 91, 138, 0.2); border-top: 2px solid var(--lavender); }
+
+  .house-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1.2rem;
+    display: block;
+  }
+
+  .house-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-style: italic;
+    font-weight: 700;
+    color: var(--cream);
+    margin-bottom: 0.5rem;
+  }
+
+  .house-tagline {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+
+  .house-card:nth-child(1) .house-tagline { color: var(--rust); }
+  .house-card:nth-child(2) .house-tagline { color: var(--teal); }
+  .house-card:nth-child(3) .house-tagline { color: var(--lavender); }
+
+  .house-desc {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: rgba(245,239,227,0.75);
+  }
+
+  .house-traits {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .trait-pill {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.8rem;
+    border-radius: 100px;
+  }
+
+  .house-card:nth-child(1) .trait-pill { background: rgba(155,58,26,0.3); color: rgba(232,184,75,0.9); border: 1px solid rgba(155,58,26,0.5); }
+  .house-card:nth-child(2) .trait-pill { background: rgba(42,107,110,0.3); color: rgba(232,184,75,0.9); border: 1px solid rgba(42,107,110,0.5); }
+  .house-card:nth-child(3) .trait-pill { background: rgba(107,91,138,0.3); color: rgba(232,184,75,0.9); border: 1px solid rgba(107,91,138,0.5); }
+
+  /* CURRICULUM MODULES */
+  .curriculum {
+    padding: 6rem 2rem;
+    background: var(--cream);
+  }
+
+  .module-list {
+    max-width: 900px;
+    margin: 4rem auto 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .module-item {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: 0;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease;
+  }
+
+  .module-item:hover .module-body {
+    background: var(--parchment);
+  }
+
+  .module-num {
+    background: var(--ink);
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 900;
+    font-style: italic;
+    min-height: 100px;
+    flex-shrink: 0;
+    transition: background 0.3s;
+  }
+
+  .module-item:hover .module-num {
+    background: var(--rust);
+  }
+
+  .module-body {
+    background: var(--parchment);
+    padding: 1.8rem 2rem;
+    transition: background 0.3s;
+    border-bottom: 1px solid rgba(26,15,5,0.08);
+  }
+
+  .module-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .module-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.35rem;
+    font-weight: 700;
+    font-style: italic;
+    color: var(--ink);
+    line-height: 1.2;
+  }
+
+  .module-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.5rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.7rem;
+    background: var(--ink);
+    color: var(--gold);
+    white-space: nowrap;
+    margin-top: 0.2rem;
+    flex-shrink: 0;
+  }
+
+  .module-desc {
+    font-size: 1.05rem;
+    line-height: 1.65;
+    color: rgba(26,15,5,0.75);
+    margin-bottom: 0.8rem;
+  }
+
+  .module-activity {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border-top: 1px solid rgba(200,146,42,0.2);
+    padding-top: 0.8rem;
+  }
+
+  /* GIFT ARCHETYPES */
+  .archetypes {
+    padding: 6rem 2rem;
+    background: var(--parchment);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .archetypes::after {
+    content: '';
+    position: absolute;
+    right: -100px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    border: 1px solid rgba(200,146,42,0.15);
+    pointer-events: none;
+  }
+
+  .archetype-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+    max-width: 1100px;
+    margin: 3rem auto 0;
+  }
+
+  .archetype-card {
+    padding: 2rem;
+    background: var(--cream);
+    border: 1px solid rgba(26,15,5,0.08);
+    position: relative;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .archetype-card:hover {
+    transform: translateY(-4px) rotate(-0.3deg);
+    box-shadow: 8px 12px 30px var(--shadow);
+  }
+
+  .archetype-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+  }
+
+  .archetype-card.fire::before { background: var(--rust); }
+  .archetype-card.earth::before { background: var(--moss); }
+  .archetype-card.air::before { background: var(--teal); }
+  .archetype-card.water::before { background: #2a4b8a; }
+  .archetype-card.void::before { background: var(--lavender); }
+  .archetype-card.light::before { background: var(--gold); }
+
+  .archetype-symbol {
+    font-size: 2rem;
+    margin-bottom: 0.8rem;
+    display: block;
+  }
+
+  .archetype-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+    color: var(--ink);
+  }
+
+  .archetype-gift {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    color: var(--gold);
+  }
+
+  .archetype-desc {
+    font-size: 0.95rem;
+    line-height: 1.65;
+    color: rgba(26,15,5,0.72);
+  }
+
+  .archetype-in-real-life {
+    margin-top: 1rem;
+    padding-top: 0.8rem;
+    border-top: 1px solid rgba(26,15,5,0.08);
+    font-size: 0.85rem;
+    font-style: italic;
+    color: rgba(26,15,5,0.55);
+  }
+
+  /* SAFE HOUSE RULES */
+  .rules {
+    padding: 6rem 2rem;
+    background: var(--midnight);
+    text-align: center;
+  }
+
+  .rules .section-title { color: var(--cream); margin-bottom: 3.5rem; }
+  .rules .section-label { text-align: center; display: block; }
+
+  .rules-list {
+    max-width: 700px;
+    margin: 0 auto;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .rules-list li {
+    display: grid;
+    grid-template-columns: 50px 1fr;
+    text-align: left;
+    border-bottom: 1px solid rgba(245,239,227,0.06);
+    transition: background 0.3s;
+  }
+
+  .rules-list li:hover {
+    background: rgba(200,146,42,0.05);
+  }
+
+  .rule-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.9rem;
+    font-style: italic;
+    color: rgba(200,146,42,0.4);
+    padding: 1.2rem 0;
+    display: flex;
+    align-items: center;
+  }
+
+  .rule-text {
+    font-size: 1.15rem;
+    line-height: 1.5;
+    color: rgba(245,239,227,0.85);
+    padding: 1.2rem 0 1.2rem 1rem;
+  }
+
+  .rule-text strong {
+    color: var(--gold-light);
+    font-weight: 600;
+  }
+
+  /* WEEKLY RHYTHM */
+  .rhythm {
+    padding: 6rem 2rem;
+    background: var(--cream);
+  }
+
+  .day-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 2px;
+    max-width: 1000px;
+    margin: 3rem auto 0;
+  }
+
+  @media (max-width: 700px) {
+    .day-grid { grid-template-columns: 1fr; }
+    .house-grid { grid-template-columns: 1fr; }
+    .archetype-grid { grid-template-columns: 1fr 1fr; }
+    .module-item { grid-template-columns: 60px 1fr; }
+    .hero-title { font-size: 3rem; }
+  }
+
+  .day-card {
+    background: var(--parchment);
+    padding: 1.8rem 1.5rem;
+    text-align: center;
+    transition: transform 0.3s;
+  }
+
+  .day-card:hover { transform: translateY(-6px); }
+
+  .day-name {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.8rem;
+  }
+
+  .day-icon { font-size: 1.8rem; margin-bottom: 0.8rem; display: block; }
+
+  .day-theme {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    font-style: italic;
+    color: var(--ink);
+    margin-bottom: 0.5rem;
+  }
+
+  .day-activity {
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: rgba(26,15,5,0.65);
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--ink);
+    padding: 4rem 2rem;
+    text-align: center;
+  }
+
+  .footer-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-style: italic;
+    color: var(--gold);
+    margin-bottom: 1rem;
+  }
+
+  .footer-text {
+    font-size: 1rem;
+    color: rgba(245,239,227,0.45);
+    line-height: 1.7;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .footer-sigil {
+    font-size: 1.5rem;
+    color: rgba(200,146,42,0.3);
+    margin-top: 2rem;
+    letter-spacing: 0.5em;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.3; transform: scaleY(1); }
+    50% { opacity: 1; transform: scaleY(1.1); }
+  }
+
+  /* DIVIDERS */
+  .ornamental-divider {
+    text-align: center;
+    color: var(--gold);
+    opacity: 0.4;
+    font-size: 1.2rem;
+    letter-spacing: 0.5em;
+    margin: 3rem 0;
+  }
+
+  /* HIGHLIGHT TEXT */
+  .highlight { color: var(--gold); }
+  .highlight-teal { color: var(--teal); }
+
+  /* QUOTE PULL */
+  .pull-quote {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-style: italic;
+    font-weight: 400;
+    color: var(--ink);
+    line-height: 1.4;
+    border: none;
+    padding: 0;
+    text-align: center;
+    max-width: 700px;
+    margin: 4rem auto;
+    position: relative;
+  }
+
+  .pull-quote::before, .pull-quote::after {
+    content: '';
+    display: block;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold), transparent);
+    margin: 1.5rem 0;
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <p class="hero-eyebrow">A Living Creative Curriculum · 2026 Edition</p>
+  <h1 class="hero-title">
+    The <span>Peculiar</span><br/>House
+  </h1>
+  <p class="hero-subtitle">
+    A home where every child's strange gift is not a problem to solve<br/>
+    but a language to learn
+  </p>
+  <p class="hero-premise">Rooted in suburban American life · Inspired by myth, magic & family</p>
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- PHILOSOPHY -->
+<section class="philosophy">
+  <div class="section-inner">
+    <span class="section-label">The Foundation</span>
+    <h2 class="section-title">Why Your Peculiarity<br/>Is Your Gift</h2>
+
+    <div class="drop-cap">
+      <p class="body-text">
+        In every ordinary suburb — behind the vinyl siding and the minivan, past the CCD classes on Wednesday nights and the backyard with the inflatable pool — there is a child who moves through the world differently. They dream in colors no one else can name. They hear music in the hum of the refrigerator. They build entire civilizations out of cardboard and tape and feel them as real.
+      </p>
+    </div>
+
+    <p class="body-text" style="margin-top:1.2rem;">
+      This curriculum is not a program. It is a mythology. A set of stories, rituals, and creative invitations woven into the rhythm of an ordinary week — designed to help each child recognize that what makes them strange is, in fact, what makes them indispensable.
+    </p>
+
+    <div class="callout-box">
+      "The peculiar child who fits nowhere is often the one who belongs everywhere — but has not yet been given the language to say so."
+    </div>
+
+    <p class="body-text">
+      Drawing from three story-worlds — the gothic sanctuary of <strong>Miss Peregrine's home</strong>, where difference is protected and named; the chaotic belonging of <strong>Foster's House for Imaginary Friends</strong>, where the wild things of the inner world are honored as real; and the multigenerational complexity of <strong>Encanto</strong>, where family gifts carry both power and wound — this curriculum holds all three truths at once.
+    </p>
+
+    <p class="body-text" style="margin-top:1.2rem;">
+      And it keeps its feet on the ground: in a house in the Midwest, in 2026, where the kids have homework and screen time limits and a grandmother who says the rosary every night and cousins who don't always understand.
+    </p>
+
+    <div class="ornamental-divider">· · · ✦ · · ·</div>
+
+    <div class="pull-quote">
+      Each child arrives with a gift already alive in them.<br/>
+      Our work is not to install it — only to make room.
+    </div>
+  </div>
+</section>
+
+<!-- THREE INSPIRATIONAL HOUSES -->
+<section class="houses">
+  <div class="section-inner" style="text-align:center; margin-bottom:0;">
+    <span class="section-label">The Three Story-Worlds</span>
+    <h2 class="section-title">The Mythology We're<br/>Building From</h2>
+  </div>
+  <div class="house-grid">
+
+    <div class="house-card">
+      <span class="house-icon">🦅</span>
+      <div class="house-name">Miss Peregrine's Loop</div>
+      <div class="house-tagline">Protection · Peculiarity · Naming</div>
+      <p class="house-desc">
+        A home that exists outside ordinary time, where every strange gift is documented, honored, and protected. The lesson: the world outside may not have room for you yet, but inside these walls, your peculiarity is <em>the point</em>. The Ymbryne doesn't fix the children. She keeps the loop — she holds the container.
+      </p>
+      <div class="house-traits">
+        <span class="trait-pill">Name your peculiarity</span>
+        <span class="trait-pill">Found family</span>
+        <span class="trait-pill">Safe container</span>
+        <span class="trait-pill">Vintage + gothic</span>
+      </div>
+    </div>
+
+    <div class="house-card">
+      <span class="house-icon">🏠</span>
+      <div class="house-name">Foster's House</div>
+      <div class="house-tagline">Imagination · Chaos · Inner Life is Real</div>
+      <p class="house-desc">
+        A home for imaginary friends who still need somewhere to be. The lesson: the things you make up, the friends only you can see, the worlds only you live in — they are not nothing. They deserve a room. The adults in Foster's don't dismiss the inner world. They run a home for it.
+      </p>
+      <div class="house-traits">
+        <span class="trait-pill">Imagination = valid</span>
+        <span class="trait-pill">Colorful chaos</span>
+        <span class="trait-pill">Play as work</span>
+        <span class="trait-pill">Everyday wonder</span>
+      </div>
+    </div>
+
+    <div class="house-card">
+      <span class="house-icon">🕯️</span>
+      <div class="house-name">La Casa Madrigal</div>
+      <div class="house-tagline">Lineage · Pressure · Gift & Wound</div>
+      <p class="house-desc">
+        A family where every child receives a gift — but the house cracks when the gift becomes the only thing the child is valued for. The lesson: your gift is yours, not the family's. Mirabel has no gift and saves everything. Bruno tells the truth and gets erased. The family's magic is real — and complicated.
+      </p>
+      <div class="house-traits">
+        <span class="trait-pill">Gift ≠ role</span>
+        <span class="trait-pill">Family pressure</span>
+        <span class="trait-pill">Hidden rooms</span>
+        <span class="trait-pill">Redemption arc</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- GIFT ARCHETYPES -->
+<section class="archetypes">
+  <div class="section-inner">
+    <span class="section-label">The Gift Map</span>
+    <h2 class="section-title">Six Creative Archetypes<br/>In the Peculiar House</h2>
+    <p class="body-text" style="max-width:680px;">
+      Not every child is the same kind of creative. This map helps each child recognize which "peculiarity" lives most naturally in them — not as a limitation, but as a home base from which to explore.
+    </p>
+  </div>
+
+  <div class="archetype-grid">
+
+    <div class="archetype-card fire">
+      <span class="archetype-symbol">🔥</span>
+      <div class="archetype-name">The Maker</div>
+      <div class="archetype-gift">Element: Fire · Gift: Building</div>
+      <p class="archetype-desc">
+        This child cannot stop making things. LEGO cities, duct-tape inventions, elaborate traps for imaginary villains. Their creativity is physical and urgent — they think with their hands before they think with words.
+      </p>
+      <p class="archetype-in-real-life">
+        In your house: The one who builds a "machine" out of cardboard at 9pm when they should be asleep.
+      </p>
+    </div>
+
+    <div class="archetype-card earth">
+      <span class="archetype-symbol">🌿</span>
+      <div class="archetype-name">The Grower</div>
+      <div class="archetype-gift">Element: Earth · Gift: Nurturing</div>
+      <p class="archetype-desc">
+        This child grows things — ideas, gardens, characters, relationships. They are slow and deep. They come back to projects months later. Their creativity is cyclical, not linear. Pressure kills it; patience feeds it.
+      </p>
+      <p class="archetype-in-real-life">
+        In your house: The one who's been "working on a story" for six months but it's not done yet, and that's exactly right.
+      </p>
+    </div>
+
+    <div class="archetype-card air">
+      <span class="archetype-symbol">🌀</span>
+      <div class="archetype-name">The Thinker</div>
+      <div class="archetype-gift">Element: Air · Gift: Vision</div>
+      <p class="archetype-desc">
+        This child lives mostly in their head. They are always thinking three problems ahead. Their creativity arrives as ideas, theories, strange connections — but they may need help getting it out of the air and onto the page.
+      </p>
+      <p class="archetype-in-real-life">
+        In your house: The one whose room looks like a mess but they can tell you exactly where everything is.
+      </p>
+    </div>
+
+    <div class="archetype-card water">
+      <span class="archetype-symbol">🌊</span>
+      <div class="archetype-name">The Feeler</div>
+      <div class="archetype-gift">Element: Water · Gift: Depth</div>
+      <p class="archetype-desc">
+        This child feels everything at full volume. Creativity for them is emotional processing — music, journaling, drawing, crying into a notebook. They make art because they have to, not because they want to. The family may call them "too sensitive." They are actually too gifted.
+      </p>
+      <p class="archetype-in-real-life">
+        In your house: The one who cries at commercials and writes songs about it.
+      </p>
+    </div>
+
+    <div class="archetype-card void">
+      <span class="archetype-symbol">🌙</span>
+      <div class="archetype-name">The Dreamer</div>
+      <div class="archetype-gift">Element: Void · Gift: Myth</div>
+      <p class="archetype-desc">
+        This child lives in story. They have elaborate inner worlds, imaginary friends, alternate lives running in parallel. Their peculiarity is that they are always somewhere else — and that somewhere is real. They need permission to bring it out.
+      </p>
+      <p class="archetype-in-real-life">
+        In your house: The one who stares out the car window for twenty minutes and then says "I just invented a whole planet."
+      </p>
+    </div>
+
+    <div class="archetype-card light">
+      <span class="archetype-symbol">✨</span>
+      <div class="archetype-name">The Connector</div>
+      <div class="archetype-gift">Element: Light · Gift: Bridge</div>
+      <p class="archetype-desc">
+        This child is the social genius of creativity — they make things <em>with</em> people. They direct. They collaborate. They see what everyone else is good at and find the project that holds it all together. Their gift is collective creativity.
+      </p>
+      <p class="archetype-in-real-life">
+        In your house: The one who organizes the cousins into a theatrical production at every holiday.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<!-- CURRICULUM MODULES -->
+<section class="curriculum">
+  <div class="section-inner">
+    <span class="section-label">The Curriculum</span>
+    <h2 class="section-title">Eight Modules for the<br/>Peculiar House</h2>
+    <p class="body-text">
+      Each module is designed to run 2–4 weeks in parallel with regular school and family life. They are not projects to finish — they are practices to enter.
+    </p>
+  </div>
+
+  <div class="module-list">
+
+    <div class="module-item">
+      <div class="module-num">I</div>
+      <div class="module-body">
+        <div class="module-header">
+          <div class="module-title">Name Your Peculiarity</div>
+          <span class="module-tag">Foundation</span>
+        </div>
+        <p class="module-desc">
+          Before any creative work begins, each child names what makes them strange — not as a confession, but as a declaration. They make a "Peculiarity Document": a one-page artifact that describes their gift in their own words, with a symbol, a color, and an enemy (the thing that kills their creativity). This becomes their creative passport for the rest of the curriculum.
+        </p>
+        <div class="module-activity">Core activity: The Peculiarity Document · The One-Page Map of You</div>
+      </div>
+    </div>
+
+    <div class="module-item">
+      <div class="module-num">II</div>
+      <div class="module-body">
+        <div class="module-header">
+          <div class="module-title">The Room No One Talks About</div>
+          <span class="module-tag">Inner World</span>
+        </div>
+        <p class="module-desc">
+          Inspired by Bruno's hidden room and the imaginary friends' dormitory — every child has a room inside themselves no one else has been invited into. This module teaches them to map it. What's in there? What do they keep hidden because it seems too weird, too much, too strange? They build it in physical form — a shoebox diorama, a sketchbook, a map.
+        </p>
+        <div class="module-activity">Core activity: The Secret Room Box · Inner World Cartography</div>
+      </div>
+    </div>
+
+    <div class="module-item">
+      <div class="module-num">III</div>
+      <div class="module-body">
+        <div class="module-header">
+          <div class="module-title">The Gift and the Wound</div>
+          <span class="module-tag">Family System</span>
+        </div>
+        <p class="module-desc">
+          Drawing from Encanto: every family has gifts it celebrates and gifts it overlooks. Children explore what their family loves about them — and what they have to hide. This is handled gently and mythologically, through story characters, not confession. They create a "Family Candle" artwork showing the light their family gives them, and the shadow it casts.
+        </p>
+        <div class="module-activity">Core activity: The Family Candle · Gift/Shadow Mapping via Story</div>
+      </div>
+    </div>
+
+    <div class="module-item">
+      <div class="module-num">IV</div>
+      <div class="module-body">
+        <div class="module-header">
+          <div class="module-title">Making Things That Don't Need to Be Useful</div>
+          <span class="module-tag">Process</span>
+        </div>
+        <p class="module-desc">
+          A direct counter-program to the achievement culture many suburban kids swim in. This module is about making for the sake of making — no product, no presentation, no grade. Children spend three weeks in "loop time" (like Miss Peregrine's loop): the same day, dedicated to making something purely for themselves. The only rule is that no adult gets to evaluate it.
+        </p>
+        <div class="module-activity">Core activity: Loop Time Studio · Three Weeks of Private Making</div>
+      </div>
+    </div>
+
+    <div class="module-item">
+      <div class="module-num">V</div>
+      <div class="module-body">
+        <div class="module-header">
+          <div class="module-title">The Imaginary Friend Audit</div>
+          <span class="module-tag">Imagination</span>
+        </div>
+        <p class="module-desc">
+          Borrowed from Foster's House: every child has or had an imaginary friend — a character, a companion, a world. This module makes space to honor them. Who are they? What do they want? What do they know that the child doesn't? Imaginary friends are treated as legitimate psychological material — the soul's first drafts of the self.
+        </p>
+        <div class="module-activity">Core activity: The Imaginary Friend Interview · Character Sheet + Voice Work</div>
+      </div>
+    </div>
+
+    <div class="module-item">
+      <div class="module-num">VI</div>
+      <div class="module-body">
+        <div class="module-header">
+          <div class="module-title">Translating the Gift</div>
+          <span class="module-tag">Expression</span>
+        </div>
+        <p class="module-desc">
+          Each child's peculiarity has a "native medium" — the mode through which it most naturally expresses. A Feeler may paint; a Maker may build; a Thinker may write. But this module asks them to translate: take your gift and express it through the medium that feels most foreign. A Dreamer writes code. A Maker writes poetry. The friction produces revelation.
+        </p>
+        <div class="module-activity">Core activity: The Translation Project · Cross-Medium Expression Challenge</div>
+      </div>
+    </div>
+
+    <div class="module-item">
+      <div class="module-num">VII</div>
+      <div class="module-body">
+        <div class="module-header">
+          <div class="module-title">The Peculiar House Exhibition</div>
+          <span class="module-tag">Community</span>
+        </div>
+        <p class="module-desc">
+          The children transform the home into a gallery — not a performance for adults, but a genuine exhibition of their inner worlds. Each child curates their own "room" in the space: a corner, a wall, a table. Visitors (family, trusted adults) receive a "field guide" and are asked to look, not to grade. This is an act of chosen vulnerability, not performed achievement.
+        </p>
+        <div class="module-activity">Core activity: The Home Exhibition · Curated Inner World Display</div>
+      </div>
+    </div>
+
+    <div class="module-item">
+      <div class="module-num">VIII</div>
+      <div class="module-body">
+        <div class="module-header">
+          <div class="module-title">The Letter to the Younger One</div>
+          <span class="module-tag">Continuity</span>
+        </div>
+        <p class="module-desc">
+          Each child writes — or draws, or records — a message to a younger version of themselves, or to a younger child in the family. Not advice. Permission. "You are allowed to be this strange. Here is what it looks like when you grow into it a little more." These are sealed and kept. Older kids may eventually pass them to younger cousins. The mythology continues.
+        </p>
+        <div class="module-activity">Core activity: The Permission Letter · Intergenerational Creative Legacy</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- THE RULES OF THE HOUSE -->
+<section class="rules">
+  <span class="section-label">The Covenant</span>
+  <h2 class="section-title">The Twelve Laws<br/>of the Peculiar House</h2>
+
+  <ul class="rules-list">
+    <li>
+      <span class="rule-num">I.</span>
+      <span class="rule-text"><strong>The gift belongs to the child.</strong> Not to the family, not to the school, not to the performance.</span>
+    </li>
+    <li>
+      <span class="rule-num">II.</span>
+      <span class="rule-text"><strong>Strange is not wrong.</strong> Strange is unfinished language for something real.</span>
+    </li>
+    <li>
+      <span class="rule-num">III.</span>
+      <span class="rule-text"><strong>The inner world is as real as the outer one.</strong> Imaginary friends count. Dreams count. The worlds inside count.</span>
+    </li>
+    <li>
+      <span class="rule-num">IV.</span>
+      <span class="rule-text"><strong>No adult grades the private work.</strong> Some rooms are not for inspection.</span>
+    </li>
+    <li>
+      <span class="rule-num">V.</span>
+      <span class="rule-text"><strong>Failure is part of the loop.</strong> Like September 3rd, you can reset. You are not ruined.</span>
+    </li>
+    <li>
+      <span class="rule-num">VI.</span>
+      <span class="rule-text"><strong>The family's gift is not your whole identity.</strong> You are more than what the candle lit in you.</span>
+    </li>
+    <li>
+      <span class="rule-num">VII.</span>
+      <span class="rule-text"><strong>Boredom is not a problem to solve.</strong> It is where the real ideas live. Protect it.</span>
+    </li>
+    <li>
+      <span class="rule-num">VIII.</span>
+      <span class="rule-text"><strong>Your creative enemy is real and specific.</strong> Name it. Know when it enters the room.</span>
+    </li>
+    <li>
+      <span class="rule-num">IX.</span>
+      <span class="rule-text"><strong>You do not owe your creativity to anyone.</strong> Sharing is a gift, not an obligation.</span>
+    </li>
+    <li>
+      <span class="rule-num">X.</span>
+      <span class="rule-text"><strong>The Peculiar House moves with you.</strong> It is not a place. It is a practice. It is wherever you set up the conditions for your strange gift to breathe.</span>
+    </li>
+    <li>
+      <span class="rule-num">XI.</span>
+      <span class="rule-text"><strong>Older peculiars leave the door open.</strong> If you've come through something, you help the next one find the entrance.</span>
+    </li>
+    <li>
+      <span class="rule-num">XII.</span>
+      <span class="rule-text"><strong>The house is always worth returning to.</strong> Even after the world outside has been unkind. Especially then.</span>
+    </li>
+  </ul>
+</section>
+
+<!-- WEEKLY RHYTHM -->
+<section class="rhythm">
+  <div class="section-inner">
+    <span class="section-label">The Weekly Container</span>
+    <h2 class="section-title">The Ordinary Week<br/>Made Peculiar</h2>
+    <p class="body-text">
+      No field trips required. No special budget. The curriculum lives inside the ordinary week — hidden in plain sight, like Miss Peregrine's loop behind the cairn.
+    </p>
+  </div>
+
+  <div class="day-grid">
+    <div class="day-card">
+      <div class="day-name">Monday</div>
+      <span class="day-icon">🔍</span>
+      <div class="day-theme">The Notice</div>
+      <p class="day-activity">One thing you made, found, or thought that no one else noticed. Write it, draw it, photograph it. Two minutes.</p>
+    </div>
+    <div class="day-card">
+      <div class="day-name">Tuesday</div>
+      <span class="day-icon">🛠️</span>
+      <div class="day-theme">The Mess</div>
+      <p class="day-activity">20 minutes of making with no plan and no product. Materials out, timer on, no explanation owed.</p>
+    </div>
+    <div class="day-card">
+      <div class="day-name">Wednesday</div>
+      <span class="day-icon">📖</span>
+      <div class="day-theme">The Story</div>
+      <p class="day-activity">One sentence added to an ongoing story. Or one image. Or one voice memo. The ongoing world gets a new day.</p>
+    </div>
+    <div class="day-card">
+      <div class="day-name">Thursday</div>
+      <span class="day-icon">🌀</span>
+      <div class="day-theme">The Loop</div>
+      <p class="day-activity">Revisit something old. A project, a drawing, a character. What has changed? What do you see now that you didn't then?</p>
+    </div>
+    <div class="day-card">
+      <div class="day-name">Friday</div>
+      <span class="day-icon">🕯️</span>
+      <div class="day-theme">The Witness</div>
+      <p class="day-activity">Each child shares one thing from the week — not the best thing, just one real thing. The house witnesses it without fixing it.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-title">For the Strange Ones</div>
+  <p class="footer-text">
+    This curriculum was built for the children of Catholic Midwestern suburban families who carry something their households don't have language for yet — and for the peculiar adults who remember what that felt like, and refuse to let it be erased in the next generation.
+  </p>
+  <div class="footer-sigil">✦ ✦ ✦</div>
+</footer>
+
+</body>
+</html>

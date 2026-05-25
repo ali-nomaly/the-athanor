@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CHARACTER SHEET — PLAYER: ALI</title>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Special+Elite&family=Permanent+Marker&family=Oswald:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --yellow: #FFD600;
+    --orange: #FF5500;
+    --cyan: #00FFCC;
+    --pink: #FF1744;
+    --green: #39FF14;
+    --purple: #B24BF3;
+    --white: #F5EFD8;
+    --ink: #1a0f00;
+    --red: #FF1744;
+    --border: 4px solid var(--black);
+    --shadow: 6px 6px 0px var(--black);
+    --shadow-lg: 10px 10px 0px var(--black);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Special Elite', monospace;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(0,255,204,0.03) 1px, transparent 1px);
+    background-size: 16px 16px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page { position: relative; z-index: 1; max-width: 960px; margin: 0 auto; padding: 0 20px 80px; }
+
+  /* ===== HERO ===== */
+  .hero {
+    background: var(--cyan);
+    border: 6px solid var(--black);
+    box-shadow: var(--shadow-lg);
+    margin: 24px 0 0;
+    padding: 36px 32px 28px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      -45deg, transparent, transparent 10px,
+      rgba(0,0,0,0.04) 10px, rgba(0,0,0,0.04) 12px
+    );
+  }
+
+  .hero-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-left {}
+
+  .hero-label {
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: var(--black);
+    border: 3px solid var(--black);
+    display: inline-block;
+    padding: 4px 10px;
+    margin-bottom: 12px;
+    background: white;
+  }
+
+  .hero-title {
+    font-family: 'Bangers', cursive;
+    font-size: clamp(48px, 9vw, 84px);
+    color: var(--black);
+    line-height: 0.9;
+    letter-spacing: 2px;
+    text-shadow: 3px 3px 0 rgba(255,85,0,0.3);
+  }
+
+  .hero-sub {
+    font-family: 'Bangers', cursive;
+    font-size: clamp(16px, 3vw, 26px);
+    color: var(--orange);
+    letter-spacing: 3px;
+    -webkit-text-stroke: 1.5px var(--black);
+    margin-top: 4px;
+  }
+
+  .hero-right {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-end;
+    flex-shrink: 0;
+  }
+
+  .badge {
+    background: var(--black);
+    color: var(--yellow);
+    font-family: 'Bangers', cursive;
+    font-size: 13px;
+    letter-spacing: 2px;
+    padding: 6px 14px;
+    border: 3px solid var(--black);
+  }
+
+  .badge.danger { background: var(--pink); color: white; }
+  .badge.good { background: var(--green); color: var(--black); }
+  .badge.warn { background: var(--orange); color: white; }
+
+  .hero-desc {
+    margin-top: 16px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--ink);
+    max-width: 640px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ===== SECTIONS ===== */
+  .section { margin-top: 28px; }
+
+  .section-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+
+  .section-num {
+    font-family: 'Bangers', cursive;
+    font-size: 44px;
+    color: var(--cyan);
+    -webkit-text-stroke: 3px var(--black);
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .section-title {
+    font-family: 'Bangers', cursive;
+    font-size: clamp(24px, 4.5vw, 38px);
+    letter-spacing: 2px;
+    color: var(--white);
+    -webkit-text-stroke: 1.5px var(--black);
+    line-height: 1;
+  }
+
+  .section-title span { color: var(--cyan); -webkit-text-stroke: 1.5px var(--black); }
+
+  /* ===== STAT GRID ===== */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
+  }
+
+  .stat-block {
+    border: 4px solid var(--black);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+
+  .stat-top {
+    padding: 8px 12px 6px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    border-bottom: 3px solid var(--black);
+  }
+
+  .stat-value {
+    padding: 10px 12px 8px;
+    background: var(--white);
+    color: var(--ink);
+    font-family: 'Bangers', cursive;
+    font-size: 28px;
+    letter-spacing: 1px;
+    line-height: 1;
+  }
+
+  .stat-note {
+    padding: 0 12px 10px;
+    background: var(--white);
+    color: #444;
+    font-size: 10.5px;
+    font-family: 'Oswald', sans-serif;
+    letter-spacing: 0.5px;
+    line-height: 1.4;
+  }
+
+  .s-cyan .stat-top { background: var(--cyan); color: var(--black); }
+  .s-green .stat-top { background: var(--green); color: var(--black); }
+  .s-orange .stat-top { background: var(--orange); color: white; }
+  .s-pink .stat-top { background: var(--pink); color: white; }
+  .s-yellow .stat-top { background: var(--yellow); color: var(--black); }
+  .s-dark .stat-top { background: #1a1a1a; color: var(--cyan); }
+  .s-purple .stat-top { background: var(--purple); color: white; }
+
+  /* ===== THREAT BLOCKS ===== */
+  .threat-list { display: flex; flex-direction: column; gap: 10px; }
+
+  .threat {
+    border: 4px solid var(--black);
+    display: flex;
+    overflow: hidden;
+    box-shadow: 5px 5px 0 var(--black);
+  }
+
+  .threat-severity {
+    width: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 8px;
+    font-family: 'Bangers', cursive;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    gap: 4px;
+    flex-shrink: 0;
+  }
+
+  .threat-body {
+    flex: 1;
+    background: var(--white);
+    color: var(--ink);
+    padding: 12px 16px;
+    border-left: 3px solid var(--black);
+  }
+
+  .threat-title {
+    font-family: 'Bangers', cursive;
+    font-size: 18px;
+    letter-spacing: 1.5px;
+    margin-bottom: 4px;
+  }
+
+  .threat-desc { font-size: 12.5px; line-height: 1.7; }
+  .threat-action { margin-top: 8px; font-size: 11.5px; font-family: 'Oswald', sans-serif; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+
+  .t-critical .threat-severity { background: var(--pink); color: white; }
+  .t-high .threat-severity { background: var(--orange); color: white; }
+  .t-medium .threat-severity { background: var(--yellow); color: var(--black); }
+  .t-low .threat-severity { background: var(--cyan); color: var(--black); }
+
+  /* ===== ASSET INVENTORY ===== */
+  .inventory {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 12px;
+  }
+
+  .item {
+    border: 4px solid var(--black);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+
+  .item-top {
+    padding: 10px 14px 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .item-icon { font-size: 28px; flex-shrink: 0; }
+  .item-name { font-family: 'Bangers', cursive; font-size: 17px; letter-spacing: 1.5px; }
+  .item-rarity { font-size: 9px; font-family: 'Oswald', sans-serif; letter-spacing: 2px; text-transform: uppercase; margin-top: 1px; }
+
+  .item-body {
+    background: var(--white);
+    color: var(--ink);
+    padding: 10px 14px;
+    font-size: 12px;
+    line-height: 1.7;
+    border-top: 3px solid var(--black);
+  }
+
+  .item-val {
+    font-family: 'Bangers', cursive;
+    font-size: 22px;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+
+  .i-gold .item-top { background: var(--yellow); color: var(--black); }
+  .i-cyan .item-top { background: var(--cyan); color: var(--black); }
+  .i-green .item-top { background: var(--green); color: var(--black); }
+  .i-purple .item-top { background: var(--purple); color: white; }
+  .i-dark .item-top { background: #1a1a1a; color: var(--cyan); }
+  .i-orange .item-top { background: var(--orange); color: white; }
+
+  /* ===== QUEST LOG ===== */
+  .quest { border: 4px solid var(--black); margin-bottom: 12px; overflow: hidden; box-shadow: var(--shadow); }
+
+  .quest-header {
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+  }
+
+  .quest-phase {
+    font-family: 'Bangers', cursive;
+    font-size: 28px;
+    -webkit-text-stroke: 1.5px var(--black);
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .quest-title-wrap {}
+  .quest-name { font-family: 'Bangers', cursive; font-size: 20px; letter-spacing: 2px; }
+  .quest-timeline { font-size: 10px; font-family: 'Oswald', sans-serif; letter-spacing: 2px; text-transform: uppercase; margin-top: 2px; opacity: 0.85; }
+
+  .quest-body {
+    background: var(--white);
+    color: var(--ink);
+    padding: 14px 16px;
+    border-top: 3px solid var(--black);
+  }
+
+  .quest-objective {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    font-size: 12.5px;
+    line-height: 1.6;
+  }
+
+  .quest-objective:last-child { border-bottom: none; }
+
+  .obj-check {
+    width: 18px;
+    height: 18px;
+    border: 2.5px solid var(--black);
+    flex-shrink: 0;
+    margin-top: 2px;
+    background: white;
+  }
+
+  .obj-check.done { background: var(--green); }
+  .obj-check.active { background: var(--yellow); }
+
+  .obj-text { flex: 1; }
+  .obj-text strong { font-family: 'Oswald', sans-serif; letter-spacing: 0.5px; }
+
+  .q-1 .quest-header { background: var(--pink); color: white; }
+  .q-2 .quest-header { background: var(--orange); color: var(--black); }
+  .q-3 .quest-header { background: var(--purple); color: white; }
+
+  /* ===== CASHFLOW TABLE ===== */
+  .cf-table { width: 100%; border-collapse: collapse; margin: 14px 0; }
+  .cf-table th { background: var(--black); color: var(--cyan); font-family: 'Bangers', cursive; font-size: 15px; letter-spacing: 2px; padding: 10px 14px; text-align: left; border: 3px solid var(--black); }
+  .cf-table td { background: var(--white); color: var(--ink); padding: 9px 14px; font-size: 12.5px; border: 3px solid var(--black); vertical-align: top; line-height: 1.6; }
+  .cf-table tr:nth-child(even) td { background: #f0e8d0; }
+  .cf-table td.label { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; background: var(--cyan); border: 3px solid var(--black); color: var(--black); }
+  .cf-table td.red { color: var(--pink); font-weight: bold; }
+  .cf-table td.grn { color: #006600; font-weight: bold; }
+  .cf-table td.total { background: var(--yellow); font-family: 'Bangers', cursive; font-size: 18px; letter-spacing: 1px; }
+  .cf-table td.alert { background: #ffe0e0; border-left: 5px solid var(--pink); }
+
+  /* ===== CALLOUT ===== */
+  .callout {
+    padding: 14px 18px;
+    border: 4px solid var(--black);
+    margin: 14px 0;
+    box-shadow: var(--shadow);
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .callout-icon { font-size: 26px; flex-shrink: 0; }
+  .callout-text { font-size: 13px; line-height: 1.7; }
+  .callout-text strong { font-family: 'Oswald', sans-serif; letter-spacing: 1px; }
+  .callout.info { background: #001f5c; color: white; }
+  .callout.warn { background: var(--orange); color: var(--black); }
+  .callout.danger { background: var(--pink); color: white; }
+  .callout.tip { background: var(--green); color: var(--black); }
+  .callout.secret { background: var(--purple); color: white; }
+  .callout.dark { background: #1a1a1a; color: var(--cyan); }
+
+  /* ===== DIVIDER ===== */
+  .divider { border: none; border-top: 4px solid var(--cyan); margin: 24px 0; box-shadow: 0 4px 0 rgba(0,255,204,0.1); }
+
+  /* ===== SPEECH BUBBLE ===== */
+  .speech-bubble {
+    background: var(--cyan);
+    border: 4px solid var(--black);
+    box-shadow: var(--shadow);
+    padding: 16px 20px;
+    position: relative;
+    margin: 20px 0;
+    max-width: 580px;
+  }
+  .speech-bubble::after { content: ''; position: absolute; bottom: -22px; left: 32px; width: 0; height: 0; border-left: 16px solid transparent; border-top: 22px solid var(--black); }
+  .speech-bubble::before { content: ''; position: absolute; bottom: -16px; left: 34px; width: 0; height: 0; border-left: 13px solid transparent; border-top: 18px solid var(--cyan); z-index: 1; }
+  .bubble-text { font-family: 'Permanent Marker', cursive; font-size: 14px; color: var(--ink); line-height: 1.6; }
+
+  /* ===== MOVE PRIORITY ===== */
+  .move-stack { display: flex; flex-direction: column; gap: 10px; }
+
+  .move {
+    display: flex;
+    border: 4px solid var(--black);
+    box-shadow: 5px 5px 0 var(--black);
+    overflow: hidden;
+  }
+
+  .move-num {
+    width: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bangers', cursive;
+    font-size: 32px;
+    -webkit-text-stroke: 1.5px var(--black);
+    flex-shrink: 0;
+  }
+
+  .move-content {
+    flex: 1;
+    background: var(--white);
+    color: var(--ink);
+    padding: 12px 16px;
+    border-left: 3px solid var(--black);
+  }
+
+  .move-title { font-family: 'Bangers', cursive; font-size: 19px; letter-spacing: 1.5px; margin-bottom: 4px; }
+  .move-detail { font-size: 12.5px; line-height: 1.7; }
+  .move-meta { margin-top: 6px; font-family: 'Oswald', sans-serif; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 700; }
+
+  .mv-now .move-num { background: var(--pink); color: white; }
+  .mv-30 .move-num { background: var(--orange); color: white; }
+  .mv-90 .move-num { background: var(--yellow); color: var(--black); }
+  .mv-yr .move-num { background: var(--cyan); color: var(--black); }
+  .mv-3yr .move-num { background: var(--purple); color: white; }
+
+  /* ===== IRA TABLE ===== */
+  .ira-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px; margin: 12px 0; }
+
+  .ira-fund { border: 3px solid var(--black); overflow: hidden; }
+  .ira-fund-top { background: var(--black); color: var(--cyan); font-family: 'Bangers', cursive; font-size: 15px; letter-spacing: 1px; padding: 6px 10px; }
+  .ira-fund-body { background: var(--white); color: var(--ink); padding: 8px 10px; font-size: 11px; line-height: 1.6; }
+  .ira-fund-val { font-family: 'Bangers', cursive; font-size: 20px; color: var(--ink); }
+  .ira-fund-gain { color: #006600; font-size: 11px; font-weight: bold; }
+
+  /* ===== CREDIT SCORE BAR ===== */
+  .score-bar-wrap { margin: 16px 0; }
+  .score-bar-track { height: 24px; background: linear-gradient(to right, #FF1744 0%, #FF5500 20%, #FFD600 40%, #39FF14 70%, #00CCFF 100%); border: 4px solid var(--black); position: relative; box-shadow: var(--shadow); }
+  .score-marker { position: absolute; top: -8px; transform: translateX(-50%); width: 4px; height: 40px; background: white; border: 3px solid var(--black); z-index: 2; }
+  .score-marker::after { content: attr(data-score); position: absolute; top: -28px; left: 50%; transform: translateX(-50%); font-family: 'Bangers', cursive; font-size: 16px; white-space: nowrap; color: white; -webkit-text-stroke: 1px var(--black); }
+  .score-labels { display: flex; justify-content: space-between; margin-top: 6px; font-size: 10px; font-family: 'Oswald', sans-serif; letter-spacing: 1px; color: rgba(245,239,216,0.6); }
+
+  /* ===== BIG QUOTE ===== */
+  .big-quote { border-left: 6px solid var(--cyan); padding: 16px 20px; margin: 20px 0; background: rgba(0,255,204,0.05); }
+  .big-quote p { font-family: 'Permanent Marker', cursive; font-size: 15px; line-height: 1.6; color: var(--white); }
+  .big-quote cite { display: block; margin-top: 8px; font-size: 11px; font-family: 'Oswald', sans-serif; letter-spacing: 2px; text-transform: uppercase; color: var(--cyan); font-style: normal; }
+
+  /* ===== FOOTER ===== */
+  footer { text-align: center; padding: 40px 0; font-family: 'Bangers', cursive; font-size: 13px; letter-spacing: 3px; color: rgba(245,239,216,0.25); }
+
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: #111; }
+  ::-webkit-scrollbar-thumb { background: var(--cyan); border: 2px solid #111; }
+
+  @keyframes pulse-cyan {
+    0%, 100% { box-shadow: var(--shadow-lg); }
+    50% { box-shadow: 0 0 0 4px var(--cyan), var(--shadow-lg); }
+  }
+  .hero { animation: pulse-cyan 4s ease-in-out infinite; }
+
+  .tag { display: inline-block; font-family: 'Oswald', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border: 2px solid currentColor; padding: 2px 8px; margin: 2px; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ===== HERO ===== -->
+  <div class="hero">
+    <div class="hero-top">
+      <div class="hero-left">
+        <div class="hero-label">Ficha de Personaje · Documento Privado de Estrategia</div>
+        <h1 class="hero-title">PLAYER: ALI</h1>
+        <div class="hero-sub">CHICAGO, IL · CLASS: BRIDGE BUILDER · LVL: REBUILDING</div>
+      </div>
+      <div class="hero-right">
+        <div class="badge warn">CURRENT FACTION: WORKING CLASS</div>
+        <div class="badge danger">CREDIT: 537 — RECOVERY MODE</div>
+        <div class="badge">ROTH IRA: ACTIVE ✓</div>
+        <div class="badge good">HOUSING: STRATEGIC ADVANTAGE</div>
+      </div>
+    </div>
+    <p class="hero-desc" style="margin-top:16px; color:var(--ink);">
+      This is your actual position on the board — real numbers, real threats, real moves. The system doesn't care about the circumstances that got you here. It only responds to what you do next. This document is the honest read of where you stand and the specific sequence that gets you where you're going.
+    </p>
+  </div>
+
+  <!-- ===== VITALS ===== -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">01</div>
+      <div class="section-title">VITAL <span>STATS</span></div>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-block s-cyan">
+        <div class="stat-top">Monthly Gross</div>
+        <div class="stat-value">$2,600</div>
+        <div class="stat-note">~$600/week · Uber Eats 1099 · No tax withheld</div>
+      </div>
+      <div class="stat-block s-pink">
+        <div class="stat-top">Tax Debt Accumulating</div>
+        <div class="stat-value">~$700/mo</div>
+        <div class="stat-note">27% set-aside needed. Not currently being held. ACTIVE LEAK.</div>
+      </div>
+      <div class="stat-block s-green">
+        <div class="stat-top">True Monthly Net</div>
+        <div class="stat-value">$1,072</div>
+        <div class="stat-note">After tax set-aside + rent + car loan. This is your real operating budget.</div>
+      </div>
+      <div class="stat-block s-orange">
+        <div class="stat-top">Total Debt</div>
+        <div class="stat-value">$14,009</div>
+        <div class="stat-note">CC: $2,159 (high interest) · Auto: $11,850 (lower interest)</div>
+      </div>
+      <div class="stat-block s-yellow">
+        <div class="stat-top">Credit Score</div>
+        <div class="stat-value">537</div>
+        <div class="stat-note">Was 780. Recoverable — but costing you money every day it stays here.</div>
+      </div>
+      <div class="stat-block s-dark">
+        <div class="stat-top">Net Worth (Est.)</div>
+        <div class="stat-value">-$13,026</div>
+        <div class="stat-note">Roth IRA $983 + car value − $14,009 debt ≈ negative. Temporary. Fixable.</div>
+      </div>
+      <div class="stat-block s-purple">
+        <div class="stat-top">Roth IRA</div>
+        <div class="stat-value">$982.67</div>
+        <div class="stat-note">Up +60.1% since cost basis. Well-diversified. DO NOT TOUCH.</div>
+      </div>
+      <div class="stat-block s-green">
+        <div class="stat-top">Housing Cost</div>
+        <div class="stat-value">$550/mo</div>
+        <div class="stat-note">Parents' home, mortgage paid off. Biggest structural advantage you have right now.</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ===== CASHFLOW BREAKDOWN ===== -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">02</div>
+      <div class="section-title">CASHFLOW <span>BREAKDOWN</span></div>
+    </div>
+
+    <table class="cf-table">
+      <thead>
+        <tr><th>ITEM</th><th>MONTHLY</th><th>NOTES</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="label">INCOME IN</td><td class="grn">+$2,600</td><td>Gross. Uber Eats (~$600/week). Variable — treat as floor, not ceiling.</td></tr>
+        <tr><td class="label">TAX SET-ASIDE</td><td class="alert red">−$702</td><td>27% needed for SE tax (15.3%) + income tax. NOT currently being held. This is the single most urgent fix.</td></tr>
+        <tr><td class="label">RENT</td><td class="red">−$550</td><td>To parents. Below market. Strategic advantage — maximize it while you have it.</td></tr>
+        <tr><td class="label">AUTO LOAN</td><td class="red">−$276</td><td>$11,850 remaining. Do NOT prioritize over CC — pay minimum until CC is gone.</td></tr>
+        <tr><td class="label">TRUE OPERATING BUDGET</td><td class="total">$1,072</td><td>What you actually have to work with after all obligations are met correctly.</td></tr>
+        <tr><td class="label">CC ATTACK FUND</td><td class="grn">−$400 to $500</td><td>Recommended: put $400–500/month here. CC is gone in 5–6 months.</td></tr>
+        <tr><td class="label">ROTH IRA</td><td class="grn">−$50</td><td>Resume contributions. Even $50/month restarts the compounding clock.</td></tr>
+        <tr><td class="label">EMERGENCY BUFFER</td><td class="grn">−$100</td><td>Build toward $1,000 first (mini fund), then $3,000 (3-month buffer).</td></tr>
+        <tr><td class="label">REMAINING / LIVING</td><td class="total">~$422–$522</td><td>Food, phone, personal expenses, small circulation. Tight but workable at this stage.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout danger">
+      <div class="callout-icon">🚨</div>
+      <div class="callout-text">
+        <strong>THE INVISIBLE DEBT:</strong> You've been earning ~$2,600/month since January 2026. If you haven't set aside 27%, you've accumulated ~$2,800+ in owed taxes over ~4 months that doesn't exist in your account. This is the threat that blindsides gig workers — the IRS bill arrives in April 2027 and it's already growing now. Fix this first, week one.
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ===== THREATS ===== -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">03</div>
+      <div class="section-title">ACTIVE <span>THREATS</span></div>
+    </div>
+
+    <div class="threat-list">
+
+      <div class="threat t-critical">
+        <div class="threat-severity">CRITICAL</div>
+        <div class="threat-body">
+          <div class="threat-title">🚨 NO TAX SET-ASIDE — TICKING CLOCK</div>
+          <div class="threat-desc">As a 1099 gig worker, zero taxes are withheld from your income. You owe ~27% of everything you've earned to the IRS. You also haven't finished your 2025 taxes (extension only delays filing, not payment — if you owed for 2025, interest is already accruing). The IRS doesn't negotiate well with people who ignore it. This isn't a year-end problem. It's a right-now problem.</div>
+          <div class="threat-action" style="color:var(--pink)">→ ACTION: Open a separate savings account labeled "TAXES." Transfer $700 this week. Do it for every week going forward.</div>
+        </div>
+      </div>
+
+      <div class="threat t-critical">
+        <div class="threat-severity">CRITICAL</div>
+        <div class="threat-body">
+          <div class="threat-title">💳 CREDIT SCORE 537 — COSTING YOU DAILY</div>
+          <div class="threat-desc">A 537 score means: higher APR on any new debt, potential denial on apartments, disadvantage on job applications, and higher car insurance premiums in Illinois. You were at 780 — this is recoverable, but every month you don't act it costs you invisibly. The two fastest score movers are payment history (35% of score) and credit utilization (30%). Your Discover balance is the lever you can actually pull right now.</div>
+          <div class="threat-action" style="color:var(--pink)">→ ACTION: Know your Discover credit limit. If balance ÷ limit is above 30%, every dollar you pay down moves your score. Pay at minimum the statement balance every month, on time, no exceptions.</div>
+        </div>
+      </div>
+
+      <div class="threat t-high">
+        <div class="threat-severity">HIGH</div>
+        <div class="threat-body">
+          <div class="threat-title">📋 2025 TAXES UNFINISHED</div>
+          <div class="threat-desc">Extension to file ≠ extension to pay. If you had taxable income in 2025 and owed taxes, interest has been accruing since April 2025. Not knowing your 2025 tax situation means you're flying blind on a potential bill. This needs to be resolved before anything else can be planned cleanly.</div>
+          <div class="threat-action" style="color:var(--orange)">→ ACTION: Gather all 2025 income records. File ASAP. If you owe, a payment plan with the IRS is available and far better than ignoring it.</div>
+        </div>
+      </div>
+
+      <div class="threat t-high">
+        <div class="threat-severity">HIGH</div>
+        <div class="threat-body">
+          <div class="threat-title">🔄 INCOME VARIABILITY — GIG FLOOR RISK</div>
+          <div class="threat-desc">Uber Eats income fluctuates with weather, demand, algorithm changes, and your availability. $600/week is your current rate — not guaranteed. The entire budget above is built on that floor. One slow month with no buffer erases discipline built over multiple months. You have no emergency fund yet, which means any unexpected expense (car repair, health issue) currently goes on the credit card — undoing the paydown progress.</div>
+          <div class="threat-action" style="color:var(--orange)">→ ACTION: Build $1,000 cash buffer before anything else beyond minimum debt payments. This is your shield.</div>
+        </div>
+      </div>
+
+      <div class="threat t-medium">
+        <div class="threat-severity">MEDIUM</div>
+        <div class="threat-body">
+          <div class="threat-title">🚗 AUTO LOAN $11,850 — LOW PRIORITY FOR NOW</div>
+          <div class="threat-desc">The auto loan is a larger number but almost certainly carries a lower interest rate than your credit card. Pay the minimum and nothing more until the CC is gone. Once the CC is eliminated, redirect that $400–500/month here to accelerate payoff. The car is also a working asset — it generates your income. Protect it.</div>
+          <div class="threat-action" style="color:var(--yellow); -webkit-text-stroke: 0.5px #000">→ ACTION: Confirm interest rate with California credit union. Make every payment on time — this is part of your credit score recovery.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ===== CREDIT SCORE ===== -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">04</div>
+      <div class="section-title">CREDIT SCORE <span>RECOVERY MAP</span></div>
+    </div>
+
+    <div class="score-bar-wrap">
+      <div class="score-bar-track">
+        <!-- 537 is at (537-300)/(850-300) = 237/550 = 43.1% -->
+        <div class="score-marker" style="left: 43.1%;" data-score="YOU: 537"></div>
+        <!-- 700 target is at (700-300)/550 = 72.7% -->
+        <div class="score-marker" style="left: 72.7%; background: var(--yellow);" data-score="TARGET: 700+"></div>
+      </div>
+      <div class="score-labels">
+        <span>300 — POOR</span>
+        <span>580 — FAIR</span>
+        <span>670 — GOOD</span>
+        <span>740 — VERY GOOD</span>
+        <span>850 — EXCEPTIONAL</span>
+      </div>
+    </div>
+
+    <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap:12px; margin-top:16px;">
+      <div style="border:4px solid var(--black); overflow:hidden; box-shadow:var(--shadow);">
+        <div style="background:var(--pink); color:white; padding:8px 12px; font-family:'Bangers',cursive; font-size:15px; letter-spacing:1.5px; border-bottom:3px solid var(--black);">PAYMENT HISTORY — 35%</div>
+        <div style="background:var(--white); color:var(--ink); padding:10px 12px; font-size:12px; line-height:1.7;">The single biggest factor. One missed payment can drop you 60–110 points. You need a spotless record from here forward. Set up autopay on every account — at least the minimum.</div>
+      </div>
+      <div style="border:4px solid var(--black); overflow:hidden; box-shadow:var(--shadow);">
+        <div style="background:var(--orange); color:white; padding:8px 12px; font-family:'Bangers',cursive; font-size:15px; letter-spacing:1.5px; border-bottom:3px solid var(--black);">UTILIZATION — 30%</div>
+        <div style="background:var(--white); color:var(--ink); padding:10px 12px; font-size:12px; line-height:1.7;">Keep balance below 30% of your credit limit. If your Discover limit is $3,000, target getting below $900. Below 10% is where the score really jumps. Every dollar you pay down on that card moves this number.</div>
+      </div>
+      <div style="border:4px solid var(--black); overflow:hidden; box-shadow:var(--shadow);">
+        <div style="background:var(--yellow); color:var(--black); padding:8px 12px; font-family:'Bangers',cursive; font-size:15px; letter-spacing:1.5px; border-bottom:3px solid var(--black);">CREDIT AGE — 15%</div>
+        <div style="background:var(--white); color:var(--ink); padding:10px 12px; font-size:12px; line-height:1.7;">Do NOT close the Discover card after paying it off. Keep it open and use it for one small recurring charge (like Spotify or gas). Age of accounts matters. Zero balance + open = score boost.</div>
+      </div>
+      <div style="border:4px solid var(--black); overflow:hidden; box-shadow:var(--shadow);">
+        <div style="background:var(--cyan); color:var(--black); padding:8px 12px; font-family:'Bangers',cursive; font-size:15px; letter-spacing:1.5px; border-bottom:3px solid var(--black);">HARD INQUIRIES — 10%</div>
+        <div style="background:var(--white); color:var(--ink); padding:10px 12px; font-size:12px; line-height:1.7;">Do not apply for new credit right now. Every hard pull costs points temporarily. Wait until you're above 650 before considering any new card or loan application.</div>
+      </div>
+    </div>
+
+    <div class="callout tip" style="margin-top:14px;">
+      <div class="callout-icon">📈</div>
+      <div class="callout-text">
+        <strong>REALISTIC TIMELINE:</strong> With consistent payments + CC paydown, scores typically recover 50–100 points in 6 months and another 50–100 in the following 6. Getting from 537 to 700 in 12 months is achievable — but requires zero new missed payments and consistent utilization reduction. Dispute any errors on your report (1 in 5 Americans has one). Free check: AnnualCreditReport.com.
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ===== ASSETS ===== -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">05</div>
+      <div class="section-title">ASSET <span>INVENTORY</span></div>
+    </div>
+
+    <div class="inventory">
+
+      <div class="item i-gold">
+        <div class="item-top">
+          <div class="item-icon">📊</div>
+          <div>
+            <div class="item-name">ROTH IRA — FIDELITY</div>
+            <div class="item-rarity">★★★ RARE — Tax-Free Growth</div>
+          </div>
+        </div>
+        <div class="item-body">
+          <div class="item-val">$982.67</div>
+          <div>Cost basis ~$620 · Gains: +$360.85 (+60.1%)</div>
+          <div style="margin-top:6px; font-size:11px; color:#555;">Well-diversified: Total Market (38%), International (18%), Real Estate (12%), Bonds (20%), Emerging Markets (8%). <strong>Do not touch.</strong> At $50/month resumed → ~$85K in 30 years. At $100/month → ~$160K. And that's just what's there now.</div>
+        </div>
+      </div>
+
+      <div class="item i-cyan">
+        <div class="item-top">
+          <div class="item-icon">🏠</div>
+          <div>
+            <div class="item-name">PARENTS' HOME (STRATEGIC)</div>
+            <div class="item-rarity">★★★ RARE — No Mortgage</div>
+          </div>
+        </div>
+        <div class="item-body">
+          <div class="item-val">$550/mo rent</div>
+          <div>Mortgage paid off · 9 people · Backyard available</div>
+          <div style="margin-top:6px; font-size:11px; color:#555;">A Chicago apartment runs $1,200–1,800/month. You're saving $650–$1,250/month in living costs. This is your runway. Every month you're here and disciplined compounds. Don't waste the window.</div>
+        </div>
+      </div>
+
+      <div class="item i-green">
+        <div class="item-top">
+          <div class="item-icon">🚗</div>
+          <div>
+            <div class="item-name">2013 HONDA FIT</div>
+            <div class="item-rarity">★★ UNCOMMON — Income Tool</div>
+          </div>
+        </div>
+        <div class="item-body">
+          <div class="item-val">~$6,000–8,000</div>
+          <div>Estimated market value · Still under loan</div>
+          <div style="margin-top:6px; font-size:11px; color:#555;">This car IS your income. Maintenance is not optional — it's a business expense. Oil changes, tires, brakes. As a 1099 worker, mileage driven for Uber Eats is <strong>tax deductible</strong> (67 cents/mile in 2024). Track every mile.</div>
+        </div>
+      </div>
+
+      <div class="item i-purple">
+        <div class="item-top">
+          <div class="item-icon">🌿</div>
+          <div>
+            <div class="item-name">BACKYARD — DORMANT ASSET</div>
+            <div class="item-rarity">★ COMMON — Potential Unlock</div>
+          </div>
+        </div>
+        <div class="item-body">
+          <div class="item-val">$0 now · TBD</div>
+          <div>Family garden · Open land · Chicago growing season</div>
+          <div style="margin-top:6px; font-size:11px; color:#555;">This is a long-game asset. Urban gardens generate community, food security, potential income (farmers markets, CSA boxes), and align with the family ecosystem you're trying to build. Not year-one priority — but file it as real.</div>
+        </div>
+      </div>
+
+      <div class="item i-orange">
+        <div class="item-top">
+          <div class="item-icon">🧠</div>
+          <div>
+            <div class="item-name">BRIDGE CAPACITY</div>
+            <div class="item-rarity">★★★ RARE — Core Character Trait</div>
+          </div>
+        </div>
+        <div class="item-body">
+          <div class="item-val">Unmonetized</div>
+          <div>Financial literacy · Cultural fluency · Depth literacy</div>
+          <div style="margin-top:6px; font-size:11px; color:#555;">You understand systems most people around you don't. You translate between worlds — languages, cultures, knowledge frameworks. This is the seed of the 5-year business. The self-esteem issue isn't whether you have the knowledge. It's whether you authorize yourself to charge for it.</div>
+        </div>
+      </div>
+
+      <div class="item i-dark">
+        <div class="item-top">
+          <div class="item-icon">📍</div>
+          <div>
+            <div class="item-name">ADLER DOJO — CHICAGO STREETS</div>
+            <div class="item-rarity">★★ UNCOMMON — Live Training</div>
+          </div>
+        </div>
+        <div class="item-body">
+          <div class="item-val">Daily XP</div>
+          <div>Uber Eats as psychological field work</div>
+          <div style="margin-top:6px; font-size:11px; color:#555;">You're building courage-to-be-disliked reps in real time. The discipline of this season — financial, psychological, physical — is character formation. The business you build in year 5 will be built by the person this period is creating.</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ROTH IRA DETAIL -->
+    <div style="margin-top:16px; border:4px solid var(--black); box-shadow:var(--shadow); overflow:hidden;">
+      <div style="background:var(--black); color:var(--cyan); padding:10px 16px; font-family:'Bangers',cursive; font-size:18px; letter-spacing:2px; border-bottom:3px solid var(--black);">ROTH IRA HOLDINGS BREAKDOWN</div>
+      <div style="padding:12px; background:#111;">
+        <div class="ira-grid">
+          <div class="ira-fund">
+            <div class="ira-fund-top">FSKAX — Total Market</div>
+            <div class="ira-fund-body">
+              <div class="ira-fund-val">$379.62</div>
+              <div>38.6% of account</div>
+              <div class="ira-fund-gain">+$179.62 (+89.8%)</div>
+              <div style="margin-top:4px; font-size:10.5px;">Largest holding. Entire US market in one fund. Core position.</div>
+            </div>
+          </div>
+          <div class="ira-fund">
+            <div class="ira-fund-top">FSPSX — International</div>
+            <div class="ira-fund-body">
+              <div class="ira-fund-val">$180.10</div>
+              <div>18.3% of account</div>
+              <div class="ira-fund-gain">+$90.10 (+100.1%)</div>
+              <div style="margin-top:4px; font-size:10.5px;">Developed markets outside US. Good geographic diversification.</div>
+            </div>
+          </div>
+          <div class="ira-fund">
+            <div class="ira-fund-top">FSRNX — Real Estate</div>
+            <div class="ira-fund-body">
+              <div class="ira-fund-val">$118.40</div>
+              <div>12.1% of account</div>
+              <div class="ira-fund-gain">+$28.40 (+31.6%)</div>
+              <div style="margin-top:4px; font-size:10.5px;">REIT index. Exposure to real estate without buying property.</div>
+            </div>
+          </div>
+          <div class="ira-fund">
+            <div class="ira-fund-top">FIPDX — Inflation-Prot.</div>
+            <div class="ira-fund-body">
+              <div class="ira-fund-val">$102.98</div>
+              <div>10.5% of account</div>
+              <div class="ira-fund-gain">+$12.98 (+14.4%)</div>
+              <div style="margin-top:4px; font-size:10.5px;">TIPS bonds. Hedge against inflation eating your purchasing power.</div>
+            </div>
+          </div>
+          <div class="ira-fund">
+            <div class="ira-fund-top">FUAMX — Treasury Bond</div>
+            <div class="ira-fund-body">
+              <div class="ira-fund-val">$102.00</div>
+              <div>10.4% of account</div>
+              <div class="ira-fund-gain">+$12.00 (+13.3%)</div>
+              <div style="margin-top:4px; font-size:10.5px;">Intermediate-term US government bonds. Stability anchor.</div>
+            </div>
+          </div>
+          <div class="ira-fund">
+            <div class="ira-fund-top">FPADX — Emerging Mkt</div>
+            <div class="ira-fund-body">
+              <div class="ira-fund-val">$77.75</div>
+              <div>7.9% of account</div>
+              <div class="ira-fund-gain">+$37.75 (+94.4%)</div>
+              <div style="margin-top:4px; font-size:10.5px;">High-growth potential markets. Highest risk, highest gains here.</div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:10px; background:rgba(0,255,204,0.08); border:3px solid var(--cyan); padding:10px 14px; font-size:12px; color:var(--white); line-height:1.6;">
+          <strong style="font-family:'Oswald',sans-serif; letter-spacing:1px;">VERDICT:</strong> This is a genuinely well-constructed portfolio for its size — diversified across US market, international, real estate, inflation protection, and bonds. Whoever set this up knew what they were doing. Do not disturb the allocation. Resume contributions. Even $50/month restarts the compounding. Max contribution allowed in 2025: $7,000/year.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ===== QUEST LOG ===== -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">06</div>
+      <div class="section-title">QUEST <span>LOG</span></div>
+    </div>
+
+    <div class="quest q-1">
+      <div class="quest-header">
+        <div class="quest-phase" style="color:var(--yellow)">YR 1</div>
+        <div class="quest-title-wrap">
+          <div class="quest-name">STABILIZATION + CREDIT REBUILD</div>
+          <div class="quest-timeline">April 2026 → April 2027 · THE FOUNDATION YEAR</div>
+        </div>
+      </div>
+      <div class="quest-body">
+        <div class="quest-objective">
+          <div class="obj-check active"></div>
+          <div class="obj-text"><strong>WEEK 1:</strong> Open a dedicated savings account and transfer $700 labeled "2026 TAXES." Set up automatic transfer of $700/month going forward. Non-negotiable.</div>
+        </div>
+        <div class="quest-objective">
+          <div class="obj-check active"></div>
+          <div class="obj-text"><strong>WEEK 1:</strong> Log your Discover credit limit. Calculate your utilization percentage. This is your credit score benchmark number.</div>
+        </div>
+        <div class="quest-objective">
+          <div class="obj-check active"></div>
+          <div class="obj-text"><strong>WEEK 2:</strong> Finish and file your 2025 taxes. If you owe, call IRS and set up an installment agreement (usually simple, ~$31 setup fee). Do not leave this open.</div>
+        </div>
+        <div class="quest-objective">
+          <div class="obj-check"></div>
+          <div class="obj-text"><strong>MONTH 1–5:</strong> Put $400–500/month toward the Discover card. At $500/month it's gone in 5 months. Zero missed payments on everything — car loan, CC, any other bill. Autopay the minimums as a floor.</div>
+        </div>
+        <div class="quest-objective">
+          <div class="obj-check"></div>
+          <div class="obj-text"><strong>MONTH 2:</strong> Start tracking every mile driven for Uber Eats. App recommendation: Stride or Everlance (free). At 67¢/mile, this is likely your biggest 2026 tax deduction. You may owe much less than 27% once mileage is deducted — but still hold it until you know.</div>
+        </div>
+        <div class="quest-objective">
+          <div class="obj-check"></div>
+          <div class="obj-text"><strong>MONTH 2:</strong> Pull your free credit report from AnnualCreditReport.com. Look for errors — 1 in 5 people have one. Dispute anything inaccurate through each bureau directly.</div>
+        </div>
+        <div class="quest-objective">
+          <div class="obj-check"></div>
+          <div class="obj-text"><strong>MONTH 3:</strong> Build $1,000 emergency fund before increasing any other investment. Park it in a high-yield savings account (Ally, Marcus, SoFi — all free, ~4.5% APY). This is your shield against going back into credit card debt.</div>
+        </div>
+        <div class="quest-objective">
+          <div class="obj-check"></div>
+          <div class="obj-text"><strong>MONTH 5–6:</strong> CC is paid off. Do NOT close the card. Set one small recurring charge to it (Netflix, Spotify, gas) and autopay the full balance monthly. Utilization drops to near 0%. Score jumps.</div>
+        </div>
+        <div class="quest-objective">
+          <div class="obj-check"></div>
+          <div class="obj-text"><strong>MONTH 6:</strong> Resume Roth IRA contributions. Start at $50–100/month. Even this amount compounding tax-free over decades is significant.</div>
+        </div>
+        <div class="quest-objective">
+          <div class="obj-check"></div>
+          <div class="obj-text"><strong>MONTH 6–12:</strong> Begin redirecting the ex-CC payment ($400–500/month) toward the auto loan. At this rate you could have it paid off 2–3 years early.</div>
+        </div>
+        <div class="quest-objective">
+          <div class="obj-check"></div>
+          <div class="obj-text"><strong>YEAR 1 GOAL:</strong> Credit score 700+. CC debt zero. Emergency fund $1,000+. Tax situation clean. Roth IRA reactivated. Net worth no longer deeply negative.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quest q-2" style="margin-top:12px;">
+      <div class="quest-header">
+        <div class="quest-phase" style="color:var(--black)">YR 3</div>
+        <div class="quest-title-wrap">
+          <div class="quest-name">SKILL MONETIZATION + ENTITY FORMATION</div>
+          <div class="quest-timeline">2027–2029 · THE TRANSITION YEARS</div>
+        </div>
+      </div>
+      <div class="quest-body">
+        <div class="quest-objective">
+          <div class="obj-check"></div>
+          <div class="obj-text"><strong>Auto loan cleared</strong> (ahead of schedule if the CC payment is redirected). This frees $276/month for deployment.</div>
+        </div>
+        <div class="quest-objective">
+          <div class="obj-check"></div>
+          <div class="obj-text"><strong>Form an LLC.</strong> Even if you're still driving for Uber Eats, operating as an LLC changes what's deductible. Phone, mileage, home office, education — all potential deductions. Consult a CPA who works with gig workers (cost: ~$150–300/year for a simple return).</div>
+        </div>
+        <div class="quest-objective">
+          <div class="obj-check"></div>
+          <div class="obj-text"><strong>Identify the bridge skill that generates income.</strong> Financial literacy coaching, Spanish-English professional tutoring, family wealth education, community systems consulting — you have real knowledge most families in your environment don't. What's the form it takes that people would pay for?</div>
+        </div>
+        <div class="quest-objective">
+          <div class="obj-check"></div>
+          <div class="obj-text"><strong>First income stream outside labor:</strong> could be a digital product, a recurring workshop, a small consulting offering. The goal isn't scale yet — it's proving you can generate money from something you created rather than hours you drove.</div>
+        </div>
+        <div class="quest-objective">
+          <div class="obj-check"></div>
+          <div class="obj-text"><strong>Roth IRA maxing progress:</strong> Working toward $500/month contributions ($6,000/year). At that rate and 8% returns, the account is at $20,000–25,000 by year 3 and growing fast.</div>
+        </div>
+        <div class="quest-objective">
+          <div class="obj-check"></div>
+          <div class="obj-text"><strong>Credit score 750+:</strong> At this level, you qualify for the best rates on future loans, credit cards with actual rewards, and apartment applications become non-issues.</div>
+        </div>
+        <div class="quest-objective">
+          <div class="obj-check"></div>
+          <div class="obj-text"><strong>Family ecosystem contribution:</strong> By year 3, you're not just paying rent — you're the financial literacy resource for 9 people. This is the bridge role manifesting. Knowledge shared compounds too.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quest q-3" style="margin-top:12px;">
+      <div class="quest-header">
+        <div class="quest-phase" style="color:var(--yellow)">YR 5</div>
+        <div class="quest-title-wrap">
+          <div class="quest-name">BUSINESS ESTABLISHED · INTERNAL FREEDOM</div>
+          <div class="quest-timeline">2029–2031 · THE ARRIVAL</div>
+        </div>
+      </div>
+      <div class="quest-body">
+        <div class="quest-objective">
+          <div class="obj-check"></div>
+          <div class="obj-text"><strong>Business generating consistent income</strong> — not necessarily full-time yet, but enough that the identity of "business owner" is structurally real, not aspirational.</div>
+        </div>
+        <div class="quest-objective">
+          <div class="obj-check"></div>
+          <div class="obj-text"><strong>Zero consumer debt.</strong> CC gone since year 1. Auto gone by year 2–3. No new debt taken on for consumption.</div>
+        </div>
+        <div class="quest-objective">
+          <div class="obj-check"></div>
+          <div class="obj-text"><strong>Multiple income streams:</strong> business income + Roth IRA compounding + potentially rental income or a small investment portfolio outside the IRA.</div>
+        </div>
+        <div class="quest-objective">
+          <div class="obj-check"></div>
+          <div class="obj-text"><strong>The win condition you described:</strong> not stressing about money, not trading time for survival, occupying time as desired. This isn't a fantasy — it's the mathematical result of the moves above executed cleanly over 5 years.</div>
+        </div>
+        <div class="quest-objective">
+          <div class="obj-check"></div>
+          <div class="obj-text"><strong>The internal goal:</strong> The stability you're after isn't a bank balance — it's a relationship with yourself where your material life reflects your actual values. That work runs parallel to the financial work. Both are real. Both are on the clock.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ===== PRIORITY MOVES ===== -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">07</div>
+      <div class="section-title">PRIORITY <span>MOVE SEQUENCE</span></div>
+    </div>
+    <p style="font-size:13px; line-height:1.7; margin-bottom:14px; color:rgba(245,239,216,0.75)">Ordered by urgency. Not by importance to the 5-year goal — by what needs to happen first for everything else to be possible.</p>
+
+    <div class="move-stack">
+
+      <div class="move mv-now">
+        <div class="move-num">!!</div>
+        <div class="move-content">
+          <div class="move-title">OPEN THE TAX ACCOUNT — THIS WEEK</div>
+          <div class="move-detail">Separate savings account. Transfer $700 immediately (representing the last month). Set up auto-transfer of $700/month. Label it clearly. This single move stops the bleeding of a tax debt you can't currently see.</div>
+          <div class="move-meta" style="color:var(--pink)">↳ Timeline: 7 days · Cost: $0 · Impact: Stops a growing IRS liability</div>
+        </div>
+      </div>
+
+      <div class="move mv-now">
+        <div class="move-num">!!</div>
+        <div class="move-content">
+          <div class="move-title">FINISH 2025 TAXES + AUTOPAY EVERYTHING</div>
+          <div class="move-detail">File 2025 taxes ASAP. Set up autopay on Discover (full statement balance) and auto loan (minimum). These two moves protect the 35% payment history factor. One missed payment at this stage costs more than months of paydown progress.</div>
+          <div class="move-meta" style="color:var(--pink)">↳ Timeline: 30 days · Cost: $0–$50 (TurboTax or similar) · Impact: Stops credit score erosion</div>
+        </div>
+      </div>
+
+      <div class="move mv-30">
+        <div class="move-num">01</div>
+        <div class="move-content">
+          <div class="move-title">START TRACKING MILEAGE FOR UBER EATS</div>
+          <div class="move-detail">Download Stride (free). Every mile you drive for deliveries is deductible at 67¢/mile. If you drive 800 miles/month, that's $536 in deductions — reducing your taxable income by $6,400/year. This may bring your actual tax rate down significantly. But you need the records.</div>
+          <div class="move-meta" style="color:var(--orange)">↳ Timeline: This week · Cost: $0 · Impact: Could save $1,000–$2,000 in taxes annually</div>
+        </div>
+      </div>
+
+      <div class="move mv-30">
+        <div class="move-num">02</div>
+        <div class="move-content">
+          <div class="move-title">ATTACK THE DISCOVER CARD — $400–500/MONTH</div>
+          <div class="move-detail">$2,159 at ~24% APR. At $500/month: gone in 5 months with ~$123 in interest. Every dollar paid down also improves your credit utilization ratio, which is 30% of your credit score. Two benefits from one move. Start the month after the tax account is funded.</div>
+          <div class="move-meta" style="color:var(--orange)">↳ Timeline: Month 1–5 · Impact: Eliminates highest-interest debt + boosts credit score</div>
+        </div>
+      </div>
+
+      <div class="move mv-90">
+        <div class="move-num">03</div>
+        <div class="move-content">
+          <div class="move-title">BUILD $1,000 EMERGENCY FUND — HIGH-YIELD SAVINGS</div>
+          <div class="move-detail">Open Ally, Marcus, or SoFi (all free, ~4.5% APY). Build to $1,000 before anything else beyond minimums and CC attack. This prevents a car repair from sending you back to the credit card. Once built, don't touch it unless it's a true emergency — not a want, not a stress purchase.</div>
+          <div class="move-meta" style="color:var(--yellow); -webkit-text-stroke:0.3px #000">↳ Timeline: Month 2–3 · Impact: Prevents debt relapse loop</div>
+        </div>
+      </div>
+
+      <div class="move mv-yr">
+        <div class="move-num">04</div>
+        <div class="move-content">
+          <div class="move-title">RESUME ROTH IRA CONTRIBUTIONS — $50–100/MONTH</div>
+          <div class="move-detail">After the CC is dead and the emergency fund exists. Log into Fidelity and set up a monthly automatic contribution. Even $50/month into the existing diversified portfolio restarts compounding. At $100/month for 30 years at 8%: ~$160,000 tax-free. The account is already structured correctly — just feed it.</div>
+          <div class="move-meta" style="color:var(--cyan)">↳ Timeline: Month 6 · Impact: Tax-free retirement wealth, compounding resumes</div>
+        </div>
+      </div>
+
+      <div class="move mv-yr">
+        <div class="move-num">05</div>
+        <div class="move-content">
+          <div class="move-title">REDIRECT CC PAYMENT TO AUTO LOAN</div>
+          <div class="move-detail">Once the Discover card is zero, take that $400–500/month and add it to the auto loan payment. At that rate, a $11,850 loan gets knocked out years early. Once the car is paid off, you've freed $676/month ($276 + $400) that can go toward building real assets.</div>
+          <div class="move-meta" style="color:var(--cyan)">↳ Timeline: Month 6+ · Impact: Debt-free in 2–3 years total</div>
+        </div>
+      </div>
+
+      <div class="move mv-3yr">
+        <div class="move-num">06</div>
+        <div class="move-content">
+          <div class="move-title">FORM LLC + IDENTIFY THE BRIDGE BUSINESS</div>
+          <div class="move-detail">Once income is stable and credit is rebuilt: form a single-member LLC in Illinois (~$150 filing fee). This unlocks business deductions and is the structural move that transitions you from gig worker to business owner on paper first — then in practice. The business itself grows from what you're already doing: translating complex systems (financial, cultural, psychological) for people who need a guide.</div>
+          <div class="move-meta" style="color:var(--purple)">↳ Timeline: Year 2–3 · Impact: Tax access + business identity + income diversification</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ===== THIRD PARTY NOTES ===== -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">08</div>
+      <div class="section-title">THIRD-PARTY <span>OBSERVER NOTES</span></div>
+    </div>
+
+    <div class="callout dark">
+      <div class="callout-icon">🔭</div>
+      <div class="callout-text">
+        <strong>WHAT THE NUMBERS ACTUALLY SHOW:</strong> Your situation is not bad. It's clarifying. The credit score drop was a consequence of inattention — not incompetence. The tax gap is a knowledge gap — not a character flaw. The debt load is manageable at your income level. What's actually happening is: you have a working income, a legitimate investment account that's performing well, a housing advantage most of your peers don't have, and a 5-year vision that's directionally coherent. The gap between now and that vision is smaller than it feels.
+      </div>
+    </div>
+
+    <div class="callout secret" style="margin-top:12px;">
+      <div class="callout-icon">💡</div>
+      <div class="callout-text">
+        <strong>THE SELF-ESTEEM AND AUTHORITY GAP:</strong> You named it yourself — you know where you want to head, but self-esteem gets in the way of taking authority over the bridge role. From a purely strategic standpoint: the bridge isn't a service you provide when you feel worthy enough. It's a function you perform when others need crossing. The people in that house with you — 8 others, no mortgage, Chicago — they need someone who understands the maps. You have the maps. The Adler work isn't separate from the financial work. The courage to be financially sovereign and the courage to be the guide are the same muscle.
+      </div>
+    </div>
+
+    <div class="speech-bubble" style="margin-top:24px;">
+      <div class="bubble-text" style="color:var(--ink)">"Your starting position this year is not a verdict. It's a data point. The game responds to moves, not feelings about the board. Make the moves."</div>
+    </div>
+  </div>
+
+  <footer>
+    PLAYER: ALI · CHARACTER SHEET · PRIVATE STRATEGY DOCUMENT<br>
+    WORLD MAP VOL. 001 COMPANION · QUEST LOG ACTIVE · UPDATED APRIL 2026
+  </footer>
+
+</div>
+</body>
+</html>

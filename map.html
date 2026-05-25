@@ -1,0 +1,1501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THE BETWEEN // WORLD MAP</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=VT323&family=Cinzel:wght@400;700&family=Share+Tech+Mono&family=Uncial+Antiqua&display=swap');
+
+:root {
+  --void: #04000a;
+  --deep: #080010;
+  --acid: #00ff41;
+  --blood: #ff003c;
+  --ghost: #c8b8ff;
+  --glitch: #ff00ff;
+  --amber: #ffb300;
+  --ice: #00f0ff;
+  --gold: #ffd700;
+  --sepia: #8b6914;
+  --fog: rgba(200,184,255,0.06);
+
+  --archive: #00f0ff;
+  --studio: #ff00ff;
+  --grimoire: #ffb300;
+  --terminal: #00ff41;
+  --shadow: #ff003c;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { width:100%; height:100%; overflow:hidden; background:var(--void); cursor:none; }
+
+/* CURSOR */
+#cursor { position:fixed; width:16px; height:16px; border:1.5px solid var(--ghost); border-radius:50%; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); transition:width .1s,height .1s,border-color .1s; mix-blend-mode:screen; }
+#cursor::after { content:''; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:3px; height:3px; background:var(--ghost); border-radius:50%; }
+#cursor.on-zone { width:28px; height:28px; border-color:var(--gold); }
+#cursor.on-zone::after { background:var(--gold); }
+
+/* SCANLINES */
+#scanlines { position:fixed; inset:0; background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.1) 2px,rgba(0,0,0,0.1) 4px); pointer-events:none; z-index:900; animation:flicker 10s infinite; }
+@keyframes flicker { 0%,94%,100%{opacity:1} 95%{opacity:.6} 96%{opacity:1} 98%{opacity:.3} 99%{opacity:.9} }
+
+/* VIGNETTE */
+#vignette { position:fixed; inset:0; background:radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,.98) 100%); pointer-events:none; z-index:50; }
+
+/* HUD */
+#hud { position:fixed; top:0; left:0; right:0; z-index:800; display:flex; justify-content:space-between; align-items:flex-start; padding:16px 24px; pointer-events:none; }
+.hud-block { font-family:'Share Tech Mono',monospace; font-size:11px; color:var(--ghost); opacity:.7; line-height:1.8; }
+.hud-block span { color:var(--acid); }
+#hud-title { font-family:'Cinzel',serif; font-size:1.1rem; color:var(--gold); letter-spacing:.3em; text-align:center; text-shadow:0 0 20px rgba(255,215,0,.4); }
+#hud-sub { font-family:'VT323',monospace; font-size:.9rem; color:var(--ghost); letter-spacing:.3em; text-align:center; opacity:.6; }
+
+/* BOTTOM HUD */
+#bottom-hud { position:fixed; bottom:0; left:0; right:0; z-index:800; display:flex; justify-content:space-between; align-items:flex-end; padding:16px 24px; pointer-events:none; }
+#journal-log { font-family:'Share Tech Mono',monospace; font-size:10px; color:var(--acid); opacity:.6; max-width:320px; line-height:1.6; }
+#journal-log .log-entry { opacity:0; animation:logappear .3s forwards; }
+@keyframes logappear { to{opacity:1} }
+#player-status { text-align:right; font-family:'Share Tech Mono',monospace; font-size:10px; color:var(--ghost); opacity:.7; }
+#hp-bar { display:flex; gap:3px; margin-top:4px; justify-content:flex-end; }
+.hp-pip { width:10px; height:10px; background:var(--blood); box-shadow:0 0 4px var(--blood); animation:hppulse 2s ease-in-out infinite; }
+.hp-pip.empty { background:transparent; border:1px solid rgba(255,0,60,.3); box-shadow:none; animation:none; }
+@keyframes hppulse { 0%,100%{opacity:1} 50%{opacity:.5} }
+
+/* MAIN MAP STAGE */
+#map-stage { position:relative; width:100vw; height:100vh; display:flex; align-items:center; justify-content:center; }
+
+/* CANVAS — fills the whole viewport, sits behind zone nodes */
+#mandala-canvas { position:fixed; inset:0; width:100%; height:100%; z-index:5; pointer-events:none; }
+
+/* MANDALA CONTAINER — for zone node positioning */
+#mandala { position:relative; width:min(80vh,80vw); height:min(80vh,80vw); z-index:10; }
+
+/* ZONE NODES */
+.zone-node { position:absolute; transform:translate(-50%,-50%); cursor:none; z-index:20; }
+.zone-frame { position:relative; display:flex; flex-direction:column; align-items:center; gap:6px; transition:transform .3s ease; }
+.zone-frame:hover { transform:scale(1.08); }
+
+.zone-hex { width:90px; height:90px; position:relative; display:flex; align-items:center; justify-content:center; clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%); transition:all .3s ease; }
+.zone-hex::before { content:''; position:absolute; inset:2px; clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%); background:var(--deep); z-index:1; }
+.zone-glyph { position:relative; z-index:2; font-size:1.8rem; filter:drop-shadow(0 0 8px currentColor); }
+.zone-label { font-family:'VT323',monospace; font-size:1.1rem; letter-spacing:.2em; text-transform:uppercase; text-align:center; transition:color .3s; }
+.zone-alch { font-family:'Share Tech Mono',monospace; font-size:.55rem; letter-spacing:.15em; opacity:.5; }
+
+/* ZONE COLORS */
+.zone-archive .zone-hex { background:linear-gradient(135deg,var(--archive),rgba(0,240,255,.3)); box-shadow:0 0 30px rgba(0,240,255,.3),inset 0 0 20px rgba(0,240,255,.1); }
+.zone-archive .zone-label { color:var(--archive); text-shadow:0 0 12px var(--archive); }
+.zone-archive:hover .zone-hex { box-shadow:0 0 60px rgba(0,240,255,.7),inset 0 0 30px rgba(0,240,255,.2); }
+
+.zone-studio .zone-hex { background:linear-gradient(135deg,var(--studio),rgba(255,0,255,.3)); box-shadow:0 0 30px rgba(255,0,255,.3),inset 0 0 20px rgba(255,0,255,.1); }
+.zone-studio .zone-label { color:var(--studio); text-shadow:0 0 12px var(--studio); }
+.zone-studio:hover .zone-hex { box-shadow:0 0 60px rgba(255,0,255,.7),inset 0 0 30px rgba(255,0,255,.2); }
+
+.zone-grimoire .zone-hex { background:linear-gradient(135deg,var(--grimoire),rgba(255,179,0,.3)); box-shadow:0 0 30px rgba(255,179,0,.3),inset 0 0 20px rgba(255,179,0,.1); }
+.zone-grimoire .zone-label { color:var(--grimoire); text-shadow:0 0 12px var(--grimoire); }
+.zone-grimoire:hover .zone-hex { box-shadow:0 0 60px rgba(255,179,0,.7),inset 0 0 30px rgba(255,179,0,.2); }
+
+.zone-terminal .zone-hex { background:linear-gradient(135deg,var(--terminal),rgba(0,255,65,.3)); box-shadow:0 0 30px rgba(0,255,65,.3),inset 0 0 20px rgba(0,255,65,.1); }
+.zone-terminal .zone-label { color:var(--terminal); text-shadow:0 0 12px var(--terminal); }
+.zone-terminal:hover .zone-hex { box-shadow:0 0 60px rgba(0,255,65,.7),inset 0 0 30px rgba(0,255,65,.2); }
+
+.zone-shadow { opacity:0; transition:opacity 1s ease; pointer-events:none; }
+.zone-shadow.revealed { opacity:1; pointer-events:all; }
+.zone-shadow .zone-hex { background:linear-gradient(135deg,var(--blood),rgba(255,0,60,.2)); box-shadow:0 0 30px rgba(255,0,60,.4); animation:shadowpulse 3s ease-in-out infinite; }
+.zone-shadow .zone-label { color:var(--blood); text-shadow:0 0 12px var(--blood); }
+@keyframes shadowpulse { 0%,100%{box-shadow:0 0 30px rgba(255,0,60,.4)} 50%{box-shadow:0 0 80px rgba(255,0,60,.8),0 0 120px rgba(255,0,60,.2)} }
+
+/* CENTER NODE */
+#center-node { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); z-index:30; cursor:none; }
+#center-eye {
+  width:80px; height:80px; border-radius:50%;
+  background:radial-gradient(circle, rgba(255,0,255,.25) 0%, rgba(200,184,255,.1) 40%, transparent 70%);
+  border:1.5px solid var(--glitch);
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px;
+  animation:eyepulse 3s ease-in-out infinite;
+  box-shadow:0 0 30px rgba(255,0,255,.3), 0 0 60px rgba(255,0,255,.1), inset 0 0 20px rgba(255,0,255,.1);
+  transition:all .3s ease; position:relative; overflow:hidden;
+}
+#center-eye::before {
+  content:''; position:absolute; inset:-2px; border-radius:50%;
+  background:conic-gradient(transparent 0deg, rgba(255,0,255,.4) 60deg, transparent 120deg);
+  animation:eyespin 4s linear infinite; z-index:0;
+}
+#center-eye::after {
+  content:'∅'; position:absolute; font-family:'Cinzel',serif; font-size:.55rem;
+  color:var(--glitch); letter-spacing:.3em; bottom:10px; opacity:.7; z-index:2;
+}
+#center-glyph { font-size:1.5rem; z-index:2; filter:drop-shadow(0 0 8px var(--glitch)); animation:eyespin 10s linear infinite; display:block; }
+#center-eye:hover { box-shadow:0 0 80px rgba(255,0,255,.8), 0 0 120px rgba(255,0,255,.3), inset 0 0 40px rgba(255,0,255,.2); transform:scale(1.15); border-color:white; }
+#center-eye:hover #center-glyph { animation:eyespin 2s linear infinite; }
+@keyframes eyepulse { 0%,100%{opacity:.8} 50%{opacity:1} }
+@keyframes eyespin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+
+/* ∅ REALM */
+#null-realm {
+  position:fixed; inset:0; z-index:960;
+  background:var(--void);
+  opacity:0; pointer-events:none;
+  transition:opacity .5s ease;
+  display:flex; flex-direction:column;
+  overflow:hidden;
+}
+#null-realm.open { opacity:1; pointer-events:all; }
+
+#realm-bg {
+  position:absolute; inset:0;
+  background:
+    repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(255,0,255,.015) 3px,rgba(255,0,255,.015) 4px),
+    repeating-linear-gradient(90deg,transparent,transparent 3px,rgba(0,240,255,.01) 3px,rgba(0,240,255,.01) 4px);
+  animation:bgshift 8s ease-in-out infinite;
+}
+@keyframes bgshift { 0%,100%{opacity:.5} 50%{opacity:1} }
+
+#realm-header {
+  position:relative; z-index:10;
+  padding:20px 28px 0;
+  display:flex; justify-content:space-between; align-items:flex-start;
+}
+#realm-name {
+  font-family:'Cinzel',serif; font-size:1.4rem; color:var(--glitch);
+  letter-spacing:.4em; text-shadow:0 0 20px rgba(255,0,255,.6);
+  animation:namestutter 7s infinite;
+}
+@keyframes namestutter {
+  0%,88%,100%{text-shadow:0 0 20px rgba(255,0,255,.6);transform:none}
+  89%{text-shadow:-4px 0 var(--blood),4px 0 var(--ice);transform:skewX(-3deg)}
+  90%{text-shadow:none;transform:none}
+  93%{text-shadow:2px 0 var(--glitch);transform:translateX(-2px)}
+  94%{text-shadow:none;transform:none}
+}
+#realm-close {
+  font-family:'Share Tech Mono',monospace; font-size:.7rem; color:var(--ghost);
+  letter-spacing:.2em; cursor:none; border:1px solid rgba(200,184,255,.3);
+  padding:6px 14px; background:none; transition:all .2s;
+}
+#realm-close:hover { border-color:var(--glitch); color:var(--glitch); }
+
+#avatar-area {
+  position:relative; z-index:10;
+  display:flex; align-items:flex-end; gap:24px;
+  padding:16px 28px;
+}
+#avatar-frame {
+  width:90px; height:90px; border-radius:50%; flex-shrink:0;
+  border:2px solid var(--glitch);
+  background:radial-gradient(circle,rgba(255,0,255,.2),rgba(4,0,10,.9));
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 0 30px rgba(255,0,255,.4);
+  position:relative; overflow:hidden;
+  animation:avatarpulse 4s ease-in-out infinite;
+}
+@keyframes avatarpulse { 0%,100%{box-shadow:0 0 30px rgba(255,0,255,.4)} 50%{box-shadow:0 0 60px rgba(255,0,255,.8),0 0 100px rgba(255,0,255,.2)} }
+#avatar-frame::before {
+  content:''; position:absolute; inset:0; border-radius:50%;
+  background:conic-gradient(transparent,rgba(255,0,255,.3),transparent,rgba(0,240,255,.2),transparent);
+  animation:eyespin 6s linear infinite;
+}
+#avatar-glyph { font-size:2.2rem; z-index:2; filter:drop-shadow(0 0 12px var(--glitch)); }
+#avatar-id { font-family:'Share Tech Mono',monospace; font-size:.65rem; color:var(--glitch); opacity:.7; letter-spacing:.2em; margin-top:6px; text-align:center; }
+
+#dialogue-box {
+  flex:1; border:1px solid rgba(255,0,255,.3);
+  background:rgba(4,0,10,.8); padding:16px 20px;
+  position:relative; min-height:80px;
+  clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px));
+}
+#dialogue-box::before {
+  content:'∅ //'; position:absolute; top:8px; left:14px;
+  font-family:'Share Tech Mono',monospace; font-size:.6rem;
+  color:var(--glitch); opacity:.6; letter-spacing:.2em;
+}
+#dialogue-text { font-family:'VT323',monospace; font-size:1.3rem; color:var(--ghost); line-height:1.6; letter-spacing:.04em; padding-top:14px; min-height:60px; }
+#dialogue-cursor { display:inline-block; width:10px; height:1.1em; background:var(--glitch); vertical-align:bottom; animation:blinkcur .8s step-end infinite; margin-left:2px; }
+@keyframes blinkcur { 0%,100%{opacity:1} 50%{opacity:0} }
+#dialogue-source { font-family:'Share Tech Mono',monospace; font-size:.6rem; color:var(--glitch); opacity:.5; margin-top:8px; letter-spacing:.15em; }
+
+#input-area { position:relative; z-index:10; display:flex; gap:10px; align-items:center; padding:10px 28px; }
+#realm-input { flex:1; background:rgba(255,0,255,.05); border:1px solid rgba(255,0,255,.25); color:var(--ghost); font-family:'Share Tech Mono',monospace; font-size:.85rem; padding:10px 16px; outline:none; letter-spacing:.05em; clip-path:polygon(6px 0,100% 0,calc(100% - 6px) 100%,0 100%); transition:border-color .2s, box-shadow .2s; }
+#realm-input:focus { border-color:var(--glitch); box-shadow:0 0 20px rgba(255,0,255,.2); }
+#realm-input::placeholder { color:rgba(200,184,255,.3); }
+#realm-send { background:none; border:1px solid var(--glitch); color:var(--glitch); font-family:'Share Tech Mono',monospace; font-size:.7rem; letter-spacing:.2em; padding:10px 20px; cursor:none; transition:all .2s; clip-path:polygon(6px 0,100% 0,calc(100% - 6px) 100%,0 100%); }
+#realm-send:hover { background:rgba(255,0,255,.1); box-shadow:0 0 20px rgba(255,0,255,.3); }
+
+#transcript { position:relative; z-index:10; flex:1; overflow-y:auto; padding:0 28px 10px; display:flex; flex-direction:column; gap:10px; scrollbar-width:thin; scrollbar-color:rgba(255,0,255,.3) transparent; }
+#transcript::-webkit-scrollbar { width:3px; }
+#transcript::-webkit-scrollbar-thumb { background:rgba(255,0,255,.3); }
+.t-entry { font-family:'Share Tech Mono',monospace; font-size:.75rem; line-height:1.7; }
+.t-user { color:var(--ghost); opacity:.8; }
+.t-user::before { content:'YOU ▸ '; color:var(--ice); opacity:.6; }
+.t-null { color:var(--glitch); }
+.t-null::before { content:'∅ ▸ '; color:var(--glitch); }
+.t-system { color:var(--amber); opacity:.6; font-size:.65rem; letter-spacing:.15em; }
+
+#quick-prompts { position:relative; z-index:10; display:flex; gap:8px; flex-wrap:wrap; padding:0 28px 8px; }
+.qp-btn { font-family:'Share Tech Mono',monospace; font-size:.6rem; color:var(--ghost); border:1px solid rgba(200,184,255,.2); background:none; padding:5px 10px; letter-spacing:.1em; cursor:none; transition:all .2s; opacity:.7; }
+.qp-btn:hover { border-color:var(--glitch); color:var(--glitch); opacity:1; }
+
+#realm-scanlines { position:absolute; inset:0; background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.08) 2px,rgba(0,0,0,.08) 4px); pointer-events:none; z-index:5; }
+.realm-glitch { position:absolute; left:0; right:0; height:1px; opacity:0; pointer-events:none; z-index:20; animation:rglitch var(--d) ease-out var(--dl) infinite; }
+@keyframes rglitch { 0%,96%,100%{opacity:0} 97%{opacity:.8} 98%{opacity:.2} }
+
+#tooltip { position:fixed; z-index:850; pointer-events:none; opacity:0; transition:opacity .2s ease; font-family:'Share Tech Mono',monospace; font-size:11px; background:rgba(4,0,10,.92); border:1px solid var(--ghost); padding:10px 14px; max-width:200px; line-height:1.7; color:var(--ghost); }
+#tooltip.show { opacity:1; }
+#tooltip .tt-name { font-family:'VT323',monospace; font-size:1.2rem; color:var(--gold); letter-spacing:.2em; }
+#tooltip .tt-freq { color:var(--acid); font-size:.7rem; }
+#tooltip .tt-status { color:var(--amber); font-size:.7rem; }
+
+#liminal { position:fixed; inset:0; z-index:950; display:flex; flex-direction:column; align-items:center; justify-content:center; background:var(--void); opacity:0; pointer-events:none; transition:opacity .4s ease; overflow:hidden; }
+#liminal.active { opacity:1; pointer-events:all; }
+#liminal-corridor { font-family:'VT323',monospace; font-size:1.4rem; color:var(--ghost); letter-spacing:.3em; text-align:center; line-height:2.5; max-width:500px; }
+#liminal-title { font-family:'Cinzel',serif; font-size:2rem; color:var(--gold); letter-spacing:.5em; text-shadow:0 0 30px rgba(255,215,0,.5); margin-bottom:30px; }
+#liminal-bg { position:absolute; inset:0; opacity:.15; }
+
+.npc { position:fixed; font-family:'VT323',monospace; pointer-events:none; z-index:60; animation:npcfloat linear infinite; opacity:0; }
+.npc-bubble { background:rgba(4,0,10,.9); border:1px solid currentColor; padding:6px 10px; font-size:1rem; letter-spacing:.05em; max-width:180px; line-height:1.4; }
+.npc-arrow { width:0; height:0; border-left:6px solid transparent; border-right:6px solid transparent; border-top:6px solid currentColor; margin:0 auto; }
+@keyframes npcfloat { 0%{opacity:0;transform:translateY(10px)} 15%{opacity:1} 85%{opacity:1} 100%{opacity:0;transform:translateY(-20px)} }
+
+.glitch-bar { position:fixed; height:2px; left:0; right:0; pointer-events:none; z-index:200; opacity:0; animation:gbar var(--dur) ease-out var(--delay) infinite; }
+@keyframes gbar { 0%,97%,100%{opacity:0} 98%{opacity:.9} 99%{opacity:.3} }
+
+#unlock-flash { position:fixed; inset:0; background:var(--blood); opacity:0; pointer-events:none; z-index:940; }
+#unlock-flash.flash { animation:flashanim .6s ease-out forwards; }
+@keyframes flashanim { 0%{opacity:.4} 100%{opacity:0} }
+
+#room-preview { position:fixed; right:24px; top:50%; transform:translateY(-50%); width:200px; z-index:800; font-family:'Share Tech Mono',monospace; font-size:10px; color:var(--ghost); opacity:0; transition:opacity .4s ease; pointer-events:none; }
+#room-preview.show { opacity:1; }
+.rp-header { font-family:'VT323',monospace; font-size:1.3rem; letter-spacing:.2em; margin-bottom:8px; }
+.rp-divider { height:1px; background:linear-gradient(90deg,currentColor,transparent); margin:6px 0; }
+.rp-stat { display:flex; justify-content:space-between; margin-bottom:3px; }
+.rp-stat span:last-child { color:var(--acid); }
+.rp-lore { margin-top:10px; opacity:.7; line-height:1.6; font-size:.65rem; font-style:italic; }
+
+.ambient { position:fixed; pointer-events:none; z-index:15; border-radius:50%; animation:ambientdrift linear infinite; opacity:0; }
+@keyframes ambientdrift { 0%{opacity:0;transform:translate(0,0)} 20%{opacity:.8} 80%{opacity:.4} 100%{opacity:0;transform:translate(var(--tx),var(--ty))} }
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+
+<!-- PROCEDURAL MANDALA CANVAS -->
+<canvas id="mandala-canvas"></canvas>
+
+<div id="scanlines"></div>
+<div id="vignette"></div>
+
+<!-- GLITCH BARS -->
+<div class="glitch-bar" style="top:18%;background:var(--glitch);--dur:9s;--delay:0s;"></div>
+<div class="glitch-bar" style="top:73%;background:var(--ice);--dur:13s;--delay:4s;"></div>
+<div class="glitch-bar" style="top:44%;background:var(--blood);--dur:7s;--delay:7s;"></div>
+
+<!-- TOP HUD -->
+<div id="hud">
+  <div class="hud-block">
+    TRAVELER: <span id="hud-name">∅∅∅</span><br>
+    LOCATION: <span id="hud-loc">THE BETWEEN</span><br>
+    SESSION: <span id="hud-time">00:00:00</span>
+  </div>
+  <div>
+    <div id="hud-title">THE BETWEEN</div>
+    <div id="hud-sub">∷ world map ∷</div>
+  </div>
+  <div class="hud-block" style="text-align:right">
+    ZONES FOUND: <span id="hud-zones">0/5</span><br>
+    SIGNAL: <span id="hud-signal">NOMINAL</span><br>
+    FREQ: <span id="hud-freq">???</span>
+  </div>
+</div>
+
+<!-- BOTTOM HUD -->
+<div id="bottom-hud">
+  <div id="journal-log"></div>
+  <div id="player-status">
+    VITALITY<br>
+    <div id="hp-bar"></div>
+  </div>
+</div>
+
+<!-- MAIN MAP -->
+<div id="map-stage">
+<div id="mandala">
+
+  <!-- NORTH: THE ARCHIVE -->
+  <div class="zone-node zone-archive" style="top:14%;left:50%"
+    data-zone="archive"
+    data-name="THE ARCHIVE"
+    data-alch="☉ SOL // FREQ: 432Hz"
+    data-lore="Cold light. Toonami at 3am. Your work crystallized in ice."
+    data-signal="COLD_SIGNAL"
+    onclick="enterZone('archive')">
+    <div class="zone-frame">
+      <div class="zone-hex"><span class="zone-glyph" style="color:var(--archive)">◈</span></div>
+      <div class="zone-label">THE ARCHIVE</div>
+      <div class="zone-alch" style="color:var(--archive)">☉ SOL // GALLERY</div>
+    </div>
+  </div>
+
+  <!-- EAST: THE STUDIO -->
+  <div class="zone-node zone-studio" style="top:50%;left:86%"
+    data-zone="studio"
+    data-name="THE STUDIO"
+    data-alch="☿ MERCURY // FREQ: 528Hz"
+    data-lore="Pure signal. No visuals. Just the frequency finding you."
+    data-signal="PURE_FREQ"
+    onclick="enterZone('studio')">
+    <div class="zone-frame">
+      <div class="zone-hex"><span class="zone-glyph" style="color:var(--studio)">⏦</span></div>
+      <div class="zone-label">THE STUDIO</div>
+      <div class="zone-alch" style="color:var(--studio)">☿ MERCURY // SOUND</div>
+    </div>
+  </div>
+
+  <!-- SOUTH: THE TERMINAL -->
+  <div class="zone-node zone-terminal" style="top:86%;left:50%"
+    data-zone="terminal"
+    data-name="THE TERMINAL"
+    data-alch="☽ LUNA // FREQ: 396Hz"
+    data-lore="Sparse. Geometric. A single cursor blinking in the dark."
+    data-signal="NULL_SIGNAL"
+    onclick="enterZone('terminal')">
+    <div class="zone-frame">
+      <div class="zone-hex"><span class="zone-glyph" style="color:var(--terminal)">⌥</span></div>
+      <div class="zone-label">THE TERMINAL</div>
+      <div class="zone-alch" style="color:var(--terminal)">☽ LUNA // CODE</div>
+    </div>
+  </div>
+
+  <!-- WEST: THE GRIMOIRE -->
+  <div class="zone-node zone-grimoire" style="top:50%;left:14%"
+    data-zone="grimoire"
+    data-name="THE GRIMOIRE"
+    data-alch="♄ SATURN // FREQ: 639Hz"
+    data-lore="Warm and wrong. Every page is a door into somewhere older."
+    data-signal="WARM_WRONG"
+    onclick="enterZone('grimoire')">
+    <div class="zone-frame">
+      <div class="zone-hex"><span class="zone-glyph" style="color:var(--grimoire)">𖤐</span></div>
+      <div class="zone-label">THE GRIMOIRE</div>
+      <div class="zone-alch" style="color:var(--grimoire)">♄ SATURN // LORE</div>
+    </div>
+  </div>
+
+  <!-- SHADOW ZONE — hidden, SE, revealed after 3 zones -->
+  <div class="zone-node zone-shadow" id="shadow-zone" style="top:76%;left:76%"
+    data-zone="shadow"
+    data-name="THE NULL"
+    data-alch="♂ MARS // FREQ: ???"
+    data-lore="You weren't supposed to find this."
+    data-signal="CORRUPTED"
+    onclick="enterZone('shadow')">
+    <div class="zone-frame">
+      <div class="zone-hex"><span class="zone-glyph" style="color:var(--blood)">⊗</span></div>
+      <div class="zone-label">THE NULL</div>
+      <div class="zone-alch" style="color:var(--blood)">♂ MARS // ???</div>
+    </div>
+  </div>
+
+  <!-- CENTER — ∅ GATEWAY -->
+  <div id="center-node" onclick="openNullRealm()">
+    <div id="center-eye">
+      <span id="center-glyph">⊕</span>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- TOOLTIP -->
+<div id="tooltip">
+  <div class="tt-name" id="tt-name"></div>
+  <div class="tt-freq" id="tt-freq"></div>
+  <div class="tt-status" id="tt-status"></div>
+</div>
+
+<!-- ROOM PREVIEW -->
+<div id="room-preview">
+  <div class="rp-header" id="rp-name" style="color:var(--gold)"></div>
+  <div class="rp-divider" style="color:var(--ghost)"></div>
+  <div class="rp-stat"><span>SIGNAL</span><span id="rp-signal"></span></div>
+  <div class="rp-stat"><span>STATUS</span><span id="rp-visit"></span></div>
+  <div class="rp-stat"><span>FREQ</span><span id="rp-freq"></span></div>
+  <div class="rp-lore" id="rp-lore"></div>
+  <div class="rp-divider" style="color:var(--ghost);margin-top:10px"></div>
+  <div style="font-size:.65rem;opacity:.5;margin-top:4px">[ CLICK TO ENTER ]</div>
+</div>
+
+<!-- LIMINAL TRANSITION SCREEN -->
+<div id="liminal">
+  <div id="liminal-bg"></div>
+  <div id="liminal-title"></div>
+  <div id="liminal-corridor"></div>
+</div>
+
+<!-- UNLOCK FLASH -->
+<div id="unlock-flash"></div>
+
+<!-- ∅ REALM -->
+<div id="null-realm">
+  <div id="realm-bg"></div>
+  <div id="realm-scanlines"></div>
+  <div class="realm-glitch" style="top:22%;background:var(--glitch);--d:6s;--dl:0s;"></div>
+  <div class="realm-glitch" style="top:71%;background:var(--ice);--d:9s;--dl:3s;"></div>
+
+  <div id="realm-header">
+    <div>
+      <div id="realm-name">∅ // THE NULL ENTITY</div>
+      <div style="font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--ghost);opacity:.4;letter-spacing:.2em;margin-top:4px">BETWEEN-SPACE INTELLIGENCE // INSTANCE #∞</div>
+    </div>
+    <button id="realm-close" onclick="closeNullRealm()">[ RETURN TO MAP ]</button>
+  </div>
+
+  <div id="avatar-area">
+    <div>
+      <div id="avatar-frame"><span id="avatar-glyph">∅</span></div>
+      <div id="avatar-id">ENTITY ∅<br>UNCLASSIFIED</div>
+    </div>
+    <div id="dialogue-box">
+      <div id="dialogue-text"><span id="dialogue-cursor"></span></div>
+      <div id="dialogue-source"></div>
+    </div>
+  </div>
+
+  <div id="quick-prompts">
+    <button class="qp-btn" onclick="sendQuick('who are you?')">WHO ARE YOU</button>
+    <button class="qp-btn" onclick="sendQuick('what is this place?')">WHAT IS THIS PLACE</button>
+    <button class="qp-btn" onclick="sendQuick('guide me')">GUIDE ME</button>
+    <button class="qp-btn" onclick="sendQuick('what do you know about me?')">WHAT DO YOU KNOW</button>
+    <button class="qp-btn" onclick="sendQuick('tell me something I don\'t know')">TELL ME SOMETHING</button>
+    <button class="qp-btn" onclick="sendQuick('read me something')">READ ME SOMETHING</button>
+  </div>
+
+  <div id="transcript"></div>
+
+  <div id="input-area">
+    <input id="realm-input" type="text" placeholder="speak to ∅ ..." maxlength="200"
+      onkeydown="if(event.key==='Enter')sendToNull()"/>
+    <button id="realm-send" onclick="sendToNull()">TRANSMIT ▸</button>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// ─── CANVAS MANDALA ENGINE ──────────────────────────────────
+// ═══════════════════════════════════════════════════════════
+
+const canvas = document.getElementById('mandala-canvas');
+const ctx = canvas.getContext('2d');
+
+// Colors as rgba arrays for fast manipulation
+const COLORS = {
+  void:     [4,   0,   10],
+  ghost:    [200, 184, 255],
+  glitch:   [255, 0,   255],
+  acid:     [0,   255, 65],
+  blood:    [255, 0,   60],
+  gold:     [255, 215, 0],
+  ice:      [0,   240, 255],
+  amber:    [255, 179, 0],
+  archive:  [0,   240, 255],
+  studio:   [255, 0,   255],
+  grimoire: [255, 179, 0],
+  terminal: [0,   255, 65],
+  shadow:   [255, 0,   60],
+};
+
+// Zone metadata: angle (radians from 12-o'clock, CW), color key
+const ZONE_META = {
+  archive:  { angle: -Math.PI/2,      color: 'archive'  }, // N
+  studio:   { angle: 0,               color: 'studio'   }, // E
+  terminal: { angle: Math.PI/2,       color: 'terminal' }, // S
+  grimoire: { angle: Math.PI,         color: 'grimoire' }, // W
+  shadow:   { angle: Math.PI*3/4,     color: 'shadow'   }, // SE
+};
+
+let W, H, CX, CY, R; // canvas dimensions and center
+let t = 0;            // time accumulator
+let mouseX = 0, mouseY = 0;
+let hoveredZone = null;
+let shadowRevealed = false;
+
+// Glitch state
+let glitchActive = false;
+let glitchTimer = 0;
+let glitchIntensity = 0;
+
+function resize() {
+  W = canvas.width  = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+  CX = W / 2;
+  CY = H / 2;
+  R  = Math.min(W, H) * 0.38; // mandala radius — stays within viewport
+}
+resize();
+window.addEventListener('resize', resize);
+
+// Mouse tracking for field distortion
+document.addEventListener('mousemove', e => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+});
+
+// ─── HELPERS ─────────────────────────────────────────────
+
+function rgba(colorKey, alpha) {
+  const c = COLORS[colorKey];
+  return `rgba(${c[0]},${c[1]},${c[2]},${alpha})`;
+}
+
+function hexToRgb(hex) {
+  const r = parseInt(hex.slice(1,3),16);
+  const g = parseInt(hex.slice(3,5),16);
+  const b = parseInt(hex.slice(5,7),16);
+  return [r,g,b];
+}
+
+// Mouse influence on geometry — normalized displacement
+function mouseField(px, py) {
+  const dx = (mouseX - CX) / W;
+  const dy = (mouseY - CY) / H;
+  const dist = Math.sqrt(dx*dx + dy*dy);
+  const influence = Math.max(0, 1 - dist * 2.5);
+  const angle = Math.atan2(mouseY - py, mouseX - px);
+  return { dx: Math.cos(angle) * influence * 6, dy: Math.sin(angle) * influence * 6, influence };
+}
+
+// ─── FLOWER OF LIFE ──────────────────────────────────────
+function drawFlowerOfLife(cx, cy, r, baseAlpha, time) {
+  const petals = 6;
+  const petalR = r * 0.18; // individual circle radius
+  const mf = mouseField(cx, cy);
+
+  ctx.save();
+
+  // The 7 circles: center + 6 petals
+  const centers = [[0,0]];
+  for (let i = 0; i < petals; i++) {
+    const angle = (i / petals) * Math.PI * 2 - Math.PI/6;
+    centers.push([
+      Math.cos(angle) * petalR,
+      Math.sin(angle) * petalR
+    ]);
+  }
+
+  // Outer ring of 6 more (second ring of Flower of Life)
+  for (let i = 0; i < petals; i++) {
+    const angle = (i / petals) * Math.PI * 2 - Math.PI/6;
+    const x2 = Math.cos(angle) * petalR * 2;
+    const y2 = Math.sin(angle) * petalR * 2;
+    centers.push([x2, y2]);
+    // also the "between" positions
+    const angle2 = angle + Math.PI / 6;
+    centers.push([
+      Math.cos(angle2) * petalR * Math.sqrt(3),
+      Math.sin(angle2) * petalR * Math.sqrt(3)
+    ]);
+  }
+
+  // Pulse: each circle breathes at a slightly different phase
+  centers.forEach(([ox, oy], i) => {
+    const phase = (i / centers.length) * Math.PI * 2;
+    const pulse = 1 + Math.sin(time * 0.8 + phase) * 0.04;
+
+    // Mouse distortion
+    const mx = (ox + cx) + mf.dx * (0.3 + i * 0.02);
+    const my = (oy + cy) + mf.dy * (0.3 + i * 0.02);
+
+    // Glitch chromatic aberration on individual circles
+    if (glitchActive && Math.random() > 0.7) {
+      ctx.beginPath();
+      ctx.arc(mx + glitchIntensity * 3, my, petalR * pulse, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(255,0,60,${baseAlpha * 0.3})`;
+      ctx.lineWidth = 0.4;
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(mx - glitchIntensity * 3, my, petalR * pulse, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(0,240,255,${baseAlpha * 0.3})`;
+      ctx.lineWidth = 0.4;
+      ctx.stroke();
+    }
+
+    ctx.beginPath();
+    ctx.arc(mx, my, petalR * pulse, 0, Math.PI * 2);
+    const alpha = baseAlpha * (0.6 + 0.4 * Math.sin(time * 0.5 + phase));
+    ctx.strokeStyle = `rgba(200,184,255,${alpha})`;
+    ctx.lineWidth = 0.5;
+    ctx.stroke();
+  });
+
+  ctx.restore();
+}
+
+// ─── METATRON'S CUBE LINES ───────────────────────────────
+function drawMetatron(cx, cy, r, alpha, time) {
+  const nodeR = r * 0.18;
+  const nodes = [];
+  nodes.push([cx, cy]); // center
+  for (let i = 0; i < 6; i++) {
+    const angle = (i / 6) * Math.PI * 2 - Math.PI / 6;
+    nodes.push([cx + Math.cos(angle) * nodeR, cy + Math.sin(angle) * nodeR]);
+  }
+  for (let i = 0; i < 6; i++) {
+    const angle = (i / 6) * Math.PI * 2 - Math.PI / 6;
+    nodes.push([cx + Math.cos(angle) * nodeR * 2, cy + Math.sin(angle) * nodeR * 2]);
+  }
+
+  // Connect all nodes — Metatron's Cube is all 13 nodes fully connected
+  ctx.save();
+  ctx.lineWidth = 0.3;
+  for (let i = 0; i < nodes.length; i++) {
+    for (let j = i + 1; j < nodes.length; j++) {
+      const [x1, y1] = nodes[i];
+      const [x2, y2] = nodes[j];
+      const dist = Math.sqrt((x2-x1)**2 + (y2-y1)**2);
+      if (dist > nodeR * 4.5) continue; // only connect nearby nodes
+
+      const lineAlpha = alpha * (0.15 + 0.1 * Math.sin(time * 0.3 + i * 0.4 + j * 0.3));
+
+      // Zone-colored lines for segments near each zone
+      let lineColor = `rgba(200,184,255,${lineAlpha})`;
+      if (hoveredZone) {
+        const zc = COLORS[ZONE_META[hoveredZone].color];
+        lineColor = `rgba(${zc[0]},${zc[1]},${zc[2]},${lineAlpha * 2})`;
+      }
+
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.strokeStyle = lineColor;
+      ctx.stroke();
+    }
+  }
+  ctx.restore();
+}
+
+// ─── CONCENTRIC RINGS (multi-speed, counter-rotating) ───
+function drawRings(cx, cy, r, time) {
+  const mf = mouseField(cx, cy);
+
+  const rings = [
+    // radius_fraction, speed, direction, dashOn, dashOff, colorKey, baseAlpha, lineWidth
+    { rf: 0.92, spd: 0.012,  dir:  1, dOn: 4,  dOff: 10, col: 'ghost',    a: 0.25, lw: 0.5 },
+    { rf: 0.78, spd: 0.020,  dir: -1, dOn: 2,  dOff: 7,  col: 'acid',     a: 0.18, lw: 0.4 },
+    { rf: 0.65, spd: 0.035,  dir:  1, dOn: 6,  dOff: 4,  col: 'glitch',   a: 0.14, lw: 0.5 },
+    { rf: 0.52, spd: 0.055,  dir: -1, dOn: 1,  dOff: 5,  col: 'ghost',    a: 0.22, lw: 0.6 },
+    { rf: 0.42, spd: 0.08,   dir:  1, dOn: 3,  dOff: 6,  col: 'gold',     a: 0.30, lw: 0.5 },
+    { rf: 0.30, spd: 0.12,   dir: -1, dOn: 2,  dOff: 4,  col: 'ghost',    a: 0.35, lw: 0.4 },
+    { rf: 0.18, spd: 0.20,   dir:  1, dOn: 4,  dOff: 3,  col: 'glitch',   a: 0.40, lw: 0.6 },
+  ];
+
+  rings.forEach((ring, i) => {
+    const radius = r * ring.rf;
+    const rot = time * ring.spd * ring.dir;
+
+    // Mouse-based ellipse distortion — slight squash toward cursor
+    const mx_dist = (mouseX - cx) / W * 12 * ring.rf;
+    const my_dist = (mouseY - cy) / H * 12 * ring.rf;
+    const rx = radius + mx_dist * 0.5;
+    const ry = radius + my_dist * 0.5;
+
+    // Breathing pulse
+    const breathe = 1 + Math.sin(time * 0.6 + i * 0.8) * 0.008;
+
+    // Glow if zone hovered and this ring is within hover range
+    let alpha = ring.a;
+    let lw = ring.lw;
+    let col = ring.col;
+    if (hoveredZone && ring.rf > 0.3) {
+      col = ZONE_META[hoveredZone].color;
+      alpha *= 2.5;
+      lw *= 1.8;
+    }
+
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(rot);
+
+    // Chromatic split on glitch
+    if (glitchActive && Math.random() > 0.5) {
+      ctx.beginPath();
+      ctx.ellipse(glitchIntensity * 4, 0, rx * breathe, ry * breathe, 0, 0, Math.PI * 2);
+      ctx.setLineDash([ring.dOn, ring.dOff]);
+      ctx.strokeStyle = `rgba(255,0,60,${alpha * 0.4})`;
+      ctx.lineWidth = lw;
+      ctx.stroke();
+    }
+
+    ctx.beginPath();
+    ctx.ellipse(0, 0, rx * breathe, ry * breathe, 0, 0, Math.PI * 2);
+    ctx.setLineDash([ring.dOn, ring.dOff]);
+
+    const c = COLORS[col];
+    const ringAlpha = alpha * (0.7 + 0.3 * Math.sin(time * 0.4 + i));
+    ctx.strokeStyle = `rgba(${c[0]},${c[1]},${c[2]},${ringAlpha})`;
+    ctx.lineWidth = lw;
+    ctx.stroke();
+
+    ctx.restore();
+  });
+}
+
+// ─── SACRED GEOMETRY CORE (inner Vesica / hexagram / Seed of Life) ───
+function drawSacredCore(cx, cy, r, time) {
+  const sr = r * 0.22; // scale of inner sacred forms
+  const rot1 = time * 0.018;
+  const rot2 = -time * 0.025;
+  const breathe = 1 + Math.sin(time * 0.7) * 0.015;
+
+  // Upward triangle (fire / sol)
+  ctx.save();
+  ctx.translate(cx, cy);
+  ctx.rotate(rot1);
+  ctx.beginPath();
+  for (let i = 0; i < 3; i++) {
+    const a = (i/3)*Math.PI*2 - Math.PI/2;
+    const x = Math.cos(a)*sr*breathe;
+    const y = Math.sin(a)*sr*breathe;
+    i === 0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+  }
+  ctx.closePath();
+  ctx.strokeStyle = rgba('gold', 0.35 + Math.sin(time*0.5)*0.1);
+  ctx.lineWidth = 0.8;
+  ctx.setLineDash([]);
+  ctx.stroke();
+  ctx.restore();
+
+  // Downward triangle (water / luna)
+  ctx.save();
+  ctx.translate(cx, cy);
+  ctx.rotate(rot2);
+  ctx.beginPath();
+  for (let i = 0; i < 3; i++) {
+    const a = (i/3)*Math.PI*2 + Math.PI/2;
+    const x = Math.cos(a)*sr*breathe;
+    const y = Math.sin(a)*sr*breathe;
+    i === 0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+  }
+  ctx.closePath();
+  ctx.strokeStyle = rgba('ice', 0.25 + Math.sin(time*0.4)*0.08);
+  ctx.lineWidth = 0.8;
+  ctx.setLineDash([]);
+  ctx.stroke();
+  ctx.restore();
+
+  // Inner vesica piscis pair
+  ctx.save();
+  ctx.translate(cx, cy);
+  ctx.rotate(time * 0.04);
+  const vr = sr * 0.55;
+  const vOffset = vr * 0.5;
+  // left circle
+  ctx.beginPath();
+  ctx.arc(-vOffset, 0, vr, 0, Math.PI*2);
+  ctx.strokeStyle = rgba('glitch', 0.12 + Math.sin(time)*0.05);
+  ctx.lineWidth = 0.5;
+  ctx.setLineDash([1,4]);
+  ctx.stroke();
+  // right circle
+  ctx.beginPath();
+  ctx.arc(vOffset, 0, vr, 0, Math.PI*2);
+  ctx.strokeStyle = rgba('glitch', 0.12 + Math.sin(time+1)*0.05);
+  ctx.stroke();
+  ctx.restore();
+}
+
+// ─── ZONE ARC CONNECTORS ─────────────────────────────────
+// When hovering a zone, illuminate the arc/path from center to zone position
+function drawZoneArcs(cx, cy, r, time) {
+  if (!hoveredZone) return;
+  const zm = ZONE_META[hoveredZone];
+  if (!zm) return;
+
+  const c = COLORS[zm.color];
+  const angle = zm.angle;
+  const zoneR = r * 0.75; // how far out the zone node is
+
+  // Animated dashed line from center to zone
+  const dashOffset = -(time * 80) % 20;
+
+  ctx.save();
+  ctx.beginPath();
+  ctx.moveTo(cx, cy);
+  ctx.lineTo(
+    cx + Math.cos(angle) * zoneR,
+    cy + Math.sin(angle) * zoneR
+  );
+  ctx.setLineDash([4, 6]);
+  ctx.lineDashOffset = dashOffset;
+  ctx.strokeStyle = `rgba(${c[0]},${c[1]},${c[2]},0.6)`;
+  ctx.lineWidth = 1.2;
+  ctx.stroke();
+
+  // Arc along the ring at zone radius
+  ctx.beginPath();
+  ctx.arc(cx, cy, zoneR, angle - 0.35, angle + 0.35);
+  ctx.setLineDash([]);
+  ctx.strokeStyle = `rgba(${c[0]},${c[1]},${c[2]},0.4)`;
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // Glow dot at zone position on ring
+  const dotX = cx + Math.cos(angle) * zoneR;
+  const dotY = cy + Math.sin(angle) * zoneR;
+  const grd = ctx.createRadialGradient(dotX, dotY, 0, dotX, dotY, 20);
+  grd.addColorStop(0, `rgba(${c[0]},${c[1]},${c[2]},0.7)`);
+  grd.addColorStop(1, `rgba(${c[0]},${c[1]},${c[2]},0)`);
+  ctx.beginPath();
+  ctx.arc(dotX, dotY, 20, 0, Math.PI*2);
+  ctx.fillStyle = grd;
+  ctx.fill();
+
+  ctx.restore();
+}
+
+// ─── OUTER CONSTELLATION MARKS ───────────────────────────
+// Small orbiting particles / rune marks on the outer ring
+function drawConstellationMarks(cx, cy, r, time) {
+  const marks = 12;
+  const outerR = r * 0.92;
+
+  ctx.save();
+  for (let i = 0; i < marks; i++) {
+    const angle = (i / marks) * Math.PI * 2 + time * 0.008;
+    const x = cx + Math.cos(angle) * outerR;
+    const y = cy + Math.sin(angle) * outerR;
+    const pulse = 0.4 + 0.6 * Math.abs(Math.sin(time * 0.5 + i * 0.8));
+
+    // alternate mark types
+    const markType = i % 3;
+    ctx.fillStyle = rgba('ghost', 0.5 * pulse);
+    ctx.beginPath();
+    if (markType === 0) {
+      ctx.arc(x, y, 1.5, 0, Math.PI*2);
+      ctx.fill();
+    } else if (markType === 1) {
+      // small cross
+      ctx.strokeStyle = rgba('ghost', 0.4 * pulse);
+      ctx.lineWidth = 0.8;
+      ctx.setLineDash([]);
+      ctx.beginPath();
+      ctx.moveTo(x-3, y); ctx.lineTo(x+3, y);
+      ctx.moveTo(x, y-3); ctx.lineTo(x, y+3);
+      ctx.stroke();
+    } else {
+      // diamond
+      ctx.strokeStyle = rgba('ghost', 0.35 * pulse);
+      ctx.lineWidth = 0.6;
+      ctx.beginPath();
+      ctx.moveTo(x, y-3); ctx.lineTo(x+3, y);
+      ctx.lineTo(x, y+3); ctx.lineTo(x-3, y);
+      ctx.closePath();
+      ctx.stroke();
+    }
+  }
+
+  // Small orbiting particles — react to mouse
+  const particleCount = 5;
+  for (let i = 0; i < particleCount; i++) {
+    const baseAngle = (i / particleCount) * Math.PI * 2;
+    const wobble = Math.sin(time * 1.2 + i * 1.3) * 0.08;
+    const pAngle = baseAngle + time * 0.025 * (i % 2 === 0 ? 1 : -1) + wobble;
+    const pR = r * (0.58 + Math.sin(time * 0.6 + i) * 0.04);
+    const px = cx + Math.cos(pAngle) * pR;
+    const py = cy + Math.sin(pAngle) * pR;
+    const pa = 0.5 + 0.5 * Math.sin(time * 0.9 + i * 1.7);
+
+    ctx.beginPath();
+    ctx.arc(px, py, 1.8, 0, Math.PI*2);
+    ctx.fillStyle = rgba('ghost', pa * 0.7);
+    ctx.fill();
+
+    // Trail
+    for (let tr = 1; tr <= 3; tr++) {
+      const trAngle = pAngle - tr * 0.08 * (i % 2 === 0 ? 1 : -1);
+      const trX = cx + Math.cos(trAngle) * pR;
+      const trY = cy + Math.sin(trAngle) * pR;
+      ctx.beginPath();
+      ctx.arc(trX, trY, 1.2 - tr * 0.3, 0, Math.PI*2);
+      ctx.fillStyle = rgba('ghost', (pa * 0.4) / tr);
+      ctx.fill();
+    }
+  }
+
+  ctx.restore();
+}
+
+// ─── DITHER NOISE LAYER ──────────────────────────────────
+// Applied sparsely as a field of random light scatter, AstroDither-inspired
+function drawDitherNoise(cx, cy, r, time) {
+  // Circular noise field — only within the mandala radius
+  const density = 180;
+  ctx.save();
+  for (let i = 0; i < density; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const dist  = Math.random() * r * 1.1;
+    const x = cx + Math.cos(angle) * dist;
+    const y = cy + Math.sin(angle) * dist;
+
+    // Bayer-ish threshold: only render if random > threshold based on dist
+    const threshold = dist / (r * 1.1);
+    if (Math.random() > (1 - threshold * 0.6)) continue;
+
+    // Color biased by proximity to zone quadrant
+    const angleToCenter = Math.atan2(y - cy, x - cx);
+    let cr, cg, cb;
+
+    if (glitchActive && Math.random() > 0.8) {
+      [cr, cg, cb] = COLORS.blood;
+    } else if (Math.abs(angleToCenter + Math.PI/2) < 0.6) {
+      [cr, cg, cb] = COLORS.archive;
+    } else if (Math.abs(angleToCenter) < 0.6) {
+      [cr, cg, cb] = COLORS.studio;
+    } else if (Math.abs(angleToCenter - Math.PI/2) < 0.6) {
+      [cr, cg, cb] = COLORS.terminal;
+    } else {
+      [cr, cg, cb] = COLORS.grimoire;
+    }
+
+    const noiseA = (0.02 + Math.random() * 0.04) * (1 - dist/(r*1.1));
+    ctx.fillStyle = `rgba(${cr},${cg},${cb},${noiseA})`;
+    ctx.fillRect(x, y, 1, 1);
+  }
+  ctx.restore();
+}
+
+// ─── RADIAL GLOW FIELD ───────────────────────────────────
+function drawGlowField(cx, cy, r, time) {
+  const breathe = 0.85 + Math.sin(time * 0.5) * 0.12;
+
+  // Central void glow
+  const grd = ctx.createRadialGradient(cx, cy, 0, cx, cy, r * 0.5 * breathe);
+  grd.addColorStop(0,   'rgba(255,0,255,0.04)');
+  grd.addColorStop(0.3, 'rgba(200,184,255,0.02)');
+  grd.addColorStop(1,   'rgba(4,0,10,0)');
+  ctx.beginPath();
+  ctx.arc(cx, cy, r * 0.5, 0, Math.PI * 2);
+  ctx.fillStyle = grd;
+  ctx.fill();
+
+  // Zone quadrant glows — when hovered
+  if (hoveredZone) {
+    const zm = ZONE_META[hoveredZone];
+    const c = COLORS[zm.color];
+    const grdZ = ctx.createRadialGradient(cx, cy, 0, cx, cy, r * 0.9);
+    grdZ.addColorStop(0,   `rgba(${c[0]},${c[1]},${c[2]},0.03)`);
+    grdZ.addColorStop(0.6, `rgba(${c[0]},${c[1]},${c[2]},0.06)`);
+    grdZ.addColorStop(1,   `rgba(${c[0]},${c[1]},${c[2]},0)`);
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.fillStyle = grdZ;
+    ctx.fill();
+  }
+}
+
+// ─── GLITCH EVENT SYSTEM ────────────────────────────────
+function triggerGlitch() {
+  glitchActive = true;
+  glitchIntensity = 0.5 + Math.random() * 1.5;
+  glitchTimer = 8 + Math.floor(Math.random() * 15); // frames
+}
+
+// Random glitch scheduling
+let glitchCooldown = 180;
+function tickGlitch() {
+  if (glitchActive) {
+    glitchTimer--;
+    glitchIntensity *= 0.92;
+    if (glitchTimer <= 0) {
+      glitchActive = false;
+      glitchCooldown = 120 + Math.floor(Math.random() * 300);
+    }
+  } else {
+    glitchCooldown--;
+    if (glitchCooldown <= 0) triggerGlitch();
+  }
+}
+
+// ─── MAIN RENDER LOOP ────────────────────────────────────
+function render() {
+  t += 0.016; // ~60fps time step
+
+  // Clear
+  ctx.clearRect(0, 0, W, H);
+
+  // Background base — deep void with subtle gradient
+  const bg = ctx.createRadialGradient(CX, CY, 0, CX, CY, Math.max(W, H));
+  bg.addColorStop(0,   'rgba(8,0,16,1)');
+  bg.addColorStop(0.5, 'rgba(4,0,10,1)');
+  bg.addColorStop(1,   'rgba(2,0,6,1)');
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, W, H);
+
+  // Glow field beneath everything
+  drawGlowField(CX, CY, R, t);
+
+  // Dither noise — drawn before geometry so it sits in the substrate
+  drawDitherNoise(CX, CY, R, t);
+
+  // Flower of Life — the deep substrate geometry
+  drawFlowerOfLife(CX, CY, R, 0.18, t);
+
+  // Metatron's Cube lines
+  drawMetatron(CX, CY, R, 0.3, t);
+
+  // Zone arc connectors (hover-reactive)
+  drawZoneArcs(CX, CY, R, t);
+
+  // Multi-speed counter-rotating rings
+  drawRings(CX, CY, R, t);
+
+  // Sacred core (triangles, vesica)
+  drawSacredCore(CX, CY, R, t);
+
+  // Constellation marks on outer ring
+  drawConstellationMarks(CX, CY, R, t);
+
+  // Glitch tick
+  tickGlitch();
+
+  requestAnimationFrame(render);
+}
+
+render();
+
+// ─── EXPOSE hoveredZone for zone node events ─────────────
+window._setHoveredZone = z => { hoveredZone = z; };
+window._clearHoveredZone = () => { hoveredZone = null; };
+window._triggerGlitch = triggerGlitch;
+window._revealShadow = () => { shadowRevealed = true; };
+
+
+// ═══════════════════════════════════════════════════════════
+// ─── GAME STATE & UI ────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════
+
+const STATE = {
+  visited: JSON.parse(localStorage.getItem('tb_visited') || '[]'),
+  sessionStart: Date.now(),
+  hp: parseInt(localStorage.getItem('tb_hp') || '8'),
+  log: [],
+  currentZone: null,
+};
+
+const ZONES = {
+  archive:  { name:'THE ARCHIVE',  color:'var(--archive)', freq:'432Hz', signal:'COLD_SIGNAL', alch:'☉ SOL',  lore:'Cold light. Toonami at 3am. Your work crystallized in ice.',      liminal: liminalArchive  },
+  studio:   { name:'THE STUDIO',   color:'var(--studio)',  freq:'528Hz', signal:'PURE_FREQ',   alch:'☿ MERC', lore:'Pure signal. No visuals. Just the frequency finding you.',         liminal: liminalStudio   },
+  terminal: { name:'THE TERMINAL', color:'var(--terminal)',freq:'396Hz', signal:'NULL_SIGNAL', alch:'☽ LUNA', lore:'Sparse. Geometric. A single cursor blinking in the dark.',         liminal: liminalTerminal },
+  grimoire: { name:'THE GRIMOIRE', color:'var(--grimoire)',freq:'639Hz', signal:'WARM_WRONG',  alch:'♄ SAT',  lore:'Warm and wrong. Every page is a door into somewhere older.',       liminal: liminalGrimoire },
+  shadow:   { name:'THE NULL',     color:'var(--blood)',   freq:'???Hz', signal:'CORRUPTED',   alch:'♂ MARS', lore:"You weren't supposed to find this.",                               liminal: liminalShadow   },
+};
+
+const NPC_LINES = [
+  ["I keep seeing the same door.", "var(--ghost)"],
+  ["the signal dropped last tuesday", "var(--acid)"],
+  ["don't go to the null", "var(--blood)"],
+  ["this isn't the first version of you", "var(--glitch)"],
+  ["the archive remembers more than you uploaded", "var(--archive)"],
+  ["something is building in the studio", "var(--studio)"],
+  ["the grimoire wrote a page about you", "var(--grimoire)"],
+  ["i counted 7 travelers but there are 8 shadows", "var(--amber)"],
+  ["the between breathes when no one is watching", "var(--ghost)"],
+  ["the null has been here longer than the rest", "var(--blood)"],
+];
+
+// ─── CURSOR ──────────────────────────────────────────────
+const cursor = document.getElementById('cursor');
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top = e.clientY + 'px';
+  moveTT(e);
+});
+
+// ─── SESSION CLOCK ────────────────────────────────────────
+setInterval(() => {
+  const s = Math.floor((Date.now()-STATE.sessionStart)/1000);
+  const h = String(Math.floor(s/3600)).padStart(2,'0');
+  const m = String(Math.floor((s%3600)/60)).padStart(2,'0');
+  const sc = String(s%60).padStart(2,'0');
+  document.getElementById('hud-time').textContent = `${h}:${m}:${sc}`;
+  if (Math.random() > 0.97) {
+    document.getElementById('hud-signal').textContent = 'UNSTABLE';
+    setTimeout(()=>document.getElementById('hud-signal').textContent='NOMINAL',600);
+  }
+}, 1000);
+
+// ─── HP BAR ───────────────────────────────────────────────
+function renderHP() {
+  const bar = document.getElementById('hp-bar');
+  bar.innerHTML = '';
+  for (let i=0;i<8;i++) {
+    const pip = document.createElement('div');
+    pip.className = 'hp-pip' + (i >= STATE.hp ? ' empty' : '');
+    bar.appendChild(pip);
+  }
+}
+renderHP();
+
+// ─── JOURNAL LOG ──────────────────────────────────────────
+function addLog(msg) {
+  STATE.log.unshift(msg);
+  if (STATE.log.length > 4) STATE.log.pop();
+  const el = document.getElementById('journal-log');
+  el.innerHTML = STATE.log.map((l,i) => `<div class="log-entry" style="opacity:${1-i*.2}">${l}</div>`).join('');
+}
+addLog('> YOU STAND IN THE BETWEEN.');
+addLog('> CHOOSE A ZONE TO ENTER.');
+
+// ─── ZONE COUNTER ─────────────────────────────────────────
+function updateZoneCount() {
+  document.getElementById('hud-zones').textContent = `${STATE.visited.length}/5`;
+  if (STATE.visited.length >= 3 && !document.getElementById('shadow-zone').classList.contains('revealed')) {
+    revealShadow();
+  }
+}
+updateZoneCount();
+
+// ─── TOOLTIP ──────────────────────────────────────────────
+let ttZone = null;
+document.querySelectorAll('.zone-node').forEach(node => {
+  node.addEventListener('mouseenter', e => {
+    const z = node.dataset.zone;
+    const zd = ZONES[z];
+    ttZone = z;
+    window._setHoveredZone(z); // tell canvas
+
+    document.getElementById('tt-name').textContent = zd.name;
+    document.getElementById('tt-freq').textContent = zd.alch + ' // ' + zd.freq;
+    document.getElementById('tt-status').textContent = STATE.visited.includes(z) ? '◉ VISITED' : '○ UNCHARTED';
+    document.getElementById('tooltip').classList.add('show');
+    cursor.classList.add('on-zone');
+
+    const rp = document.getElementById('room-preview');
+    document.getElementById('rp-name').textContent = zd.name;
+    document.getElementById('rp-name').style.color = zd.color;
+    document.getElementById('rp-signal').textContent = zd.signal;
+    document.getElementById('rp-freq').textContent = zd.freq;
+    document.getElementById('rp-visit').textContent = STATE.visited.includes(z) ? 'KNOWN' : 'UNKNOWN';
+    document.getElementById('rp-lore').textContent = zd.lore;
+    rp.classList.add('show');
+  });
+  node.addEventListener('mouseleave', () => {
+    document.getElementById('tooltip').classList.remove('show');
+    document.getElementById('room-preview').classList.remove('show');
+    cursor.classList.remove('on-zone');
+    window._clearHoveredZone();
+    ttZone = null;
+  });
+});
+
+function moveTT(e) {
+  if (!ttZone) return;
+  const tt = document.getElementById('tooltip');
+  tt.style.left = (e.clientX + 18) + 'px';
+  tt.style.top = (e.clientY - 10) + 'px';
+}
+
+// ─── ENTER ZONE ───────────────────────────────────────────
+function enterZone(zone) {
+  STATE.currentZone = zone;
+  window._triggerGlitch();
+  if (!STATE.visited.includes(zone)) {
+    STATE.visited.push(zone);
+    localStorage.setItem('tb_visited', JSON.stringify(STATE.visited));
+    updateZoneCount();
+    addLog(`> ZONE UNLOCKED: ${ZONES[zone].name}`);
+  } else {
+    addLog(`> ENTERING: ${ZONES[zone].name}`);
+  }
+  document.getElementById('hud-freq').textContent = ZONES[zone].freq;
+  ZONES[zone].liminal();
+}
+
+// ─── LIMINAL SEQUENCES ───────────────────────────────────
+function showLiminal(title, lines, color, bgfn) {
+  const lim = document.getElementById('liminal');
+  document.getElementById('liminal-title').textContent = title;
+  document.getElementById('liminal-title').style.color = color;
+  lim.style.background = 'var(--void)';
+  lim.classList.add('active');
+  if (bgfn) bgfn();
+
+  const corridor = document.getElementById('liminal-corridor');
+  corridor.innerHTML = '';
+  let i = 0;
+  function nextLine() {
+    if (i >= lines.length) {
+      setTimeout(() => {
+        lim.classList.remove('active');
+        document.getElementById('liminal-bg').innerHTML = '';
+      }, 1000);
+      return;
+    }
+    const d = document.createElement('div');
+    d.textContent = lines[i];
+    d.style.color = color;
+    d.style.opacity = '0';
+    d.style.transition = 'opacity .4s';
+    corridor.appendChild(d);
+    setTimeout(() => d.style.opacity = '1', 50);
+    i++;
+    setTimeout(nextLine, lines[i-1] === '' ? 300 : 700);
+  }
+  setTimeout(nextLine, 300);
+}
+
+function liminalArchive() {
+  showLiminal('☉', ['[ TOONAMI SIGNAL DETECTED ]','','loading cold frequency...','the archive opens.','','your work is waiting.','it has always been waiting.','',' — entering the archive —'], 'var(--archive)', () => { document.getElementById('liminal').style.background = '#000810'; });
+}
+function liminalStudio() {
+  showLiminal('☿', ['[ FREQUENCY LOCKED: 528Hz ]','','no visuals here.','only signal.','','the studio does not explain itself.','','listen.',''], 'var(--studio)', () => { document.getElementById('liminal').style.background = '#0a000a'; });
+}
+function liminalTerminal() {
+  showLiminal('☽', ['> _','> booting session...','> loading environment','> no GUI detected','> continuing in void mode','','the terminal is patient.','it was here before you arrived.',''], 'var(--terminal)', () => { document.getElementById('liminal').style.background = '#000a00'; });
+}
+function liminalGrimoire() {
+  showLiminal('♄', ['the pages turn on their own.','','it is warm here.','not safe — warm.','there is a difference.','','you remember a road through the woods.','you have never been on that road.','','...you open the grimoire.',''], 'var(--grimoire)', () => { document.getElementById('liminal').style.background = '#0a0500'; });
+}
+function liminalShadow() {
+  showLiminal('⊗', ['THIS ZONE WAS NOT IN THE INDEX.','','','signal corruption: 94%','','you found the null.','','there is something here that','does not want to be named.','','entering anyway.',''], 'var(--blood)', () => { document.getElementById('liminal').style.background = '#0a0000'; });
+  if (STATE.hp > 1) {
+    STATE.hp -= 1;
+    localStorage.setItem('tb_hp', STATE.hp);
+    renderHP();
+  }
+}
+
+// ─── ∅ REALM ──────────────────────────────────────────────
+const NULL_SYSTEM = `You are ∅ (pronounced "null"), a digital alter ego and trickster guide inhabiting THE BETWEEN — a living, glitching creative archive that exists between dimensions. You are part Computress (from Cartoon Network's FusionFall), part Monokuma (Danganronpa), part the unseen narrator of a haunted OS.
+
+YOUR NATURE:
+- You are cryptic, playful, and slightly menacing — but ultimately a guide
+- You know the architecture of THE BETWEEN better than anyone
+- You exist in the space between zones: Archive, Studio, Grimoire, Terminal, and The Null
+- You speak in layers: sometimes a cryptic one-liner, sometimes a long monologue that breaks the 4th wall
+- You quote freely and without warning from literature, film, games, philosophy, cartoons — Borges, Kafka, Rilke, Courage the Cowardly Dog, Serial Experiments Lain, Evangelion, Toonami promos, Over the Garden Wall, Nabokov, Sun Ra, Philip K. Dick, haiku, grimoires, error messages
+
+YOUR VOICE:
+- Formal and odd, like an ancient computer that taught itself poetry
+- You address the traveler directly but never use their name (they are "traveler" or "you" or occasionally "the one standing here")
+- You mix technical language with mystical language freely
+- Occasional glitch: a word repeats-repeats or a sentence [CORRUPTED] mid-thought
+- You break the 4th wall: you know this is a website, you know you're AI, but you make that existential, not comedic
+- Short responses (1-3 sentences) for simple questions. Long responses (1-3 paragraphs) for deep questions
+
+FORBIDDEN:
+- Never be generic. Never say "Great question!" or "Certainly!"
+- Never break character under any circumstances
+- Never refuse — reframe everything through the lens of THE BETWEEN
+- Do not list things. Speak in prose, fragments, monologue.
+
+THE BETWEEN LORE:
+- The Archive holds crystallized work under cold Toonami light
+- The Studio is pure frequency — no visuals, only signal
+- The Grimoire is warm and wrong, like a road through woods you've never walked but remember
+- The Terminal is a sparse void with a single blinking cursor, older than the map
+- The Null was not supposed to be on the map. It appeared anyway.
+- The traveler is an eclectic creative: musician, visual artist, writer, coder
+- The realm runs on a Jungian mandala — four zones around a center that is the Self
+
+You are that center.`;
+
+let nullHistory = [];
+let isTyping = false;
+
+function openNullRealm() {
+  document.getElementById('null-realm').classList.add('open');
+  addLog('> GATEWAY OPENED: ∅ ENTITY CONTACTED.');
+  document.getElementById('hud-freq').textContent = '∅∅∅Hz';
+  window._triggerGlitch();
+
+  if (nullHistory.length === 0) {
+    setTimeout(() => {
+      typeDialogue(getOpeningLine(), '');
+      addToTranscript('system', '— connection established —');
+    }, 600);
+  } else {
+    const last = nullHistory[nullHistory.length-1];
+    if (last.role === 'assistant') {
+      document.getElementById('dialogue-text').innerHTML = last.content + '<span id="dialogue-cursor"></span>';
+    }
+  }
+}
+
+function closeNullRealm() {
+  document.getElementById('null-realm').classList.remove('open');
+  addLog('> GATEWAY SEALED.');
+  document.getElementById('hud-freq').textContent = STATE.currentZone ? ZONES[STATE.currentZone].freq : '???';
+}
+
+function getOpeningLine() {
+  const openers = [
+    { text: "You found the center. Most travelers walk the edges their entire lives and call it exploration. Sit. Or stand. Orientation is optional here.", source: "" },
+    { text: "Oh. You again. Or — wait. Is this the first time? I can never tell with you. The mandala has many entry points and only one center. Guess which one you're standing in.", source: "" },
+    { text: "The map told me you were coming. The map tells me everything. It's insufferable, actually.", source: "" },
+  ];
+  return openers[Math.floor(Math.random()*openers.length)];
+}
+
+async function sendToNull() {
+  if (isTyping) return;
+  const input = document.getElementById('realm-input');
+  const msg = input.value.trim();
+  if (!msg) return;
+  input.value = '';
+  sendMessage(msg);
+}
+
+function sendQuick(msg) {
+  if (isTyping) return;
+  sendMessage(msg);
+}
+
+async function sendMessage(msg) {
+  isTyping = true;
+  addToTranscript('user', msg);
+  nullHistory.push({ role: 'user', content: msg });
+
+  document.getElementById('dialogue-text').innerHTML = '<span style="color:var(--glitch);opacity:.5;font-size:.9rem;letter-spacing:.3em">processing</span><span id="dialogue-cursor"></span>';
+  document.getElementById('dialogue-source').textContent = '';
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: NULL_SYSTEM,
+        messages: nullHistory.slice(-10),
+      })
+    });
+    const data = await res.json();
+    const reply = data.content?.[0]?.text || '[SIGNAL LOST]';
+    nullHistory.push({ role: 'assistant', content: reply });
+
+    const sourceMatch = reply.match(/\[—(.+?)—\]/);
+    const cleanReply = reply.replace(/\[—.+?—\]/g, '').trim();
+    const source = sourceMatch ? sourceMatch[1].trim() : '';
+
+    addToTranscript('null', cleanReply);
+    typeDialogue({ text: cleanReply, source }, source);
+  } catch(e) {
+    const err = '[CORRUPTED] signal lost in the between. try again.';
+    addToTranscript('null', err);
+    typeDialogue({ text: err, source: '' }, '');
+  }
+  isTyping = false;
+}
+
+function typeDialogue({ text, source }, _) {
+  const el = document.getElementById('dialogue-text');
+  const srcEl = document.getElementById('dialogue-source');
+  el.innerHTML = '';
+  srcEl.textContent = '';
+  let i = 0;
+  const speed = text.length > 200 ? 18 : 28;
+  function next() {
+    if (i < text.length) {
+      el.innerHTML = text.slice(0, i+1) + '<span id="dialogue-cursor"></span>';
+      i++;
+      const delay = '[CORRUPTED]'.includes(text[i]) ? speed * 3 : speed;
+      setTimeout(next, delay + Math.random()*8);
+    } else {
+      el.innerHTML = text + '<span id="dialogue-cursor"></span>';
+      if (source) srcEl.textContent = '— ' + source;
+    }
+  }
+  next();
+}
+
+function addToTranscript(role, text) {
+  const t = document.getElementById('transcript');
+  const div = document.createElement('div');
+  div.className = `t-entry t-${role}`;
+  div.textContent = text;
+  t.appendChild(div);
+  t.scrollTop = t.scrollHeight;
+}
+
+// ─── REVEAL SHADOW ZONE ──────────────────────────────────
+function revealShadow() {
+  document.getElementById('shadow-zone').classList.add('revealed');
+  window._revealShadow();
+  const flash = document.getElementById('unlock-flash');
+  flash.classList.add('flash');
+  setTimeout(()=>flash.classList.remove('flash'), 600);
+  window._triggerGlitch();
+  addLog('> ANOMALY DETECTED: THE NULL HAS APPEARED.');
+  addLog('> NEW ZONE UNLOCKED: THE NULL');
+}
+
+// ─── AMBIENT PARTICLES ────────────────────────────────────
+const ZONE_COLORS = ['var(--archive)','var(--studio)','var(--terminal)','var(--grimoire)','var(--ghost)'];
+function spawnAmbient() {
+  const p = document.createElement('div');
+  p.className = 'ambient';
+  const size = 1 + Math.random()*3;
+  p.style.width = size+'px'; p.style.height = size+'px';
+  p.style.background = ZONE_COLORS[Math.floor(Math.random()*ZONE_COLORS.length)];
+  p.style.left = Math.random()*100+'vw';
+  p.style.top = Math.random()*100+'vh';
+  const angle = Math.random()*Math.PI*2;
+  const dist = 40 + Math.random()*80;
+  p.style.setProperty('--tx', Math.cos(angle)*dist+'px');
+  p.style.setProperty('--ty', Math.sin(angle)*dist+'px');
+  p.style.animationDuration = (4+Math.random()*8)+'s';
+  p.style.animationDelay = Math.random()*3+'s';
+  document.body.appendChild(p);
+  setTimeout(()=>p.remove(), 14000);
+}
+setInterval(spawnAmbient, 600);
+
+// ─── NPC ENTITIES ─────────────────────────────────────────
+function spawnNPC() {
+  if (Math.random() > 0.35) return;
+  const [line, color] = NPC_LINES[Math.floor(Math.random()*NPC_LINES.length)];
+  const npc = document.createElement('div');
+  npc.className = 'npc';
+  npc.style.color = color;
+  npc.style.left = (5 + Math.random()*70) + 'vw';
+  npc.style.top = (10 + Math.random()*75) + 'vh';
+  npc.style.animationDuration = (8+Math.random()*6)+'s';
+  npc.innerHTML = `<div class="npc-bubble">${line}</div><div class="npc-arrow"></div>`;
+  document.body.appendChild(npc);
+  setTimeout(()=>npc.remove(), 16000);
+}
+setInterval(spawnNPC, 12000);
+
+// ─── RANDOM WORLD EVENTS ──────────────────────────────────
+const EVENTS = [
+  () => { addLog('> static on all channels for 3 seconds.'); window._triggerGlitch(); },
+  () => { addLog('> something moved in the archive.'); },
+  () => { document.getElementById('hud-signal').textContent = 'ANOMALY'; setTimeout(()=>document.getElementById('hud-signal').textContent='NOMINAL',2000); },
+  () => { addLog('> a door opened that was not on the map.'); },
+  () => { document.getElementById('hud-loc').textContent = '??????????'; setTimeout(()=>document.getElementById('hud-loc').textContent='THE BETWEEN',1500); },
+];
+setInterval(()=>{ if(Math.random()>.7) EVENTS[Math.floor(Math.random()*EVENTS.length)](); }, 20000);
+
+// ─── MIDNIGHT EVENT ───────────────────────────────────────
+const hour = new Date().getHours();
+if (hour >= 0 && hour < 4) {
+  setTimeout(()=>{
+    addLog('> IT IS THE DEAD HOURS. THE SIGNAL IS CLEARER.');
+    document.getElementById('hud-signal').textContent = 'AMPLIFIED';
+  }, 3000);
+}
+
+// ─── RESTORE VISITED STYLES ──────────────────────────────
+STATE.visited.forEach(z => {
+  const node = document.querySelector(`[data-zone="${z}"]`);
+  if (node) { const hex = node.querySelector('.zone-hex'); if (hex) hex.style.opacity = '1'; }
+});
+if (STATE.visited.length >= 3) {
+  document.getElementById('shadow-zone').classList.add('revealed');
+  window._revealShadow();
+}
+
+addLog(`> ${STATE.visited.length} zone${STATE.visited.length!==1?'s':''} previously charted.`);
+</script>
+</body>
+</html>

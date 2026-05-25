@@ -1,0 +1,1783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Family Pantry & Self-Sufficiency Guide</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap');
+
+:root {
+  --soil: #3d2b1f;
+  --bark: #5c3d2e;
+  --moss: #4a5c3f;
+  --sage: #7a8c6e;
+  --fern: #a8bc98;
+  --cream: #f7f2e8;
+  --oat: #ede4d0;
+  --wheat: #d4b896;
+  --terracotta: #c4714a;
+  --rust: #a0522d;
+  --gold: #c9982a;
+  --sky: #7ba7bc;
+  --ink: #1e1610;
+  --text: #2e2218;
+  --muted: #6b5a4a;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--cream);
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text);
+  line-height: 1.6;
+}
+
+/* ========= COVER ========= */
+.cover {
+  background: var(--soil);
+  background-image:
+    radial-gradient(ellipse at 10% 20%, rgba(74,92,63,0.4) 0%, transparent 50%),
+    radial-gradient(ellipse at 90% 80%, rgba(160,82,45,0.3) 0%, transparent 50%),
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 40px,
+      rgba(255,255,255,0.01) 40px,
+      rgba(255,255,255,0.01) 41px
+    );
+  min-height: 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 3rem 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.cover::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='30' cy='30' r='1' fill='rgba(255,255,255,0.04)'/%3E%3C/svg%3E") repeat;
+}
+
+.cover-tag {
+  font-size: 0.7rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--fern);
+  margin-bottom: 0.8rem;
+  position: relative;
+}
+
+.cover h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 700;
+  color: var(--cream);
+  line-height: 1.15;
+  position: relative;
+}
+
+.cover h1 em {
+  font-style: italic;
+  color: var(--fern);
+}
+
+.cover-sub {
+  font-size: 0.9rem;
+  color: var(--wheat);
+  margin-top: 0.8rem;
+  letter-spacing: 0.05em;
+  position: relative;
+}
+
+.cover-divider {
+  width: 60px;
+  height: 2px;
+  background: var(--sage);
+  margin: 1.2rem auto 0;
+  position: relative;
+}
+
+/* ========= NAV PILLS ========= */
+.section-nav {
+  background: var(--bark);
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+}
+
+.nav-pill {
+  padding: 0.7rem 1.4rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--wheat);
+  text-decoration: none;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  border-right: 1px solid rgba(255,255,255,0.08);
+  transition: background 0.2s, color 0.2s;
+}
+
+.nav-pill:hover { background: var(--moss); color: var(--cream); }
+
+/* ========= SECTION WRAPPER ========= */
+.section {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+}
+
+.section-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid var(--oat);
+  padding-bottom: 1rem;
+}
+
+.section-num {
+  font-family: 'DM Serif Display', serif;
+  font-size: 3rem;
+  color: var(--oat);
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.section-title-block h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.7rem;
+  font-weight: 600;
+  color: var(--soil);
+  line-height: 1.2;
+}
+
+.section-title-block p {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-top: 0.2rem;
+}
+
+/* SECTION BANDS */
+.band-green { background: #f0f4ec; border-top: 4px solid var(--moss); }
+.band-warm  { background: #faf5ed; border-top: 4px solid var(--terracotta); }
+.band-earth { background: var(--cream); border-top: 4px solid var(--rust); }
+.band-sky   { background: #f0f5f8; border-top: 4px solid var(--sky); }
+.band-gold  { background: #fdf8ee; border-top: 4px solid var(--gold); }
+
+/* ========= GARDEN SECTION ========= */
+.garden-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+/* Garden bed diagram */
+.garden-diagram {
+  background: #fff;
+  border: 2px solid var(--oat);
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+}
+
+.garden-diagram-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  color: var(--soil);
+  margin-bottom: 1rem;
+  font-style: italic;
+}
+
+.bed-layout {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin-bottom: 1rem;
+}
+
+.bed-zone {
+  border-radius: 6px;
+  padding: 0.6rem 0.4rem;
+  text-align: center;
+  font-size: 0.7rem;
+  font-weight: 600;
+  line-height: 1.3;
+  cursor: default;
+  transition: transform 0.15s;
+}
+
+.bed-zone:hover { transform: scale(1.04); }
+.bed-zone .emoji { font-size: 1.3rem; display: block; margin-bottom: 3px; }
+.bed-zone .name { font-size: 0.6rem; font-weight: 500; }
+
+.z-tomato  { background: #fde8dc; color: #8b2500; }
+.z-squash  { background: #fef3dc; color: #6b4500; }
+.z-beans   { background: #e8f4e8; color: #1a4a1a; }
+.z-pepper  { background: #fde8e8; color: #8b1a1a; }
+.z-kale    { background: #e4eede; color: #2a4a20; }
+.z-herb    { background: #e8f0e8; color: #2a5030; }
+.z-carrot  { background: #fef0e0; color: #7a3800; }
+.z-onion   { background: #f8eef8; color: #5a2a5a; }
+.z-cucumber { background: #e0f0e8; color: #1a5030; }
+.z-potato  { background: #f4ece0; color: #5a3820; }
+.z-garlic  { background: #f8f0e0; color: #6a4a10; }
+.z-berry   { background: #f8e0f0; color: #6a0a3a; }
+.z-trellis { background: #e0ecf8; color: #1a3a5a; grid-column: span 2; }
+.z-compost { background: #e8e0d8; color: #3a2a1a; }
+
+/* Compass rose */
+.compass {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+.compass-inner {
+  font-size: 0.65rem;
+  color: var(--muted);
+  text-align: center;
+  background: var(--oat);
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+
+/* Crop cards */
+.crop-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.crop-card {
+  background: #fff;
+  border-radius: 8px;
+  border-left: 4px solid var(--moss);
+  padding: 0.75rem 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.5rem 0.8rem;
+  align-items: center;
+}
+
+.crop-card .crop-icon { font-size: 1.5rem; }
+
+.crop-card .crop-info h4 {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--soil);
+  margin-bottom: 1px;
+}
+
+.crop-card .crop-info p {
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+.crop-tags {
+  display: flex;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+  margin-top: 3px;
+}
+
+.crop-tag {
+  font-size: 0.58rem;
+  padding: 1px 6px;
+  border-radius: 20px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.tag-cal { background: #fde8dc; color: #8b2500; }
+.tag-easy { background: #e8f4e8; color: #1a4a1a; }
+.tag-store { background: #fef3dc; color: #6b4500; }
+.tag-peren { background: #e0ecf8; color: #1a3a5a; }
+.tag-high { background: #fde8f8; color: #6a1a5a; }
+
+/* Three sisters */
+.three-sisters {
+  background: linear-gradient(135deg, #e8f4e4, #f0f8ec);
+  border: 2px solid var(--fern);
+  border-radius: 12px;
+  padding: 1.2rem;
+  margin-top: 1rem;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.sisters-icon { font-size: 2.5rem; }
+
+.sisters-text h4 {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.95rem;
+  color: var(--moss);
+  margin-bottom: 0.2rem;
+}
+
+.sisters-text p {
+  font-size: 0.75rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* Season planner */
+.season-bar-wrap {
+  margin-top: 2rem;
+}
+
+.season-bar-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  color: var(--soil);
+  margin-bottom: 0.8rem;
+  font-style: italic;
+}
+
+.season-table { width: 100%; border-collapse: collapse; font-size: 0.72rem; }
+
+.season-table th {
+  background: var(--moss);
+  color: white;
+  padding: 0.4rem 0.5rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  font-size: 0.65rem;
+  text-align: center;
+}
+
+.season-table td {
+  padding: 0.35rem 0.5rem;
+  border-bottom: 1px solid var(--oat);
+  color: var(--text);
+  vertical-align: middle;
+}
+
+.season-table tr:nth-child(even) td { background: rgba(255,255,255,0.6); }
+
+.month-cell {
+  width: 6%;
+  text-align: center;
+  border-radius: 3px;
+  font-size: 0.6rem;
+}
+
+.m-sow    { background: #c8e6c9; color: #1a3a1a; font-weight: 700; }
+.m-grow   { background: #4caf50; color: white; font-weight: 700; }
+.m-harvest { background: #c9982a; color: white; font-weight: 700; }
+.m-rest   { background: var(--oat); color: transparent; }
+
+.legend-row {
+  display: flex;
+  gap: 1.2rem;
+  margin-top: 0.6rem;
+  font-size: 0.68rem;
+  color: var(--muted);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.legend-dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  margin-right: 3px;
+  vertical-align: middle;
+}
+
+/* ========= PRESERVATION SECTION ========= */
+.preserve-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+.preserve-card {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.preserve-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+}
+
+.preserve-header {
+  padding: 1.1rem 1.2rem 0.8rem;
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+.preserve-icon { font-size: 2rem; }
+
+.preserve-header h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  color: var(--soil);
+  margin-bottom: 1px;
+}
+
+.preserve-shelf {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--terracotta);
+}
+
+.preserve-body {
+  padding: 0 1.2rem 1.2rem;
+  font-size: 0.77rem;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.preserve-body strong { color: var(--soil); }
+
+.preserve-foods {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-top: 0.6rem;
+}
+
+.food-chip {
+  background: var(--oat);
+  color: var(--soil);
+  font-size: 0.62rem;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+}
+
+.p-canning .preserve-header { background: #fde8dc; }
+.p-freezing .preserve-header { background: #deeaf8; }
+.p-dehydrate .preserve-header { background: #fef3dc; }
+.p-ferment .preserve-header { background: #e8f4e8; }
+.p-root .preserve-header { background: #f4ece0; }
+.p-vacuum .preserve-header { background: #f0eef8; }
+
+/* Shelf life bar chart */
+.shelf-chart {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+}
+
+.shelf-chart h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.05rem;
+  color: var(--soil);
+  margin-bottom: 1.2rem;
+  font-style: italic;
+}
+
+.shelf-row {
+  display: grid;
+  grid-template-columns: 130px 1fr 50px;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 0.65rem;
+}
+
+.shelf-label { font-size: 0.75rem; color: var(--text); font-weight: 500; }
+
+.shelf-bar-bg {
+  background: var(--oat);
+  border-radius: 20px;
+  height: 14px;
+  overflow: hidden;
+}
+
+.shelf-bar-fill {
+  height: 100%;
+  border-radius: 20px;
+  transition: width 1s ease;
+}
+
+.shelf-years { font-size: 0.68rem; color: var(--muted); text-align: right; font-weight: 600; }
+
+/* ========= PANTRY STORAGE SECTION ========= */
+.pantry-blueprint {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.pantry-diagram {
+  background: #fff;
+  border: 2px solid var(--oat);
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+}
+
+.pantry-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  color: var(--soil);
+  font-style: italic;
+  margin-bottom: 1.2rem;
+  border-bottom: 1px solid var(--oat);
+  padding-bottom: 0.5rem;
+}
+
+/* Pantry shelves visual */
+.pantry-shelves {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.shelf-unit {
+  border: 2px solid var(--wheat);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.shelf-zone-label {
+  background: var(--soil);
+  color: var(--wheat);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.8rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.shelf-zone-temp {
+  font-size: 0.6rem;
+  color: var(--fern);
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.shelf-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 0.5rem;
+  background: rgba(255,255,255,0.7);
+}
+
+.shelf-item {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.65rem;
+  background: var(--cream);
+  border: 1px solid var(--oat);
+  border-radius: 4px;
+  padding: 2px 6px;
+  color: var(--text);
+}
+
+.shelf-item span { font-size: 0.85rem; }
+
+/* Pantry rules */
+.pantry-rules {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.rule-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 1rem 1.1rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  display: flex;
+  gap: 0.8rem;
+  align-items: flex-start;
+}
+
+.rule-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--moss);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.rule-text h4 {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--soil);
+  margin-bottom: 2px;
+}
+
+.rule-text p { font-size: 0.74rem; color: var(--muted); line-height: 1.45; }
+
+/* ========= STAPLES SECTION ========= */
+.staples-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.staple-group {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 3px 16px rgba(0,0,0,0.06);
+}
+
+.staple-group-header {
+  padding: 0.8rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.staple-group-icon { font-size: 1.4rem; }
+
+.staple-group-header h3 {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.staple-list {
+  padding: 0.5rem 0.8rem 1rem;
+  list-style: none;
+}
+
+.staple-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.3rem 0;
+  border-bottom: 1px solid var(--oat);
+  font-size: 0.73rem;
+  color: var(--text);
+}
+
+.staple-list li:last-child { border-bottom: none; }
+
+.staple-duration {
+  font-size: 0.62rem;
+  color: var(--muted);
+  font-weight: 600;
+  white-space: nowrap;
+  margin-left: 0.5rem;
+}
+
+.sg-grains  .staple-group-header { background: #fef3dc; color: var(--bark); }
+.sg-protein .staple-group-header { background: #fde8dc; color: #7a2500; }
+.sg-produce .staple-group-header { background: #e8f4e8; color: #1a4a1a; }
+.sg-fat     .staple-group-header { background: #f8f0e0; color: var(--bark); }
+
+/* ========= ROTATION SYSTEM ========= */
+.rotation-visual {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.fifo-diagram {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+}
+
+.fifo-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  color: var(--soil);
+  font-style: italic;
+  margin-bottom: 1.2rem;
+}
+
+.fifo-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.fifo-step {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  background: var(--cream);
+  border-radius: 8px;
+  padding: 0.7rem 1rem;
+  border-left: 4px solid var(--moss);
+}
+
+.fifo-arrow {
+  text-align: center;
+  font-size: 1.2rem;
+  color: var(--sage);
+  margin-left: 1.8rem;
+}
+
+.fifo-step-icon { font-size: 1.4rem; }
+
+.fifo-step-text h4 {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--soil);
+}
+
+.fifo-step-text p { font-size: 0.7rem; color: var(--muted); }
+
+/* Water storage */
+.water-section {
+  background: linear-gradient(135deg, #deeaf8, #eef4fc);
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 2px solid #b8d4e8;
+}
+
+.water-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  color: #1a3a5a;
+  margin-bottom: 1rem;
+}
+
+.water-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.water-item {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  background: rgba(255,255,255,0.65);
+  border-radius: 8px;
+  padding: 0.65rem 0.9rem;
+  font-size: 0.77rem;
+  color: #1a3a5a;
+}
+
+.water-item span { font-size: 1.2rem; }
+
+/* ========= INDOOR GROWING ========= */
+.indoor-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.2rem;
+}
+
+.indoor-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.2rem;
+  box-shadow: 0 3px 16px rgba(0,0,0,0.06);
+  border-top: 4px solid var(--sage);
+}
+
+.indoor-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.95rem;
+  color: var(--soil);
+  margin-bottom: 0.3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.indoor-card p {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-bottom: 0.8rem;
+  line-height: 1.45;
+}
+
+.indoor-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.indoor-item {
+  font-size: 0.65rem;
+  background: var(--oat);
+  color: var(--text);
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+}
+
+/* ========= QUICK REF CARDS ========= */
+.quick-ref {
+  background: var(--soil);
+  padding: 3rem 1.5rem;
+}
+
+.quick-ref-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.quick-ref h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  color: var(--cream);
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.quick-ref p.sub {
+  text-align: center;
+  color: var(--wheat);
+  font-size: 0.85rem;
+  margin-bottom: 2rem;
+}
+
+.qr-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.qr-card {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 1.2rem;
+}
+
+.qr-card h4 {
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--fern);
+  margin-bottom: 0.8rem;
+  font-weight: 600;
+}
+
+.qr-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.3rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  font-size: 0.74rem;
+  color: var(--cream);
+}
+
+.qr-item:last-child { border-bottom: none; }
+.qr-val { color: var(--wheat); font-weight: 600; font-size: 0.68rem; }
+
+/* ========= FOOTER ========= */
+.guide-footer {
+  background: var(--ink);
+  text-align: center;
+  padding: 1.5rem;
+  font-size: 0.72rem;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+}
+
+/* ========= UTILITY ========= */
+.callout {
+  background: linear-gradient(135deg, var(--fern), var(--moss));
+  color: white;
+  border-radius: 10px;
+  padding: 1rem 1.3rem;
+  font-size: 0.82rem;
+  line-height: 1.55;
+  margin: 1.2rem 0;
+}
+
+.callout strong { font-weight: 700; }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+
+@media (max-width: 800px) {
+  .garden-grid, .pantry-blueprint, .rotation-visual, .two-col { grid-template-columns: 1fr; }
+  .preserve-grid, .indoor-grid { grid-template-columns: 1fr 1fr; }
+  .staples-grid { grid-template-columns: 1fr 1fr; }
+  .qr-grid { grid-template-columns: 1fr 1fr; }
+  .bed-layout { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 500px) {
+  .preserve-grid, .indoor-grid, .staples-grid, .qr-grid { grid-template-columns: 1fr; }
+  .bed-layout { grid-template-columns: repeat(2, 1fr); }
+  .section-num { font-size: 2rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-tag">A Complete Household Reference</div>
+  <h1>Family Pantry &amp;<br><em>Self-Sufficiency</em> Guide</h1>
+  <div class="cover-sub">Backyard Farming · Food Storage · Preservation · Indoor Growing</div>
+  <div class="cover-divider"></div>
+</div>
+
+<!-- NAV -->
+<nav class="section-nav">
+  <a class="nav-pill" href="#garden">🌱 Backyard Garden</a>
+  <a class="nav-pill" href="#preserve">🫙 Preservation</a>
+  <a class="nav-pill" href="#pantry">🏠 Pantry Setup</a>
+  <a class="nav-pill" href="#staples">📦 Staples List</a>
+  <a class="nav-pill" href="#rotation">🔄 Rotation</a>
+  <a class="nav-pill" href="#indoor">🪴 Indoor Growing</a>
+  <a class="nav-pill" href="#quickref">📋 Quick Ref</a>
+</nav>
+
+
+<!-- ===== SECTION 1: BACKYARD GARDEN ===== -->
+<div id="garden" class="band-green">
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">01</div>
+    <div class="section-title-block">
+      <h2>Backyard Food Garden</h2>
+      <p>Layout, crop selection, and planting strategy for maximum family yield</p>
+    </div>
+  </div>
+
+  <div class="garden-grid">
+    <!-- DIAGRAM -->
+    <div>
+      <div class="garden-diagram">
+        <div class="garden-diagram-title">Recommended 20×20 ft Family Garden Layout</div>
+        <div class="bed-layout">
+          <!-- Row 1: Tall crops north -->
+          <div class="bed-zone z-trellis">
+            <span class="emoji">🥒🫘</span>
+            <div class="name">TRELLIS ROW — Cucumbers + Pole Beans (north wall)</div>
+          </div>
+          <div class="bed-zone z-tomato"><span class="emoji">🍅</span><div class="name">Tomatoes</div></div>
+          <div class="bed-zone z-pepper"><span class="emoji">🫑</span><div class="name">Peppers</div></div>
+          <!-- Row 2: Mid crops -->
+          <div class="bed-zone z-squash"><span class="emoji">🎃</span><div class="name">Winter Squash</div></div>
+          <div class="bed-zone z-beans"><span class="emoji">🫘</span><div class="name">Bush Beans</div></div>
+          <div class="bed-zone z-kale"><span class="emoji">🥬</span><div class="name">Kale / Chard</div></div>
+          <div class="bed-zone z-onion"><span class="emoji">🧅</span><div class="name">Onions</div></div>
+          <!-- Row 3: Root crops -->
+          <div class="bed-zone z-potato"><span class="emoji">🥔</span><div class="name">Potatoes</div></div>
+          <div class="bed-zone z-carrot"><span class="emoji">🥕</span><div class="name">Carrots</div></div>
+          <div class="bed-zone z-garlic"><span class="emoji">🧄</span><div class="name">Garlic</div></div>
+          <div class="bed-zone z-herb"><span class="emoji">🌿</span><div class="name">Herbs</div></div>
+          <!-- Row 4: Ground covers + perennial -->
+          <div class="bed-zone z-berry"><span class="emoji">🍓</span><div class="name">Strawberries (perennial)</div></div>
+          <div class="bed-zone z-cucumber"><span class="emoji">🥦</span><div class="name">Broccoli</div></div>
+          <div class="bed-zone z-compost"><span class="emoji">♻️</span><div class="name">Compost Bin</div></div>
+          <div class="bed-zone z-herb"><span class="emoji">🌸</span><div class="name">Pollinator Strip</div></div>
+        </div>
+        <div class="compass">
+          <div class="compass-inner">☀️<br>NORTH<br>↑</div>
+        </div>
+        <div style="font-size:0.65rem; color:var(--muted); text-align:center; margin-top:0.5rem;">
+          Place tall crops on north edge · Paths 18–24 in wide · Compost in accessible corner
+        </div>
+      </div>
+
+      <div class="three-sisters">
+        <div class="sisters-icon">🌽🫘🎃</div>
+        <div class="sisters-text">
+          <h4>The Three Sisters — Native American Companion Planting</h4>
+          <p>Corn provides a trellis for beans. Beans fix nitrogen in the soil. Squash shades the ground, retains moisture, and deters pests. Plant together in mounds for exceptional yield in small space.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CROP CARDS -->
+    <div>
+      <div class="crop-cards">
+        <div class="crop-card">
+          <div class="crop-icon">🍅</div>
+          <div class="crop-info">
+            <h4>Tomatoes — Core Calorie Crop</h4>
+            <p>Determinate for canning, indeterminate for fresh season-long harvest. 3–5 plants per person.</p>
+            <div class="crop-tags"><span class="crop-tag tag-high">High Yield</span><span class="crop-tag tag-cal">Calories</span><span class="crop-tag tag-store">Preserves Well</span></div>
+          </div>
+        </div>
+        <div class="crop-card">
+          <div class="crop-icon">🥔</div>
+          <div class="crop-info">
+            <h4>Potatoes — Calorie King</h4>
+            <p>Most calories per sq ft. 80 plants = ~80,000 calories. Plant in spring & again in June.</p>
+            <div class="crop-tags"><span class="crop-tag tag-cal">High Calories</span><span class="crop-tag tag-store">Long Storage</span></div>
+          </div>
+        </div>
+        <div class="crop-card">
+          <div class="crop-icon">🧄</div>
+          <div class="crop-info">
+            <h4>Garlic & Onions — Flavor Foundation</h4>
+            <p>Plant garlic in fall, harvest in early summer. Dense plant = 1,000+ bulbs per 100 sq ft. Doubles as medicine.</p>
+            <div class="crop-tags"><span class="crop-tag tag-easy">Easy</span><span class="crop-tag tag-store">6–12 Mo</span><span class="crop-tag tag-cal">Calorie Crop</span></div>
+          </div>
+        </div>
+        <div class="crop-card">
+          <div class="crop-icon">🥬</div>
+          <div class="crop-info">
+            <h4>Leafy Greens — Continuous Harvest</h4>
+            <p>Cut-and-come-again: kale, chard, spinach, lettuce. Succession plant every 2–3 weeks for constant supply.</p>
+            <div class="crop-tags"><span class="crop-tag tag-easy">Beginner</span><span class="crop-tag tag-high">Fast Yield</span></div>
+          </div>
+        </div>
+        <div class="crop-card">
+          <div class="crop-icon">🫘</div>
+          <div class="crop-info">
+            <h4>Beans & Legumes — Protein + Soil</h4>
+            <p>Fix nitrogen in soil. Dry beans store 10+ years. Bush beans give 60-day yields in tight spaces.</p>
+            <div class="crop-tags"><span class="crop-tag tag-store">10+ Yr Dry</span><span class="crop-tag tag-easy">Easy</span></div>
+          </div>
+        </div>
+        <div class="crop-card">
+          <div class="crop-icon">🎃</div>
+          <div class="crop-info">
+            <h4>Winter Squash — Natural Storage</h4>
+            <p>Butternut, acorn, spaghetti squash cure and store 3–6 months without refrigeration.</p>
+            <div class="crop-tags"><span class="crop-tag tag-store">Months</span><span class="crop-tag tag-cal">Calories</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEASON PLANNER -->
+  <div class="season-bar-wrap">
+    <div class="season-bar-title">Annual Planting & Harvest Calendar (Northern Hemisphere)</div>
+    <table class="season-table">
+      <thead>
+        <tr>
+          <th style="text-align:left; width:120px;">Crop</th>
+          <th>Jan</th><th>Feb</th><th>Mar</th><th>Apr</th><th>May</th><th>Jun</th>
+          <th>Jul</th><th>Aug</th><th>Sep</th><th>Oct</th><th>Nov</th><th>Dec</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Garlic</td>
+          <td class="month-cell m-rest"></td><td class="month-cell m-rest"></td><td class="month-cell m-rest"></td>
+          <td class="month-cell m-rest"></td><td class="month-cell m-rest"></td><td class="month-cell m-harvest">H</td>
+          <td class="month-cell m-rest"></td><td class="month-cell m-rest"></td><td class="month-cell m-rest"></td>
+          <td class="month-cell m-sow">S</td><td class="month-cell m-sow">S</td><td class="month-cell m-rest"></td>
+        </tr>
+        <tr>
+          <td>Greens / Kale</td>
+          <td class="month-cell m-rest"></td><td class="month-cell m-rest"></td><td class="month-cell m-sow">S</td>
+          <td class="month-cell m-grow">G</td><td class="month-cell m-harvest">H</td><td class="month-cell m-harvest">H</td>
+          <td class="month-cell m-harvest">H</td><td class="month-cell m-sow">S</td><td class="month-cell m-grow">G</td>
+          <td class="month-cell m-harvest">H</td><td class="month-cell m-harvest">H</td><td class="month-cell m-rest"></td>
+        </tr>
+        <tr>
+          <td>Tomatoes</td>
+          <td class="month-cell m-rest"></td><td class="month-cell m-sow">S</td><td class="month-cell m-sow">S</td>
+          <td class="month-cell m-grow">G</td><td class="month-cell m-grow">G</td><td class="month-cell m-grow">G</td>
+          <td class="month-cell m-harvest">H</td><td class="month-cell m-harvest">H</td><td class="month-cell m-harvest">H</td>
+          <td class="month-cell m-rest"></td><td class="month-cell m-rest"></td><td class="month-cell m-rest"></td>
+        </tr>
+        <tr>
+          <td>Potatoes</td>
+          <td class="month-cell m-rest"></td><td class="month-cell m-sow">S</td><td class="month-cell m-sow">S</td>
+          <td class="month-cell m-grow">G</td><td class="month-cell m-grow">G</td><td class="month-cell m-sow">S</td>
+          <td class="month-cell m-grow">G</td><td class="month-cell m-harvest">H</td><td class="month-cell m-harvest">H</td>
+          <td class="month-cell m-rest"></td><td class="month-cell m-rest"></td><td class="month-cell m-rest"></td>
+        </tr>
+        <tr>
+          <td>Winter Squash</td>
+          <td class="month-cell m-rest"></td><td class="month-cell m-rest"></td><td class="month-cell m-rest"></td>
+          <td class="month-cell m-sow">S</td><td class="month-cell m-grow">G</td><td class="month-cell m-grow">G</td>
+          <td class="month-cell m-grow">G</td><td class="month-cell m-grow">G</td><td class="month-cell m-harvest">H</td>
+          <td class="month-cell m-harvest">H</td><td class="month-cell m-rest"></td><td class="month-cell m-rest"></td>
+        </tr>
+        <tr>
+          <td>Beans</td>
+          <td class="month-cell m-rest"></td><td class="month-cell m-rest"></td><td class="month-cell m-rest"></td>
+          <td class="month-cell m-rest"></td><td class="month-cell m-sow">S</td><td class="month-cell m-grow">G</td>
+          <td class="month-cell m-harvest">H</td><td class="month-cell m-harvest">H</td><td class="month-cell m-rest"></td>
+          <td class="month-cell m-rest"></td><td class="month-cell m-rest"></td><td class="month-cell m-rest"></td>
+        </tr>
+        <tr>
+          <td>Root Crops</td>
+          <td class="month-cell m-rest"></td><td class="month-cell m-rest"></td><td class="month-cell m-sow">S</td>
+          <td class="month-cell m-grow">G</td><td class="month-cell m-grow">G</td><td class="month-cell m-harvest">H</td>
+          <td class="month-cell m-sow">S</td><td class="month-cell m-grow">G</td><td class="month-cell m-harvest">H</td>
+          <td class="month-cell m-harvest">H</td><td class="month-cell m-rest"></td><td class="month-cell m-rest"></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="legend-row">
+      <span><span class="legend-dot" style="background:#c8e6c9;"></span>S = Sow / Start Indoors</span>
+      <span><span class="legend-dot" style="background:#4caf50;"></span>G = Growing Season</span>
+      <span><span class="legend-dot" style="background:#c9982a;"></span>H = Harvest</span>
+      <span style="color:var(--muted); font-style:italic;">Adjust 2–4 weeks based on your USDA hardiness zone & frost dates</span>
+    </div>
+  </div>
+
+</div></div>
+
+
+<!-- ===== SECTION 2: PRESERVATION ===== -->
+<div id="preserve" class="band-warm">
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">02</div>
+    <div class="section-title-block">
+      <h2>Food Preservation Methods</h2>
+      <p>Turn harvest abundance into year-round food security</p>
+    </div>
+  </div>
+
+  <div class="preserve-grid">
+    <div class="preserve-card p-canning">
+      <div class="preserve-header">
+        <div class="preserve-icon">🫙</div>
+        <div>
+          <h3>Water Bath Canning</h3>
+          <div class="preserve-shelf">SHELF LIFE: 1–2 YEARS</div>
+        </div>
+      </div>
+      <div class="preserve-body">
+        <strong>For high-acid foods only</strong> (pH ≤ 4.6). Submerge sealed jars in boiling water. Kills microorganisms and creates vacuum seal.
+        <div class="preserve-foods">
+          <span class="food-chip">Tomatoes</span><span class="food-chip">Fruit Jams</span>
+          <span class="food-chip">Pickles</span><span class="food-chip">Apple Sauce</span>
+          <span class="food-chip">Salsa</span><span class="food-chip">Fruit Preserves</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="preserve-card p-canning" style="">
+      <div class="preserve-header" style="background:#fde0d0;">
+        <div class="preserve-icon">⚗️</div>
+        <div>
+          <h3>Pressure Canning</h3>
+          <div class="preserve-shelf">SHELF LIFE: 2–5 YEARS</div>
+        </div>
+      </div>
+      <div class="preserve-body">
+        <strong>Required for low-acid foods.</strong> Reaches 240°F under pressure, killing botulism spores. Always use tested USDA recipes.
+        <div class="preserve-foods">
+          <span class="food-chip">Meat & Fish</span><span class="food-chip">Beans</span>
+          <span class="food-chip">Vegetables</span><span class="food-chip">Soups</span>
+          <span class="food-chip">Broths</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="preserve-card p-freezing">
+      <div class="preserve-header">
+        <div class="preserve-icon">❄️</div>
+        <div>
+          <h3>Freezing</h3>
+          <div class="preserve-shelf" style="color:#1a3a5a;">SHELF LIFE: 8–12 MONTHS</div>
+        </div>
+      </div>
+      <div class="preserve-body">
+        <strong>Easiest method</strong>, best for preserving texture and nutrients. Blanch vegetables first. Vacuum seal to prevent freezer burn.
+        <div class="preserve-foods">
+          <span class="food-chip">Berries</span><span class="food-chip">Vegetables</span>
+          <span class="food-chip">Meat</span><span class="food-chip">Bread</span>
+          <span class="food-chip">Meals</span><span class="food-chip">Herbs</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="preserve-card p-dehydrate">
+      <div class="preserve-header">
+        <div class="preserve-icon">🌞</div>
+        <div>
+          <h3>Dehydrating</h3>
+          <div class="preserve-shelf">SHELF LIFE: 3–5 YEARS</div>
+        </div>
+      </div>
+      <div class="preserve-body">
+        <strong>Removes moisture</strong> to stop microbial growth. Lightweight and compact storage. Retains most nutrients.
+        <div class="preserve-foods">
+          <span class="food-chip">Fruit Leather</span><span class="food-chip">Jerky</span>
+          <span class="food-chip">Herbs</span><span class="food-chip">Mushrooms</span>
+          <span class="food-chip">Tomatoes</span><span class="food-chip">Apples</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="preserve-card p-ferment">
+      <div class="preserve-header">
+        <div class="preserve-icon">🫧</div>
+        <div>
+          <h3>Lacto-Fermentation</h3>
+          <div class="preserve-shelf" style="color:#1a4a1a;">SHELF LIFE: 6–18 MONTHS</div>
+        </div>
+      </div>
+      <div class="preserve-body">
+        <strong>Beneficial bacteria</strong> (probiotics) naturally preserve food and enhance nutrition. No special equipment needed — just salt and time.
+        <div class="preserve-foods">
+          <span class="food-chip">Sauerkraut</span><span class="food-chip">Kimchi</span>
+          <span class="food-chip">Pickles</span><span class="food-chip">Kefir</span>
+          <span class="food-chip">Kombucha</span><span class="food-chip">Miso</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="preserve-card p-root">
+      <div class="preserve-header">
+        <div class="preserve-icon">🏚️</div>
+        <div>
+          <h3>Root Cellaring</h3>
+          <div class="preserve-shelf" style="color:#5a3820;">SHELF LIFE: 3–8 MONTHS</div>
+        </div>
+      </div>
+      <div class="preserve-body">
+        <strong>No electricity needed.</strong> Cool (32–50°F), dark, slightly humid space. Can use a basement corner, unheated garage, or buried crate.
+        <div class="preserve-foods">
+          <span class="food-chip">Potatoes</span><span class="food-chip">Carrots</span>
+          <span class="food-chip">Onions</span><span class="food-chip">Winter Squash</span>
+          <span class="food-chip">Apples</span><span class="food-chip">Beets</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SHELF LIFE CHART -->
+  <div class="shelf-chart">
+    <h3>Shelf Life Comparison — Key Pantry Staples</h3>
+    <div class="shelf-row"><div class="shelf-label">White Rice</div><div class="shelf-bar-bg"><div class="shelf-bar-fill" style="width:100%; background: linear-gradient(90deg, #c9982a, #e8c96b);"></div></div><div class="shelf-years">20+ yrs</div></div>
+    <div class="shelf-row"><div class="shelf-label">Dried Beans</div><div class="shelf-bar-bg"><div class="shelf-bar-fill" style="width:100%; background: linear-gradient(90deg, #c9982a, #e8c96b);"></div></div><div class="shelf-years">10–20 yrs</div></div>
+    <div class="shelf-row"><div class="shelf-label">Whole Wheat Berries</div><div class="shelf-bar-bg"><div class="shelf-bar-fill" style="width:95%; background: linear-gradient(90deg, #7a8c6e, #a8bc98);"></div></div><div class="shelf-years">25–30 yrs</div></div>
+    <div class="shelf-row"><div class="shelf-label">Honey / Salt / Sugar</div><div class="shelf-bar-bg"><div class="shelf-bar-fill" style="width:100%; background: linear-gradient(90deg, #c9982a, #e8c96b);"></div></div><div class="shelf-years">Indefinite</div></div>
+    <div class="shelf-row"><div class="shelf-label">Freeze-Dried Food</div><div class="shelf-bar-bg"><div class="shelf-bar-fill" style="width:95%; background: linear-gradient(90deg, #5c3d2e, #a0522d);"></div></div><div class="shelf-years">25–30 yrs</div></div>
+    <div class="shelf-row"><div class="shelf-label">All-Purpose Flour</div><div class="shelf-bar-bg"><div class="shelf-bar-fill" style="width:15%; background: linear-gradient(90deg, #7ba7bc, #a8c8d8);"></div></div><div class="shelf-years">1–2 yrs</div></div>
+    <div class="shelf-row"><div class="shelf-label">Canned Vegetables</div><div class="shelf-bar-bg"><div class="shelf-bar-fill" style="width:20%; background: linear-gradient(90deg, #7ba7bc, #a8c8d8);"></div></div><div class="shelf-years">2–5 yrs</div></div>
+    <div class="shelf-row"><div class="shelf-label">Dehydrated Vegetables</div><div class="shelf-bar-bg"><div class="shelf-bar-fill" style="width:35%; background: linear-gradient(90deg, #4a5c3f, #7a8c6e);"></div></div><div class="shelf-years">3–5 yrs</div></div>
+    <div class="shelf-row"><div class="shelf-label">Olive / Coconut Oil</div><div class="shelf-bar-bg"><div class="shelf-bar-fill" style="width:20%; background: linear-gradient(90deg, #7a8c6e, #a8bc98);"></div></div><div class="shelf-years">1–2 yrs</div></div>
+    <div class="shelf-row"><div class="shelf-label">Frozen Vegetables</div><div class="shelf-bar-bg"><div class="shelf-bar-fill" style="width:10%; background: linear-gradient(90deg, #7ba7bc, #a8c8d8);"></div></div><div class="shelf-years">8–12 mo</div></div>
+  </div>
+
+</div></div>
+
+
+<!-- ===== SECTION 3: PANTRY SETUP ===== -->
+<div id="pantry" class="band-earth">
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">03</div>
+    <div class="section-title-block">
+      <h2>Indoor Pantry Organization</h2>
+      <p>Zone-based storage for temperature, humidity, and food type</p>
+    </div>
+  </div>
+
+  <div class="pantry-blueprint">
+    <!-- PANTRY DIAGRAM -->
+    <div>
+      <div class="pantry-diagram">
+        <div class="pantry-title">Pantry Zone System — Organized by Storage Conditions</div>
+        <div class="pantry-shelves">
+
+          <div class="shelf-unit">
+            <div class="shelf-zone-label">
+              ZONE A — LONG-TERM BULK (Cool & Dark)
+              <span class="shelf-zone-temp">50–65°F · Dry</span>
+            </div>
+            <div class="shelf-items">
+              <div class="shelf-item"><span>🌾</span> Wheat Berries</div>
+              <div class="shelf-item"><span>🍚</span> White Rice</div>
+              <div class="shelf-item"><span>🫘</span> Dried Beans</div>
+              <div class="shelf-item"><span>🧂</span> Salt (bulk)</div>
+              <div class="shelf-item"><span>🍯</span> Honey</div>
+              <div class="shelf-item"><span>🍬</span> Sugar</div>
+              <div class="shelf-item"><span>🌽</span> Cornmeal</div>
+              <div class="shelf-item"><span>🫙</span> Lentils</div>
+            </div>
+          </div>
+
+          <div class="shelf-unit">
+            <div class="shelf-zone-label">
+              ZONE B — MEDIUM-TERM CANNED & JARRED
+              <span class="shelf-zone-temp">60–72°F · Consistent Temp</span>
+            </div>
+            <div class="shelf-items">
+              <div class="shelf-item"><span>🥫</span> Canned Tomatoes</div>
+              <div class="shelf-item"><span>🫙</span> Home-Canned Jams</div>
+              <div class="shelf-item"><span>🥫</span> Canned Beans</div>
+              <div class="shelf-item"><span>🫙</span> Pickles</div>
+              <div class="shelf-item"><span>🥫</span> Canned Broth</div>
+              <div class="shelf-item"><span>🫙</span> Fermented Veg</div>
+              <div class="shelf-item"><span>🥫</span> Tuna / Salmon</div>
+              <div class="shelf-item"><span>🫙</span> Pasta Sauce</div>
+            </div>
+          </div>
+
+          <div class="shelf-unit">
+            <div class="shelf-zone-label">
+              ZONE C — WORKING PANTRY (Active Use)
+              <span class="shelf-zone-temp">65–75°F · Kitchen Accessible</span>
+            </div>
+            <div class="shelf-items">
+              <div class="shelf-item"><span>🌾</span> All-Purpose Flour</div>
+              <div class="shelf-item"><span>🫙</span> Pasta & Noodles</div>
+              <div class="shelf-item"><span>🫒</span> Olive Oil</div>
+              <div class="shelf-item"><span>🧄</span> Onions / Garlic</div>
+              <div class="shelf-item"><span>🌿</span> Dried Herbs</div>
+              <div class="shelf-item"><span>🫙</span> Oats</div>
+              <div class="shelf-item"><span>🍫</span> Dark Chocolate</div>
+              <div class="shelf-item"><span>🫙</span> Vinegar</div>
+            </div>
+          </div>
+
+          <div class="shelf-unit">
+            <div class="shelf-zone-label">
+              ZONE D — ROOT CELLAR / COLD STORAGE
+              <span class="shelf-zone-temp">32–50°F · Slightly Humid</span>
+            </div>
+            <div class="shelf-items">
+              <div class="shelf-item"><span>🥔</span> Potatoes</div>
+              <div class="shelf-item"><span>🧅</span> Onions (mesh bags)</div>
+              <div class="shelf-item"><span>🎃</span> Winter Squash</div>
+              <div class="shelf-item"><span>🍎</span> Apples</div>
+              <div class="shelf-item"><span>🥕</span> Carrots (in sand)</div>
+              <div class="shelf-item"><span>🥦</span> Cabbage</div>
+              <div class="shelf-item"><span>🫚</span> Lard / Tallow</div>
+            </div>
+          </div>
+
+          <div class="shelf-unit">
+            <div class="shelf-zone-label">
+              ZONE E — FREEZER
+              <span class="shelf-zone-temp">0°F or Below</span>
+            </div>
+            <div class="shelf-items">
+              <div class="shelf-item"><span>🥩</span> Meat (vacuum sealed)</div>
+              <div class="shelf-item"><span>🐟</span> Fish</div>
+              <div class="shelf-item"><span>🫐</span> Berries</div>
+              <div class="shelf-item"><span>🥦</span> Blanched Veg</div>
+              <div class="shelf-item"><span>🍞</span> Bread / Dough</div>
+              <div class="shelf-item"><span>🍲</span> Batch Meals</div>
+              <div class="shelf-item"><span>🌿</span> Herb Cubes</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- PANTRY RULES -->
+    <div>
+      <div class="pantry-rules">
+        <div class="rule-card">
+          <div class="rule-num">1</div>
+          <div class="rule-text">
+            <h4>FIFO — First In, First Out</h4>
+            <p>Always place new stock behind old. Consume oldest items first. Label everything with purchase or canning date. Check inventory every 6 months.</p>
+          </div>
+        </div>
+        <div class="rule-card">
+          <div class="rule-num">2</div>
+          <div class="rule-text">
+            <h4>The Enemy Trinity: Heat · Light · Moisture</h4>
+            <p>Store in cool (below 70°F), dark spaces. Avoid above the stove or against exterior walls. Use airtight containers — mylar bags + oxygen absorbers for bulk grains.</p>
+          </div>
+        </div>
+        <div class="rule-card">
+          <div class="rule-num">3</div>
+          <div class="rule-text">
+            <h4>Stock What You Actually Eat</h4>
+            <p>A pantry of foods your family won't eat is wasted space. Build around 10–15 core meals your family loves, then stock 3–4 months of those ingredients.</p>
+          </div>
+        </div>
+        <div class="rule-card">
+          <div class="rule-num">4</div>
+          <div class="rule-text">
+            <h4>Inventory System</h4>
+            <p>Keep a running list (paper or app) on the pantry door. Note quantity and date. Rotate weekly. Do a full inventory audit every 3 months to identify gaps before they become emergencies.</p>
+          </div>
+        </div>
+        <div class="rule-card">
+          <div class="rule-num">5</div>
+          <div class="rule-text">
+            <h4>Pest-Proof Storage</h4>
+            <p>Transfer bulk goods to glass jars or food-grade 5-gallon buckets with gamma-seal lids. Never store directly on concrete floor. Check regularly for signs of moisture or infestation.</p>
+          </div>
+        </div>
+        <div class="rule-card">
+          <div class="rule-num">6</div>
+          <div class="rule-text">
+            <h4>Build in Tiers</h4>
+            <p>Start with 2-week supply → expand to 1 month → then 3 months → then 6–12 months. Add 1–2 extra items per grocery run. Steady progress beats panic-buying.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div></div>
+
+
+<!-- ===== SECTION 4: STAPLES LIST ===== -->
+<div id="staples" class="band-sky">
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">04</div>
+    <div class="section-title-block">
+      <h2>Family Pantry Staples Master List</h2>
+      <p>Prioritized by shelf life, nutrition density, and versatility</p>
+    </div>
+  </div>
+
+  <div class="staples-grid">
+    <div class="staple-group sg-grains">
+      <div class="staple-group-header">
+        <div class="staple-group-icon">🌾</div>
+        <h3>Grains & Starches</h3>
+      </div>
+      <ul class="staple-list">
+        <li>White Rice <span class="staple-duration">20+ yrs</span></li>
+        <li>Wheat Berries <span class="staple-duration">25–30 yrs</span></li>
+        <li>All-Purpose Flour <span class="staple-duration">1–2 yrs</span></li>
+        <li>Rolled Oats <span class="staple-duration">2–5 yrs</span></li>
+        <li>Pasta / Noodles <span class="staple-duration">2–5 yrs</span></li>
+        <li>Cornmeal <span class="staple-duration">2–3 yrs</span></li>
+        <li>Popcorn (dry) <span class="staple-duration">2–4 yrs</span></li>
+        <li>Crackers <span class="staple-duration">6–9 mo</span></li>
+        <li>Bread Mix / Yeast <span class="staple-duration">1–4 yrs</span></li>
+        <li>Quinoa <span class="staple-duration">2–3 yrs</span></li>
+      </ul>
+    </div>
+
+    <div class="staple-group sg-protein">
+      <div class="staple-group-header">
+        <div class="staple-group-icon">🫘</div>
+        <h3>Protein & Legumes</h3>
+      </div>
+      <ul class="staple-list">
+        <li>Dried Black Beans <span class="staple-duration">10–25 yrs</span></li>
+        <li>Dried Lentils <span class="staple-duration">10–25 yrs</span></li>
+        <li>Dried Chickpeas <span class="staple-duration">10–25 yrs</span></li>
+        <li>Split Peas <span class="staple-duration">10–25 yrs</span></li>
+        <li>Canned Tuna <span class="staple-duration">3–5 yrs</span></li>
+        <li>Canned Salmon <span class="staple-duration">3–5 yrs</span></li>
+        <li>Canned Chicken <span class="staple-duration">3–5 yrs</span></li>
+        <li>Peanut Butter <span class="staple-duration">1–2 yrs</span></li>
+        <li>Nuts / Seeds <span class="staple-duration">1 yr</span></li>
+        <li>Powdered Milk <span class="staple-duration">2–10 yrs</span></li>
+      </ul>
+    </div>
+
+    <div class="staple-group sg-produce">
+      <div class="staple-group-header">
+        <div class="staple-group-icon">🧄</div>
+        <h3>Pantry Produce</h3>
+      </div>
+      <ul class="staple-list">
+        <li>Garlic (cured) <span class="staple-duration">6–8 mo</span></li>
+        <li>Onions (cured) <span class="staple-duration">4–6 mo</span></li>
+        <li>Winter Squash <span class="staple-duration">3–6 mo</span></li>
+        <li>Potatoes (root cellar) <span class="staple-duration">4–6 mo</span></li>
+        <li>Canned Tomatoes <span class="staple-duration">2–5 yrs</span></li>
+        <li>Dehydrated Onion <span class="staple-duration">3–5 yrs</span></li>
+        <li>Dehydrated Tomato <span class="staple-duration">3–5 yrs</span></li>
+        <li>Apple Sauce (canned) <span class="staple-duration">1–2 yrs</span></li>
+        <li>Dried Mushrooms <span class="staple-duration">1–3 yrs</span></li>
+        <li>Freeze-Dried Veg <span class="staple-duration">25+ yrs</span></li>
+      </ul>
+    </div>
+
+    <div class="staple-group sg-fat">
+      <div class="staple-group-header">
+        <div class="staple-group-icon">🫒</div>
+        <h3>Fats, Flavors & Baking</h3>
+      </div>
+      <ul class="staple-list">
+        <li>Salt (bulk) <span class="staple-duration">Indefinite</span></li>
+        <li>Honey (raw) <span class="staple-duration">Indefinite</span></li>
+        <li>White Sugar <span class="staple-duration">Indefinite</span></li>
+        <li>Apple Cider Vinegar <span class="staple-duration">5+ yrs</span></li>
+        <li>Coconut Oil <span class="staple-duration">2+ yrs</span></li>
+        <li>Olive Oil <span class="staple-duration">1–2 yrs</span></li>
+        <li>Baking Soda/Powder <span class="staple-duration">1–3 yrs</span></li>
+        <li>Dried Herbs & Spices <span class="staple-duration">2–4 yrs</span></li>
+        <li>Soy Sauce / Tamari <span class="staple-duration">2–3 yrs</span></li>
+        <li>Cocoa Powder <span class="staple-duration">3–5 yrs</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>Priority Rule:</strong> Begin with the items that give you the highest calorie density per dollar per cubic foot of storage. Rice, beans, oats, and wheat berries are the bedrock — affordable, versatile, and nearly indefinite shelf life in proper storage. Build around them.
+  </div>
+
+</div></div>
+
+
+<!-- ===== SECTION 5: ROTATION ===== -->
+<div id="rotation" class="band-gold">
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">05</div>
+    <div class="section-title-block">
+      <h2>Rotation, Inventory & Water Storage</h2>
+      <p>Systems that keep your pantry alive and prevent waste</p>
+    </div>
+  </div>
+
+  <div class="rotation-visual">
+    <div class="fifo-diagram">
+      <div class="fifo-title">The FIFO Rotation System</div>
+      <div class="fifo-flow">
+        <div class="fifo-step">
+          <div class="fifo-step-icon">🛒</div>
+          <div class="fifo-step-text">
+            <h4>Purchase / Harvest</h4>
+            <p>Bring in new stock from store, garden, or CSA. Label immediately with date.</p>
+          </div>
+        </div>
+        <div class="fifo-arrow">↓</div>
+        <div class="fifo-step">
+          <div class="fifo-step-icon">🔄</div>
+          <div class="fifo-step-text">
+            <h4>Stock to the Back</h4>
+            <p>Push existing stock forward. New items go behind. Never mix dates in one container.</p>
+          </div>
+        </div>
+        <div class="fifo-arrow">↓</div>
+        <div class="fifo-step">
+          <div class="fifo-step-icon">📝</div>
+          <div class="fifo-step-text">
+            <h4>Log the Inventory</h4>
+            <p>Update your list (whiteboard, app, or notebook). Note quantity, date added, expiry.</p>
+          </div>
+        </div>
+        <div class="fifo-arrow">↓</div>
+        <div class="fifo-step">
+          <div class="fifo-step-icon">🍽️</div>
+          <div class="fifo-step-text">
+            <h4>Cook From the Front</h4>
+            <p>Always use the oldest item first. Oldest = front of shelf = first to be used.</p>
+          </div>
+        </div>
+        <div class="fifo-arrow">↓</div>
+        <div class="fifo-step" style="border-left-color: var(--terracotta);">
+          <div class="fifo-step-icon">🔁</div>
+          <div class="fifo-step-text">
+            <h4>Audit Every 3 Months</h4>
+            <p>Identify gaps, nearing-expiry items, and rotation failures. Restock accordingly.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WATER SECTION -->
+    <div class="water-section">
+      <div class="water-title">💧 Water Storage — The Most Critical Prep</div>
+      <p style="font-size:0.77rem; color:#2a4a6a; margin-bottom:1rem; line-height:1.5;">
+        Humans need 1 gallon per person per day (2 gallons in heat or for nursing). Water becomes critical in 3 days. Store before food.
+      </p>
+      <div class="water-items">
+        <div class="water-item"><span>🫙</span><div><strong>Minimum:</strong> 3-day supply (3 gal/person). Start here.</div></div>
+        <div class="water-item"><span>🪣</span><div><strong>Target:</strong> 2-week supply (14 gal/person) in sealed food-grade containers.</div></div>
+        <div class="water-item"><span>🛢️</span><div><strong>Advanced:</strong> 55-gallon water barrels + hand pump for 30-day+ reserves.</div></div>
+        <div class="water-item"><span>🔽</span><div><strong>Filtration:</strong> Berkey filter or Sawyer Squeeze as backup for any water source.</div></div>
+        <div class="water-item"><span>🔄</span><div><strong>Rotate:</strong> Tap water in sealed containers lasts 6–12 months. Label date and replace annually.</div></div>
+        <div class="water-item"><span>☀️</span><div><strong>Solar Disinfection:</strong> Clear bottles + 6 hrs of direct sunlight = SODIS purification method.</div></div>
+      </div>
+    </div>
+  </div>
+
+</div></div>
+
+
+<!-- ===== SECTION 6: INDOOR GROWING ===== -->
+<div id="indoor" class="band-green">
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">06</div>
+    <div class="section-title-block">
+      <h2>Year-Round Indoor Growing</h2>
+      <p>Fresh food without outdoor space — herbs, sprouts, microgreens & more</p>
+    </div>
+  </div>
+
+  <div class="indoor-grid">
+    <div class="indoor-card">
+      <h3>🌿 Window Herb Garden</h3>
+      <p>South-facing window gets 6+ hours of sun. Use a 6-inch pot per herb. Most herbs thrive in well-draining soil and require minimal care.</p>
+      <div class="indoor-items">
+        <span class="indoor-item">Basil</span>
+        <span class="indoor-item">Chives</span>
+        <span class="indoor-item">Parsley</span>
+        <span class="indoor-item">Thyme</span>
+        <span class="indoor-item">Oregano</span>
+        <span class="indoor-item">Mint (own pot)</span>
+        <span class="indoor-item">Rosemary</span>
+      </div>
+    </div>
+
+    <div class="indoor-card">
+      <h3>🌱 Sprouts — Fastest Food</h3>
+      <p>Ready in 3–7 days. No soil, no light required. Just a mason jar and cheesecloth. Nutritionally dense — up to 40x more nutrients than the adult plant.</p>
+      <div class="indoor-items">
+        <span class="indoor-item">Broccoli Sprouts</span>
+        <span class="indoor-item">Alfalfa</span>
+        <span class="indoor-item">Lentil Sprouts</span>
+        <span class="indoor-item">Mung Beans</span>
+        <span class="indoor-item">Sunflower</span>
+        <span class="indoor-item">Radish</span>
+      </div>
+    </div>
+
+    <div class="indoor-card">
+      <h3>🌿 Microgreens</h3>
+      <p>Harvest in 7–14 days. Grown in shallow trays with 1–2 inches of soil. Need moderate light (grow light or bright south window). 200% nutrient density vs. mature plant.</p>
+      <div class="indoor-items">
+        <span class="indoor-item">Sunflower</span>
+        <span class="indoor-item">Pea Shoots</span>
+        <span class="indoor-item">Radish</span>
+        <span class="indoor-item">Arugula</span>
+        <span class="indoor-item">Kale</span>
+        <span class="indoor-item">Beets</span>
+      </div>
+    </div>
+
+    <div class="indoor-card">
+      <h3>🥬 Container Greens</h3>
+      <p>Lettuce, spinach, and kale thrive in 8–12 inch deep containers. Use a grow light (16 hrs/day) in low-light rooms. Succession-sow every 3 weeks for continuous harvest.</p>
+      <div class="indoor-items">
+        <span class="indoor-item">Butter Lettuce</span>
+        <span class="indoor-item">Spinach</span>
+        <span class="indoor-item">Arugula</span>
+        <span class="indoor-item">Bok Choy</span>
+        <span class="indoor-item">Baby Kale</span>
+      </div>
+    </div>
+
+    <div class="indoor-card">
+      <h3>🍅 Compact Fruiting Plants</h3>
+      <p>Dwarf tomatoes, peppers, and cucumbers can produce indoors with a quality grow light (full-spectrum LED, 12–16 hrs). Pollinate flowers manually with a small brush.</p>
+      <div class="indoor-items">
+        <span class="indoor-item">Tumbling Tom Tomato</span>
+        <span class="indoor-item">Mini Peppers</span>
+        <span class="indoor-item">Bush Cucumber</span>
+        <span class="indoor-item">Dwarf Basil</span>
+      </div>
+    </div>
+
+    <div class="indoor-card">
+      <h3>🍄 Mushroom Kits</h3>
+      <p>All-in-one inoculated grow bags produce multiple flushes over 2–3 months. Keep in a cool, humid spot (65–75°F). Spray with water twice daily. No soil needed.</p>
+      <div class="indoor-items">
+        <span class="indoor-item">Oyster Mushroom</span>
+        <span class="indoor-item">Shiitake</span>
+        <span class="indoor-item">Lion's Mane</span>
+        <span class="indoor-item">King Oyster</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout" style="background: linear-gradient(135deg, #4a5c3f, #7a8c6e); margin-top: 1.5rem;">
+    <strong>Light Tip:</strong> A single full-spectrum grow light (45–65W LED, 2700–6500K) placed 6–12 inches above plants for 14–16 hours/day will support any indoor food crop. Cost: ~$30–80. Return on investment in 1–2 harvests of microgreens or herbs.
+  </div>
+
+</div></div>
+
+
+<!-- ===== QUICK REF ===== -->
+<div id="quickref" class="quick-ref">
+  <div class="quick-ref-inner">
+    <h2>Quick Reference Cards</h2>
+    <p class="sub">Pin these in your pantry</p>
+
+    <div class="qr-grid">
+      <div class="qr-card">
+        <h4>Family of 4 — 3 Month Supply</h4>
+        <div class="qr-item">White Rice <span class="qr-val">40 lbs</span></div>
+        <div class="qr-item">Dried Beans <span class="qr-val">30 lbs</span></div>
+        <div class="qr-item">Flour / Oats <span class="qr-val">25 lbs</span></div>
+        <div class="qr-item">Canned Protein <span class="qr-val">48 cans</span></div>
+        <div class="qr-item">Canned Vegetables <span class="qr-val">60 cans</span></div>
+        <div class="qr-item">Oil (olive/coconut) <span class="qr-val">3–4 liters</span></div>
+        <div class="qr-item">Salt <span class="qr-val">10 lbs</span></div>
+        <div class="qr-item">Water (drinking) <span class="qr-val">168 gal</span></div>
+      </div>
+
+      <div class="qr-card">
+        <h4>Storage Enemies & Solutions</h4>
+        <div class="qr-item">Heat <span class="qr-val">Store below 70°F</span></div>
+        <div class="qr-item">Light <span class="qr-val">Dark containers</span></div>
+        <div class="qr-item">Moisture <span class="qr-val">Airtight seal</span></div>
+        <div class="qr-item">Oxygen <span class="qr-val">Oxygen absorbers</span></div>
+        <div class="qr-item">Pests <span class="qr-val">Sealed buckets</span></div>
+        <div class="qr-item">Fluctuation <span class="qr-val">Stable temp zone</span></div>
+        <div class="qr-item">Forgetting <span class="qr-val">Label everything</span></div>
+        <div class="qr-item">Waste <span class="qr-val">FIFO always</span></div>
+      </div>
+
+      <div class="qr-card">
+        <h4>Garden Space Calculator</h4>
+        <div class="qr-item">Calories/person/day <span class="qr-val">2,000</span></div>
+        <div class="qr-item">Min sq ft / person <span class="qr-val">200 sq ft</span></div>
+        <div class="qr-item">Self-sufficient / person <span class="qr-val">2,000–4,000 sq ft</span></div>
+        <div class="qr-item">Raised bed (4×8) <span class="qr-val">32 sq ft</span></div>
+        <div class="qr-item">Tomatoes per person <span class="qr-val">3–5 plants</span></div>
+        <div class="qr-item">Potato / person <span class="qr-val">20–25 plants</span></div>
+        <div class="qr-item">Garlic / person <span class="qr-val">30–50 bulbs</span></div>
+        <div class="qr-item">Compost ratio <span class="qr-val">1 bin / 200 sq ft</span></div>
+      </div>
+
+      <div class="qr-card">
+        <h4>Preservation Quick Picks</h4>
+        <div class="qr-item">Tomato glut → <span class="qr-val">Water bath can</span></div>
+        <div class="qr-item">Berry harvest → <span class="qr-val">Freeze / jam</span></div>
+        <div class="qr-item">Herb excess → <span class="qr-val">Dehydrate / freeze</span></div>
+        <div class="qr-item">Cabbage → <span class="qr-val">Ferment (kraut)</span></div>
+        <div class="qr-item">Root veg → <span class="qr-val">Root cellar</span></div>
+        <div class="qr-item">Meat bulk → <span class="qr-val">Freeze / pressure can</span></div>
+        <div class="qr-item">Cucumbers → <span class="qr-val">Ferment / pickle</span></div>
+        <div class="qr-item">Green beans → <span class="qr-val">Pressure can</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="guide-footer">
+  Family Pantry & Self-Sufficiency Guide · Adjust all quantities to your family size, climate zone, and dietary needs · Review & update annually
+</div>
+
+</body>
+</html>

@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shadow to Light — A Field Reference</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0C0A08;
+    --surface: #131009;
+    --card-bg: #17130E;
+    --border: #2E2518;
+    --border-lit: #5C4520;
+    --gold: #C8971E;
+    --gold-pale: #E8C96A;
+    --gold-dim: #7A5E18;
+    --parchment: #E4D5B5;
+    --parchment-dim: #8A7A60;
+    --smoke: #4A3F2F;
+    --shadow-col: #3D2B10;
+    --light-col: #C8971E;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--parchment);
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-weight: 300;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.6;
+  }
+
+  .page {
+    position: relative;
+    z-index: 1;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 80px 32px 120px;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 72px;
+    animation: fadeDown 1s ease forwards;
+  }
+
+  .header-eyebrow {
+    font-family: 'Crimson Pro', serif;
+    font-size: 11px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeIn 1s 0.3s ease forwards;
+  }
+
+  .header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(42px, 8vw, 72px);
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    color: var(--parchment);
+    margin-bottom: 16px;
+  }
+
+  .header h1 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .header-rule {
+    width: 1px;
+    height: 48px;
+    background: linear-gradient(to bottom, transparent, var(--gold-dim), transparent);
+    margin: 28px auto;
+  }
+
+  .header-desc {
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--parchment-dim);
+    max-width: 520px;
+    margin: 0 auto;
+    font-style: italic;
+  }
+
+  /* Arc Legend */
+  .arc-legend {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 64px;
+    opacity: 0;
+    animation: fadeIn 0.8s 0.7s ease forwards;
+  }
+
+  .arc-step {
+    text-align: center;
+    padding: 0 20px;
+  }
+
+  .arc-step-label {
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--parchment-dim);
+    margin-bottom: 6px;
+  }
+
+  .arc-step-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    margin: 0 auto 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+  }
+
+  .arc-step-icon.shadow { background: #1E1508; border: 1px solid #3A2A10; }
+  .arc-step-icon.wound  { background: #251B0C; border: 1px solid #4A3515; }
+  .arc-step-icon.reach  { background: #2E2010; border: 1px solid #5C4520; }
+  .arc-step-icon.gift   { background: #3A2810; border: 1px solid var(--gold-dim); }
+
+  .arc-connector {
+    width: 36px;
+    height: 1px;
+    background: linear-gradient(to right, #3A2A10, #5C4520);
+    flex-shrink: 0;
+  }
+
+  .arc-step-name {
+    font-size: 11px;
+    color: var(--parchment-dim);
+  }
+
+  /* Cards */
+  .cards {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.4s ease;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards;
+  }
+
+  .card:nth-child(1) { animation-delay: 0.8s; }
+  .card:nth-child(2) { animation-delay: 1.0s; }
+  .card:nth-child(3) { animation-delay: 1.2s; }
+  .card:nth-child(4) { animation-delay: 1.4s; }
+
+  .card:hover, .card.open {
+    border-color: var(--border-lit);
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    padding: 28px 32px;
+    gap: 24px;
+    position: relative;
+  }
+
+  .card-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--gold-dim);
+    flex-shrink: 0;
+    width: 20px;
+  }
+
+  .card-title-group {
+    flex: 1;
+  }
+
+  .card-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 400;
+    color: var(--parchment);
+    letter-spacing: 0.01em;
+    line-height: 1.1;
+    margin-bottom: 4px;
+  }
+
+  .card-subtitle {
+    font-size: 13px;
+    color: var(--parchment-dim);
+    font-style: italic;
+    letter-spacing: 0.02em;
+  }
+
+  .card-toggle {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    transition: all 0.4s ease;
+    color: var(--gold-dim);
+    font-size: 14px;
+    font-family: 'Cormorant Garamond', serif;
+  }
+
+  .card.open .card-toggle {
+    border-color: var(--gold-dim);
+    color: var(--gold);
+    transform: rotate(45deg);
+  }
+
+  /* Progress bar across top of card */
+  .card-spine {
+    height: 2px;
+    background: linear-gradient(to right, #1A1508, var(--border));
+    transition: background 0.5s ease;
+  }
+
+  .card.open .card-spine {
+    background: linear-gradient(to right, #2D1E08, var(--shadow-col) 30%, var(--gold-dim) 70%, var(--gold) 100%);
+  }
+
+  /* Card body — the arc */
+  .card-body {
+    display: none;
+    padding: 0 32px 40px 32px;
+  }
+
+  .card.open .card-body {
+    display: block;
+    animation: expandIn 0.45s ease forwards;
+  }
+
+  .arc-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border-top: 1px solid var(--border);
+    margin: 0 -32px 36px;
+  }
+
+  .arc-cell {
+    padding: 24px 24px 28px;
+    position: relative;
+  }
+
+  .arc-cell:nth-child(1) { background: #141008; }
+  .arc-cell:nth-child(2) { background: #181308; }
+  .arc-cell:nth-child(3) { background: #1E1809; }
+  .arc-cell:nth-child(4) { background: #231C0A; }
+
+  .arc-cell-label {
+    font-size: 8px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .arc-cell:nth-child(1) .arc-cell-label { color: #5A4020; }
+  .arc-cell:nth-child(2) .arc-cell-label { color: #6A4A25; }
+  .arc-cell:nth-child(3) .arc-cell-label { color: #7A5A2A; }
+  .arc-cell:nth-child(4) .arc-cell-label { color: var(--gold-dim); }
+
+  .arc-cell-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    margin-bottom: 12px;
+  }
+  .arc-cell:nth-child(1) .arc-cell-dot { background: #4A3018; }
+  .arc-cell:nth-child(2) .arc-cell-dot { background: #6A4A22; }
+  .arc-cell:nth-child(3) .arc-cell-dot { background: #8A6428; }
+  .arc-cell:nth-child(4) .arc-cell-dot { background: var(--gold); }
+
+  .arc-cell-text {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--parchment-dim);
+  }
+
+  .arc-cell:nth-child(4) .arc-cell-text {
+    color: #C4A86A;
+  }
+
+  /* Lower sections */
+  .card-lower {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  .card-section {
+    border-left: 1px solid var(--border);
+    padding-left: 20px;
+  }
+
+  .card-section-label {
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .card-section-text {
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--parchment-dim);
+    font-style: italic;
+  }
+
+  .card-section-text strong {
+    font-style: normal;
+    color: var(--parchment);
+    font-weight: 400;
+  }
+
+  /* Cultural anchor — full width */
+  .card-anchor {
+    margin-top: 28px;
+    padding: 20px 24px;
+    background: #0F0C07;
+    border: 1px solid #241C0C;
+    border-left: 2px solid var(--gold-dim);
+    position: relative;
+  }
+
+  .card-anchor-label {
+    font-size: 9px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .card-anchor-text {
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--parchment-dim);
+    font-style: italic;
+  }
+
+  .card-anchor-text em {
+    color: var(--gold-pale);
+    font-style: normal;
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    margin-top: 96px;
+    padding-top: 40px;
+    border-top: 1px solid var(--border);
+    opacity: 0;
+    animation: fadeIn 1s 2s ease forwards;
+  }
+
+  .footer-rule {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--gold-dim), transparent);
+    margin: 0 auto 20px;
+  }
+
+  .footer-text {
+    font-size: 13px;
+    color: var(--smoke);
+    font-style: italic;
+    letter-spacing: 0.04em;
+    line-height: 1.8;
+  }
+
+  /* Animations */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  @keyframes expandIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Mobile */
+  @media (max-width: 600px) {
+    .page { padding: 48px 20px 80px; }
+    .arc-row { grid-template-columns: 1fr 1fr; }
+    .card-lower { grid-template-columns: 1fr; }
+    .card-header { padding: 22px 20px; gap: 16px; }
+    .card-body { padding: 0 20px 32px; }
+    .arc-row { margin: 0 -20px 28px; }
+    .arc-cell { padding: 18px 16px 22px; }
+    .arc-legend { flex-wrap: wrap; gap: 8px; }
+    .arc-connector { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <header class="header">
+    <p class="header-eyebrow">A field reference in depth psychology &amp; cultural shadow work</p>
+    <h1>Shadow to <em>Light</em></h1>
+    <div class="header-rule"></div>
+    <p class="header-desc">Each shadow behavior is not a defect — it is a distorted expression of something originally healthy. The work is to see clearly enough to reclaim the gift inside the wound.</p>
+  </header>
+
+  <div class="arc-legend">
+    <div class="arc-step">
+      <div class="arc-step-label">Phase I</div>
+      <div class="arc-step-icon shadow">◼</div>
+      <div class="arc-step-name">The Shadow</div>
+    </div>
+    <div class="arc-connector"></div>
+    <div class="arc-step">
+      <div class="arc-step-label">Phase II</div>
+      <div class="arc-step-icon wound">◆</div>
+      <div class="arc-step-name">The Wound</div>
+    </div>
+    <div class="arc-connector"></div>
+    <div class="arc-step">
+      <div class="arc-step-label">Phase III</div>
+      <div class="arc-step-icon reach">◈</div>
+      <div class="arc-step-name">The Reach</div>
+    </div>
+    <div class="arc-connector"></div>
+    <div class="arc-step">
+      <div class="arc-step-label">Phase IV</div>
+      <div class="arc-step-icon gift">◉</div>
+      <div class="arc-step-name">The Gift</div>
+    </div>
+  </div>
+
+  <div class="cards">
+
+    <!-- Card 1: Triangulation -->
+    <div class="card" onclick="toggle(this)">
+      <div class="card-spine"></div>
+      <div class="card-header">
+        <span class="card-number">01</span>
+        <div class="card-title-group">
+          <div class="card-title">Triangulation</div>
+          <div class="card-subtitle">indirect communication routed through a third party</div>
+        </div>
+        <div class="card-toggle">+</div>
+      </div>
+      <div class="card-body">
+        <div class="arc-row">
+          <div class="arc-cell">
+            <span class="arc-cell-label">The Shadow</span>
+            <div class="arc-cell-dot"></div>
+            <div class="arc-cell-text">Using a third person to deliver messages, build alliances, or manage conflict — avoiding direct contact with the source of tension.</div>
+          </div>
+          <div class="arc-cell">
+            <span class="arc-cell-label">What it protects</span>
+            <div class="arc-cell-dot"></div>
+            <div class="arc-cell-text">The self from direct confrontation; the relationship from perceived rupture. It keeps peace at the cost of honesty.</div>
+          </div>
+          <div class="arc-cell">
+            <span class="arc-cell-label">What it reaches for</span>
+            <div class="arc-cell-dot"></div>
+            <div class="arc-cell-text">Connection across difference. The underlying impulse is genuinely relational — to stay in contact even when direct speech feels impossible or dangerous.</div>
+          </div>
+          <div class="arc-cell">
+            <span class="arc-cell-label">The Gift Beneath</span>
+            <div class="arc-cell-dot"></div>
+            <div class="arc-cell-text">A rare capacity to hold multiple perspectives at once — the relational intelligence to see both sides. When freed from fear, this becomes mediation, diplomacy, and genuine coalition-building.</div>
+          </div>
+        </div>
+        <div class="card-lower">
+          <div class="card-section">
+            <span class="card-section-label">Behavioral Markers</span>
+            <p class="card-section-text">Information about Person A is shared with Person B to influence Person A's behavior. Alliances form against a common "problem." Secrets are kept as relational currency. Stories shift slightly depending on audience.</p>
+          </div>
+          <div class="card-section">
+            <span class="card-section-label">What Emerges When It Loosens</span>
+            <p class="card-section-text">The person becomes a <strong>genuine bridge</strong> — able to translate between parties without distortion, to hold tension without collapsing it, to speak truth to multiple sides without betraying either.</p>
+          </div>
+        </div>
+        <div class="card-anchor">
+          <span class="card-anchor-label">Cultural &amp; Archetypal Anchor</span>
+          <p class="card-anchor-text">In high-<em>familismo</em> systems, direct confrontation violates relational hierarchy — it reads as disrespect or aggression. Triangulation is the adaptive workaround: information travels <em>laterally</em> because it cannot travel directly. The archetype underneath is <em>Hermès</em> — the messenger who moves between worlds. The shadow is Hermès in service of avoidance. The gift is Hermès in service of truth.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2: Codependency -->
+    <div class="card" onclick="toggle(this)">
+      <div class="card-spine"></div>
+      <div class="card-header">
+        <span class="card-number">02</span>
+        <div class="card-title-group">
+          <div class="card-title">Codependency</div>
+          <div class="card-subtitle">self-erasure in service of another's stability</div>
+        </div>
+        <div class="card-toggle">+</div>
+      </div>
+      <div class="card-body">
+        <div class="arc-row">
+          <div class="arc-cell">
+            <span class="arc-cell-label">The Shadow</span>
+            <div class="arc-cell-dot"></div>
+            <div class="arc-cell-text">Organizing one's inner life around another person's needs, moods, or crises — at the expense of one's own interiority and autonomy.</div>
+          </div>
+          <div class="arc-cell">
+            <span class="arc-cell-label">What it protects</span>
+            <div class="arc-cell-dot"></div>
+            <div class="arc-cell-text">The relationship from rupture; the self from abandonment. If I am essential to you, I cannot be left. If I manage your pain, I do not have to feel my own.</div>
+          </div>
+          <div class="arc-cell">
+            <span class="arc-cell-label">What it reaches for</span>
+            <div class="arc-cell-dot"></div>
+            <div class="arc-cell-text">Deep, sustained, mutual belonging. The longing is legitimate: to matter to someone, to be woven into their life, to love and be needed. The mechanism distorts it.</div>
+          </div>
+          <div class="arc-cell">
+            <span class="arc-cell-label">The Gift Beneath</span>
+            <div class="arc-cell-dot"></div>
+            <div class="arc-cell-text">Extraordinary attunement — the capacity to read another's emotional state with precision, to hold space without requiring reciprocity, to love through difficulty. When the self is no longer erased in service of this, it becomes the foundation of genuine care.</div>
+          </div>
+        </div>
+        <div class="card-lower">
+          <div class="card-section">
+            <span class="card-section-label">Behavioral Markers</span>
+            <p class="card-section-text">Own needs are minimized or invisible. Another's crisis becomes the primary organizing event. Feelings of guilt when setting limits. Identity becomes entangled with another's outcomes — their success becomes yours, their failure, yours too.</p>
+          </div>
+          <div class="card-section">
+            <span class="card-section-label">What Emerges When It Loosens</span>
+            <p class="card-section-text">The person discovers they can love <strong>without dissolving</strong>. Presence from a rooted self rather than a managed one. The capacity to care for others without it being a covert strategy for self-preservation.</p>
+          </div>
+        </div>
+        <div class="card-anchor">
+          <span class="card-anchor-label">Cultural &amp; Archetypal Anchor</span>
+          <p class="card-anchor-text"><em>Marianismo</em> — the cultural valorization of feminine self-sacrifice as spiritual virtue — creates the conditions for codependency to be not just adaptive but morally aspirational. The woman who gives everything is seen as holy. The archetype underneath is the <em>Great Mother</em>: nourishing, containing, sustaining. The shadow is the Mother who cannot allow others to individuate because her own self lives through them. The gift is the Mother who nourishes from abundance rather than from fear of being unneeded.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3: Emotional Neglect -->
+    <div class="card" onclick="toggle(this)">
+      <div class="card-spine"></div>
+      <div class="card-header">
+        <span class="card-number">03</span>
+        <div class="card-title-group">
+          <div class="card-title">Emotional Neglect</div>
+          <div class="card-subtitle">the absence coded as strength</div>
+        </div>
+        <div class="card-toggle">+</div>
+      </div>
+      <div class="card-body">
+        <div class="arc-row">
+          <div class="arc-cell">
+            <span class="arc-cell-label">The Shadow</span>
+            <div class="arc-cell-dot"></div>
+            <div class="arc-cell-text">Consistent failure to acknowledge, validate, or respond to emotional experience — in oneself or others. Often invisible because nothing happens; no wound is inflicted, something simply never arrives.</div>
+          </div>
+          <div class="arc-cell">
+            <span class="arc-cell-label">What it protects</span>
+            <div class="arc-cell-dot"></div>
+            <div class="arc-cell-text">The self from overwhelm; the family from the perceived danger of emotional expressiveness. If we do not name it, it cannot destabilize us. Feelings are treated as threats to structural coherence.</div>
+          </div>
+          <div class="arc-cell">
+            <span class="arc-cell-label">What it reaches for</span>
+            <div class="arc-cell-dot"></div>
+            <div class="arc-cell-text">Stability. Endurance. The capacity to function regardless of inner weather. The original impulse was survival — do not fall apart, because falling apart is not available as an option.</div>
+          </div>
+          <div class="arc-cell">
+            <span class="arc-cell-label">The Gift Beneath</span>
+            <div class="arc-cell-dot"></div>
+            <div class="arc-cell-text">A profound resilience — the ability to move through difficulty without being incapacitated by it. Psychological durability. When paired with emotional literacy, this becomes the capacity to remain functional and present even in crisis — not through suppression, but through genuine steadiness.</div>
+          </div>
+        </div>
+        <div class="card-lower">
+          <div class="card-section">
+            <span class="card-section-label">Behavioral Markers</span>
+            <p class="card-section-text">Emotional displays are met with silence, subject-changes, or practical responses. Children learn that feelings are private events with no relational address. "I'm fine" as a complete answer. Love expressed exclusively through provision, never through acknowledgment.</p>
+          </div>
+          <div class="card-section">
+            <span class="card-section-label">What Emerges When It Loosens</span>
+            <p class="card-section-text">The person learns to <strong>witness without fleeing</strong>. To hold space for another's emotional reality without needing to fix, minimize, or escape it. Stillness becomes presence rather than absence.</p>
+          </div>
+        </div>
+        <div class="card-anchor">
+          <span class="card-anchor-label">Cultural &amp; Archetypal Anchor</span>
+          <p class="card-anchor-text"><em>Caballerismo</em> and its harder edges: emotional expressiveness coded as weakness, stoicism as masculine virtue. The immigrant or first-generation imperative compounds this — when survival required full psychological resources, inner life was a luxury the circumstances did not permit. The archetype is the <em>Stone</em> — dependable, unchanging, present, but without warmth. The gift is the stone that has learned to be both <em>solid and warm</em> — that holds its shape without becoming cold.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 4: Appeasement -->
+    <div class="card" onclick="toggle(this)">
+      <div class="card-spine"></div>
+      <div class="card-header">
+        <span class="card-number">04</span>
+        <div class="card-title-group">
+          <div class="card-title">Appeasement</div>
+          <div class="card-subtitle">harmony purchased at the cost of the self</div>
+        </div>
+        <div class="card-toggle">+</div>
+      </div>
+      <div class="card-body">
+        <div class="arc-row">
+          <div class="arc-cell">
+            <span class="arc-cell-label">The Shadow</span>
+            <div class="arc-cell-dot"></div>
+            <div class="arc-cell-text">Adjusting one's positions, needs, or truth to match what the room requires — prioritizing the absence of conflict over the presence of integrity.</div>
+          </div>
+          <div class="arc-cell">
+            <span class="arc-cell-label">What it protects</span>
+            <div class="arc-cell-dot"></div>
+            <div class="arc-cell-text">The self from rejection, punishment, or abandonment. The relationship from the danger of one's full presence. If I become what you need, I remain safe. If I disappear, I cannot be attacked.</div>
+          </div>
+          <div class="arc-cell">
+            <span class="arc-cell-label">What it reaches for</span>
+            <div class="arc-cell-dot"></div>
+            <div class="arc-cell-text">Genuine harmony. The longing is not to submit — it is to live in a world without unnecessary conflict, where people can coexist without wounding each other. The impulse toward peace is real and worth honoring.</div>
+          </div>
+          <div class="arc-cell">
+            <span class="arc-cell-label">The Gift Beneath</span>
+            <div class="arc-cell-dot"></div>
+            <div class="arc-cell-text">A natural gift for de-escalation, for reading the emotional temperature of a room, for finding points of agreement across difference. When this operates from <em>groundedness</em> rather than fear, it becomes genuine diplomacy — a capacity to facilitate peace without sacrificing truth.</div>
+          </div>
+        </div>
+        <div class="card-lower">
+          <div class="card-section">
+            <span class="card-section-label">Behavioral Markers</span>
+            <p class="card-section-text">Opinions shift to match the dominant voice in the room. Discomfort with any sign of another's displeasure. "Yes" given before inner consultation. Persistent low-level resentment, because suppressed truth accumulates. Own needs framed as secondary or nonexistent.</p>
+          </div>
+          <div class="card-section">
+            <span class="card-section-label">What Emerges When It Loosens</span>
+            <p class="card-section-text">The person learns that <strong>honest presence does not destroy love</strong>. That disagreement can be held within relationship. That peacemaking from a full self is more durable than peace purchased through self-erasure.</p>
+          </div>
+        </div>
+        <div class="card-anchor">
+          <span class="card-anchor-label">Cultural &amp; Archetypal Anchor</span>
+          <p class="card-anchor-text">In cultures where <em>respeto</em> is structural — where hierarchy is sacred and challenge reads as ingratitude — appeasement is not pathology, it is survival intelligence. The child who appeases the volatile parent is not weak; they are adaptive. The tragedy is when that adaptation calcifies into adulthood, long after the original danger has passed. The archetype is the <em>Trickster</em> in inversion: where the Trickster speaks truth through indirection, the appeaser uses the same indirection to <em>withhold</em> truth. The gift emerges when the indirection is no longer driven by fear — and becomes instead the art of <em>right timing</em>: knowing when and how truth lands.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="footer">
+    <div class="footer-rule"></div>
+    <p class="footer-text">
+      The patterns are not the people.<br>
+      The shadow is not the enemy — it is the self in hiding.<br>
+      The work is to see clearly enough that the hiding is no longer necessary.
+    </p>
+  </footer>
+
+</div>
+
+<script>
+  function toggle(card) {
+    const isOpen = card.classList.contains('open');
+    document.querySelectorAll('.card.open').forEach(c => c.classList.remove('open'));
+    if (!isOpen) card.classList.add('open');
+  }
+</script>
+
+</body>
+</html>

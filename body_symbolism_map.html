@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Body in Symbolism — Manly P. Hall</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
+
+  :root {
+    --gold: #c9a84c;
+    --gold-pale: #e8d08a;
+    --gold-dim: #7a5e22;
+    --deep: #07050f;
+    --deep2: #0e0a1c;
+    --deep3: #150f28;
+    --crimson: #8b2030;
+    --violet: #3d2060;
+    --silver: #b8c4d4;
+    --silver-pale: #dde6f0;
+    --glow: rgba(201,168,76,0.18);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--deep);
+    color: var(--silver-pale);
+    font-family: 'Cormorant Garamond', serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Starfield background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse at 20% 20%, rgba(61,32,96,0.4) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(139,32,48,0.2) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 0%, rgba(201,168,76,0.07) 0%, transparent 40%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .stars {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .star {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle var(--d, 3s) ease-in-out infinite alternate;
+    opacity: var(--o, 0.4);
+  }
+  @keyframes twinkle {
+    from { opacity: var(--o, 0.4); }
+    to { opacity: calc(var(--o, 0.4) * 0.3); }
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 60px;
+    position: relative;
+  }
+
+  .header-rule {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  .header-rule::before,
+  .header-rule::after {
+    content: '';
+    flex: 1;
+    max-width: 200px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+
+  .sigil {
+    font-size: 28px;
+    color: var(--gold);
+  }
+
+  h1 {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(1rem, 4vw, 1.7rem);
+    color: var(--gold);
+    letter-spacing: 0.12em;
+    text-shadow: 0 0 40px rgba(201,168,76,0.5);
+    line-height: 1.4;
+  }
+
+  .subtitle {
+    font-style: italic;
+    color: var(--silver);
+    font-size: 1rem;
+    margin-top: 10px;
+    letter-spacing: 0.06em;
+  }
+
+  /* ── MAIN BODY FIGURE ─────────────────────────────────────── */
+  .body-section {
+    display: grid;
+    grid-template-columns: 1fr 280px 1fr;
+    gap: 20px;
+    align-items: start;
+    margin-bottom: 60px;
+  }
+
+  .figure-wrap {
+    position: relative;
+    grid-column: 2;
+    display: flex;
+    justify-content: center;
+  }
+
+  .figure-svg {
+    width: 280px;
+    height: 500px;
+  }
+
+  /* Left & Right annotation columns */
+  .annot-col {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 30px;
+  }
+
+  .annot-left { align-items: flex-end; }
+  .annot-right { align-items: flex-start; }
+
+  .annot-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    animation: fadeIn 1s ease both;
+  }
+
+  .annot-left .annot-item { flex-direction: row-reverse; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateX(var(--tx, -10px)); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  .annot-right .annot-item { --tx: 10px; }
+
+  .annot-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    box-shadow: 0 0 6px currentColor;
+  }
+
+  .annot-line {
+    width: 40px;
+    height: 1px;
+    background: linear-gradient(90deg, var(--gold-dim), var(--gold));
+    flex-shrink: 0;
+  }
+
+  .annot-left .annot-line {
+    background: linear-gradient(90deg, var(--gold), var(--gold-dim));
+  }
+
+  .annot-text {
+    font-size: 0.82rem;
+    line-height: 1.35;
+    text-align: right;
+  }
+  .annot-right .annot-text { text-align: left; }
+
+  .annot-label {
+    color: var(--gold-pale);
+    font-weight: 600;
+    display: block;
+    letter-spacing: 0.05em;
+  }
+
+  .annot-subs {
+    color: var(--silver);
+    font-style: italic;
+    font-size: 0.75rem;
+  }
+
+  /* ── CORRESPONDENCE TABLES ───────────────────────────────── */
+  .tables-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 28px;
+    margin-bottom: 60px;
+  }
+
+  .corr-card {
+    background: linear-gradient(135deg, rgba(14,10,28,0.9) 0%, rgba(21,15,40,0.9) 100%);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 2px;
+    overflow: hidden;
+    box-shadow: 0 4px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(201,168,76,0.1);
+    transition: border-color 0.3s;
+  }
+  .corr-card:hover { border-color: rgba(201,168,76,0.5); }
+
+  .card-header {
+    padding: 14px 18px 12px;
+    border-bottom: 1px solid rgba(201,168,76,0.15);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(201,168,76,0.05);
+  }
+
+  .card-glyph {
+    font-size: 1.4rem;
+    line-height: 1;
+    color: var(--gold);
+    text-shadow: 0 0 12px rgba(201,168,76,0.6);
+    min-width: 28px;
+    text-align: center;
+  }
+
+  .card-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.72rem;
+    color: var(--gold);
+    letter-spacing: 0.12em;
+  }
+
+  .card-desc {
+    font-style: italic;
+    font-size: 0.72rem;
+    color: var(--silver);
+    margin-top: 2px;
+  }
+
+  .card-body {
+    padding: 14px 18px;
+  }
+
+  .corr-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px 12px;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(201,168,76,0.07);
+    font-size: 0.8rem;
+  }
+  .corr-row:last-child { border-bottom: none; }
+
+  .corr-key {
+    color: var(--gold-pale);
+    font-weight: 600;
+    letter-spacing: 0.03em;
+  }
+
+  .corr-val {
+    color: var(--silver-pale);
+    font-style: italic;
+  }
+
+  /* ── ZODIAC BELT ─────────────────────────────────────────── */
+  .zodiac-section {
+    margin-bottom: 60px;
+  }
+
+  .section-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.85rem;
+    color: var(--gold);
+    letter-spacing: 0.15em;
+    text-align: center;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .section-title::before,
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+  }
+
+  .zodiac-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
+  }
+
+  @media (max-width: 600px) {
+    .zodiac-grid { grid-template-columns: repeat(3, 1fr); }
+    .body-section { grid-template-columns: 1fr; }
+    .figure-wrap { grid-column: 1; }
+    .annot-col { padding-top: 0; }
+    .annot-left, .annot-right { align-items: flex-start; }
+    .annot-left .annot-item { flex-direction: row; }
+    .annot-left .annot-text { text-align: left; }
+    .annot-line { display: none; }
+  }
+
+  .zodiac-card {
+    background: linear-gradient(160deg, rgba(21,15,40,0.95), rgba(7,5,15,0.95));
+    border: 1px solid rgba(201,168,76,0.15);
+    border-radius: 2px;
+    padding: 12px 10px;
+    text-align: center;
+    cursor: default;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .zodiac-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(201,168,76,0.08) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .zodiac-card:hover { border-color: var(--gold); transform: translateY(-2px); }
+  .zodiac-card:hover::before { opacity: 1; }
+
+  .z-glyph {
+    font-size: 1.6rem;
+    display: block;
+    color: var(--gold);
+    text-shadow: 0 0 10px rgba(201,168,76,0.5);
+    margin-bottom: 4px;
+  }
+
+  .z-sign {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.58rem;
+    color: var(--gold-pale);
+    letter-spacing: 0.08em;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .z-body {
+    font-size: 0.72rem;
+    color: var(--silver-pale);
+    font-style: italic;
+    display: block;
+    margin-bottom: 3px;
+  }
+
+  .z-element {
+    font-size: 0.65rem;
+    color: var(--silver);
+    display: block;
+  }
+
+  /* ── ELEMENTS / QUATERNARY ───────────────────────────────── */
+  .elements-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 60px;
+  }
+
+  @media (max-width: 600px) {
+    .elements-row { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .elem-card {
+    background: linear-gradient(135deg, var(--c1, rgba(21,15,40,0.9)), var(--c2, rgba(7,5,15,0.9)));
+    border: 1px solid var(--ce, rgba(201,168,76,0.2));
+    border-radius: 2px;
+    padding: 18px 14px;
+    text-align: center;
+    transition: box-shadow 0.3s;
+  }
+
+  .elem-card:hover {
+    box-shadow: 0 0 30px var(--ce, rgba(201,168,76,0.2));
+  }
+
+  .elem-fire { --c1: rgba(60,15,10,0.9); --c2: rgba(20,5,3,0.9); --ce: rgba(200,80,30,0.4); }
+  .elem-water { --c1: rgba(5,20,50,0.9); --c2: rgba(3,10,25,0.9); --ce: rgba(30,100,200,0.4); }
+  .elem-air { --c1: rgba(20,30,40,0.9); --c2: rgba(10,18,28,0.9); --ce: rgba(150,210,230,0.3); }
+  .elem-earth { --c1: rgba(20,18,5,0.9); --c2: rgba(10,9,3,0.9); --ce: rgba(120,100,40,0.4); }
+
+  .elem-symbol {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .elem-name {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.7rem;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .elem-list {
+    font-size: 0.73rem;
+    color: var(--silver-pale);
+    font-style: italic;
+    line-height: 1.6;
+  }
+
+  /* ── TRIPARTITE / THREE WORLDS ───────────────────────────── */
+  .tripart {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 60px;
+  }
+
+  @media (max-width: 600px) {
+    .tripart { grid-template-columns: 1fr; }
+  }
+
+  .tri-card {
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 2px;
+    padding: 20px 16px;
+    text-align: center;
+    background: var(--bg, rgba(14,10,28,0.85));
+    position: relative;
+    overflow: hidden;
+  }
+
+  .tri-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--accent, var(--gold));
+    opacity: 0.4;
+  }
+
+  .tri-head { --bg: rgba(8,5,18,0.9); --accent: var(--gold); }
+  .tri-heart { --bg: rgba(18,8,18,0.9); --accent: #c060a0; }
+  .tri-limb { --bg: rgba(5,12,18,0.9); --accent: #4090c0; }
+
+  .tri-label {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.7rem;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .tri-region {
+    font-size: 0.85rem;
+    color: var(--silver-pale);
+    font-style: italic;
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  .tri-attrs {
+    font-size: 0.75rem;
+    color: var(--silver);
+    line-height: 1.7;
+  }
+
+  /* ── TEMPLE SECTION ──────────────────────────────────────── */
+  .temple-section {
+    background: linear-gradient(135deg, rgba(14,10,28,0.95), rgba(21,15,40,0.95));
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 2px;
+    padding: 28px 28px 24px;
+    margin-bottom: 60px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .temple-section::before {
+    content: '⊕';
+    position: absolute;
+    right: 20px;
+    top: 16px;
+    font-size: 4rem;
+    opacity: 0.05;
+    color: var(--gold);
+  }
+
+  .temple-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-top: 20px;
+  }
+
+  .temple-item {
+    border-left: 2px solid rgba(201,168,76,0.3);
+    padding-left: 12px;
+  }
+
+  .ti-head {
+    font-size: 0.8rem;
+    color: var(--gold-pale);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .ti-body {
+    font-size: 0.76rem;
+    color: var(--silver);
+    font-style: italic;
+    line-height: 1.5;
+  }
+
+  /* ── FOOTER ──────────────────────────────────────────────── */
+  footer {
+    text-align: center;
+    font-style: italic;
+    font-size: 0.78rem;
+    color: var(--gold-dim);
+    border-top: 1px solid rgba(201,168,76,0.1);
+    padding-top: 28px;
+    letter-spacing: 0.05em;
+  }
+
+  .ornament {
+    color: var(--gold);
+    font-size: 1.2rem;
+    display: block;
+    margin-bottom: 8px;
+    opacity: 0.6;
+  }
+
+</style>
+</head>
+<body>
+
+<!-- Stars -->
+<div class="stars" id="stars"></div>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-rule"><span class="sigil">✦</span></div>
+    <h1>The Human Body in Symbolism</h1>
+    <p class="subtitle">After Manly P. Hall · <em>The Secret Teachings of All Ages</em></p>
+    <div class="header-rule" style="margin-top:20px"><span class="sigil">✦</span></div>
+  </header>
+
+  <!-- BODY FIGURE WITH ANNOTATIONS -->
+  <div class="body-section">
+    <!-- LEFT column -->
+    <div class="annot-col annot-left">
+
+      <div class="annot-item" style="animation-delay:0.1s">
+        <div class="annot-text">
+          <span class="annot-label">Crown · Kether</span>
+          <span class="annot-subs">Divine Spark · ♄ Saturn</span>
+        </div>
+        <div class="annot-line"></div>
+        <div class="annot-dot" style="color:#e8d08a; background:#e8d08a;"></div>
+      </div>
+
+      <div class="annot-item" style="animation-delay:0.2s; margin-top:18px">
+        <div class="annot-text">
+          <span class="annot-label">Left Eye · Moon</span>
+          <span class="annot-subs">Passive Intellect · Water</span>
+        </div>
+        <div class="annot-line"></div>
+        <div class="annot-dot" style="color:#b8c4d4; background:#b8c4d4;"></div>
+      </div>
+
+      <div class="annot-item" style="animation-delay:0.3s; margin-top:10px">
+        <div class="annot-text">
+          <span class="annot-label">Left Ear</span>
+          <span class="annot-subs">Occult Hearing · ♃ Jupiter</span>
+        </div>
+        <div class="annot-line"></div>
+        <div class="annot-dot" style="color:#7a9fe0; background:#7a9fe0;"></div>
+      </div>
+
+      <div class="annot-item" style="animation-delay:0.4s; margin-top:50px">
+        <div class="annot-text">
+          <span class="annot-label">Left Shoulder</span>
+          <span class="annot-subs">♃ Receptive Power · Air</span>
+        </div>
+        <div class="annot-line"></div>
+        <div class="annot-dot" style="color:#a0c0e0; background:#a0c0e0;"></div>
+      </div>
+
+      <div class="annot-item" style="animation-delay:0.5s; margin-top:36px">
+        <div class="annot-text">
+          <span class="annot-label">Left Arm · Passive Arc</span>
+          <span class="annot-subs">Receiving · Lunar Polarity</span>
+        </div>
+        <div class="annot-line"></div>
+        <div class="annot-dot" style="color:#90aac8; background:#90aac8;"></div>
+      </div>
+
+      <div class="annot-item" style="animation-delay:0.6s; margin-top:20px">
+        <div class="annot-text">
+          <span class="annot-label">Heart · Sun / Sol</span>
+          <span class="annot-subs">Seat of Divine Fire · ♌ Leo</span>
+        </div>
+        <div class="annot-line"></div>
+        <div class="annot-dot" style="color:#f5b942; background:#f5b942;"></div>
+      </div>
+
+      <div class="annot-item" style="animation-delay:0.7s; margin-top:18px">
+        <div class="annot-text">
+          <span class="annot-label">Liver · ♃ Jupiter</span>
+          <span class="annot-subs">Vital Heat · Blood Purification</span>
+        </div>
+        <div class="annot-line"></div>
+        <div class="annot-dot" style="color:#7a5e22; background:#7a5e22;"></div>
+      </div>
+
+      <div class="annot-item" style="animation-delay:0.8s; margin-top:14px">
+        <div class="annot-text">
+          <span class="annot-label">Left Hand</span>
+          <span class="annot-subs">Passive · Receptive Force</span>
+        </div>
+        <div class="annot-line"></div>
+        <div class="annot-dot" style="color:#88aacc; background:#88aacc;"></div>
+      </div>
+
+      <div class="annot-item" style="animation-delay:0.9s; margin-top:26px">
+        <div class="annot-text">
+          <span class="annot-label">Left Leg · ♍ Virgo</span>
+          <span class="annot-subs">Mutable Earth · Discernment</span>
+        </div>
+        <div class="annot-line"></div>
+        <div class="annot-dot" style="color:#b0a060; background:#b0a060;"></div>
+      </div>
+
+    </div>
+
+    <!-- CENTER: SVG figure -->
+    <div class="figure-wrap">
+      <svg class="figure-svg" viewBox="0 0 280 500" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="bodyGlow" cx="50%" cy="40%" r="50%">
+            <stop offset="0%" stop-color="rgba(201,168,76,0.15)"/>
+            <stop offset="100%" stop-color="rgba(201,168,76,0)"/>
+          </radialGradient>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+            <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <filter id="softGlow">
+            <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+            <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+
+        <!-- Auric glow -->
+        <ellipse cx="140" cy="200" rx="100" ry="220" fill="url(#bodyGlow)" opacity="0.6"/>
+
+        <!-- Vitruvian-style outer circle (faint) -->
+        <circle cx="140" cy="220" r="130" fill="none" stroke="rgba(201,168,76,0.08)" stroke-width="1" stroke-dasharray="4 6"/>
+
+        <!-- Pillar / central axis (spine) -->
+        <line x1="140" y1="60" x2="140" y2="450" stroke="rgba(201,168,76,0.25)" stroke-width="1" stroke-dasharray="2 4"/>
+
+        <!-- HEAD -->
+        <circle cx="140" cy="72" r="36" fill="none" stroke="rgba(201,168,76,0.6)" stroke-width="1.5" filter="url(#softGlow)"/>
+        <!-- Crown -->
+        <circle cx="140" cy="38" r="6" fill="none" stroke="#e8d08a" stroke-width="1.2"/>
+        <circle cx="140" cy="38" r="2.5" fill="#e8d08a" opacity="0.8"/>
+        <!-- Crown rays -->
+        <g stroke="#e8d08a" stroke-width="0.8" opacity="0.6">
+          <line x1="140" y1="28" x2="140" y2="22"/>
+          <line x1="150" y1="30" x2="153" y2="25"/>
+          <line x1="130" y1="30" x2="127" y2="25"/>
+          <line x1="155" y1="35" x2="160" y2="32"/>
+          <line x1="125" y1="35" x2="120" y2="32"/>
+        </g>
+
+        <!-- Eyes -->
+        <ellipse cx="127" cy="68" rx="5" ry="3.5" fill="none" stroke="rgba(184,196,212,0.8)" stroke-width="1"/>
+        <circle cx="127" cy="68" r="2" fill="rgba(184,196,212,0.6)"/>
+        <ellipse cx="153" cy="68" rx="5" ry="3.5" fill="none" stroke="rgba(245,185,66,0.8)" stroke-width="1"/>
+        <circle cx="153" cy="68" r="2" fill="rgba(245,185,66,0.6)"/>
+
+        <!-- NECK -->
+        <rect x="131" y="105" width="18" height="15" rx="2" fill="none" stroke="rgba(201,168,76,0.3)" stroke-width="1"/>
+
+        <!-- TORSO -->
+        <path d="M95,120 Q80,130 78,180 Q76,220 82,260 Q88,290 95,300 L185,300 Q192,290 198,260 Q204,220 202,180 Q200,130 185,120 Z" fill="none" stroke="rgba(201,168,76,0.55)" stroke-width="1.5"/>
+
+        <!-- Heart marker -->
+        <circle cx="128" cy="175" r="8" fill="none" stroke="rgba(245,185,66,0.9)" stroke-width="1.5" filter="url(#glow)"/>
+        <circle cx="128" cy="175" r="3" fill="rgba(245,185,66,0.7)"/>
+
+        <!-- Solar Plexus -->
+        <circle cx="140" cy="215" r="6" fill="none" stroke="rgba(201,168,76,0.6)" stroke-width="1.2"/>
+        <circle cx="140" cy="215" r="2" fill="rgba(201,168,76,0.5)"/>
+
+        <!-- Navel / Lunar Center -->
+        <circle cx="140" cy="248" r="5" fill="none" stroke="rgba(184,196,212,0.5)" stroke-width="1"/>
+
+        <!-- ARMS -->
+        <!-- Left arm -->
+        <path d="M82,130 Q55,160 48,210 Q44,240 50,270 L58,270 Q56,240 62,212 Q70,165 95,138" fill="none" stroke="rgba(201,168,76,0.45)" stroke-width="1.5"/>
+        <!-- Left hand -->
+        <ellipse cx="52" cy="275" rx="9" ry="6" fill="none" stroke="rgba(201,168,76,0.4)" stroke-width="1"/>
+
+        <!-- Right arm -->
+        <path d="M198,130 Q225,160 232,210 Q236,240 230,270 L222,270 Q224,240 218,212 Q210,165 185,138" fill="none" stroke="rgba(201,168,76,0.45)" stroke-width="1.5"/>
+        <!-- Right hand -->
+        <ellipse cx="228" cy="275" rx="9" ry="6" fill="none" stroke="rgba(201,168,76,0.4)" stroke-width="1"/>
+
+        <!-- PELVIS / SACRAL -->
+        <path d="M95,300 Q105,320 140,325 Q175,320 185,300" fill="none" stroke="rgba(201,168,76,0.4)" stroke-width="1.2"/>
+
+        <!-- LEGS -->
+        <!-- Left leg -->
+        <path d="M105,325 Q98,380 96,420 Q94,450 98,475" fill="none" stroke="rgba(201,168,76,0.45)" stroke-width="1.5"/>
+        <ellipse cx="98" cy="478" rx="10" ry="4" fill="none" stroke="rgba(201,168,76,0.35)" stroke-width="1"/>
+
+        <!-- Right leg -->
+        <path d="M175,325 Q182,380 184,420 Q186,450 182,475" fill="none" stroke="rgba(201,168,76,0.45)" stroke-width="1.5"/>
+        <ellipse cx="182" cy="478" rx="10" ry="4" fill="none" stroke="rgba(201,168,76,0.35)" stroke-width="1"/>
+
+        <!-- Planetary centers along spine (chakra-analog) -->
+        <!-- Saturn / Crown already drawn -->
+        <!-- Jupiter / Throat -->
+        <circle cx="140" cy="113" r="4" fill="none" stroke="rgba(122,158,224,0.7)" stroke-width="1"/>
+        <circle cx="140" cy="113" r="1.5" fill="rgba(122,158,224,0.6)"/>
+        <!-- Mars / Solar Plexus - already drawn with gold -->
+        <!-- Venus / Sacral -->
+        <circle cx="140" cy="290" r="4" fill="none" stroke="rgba(220,160,200,0.7)" stroke-width="1"/>
+        <circle cx="140" cy="290" r="1.5" fill="rgba(220,160,200,0.6)"/>
+        <!-- Mercury / Brain -->
+        <circle cx="140" cy="55" r="3" fill="none" stroke="rgba(180,220,180,0.7)" stroke-width="1"/>
+
+        <!-- Microcosm label -->
+        <text x="140" y="496" text-anchor="middle" font-family="'Cormorant Garamond', serif" font-style="italic" font-size="9" fill="rgba(201,168,76,0.5)">As Above · So Below</text>
+      </svg>
+    </div>
+
+    <!-- RIGHT column -->
+    <div class="annot-col annot-right">
+
+      <div class="annot-item" style="animation-delay:0.15s">
+        <div class="annot-dot" style="color:#e8d08a; background:#e8d08a;"></div>
+        <div class="annot-line" style="background:linear-gradient(90deg,var(--gold-dim),var(--gold))"></div>
+        <div class="annot-text">
+          <span class="annot-label">Right Eye · Sun</span>
+          <span class="annot-subs">Active Intellect · Fire</span>
+        </div>
+      </div>
+
+      <div class="annot-item" style="animation-delay:0.25s; margin-top:18px">
+        <div class="annot-dot" style="color:#7a9fe0; background:#7a9fe0;"></div>
+        <div class="annot-line"></div>
+        <div class="annot-text">
+          <span class="annot-label">Right Ear</span>
+          <span class="annot-subs">Earthly Hearing · ♂ Mars</span>
+        </div>
+      </div>
+
+      <div class="annot-item" style="animation-delay:0.35s; margin-top:12px">
+        <div class="annot-dot" style="color:#c0a0d0; background:#c0a0d0;"></div>
+        <div class="annot-line"></div>
+        <div class="annot-text">
+          <span class="annot-label">Mouth · Mercury</span>
+          <span class="annot-subs">Logos · Utterance · ♊</span>
+        </div>
+      </div>
+
+      <div class="annot-item" style="animation-delay:0.45s; margin-top:52px">
+        <div class="annot-dot" style="color:#a0c0e0; background:#a0c0e0;"></div>
+        <div class="annot-line"></div>
+        <div class="annot-text">
+          <span class="annot-label">Right Shoulder</span>
+          <span class="annot-subs">♂ Active Power · Fire</span>
+        </div>
+      </div>
+
+      <div class="annot-item" style="animation-delay:0.55s; margin-top:36px">
+        <div class="annot-dot" style="color:#d08060; background:#d08060;"></div>
+        <div class="annot-line"></div>
+        <div class="annot-text">
+          <span class="annot-label">Right Arm · Active Arc</span>
+          <span class="annot-subs">Projecting · Solar Polarity</span>
+        </div>
+      </div>
+
+      <div class="annot-item" style="animation-delay:0.65s; margin-top:22px">
+        <div class="annot-dot" style="color:#d0a0c0; background:#d0a0c0;"></div>
+        <div class="annot-line"></div>
+        <div class="annot-text">
+          <span class="annot-label">Lungs · Mercury / Air</span>
+          <span class="annot-subs">Breath of Life · Prana</span>
+        </div>
+      </div>
+
+      <div class="annot-item" style="animation-delay:0.75s; margin-top:16px">
+        <div class="annot-dot" style="color:#c08030; background:#c08030;"></div>
+        <div class="annot-line"></div>
+        <div class="annot-text">
+          <span class="annot-label">Spleen · ♄ Saturn</span>
+          <span class="annot-subs">Melancholia · Black Bile</span>
+        </div>
+      </div>
+
+      <div class="annot-item" style="animation-delay:0.85s; margin-top:16px">
+        <div class="annot-dot" style="color:#d0c060; background:#d0c060;"></div>
+        <div class="annot-line"></div>
+        <div class="annot-text">
+          <span class="annot-label">Right Hand</span>
+          <span class="annot-subs">Active · Creative Force</span>
+        </div>
+      </div>
+
+      <div class="annot-item" style="animation-delay:0.95s; margin-top:26px">
+        <div class="annot-dot" style="color:#c09050; background:#c09050;"></div>
+        <div class="annot-line"></div>
+        <div class="annot-text">
+          <span class="annot-label">Right Leg · ♐ Sagittarius</span>
+          <span class="annot-subs">Mutable Fire · Aspiration</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ZODIAC BELT -->
+  <div class="zodiac-section">
+    <div class="section-title">Zodiacal Rulerships of the Body</div>
+    <div class="zodiac-grid">
+      <div class="zodiac-card">
+        <span class="z-glyph">♈</span>
+        <span class="z-sign">Aries</span>
+        <span class="z-body">Head & Face</span>
+        <span class="z-element">Fire · Cardinal</span>
+      </div>
+      <div class="zodiac-card">
+        <span class="z-glyph">♉</span>
+        <span class="z-sign">Taurus</span>
+        <span class="z-body">Neck & Throat</span>
+        <span class="z-element">Earth · Fixed</span>
+      </div>
+      <div class="zodiac-card">
+        <span class="z-glyph">♊</span>
+        <span class="z-sign">Gemini</span>
+        <span class="z-body">Shoulders, Arms & Lungs</span>
+        <span class="z-element">Air · Mutable</span>
+      </div>
+      <div class="zodiac-card">
+        <span class="z-glyph">♋</span>
+        <span class="z-sign">Cancer</span>
+        <span class="z-body">Breast & Stomach</span>
+        <span class="z-element">Water · Cardinal</span>
+      </div>
+      <div class="zodiac-card">
+        <span class="z-glyph">♌</span>
+        <span class="z-sign">Leo</span>
+        <span class="z-body">Heart & Upper Back</span>
+        <span class="z-element">Fire · Fixed</span>
+      </div>
+      <div class="zodiac-card">
+        <span class="z-glyph">♍</span>
+        <span class="z-sign">Virgo</span>
+        <span class="z-body">Bowels & Abdomen</span>
+        <span class="z-element">Earth · Mutable</span>
+      </div>
+      <div class="zodiac-card">
+        <span class="z-glyph">♎</span>
+        <span class="z-sign">Libra</span>
+        <span class="z-body">Kidneys & Loins</span>
+        <span class="z-element">Air · Cardinal</span>
+      </div>
+      <div class="zodiac-card">
+        <span class="z-glyph">♏</span>
+        <span class="z-sign">Scorpio</span>
+        <span class="z-body">Genitals & Bladder</span>
+        <span class="z-element">Water · Fixed</span>
+      </div>
+      <div class="zodiac-card">
+        <span class="z-glyph">♐</span>
+        <span class="z-sign">Sagittarius</span>
+        <span class="z-body">Hips & Thighs</span>
+        <span class="z-element">Fire · Mutable</span>
+      </div>
+      <div class="zodiac-card">
+        <span class="z-glyph">♑</span>
+        <span class="z-sign">Capricorn</span>
+        <span class="z-body">Knees & Bones</span>
+        <span class="z-element">Earth · Cardinal</span>
+      </div>
+      <div class="zodiac-card">
+        <span class="z-glyph">♒</span>
+        <span class="z-sign">Aquarius</span>
+        <span class="z-body">Ankles & Circulation</span>
+        <span class="z-element">Air · Fixed</span>
+      </div>
+      <div class="zodiac-card">
+        <span class="z-glyph">♓</span>
+        <span class="z-sign">Pisces</span>
+        <span class="z-body">Feet & Lymphatics</span>
+        <span class="z-element">Water · Mutable</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLANETARY ORGANS -->
+  <div class="tables-grid">
+    <div class="corr-card">
+      <div class="card-header">
+        <span class="card-glyph">☽</span>
+        <div>
+          <div class="card-title">Planetary Organ Rulerships</div>
+          <div class="card-desc">The seven classical planets govern the vital organs</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="corr-row"><span class="corr-key">☉ Sun</span><span class="corr-val">Heart · Vital Force</span></div>
+        <div class="corr-row"><span class="corr-key">☽ Moon</span><span class="corr-val">Brain · Stomach · Womb</span></div>
+        <div class="corr-row"><span class="corr-key">☿ Mercury</span><span class="corr-val">Lungs · Nervous System</span></div>
+        <div class="corr-row"><span class="corr-key">♀ Venus</span><span class="corr-val">Kidneys · Throat · Veins</span></div>
+        <div class="corr-row"><span class="corr-key">♂ Mars</span><span class="corr-val">Gallbladder · Adrenals</span></div>
+        <div class="corr-row"><span class="corr-key">♃ Jupiter</span><span class="corr-val">Liver · Arterial Blood</span></div>
+        <div class="corr-row"><span class="corr-key">♄ Saturn</span><span class="corr-val">Spleen · Bones · Skin</span></div>
+      </div>
+    </div>
+
+    <div class="corr-card">
+      <div class="card-header">
+        <span class="card-glyph">⚗</span>
+        <div>
+          <div class="card-title">Humoral Correspondences</div>
+          <div class="card-desc">The four temperaments and their bodily seat</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="corr-row"><span class="corr-key">Blood</span><span class="corr-val">Sanguine · Air · Heart · ♃</span></div>
+        <div class="corr-row"><span class="corr-key">Yellow Bile</span><span class="corr-val">Choleric · Fire · Liver · ♂</span></div>
+        <div class="corr-row"><span class="corr-key">Black Bile</span><span class="corr-val">Melancholic · Earth · Spleen · ♄</span></div>
+        <div class="corr-row"><span class="corr-key">Phlegm</span><span class="corr-val">Phlegmatic · Water · Brain · ☽</span></div>
+        <div class="corr-row"><span class="corr-key">Vital Spirits</span><span class="corr-val">Heart — Pneuma Zōtikon</span></div>
+        <div class="corr-row"><span class="corr-key">Animal Spirits</span><span class="corr-val">Brain — Pneuma Psychikon</span></div>
+        <div class="corr-row"><span class="corr-key">Natural Spirits</span><span class="corr-val">Liver — Pneuma Physikon</span></div>
+      </div>
+    </div>
+
+    <div class="corr-card">
+      <div class="card-header">
+        <span class="card-glyph">🜁</span>
+        <div>
+          <div class="card-title">Kabbalistic / Sephirothic Map</div>
+          <div class="card-desc">The Tree of Life superimposed on Adam Kadmon</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="corr-row"><span class="corr-key">Kether</span><span class="corr-val">Crown of the Head</span></div>
+        <div class="corr-row"><span class="corr-key">Chokmah / Binah</span><span class="corr-val">Right / Left Hemisphere</span></div>
+        <div class="corr-row"><span class="corr-key">Chesed / Geburah</span><span class="corr-val">Right / Left Arm</span></div>
+        <div class="corr-row"><span class="corr-key">Tiphareth</span><span class="corr-val">Heart · Solar Center</span></div>
+        <div class="corr-row"><span class="corr-key">Netzach / Hod</span><span class="corr-val">Right / Left Leg</span></div>
+        <div class="corr-row"><span class="corr-key">Yesod</span><span class="corr-val">Generative Organs</span></div>
+        <div class="corr-row"><span class="corr-key">Malkuth</span><span class="corr-val">Feet · Earth · Matter</span></div>
+      </div>
+    </div>
+
+    <div class="corr-card">
+      <div class="card-header">
+        <span class="card-glyph">⚕</span>
+        <div>
+          <div class="card-title">Alchemical Principles in the Body</div>
+          <div class="card-desc">Sulphur, Mercury, Salt — the Tria Prima</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="corr-row"><span class="corr-key">Sulphur 🜄</span><span class="corr-val">Spirit · Vital Heat · Heart</span></div>
+        <div class="corr-row"><span class="corr-key">Mercury 🜘</span><span class="corr-val">Soul · Breath · Nervous Sys.</span></div>
+        <div class="corr-row"><span class="corr-key">Salt 🜔</span><span class="corr-val">Body · Bones · Matter</span></div>
+        <div class="corr-row"><span class="corr-key">Solve</span><span class="corr-val">Dissolution of the Ego-body</span></div>
+        <div class="corr-row"><span class="corr-key">Coagula</span><span class="corr-val">Crystallization of the Self</span></div>
+        <div class="corr-row"><span class="corr-key">Quintessence</span><span class="corr-val">Aether · Immortal Vehicle</span></div>
+        <div class="corr-row"><span class="corr-key">Philosopher's Stone</span><span class="corr-val">Perfected Human Body</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRIPARTITE BODY / THREE WORLDS -->
+  <div class="section-title">The Tripartite Body — Three Worlds</div>
+  <div class="tripart">
+    <div class="tri-card tri-head">
+      <span class="tri-label">Celestial / Divine</span>
+      <span class="tri-region">Head · Neck · Shoulders</span>
+      <span class="tri-attrs">
+        Divine Intellect · Noûs<br>
+        ♄ Saturn · ♃ Jupiter<br>
+        Archetypal World (Atziluth)<br>
+        Crown, Brow & Throat Centers<br>
+        <em>The Tabernacle of the Most High</em>
+      </span>
+    </div>
+    <div class="tri-card tri-heart">
+      <span class="tri-label">Spiritual / Mediating</span>
+      <span class="tri-region">Chest · Heart · Solar Plexus</span>
+      <span class="tri-attrs">
+        Soul · Anima Mundi<br>
+        ☉ Sun · ☽ Moon · ♀ Venus<br>
+        Creative World (Beriah)<br>
+        Heart & Solar Centers<br>
+        <em>The Holy of Holies</em>
+      </span>
+    </div>
+    <div class="tri-card tri-limb">
+      <span class="tri-label">Material / Generative</span>
+      <span class="tri-region">Abdomen · Pelvis · Limbs</span>
+      <span class="tri-attrs">
+        Body · Nephesh · Desire<br>
+        ♂ Mars · ☿ Mercury<br>
+        Formative World (Yetzirah)<br>
+        Sacral & Root Centers<br>
+        <em>The Outer Court</em>
+      </span>
+    </div>
+  </div>
+
+  <!-- TEMPLE / MICROCOSM DOCTRINE -->
+  <div class="temple-section">
+    <div class="section-title" style="text-align:left; margin-bottom:0">
+      The Body as Temple — Microcosmic Doctrine
+    </div>
+    <div class="temple-grid">
+      <div class="temple-item">
+        <span class="ti-head">The Skull as Heavenly Vault</span>
+        <span class="ti-body">The cranial dome mirrors the celestial sphere. The twelve cranial nerves correspond to the twelve zodiacal signs radiating from the brain-sun.</span>
+      </div>
+      <div class="temple-item">
+        <span class="ti-head">The Spine as World Axis</span>
+        <span class="ti-body">The vertebral column is the Caduceus, the axis mundi. The thirty-three vertebrae correspond to the degrees of Masonic initiation and the levels of Jacob's Ladder.</span>
+      </div>
+      <div class="temple-item">
+        <span class="ti-head">The Heart as Sanctum</span>
+        <span class="ti-body">The heart is the solar altar within the temple-body, the seat of the Divine Spark (Pneuma). It corresponds to Tiphareth on the Tree of Life — the mediating center of all forces.</span>
+      </div>
+      <div class="temple-item">
+        <span class="ti-head">Right vs. Left Polarity</span>
+        <span class="ti-body">The right side is solar, active, masculine (Jachin), governed by the Sun and Mars. The left side is lunar, receptive, feminine (Boaz), governed by the Moon and Venus.</span>
+      </div>
+      <div class="temple-item">
+        <span class="ti-head">Breath as Sacred Fire</span>
+        <span class="ti-body">Respiration is the perpetual temple rite. The lungs are the twin bellows of the alchemical furnace; inhalation receives divine fire, exhalation returns it purified.</span>
+      </div>
+      <div class="temple-item">
+        <span class="ti-head">The Eyes as Luminaries</span>
+        <span class="ti-body">The right eye is the Sun (active, rational, diurnal). The left eye is the Moon (passive, intuitive, nocturnal). Together they form the "All-Seeing Eye" in the adept.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ELEMENTS ROW -->
+  <div class="section-title">The Four Elements in the Body</div>
+  <div class="elements-row">
+    <div class="elem-card elem-fire">
+      <span class="elem-symbol">🜂</span>
+      <span class="elem-name">Fire</span>
+      <span class="elem-list">Heat · Bile · Vitality<br>Right side · Heart<br>Choleric · Active<br>♌ Leo · ♈ Aries · ♐ Sagittarius</span>
+    </div>
+    <div class="elem-card elem-water">
+      <span class="elem-symbol">🜄</span>
+      <span class="elem-name">Water</span>
+      <span class="elem-list">Moisture · Blood · Lymph<br>Left side · Womb<br>Phlegmatic · Receptive<br>♋ Cancer · ♏ Scorpio · ♓ Pisces</span>
+    </div>
+    <div class="elem-card elem-air">
+      <span class="elem-symbol">🜁</span>
+      <span class="elem-name">Air</span>
+      <span class="elem-list">Breath · Nervous force<br>Lungs · Brain · Nerves<br>Sanguine · Mediating<br>♊ Gemini · ♎ Libra · ♒ Aquarius</span>
+    </div>
+    <div class="elem-card elem-earth">
+      <span class="elem-symbol">🜃</span>
+      <span class="elem-name">Earth</span>
+      <span class="elem-list">Density · Bones · Flesh<br>Feet · Lower Body<br>Melancholic · Fixed<br>♉ Taurus · ♍ Virgo · ♑ Capricorn</span>
+    </div>
+  </div>
+
+  <footer>
+    <span class="ornament">✦ ✧ ✦</span>
+    "Man is the microcosm of the macrocosm; the god of the lower world; he is the second divinity."<br>
+    <em style="color:var(--gold-dim);">— Manly P. Hall, The Secret Teachings of All Ages</em>
+  </footer>
+</div>
+
+<script>
+  // Generate stars
+  const starsEl = document.getElementById('stars');
+  for (let i = 0; i < 120; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const size = Math.random() * 2 + 0.5;
+    s.style.cssText = `
+      width:${size}px; height:${size}px;
+      left:${Math.random()*100}%;
+      top:${Math.random()*100}%;
+      --d:${2 + Math.random()*4}s;
+      --o:${0.15 + Math.random()*0.5};
+      animation-delay:${Math.random()*4}s;
+    `;
+    starsEl.appendChild(s);
+  }
+</script>
+</body>
+</html>

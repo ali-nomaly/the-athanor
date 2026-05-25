@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MECÁNICO DEL CUERPO — Manual de Campo</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@300;400;500&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0d0b;
+    --bg2: #151410;
+    --bg3: #1c1a16;
+    --panel: #201e19;
+    --border: #2e2b24;
+    --brass: #c9963a;
+    --amber: #e8b84b;
+    --terra: #c4522a;
+    --sage: #7a9e7e;
+    --cream: #e8dfc8;
+    --muted: #7a7060;
+    --text: #d4c9b0;
+    --dim: #9c9080;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 999;
+    opacity: 0.4;
+  }
+
+  .wrapper {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 48px 0 32px;
+    margin-bottom: 48px;
+    position: relative;
+  }
+
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 120px;
+    height: 2px;
+    background: var(--brass);
+  }
+
+  .eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--brass);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(52px, 9vw, 96px);
+    letter-spacing: 0.04em;
+    line-height: 0.9;
+    color: var(--cream);
+  }
+
+  h1 span {
+    color: var(--brass);
+  }
+
+  .subtitle {
+    margin-top: 16px;
+    color: var(--dim);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .section-block {
+    margin-bottom: 56px;
+  }
+
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .section-label .num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    color: var(--border);
+    line-height: 1;
+    min-width: 48px;
+  }
+
+  .section-label .title-wrap h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 0.08em;
+    color: var(--cream);
+    line-height: 1;
+  }
+
+  .section-label .title-wrap .time {
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--brass);
+    text-transform: uppercase;
+    margin-top: 3px;
+  }
+
+  .practices-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+  }
+
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--brass);
+    padding: 18px 20px;
+    position: relative;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .card:hover {
+    background: var(--bg3);
+    border-left-color: var(--amber);
+  }
+
+  .card.terra { border-left-color: var(--terra); }
+  .card.terra:hover { border-left-color: #e8633a; }
+  .card.sage { border-left-color: var(--sage); }
+  .card.sage:hover { border-left-color: #9fc9a4; }
+
+  .card-tag {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+
+  .card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    color: var(--cream);
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  .card p {
+    font-size: 11.5px;
+    color: var(--dim);
+    line-height: 1.65;
+  }
+
+  .card .mechanic-note {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+    font-size: 10.5px;
+    color: var(--brass);
+  }
+
+  .card .mechanic-note::before {
+    content: '⚙ ';
+    opacity: 0.7;
+  }
+
+  .supp-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 10px;
+  }
+
+  .supp-row {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 14px 18px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 14px;
+    align-items: start;
+  }
+
+  .supp-icon {
+    font-size: 20px;
+    margin-top: 2px;
+  }
+
+  .supp-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    color: var(--cream);
+    margin-bottom: 2px;
+  }
+
+  .supp-dose {
+    font-size: 10px;
+    color: var(--brass);
+    letter-spacing: 0.1em;
+    margin-bottom: 4px;
+  }
+
+  .supp-why {
+    font-size: 11px;
+    color: var(--dim);
+    line-height: 1.55;
+  }
+
+  .fuels-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  @media (max-width: 600px) {
+    .fuels-layout { grid-template-columns: 1fr; }
+    .practices-grid { grid-template-columns: 1fr; }
+    .supp-grid { grid-template-columns: 1fr; }
+  }
+
+  .fuel-category {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 20px;
+  }
+
+  .fuel-category h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 0.1em;
+    color: var(--amber);
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .fuel-item {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    align-items: flex-start;
+  }
+
+  .fuel-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .fuel-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--brass);
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+
+  .fuel-dot.t { background: var(--terra); }
+  .fuel-dot.s { background: var(--sage); }
+
+  .fuel-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    color: var(--cream);
+  }
+
+  .fuel-desc {
+    font-size: 11px;
+    color: var(--dim);
+    margin-top: 1px;
+  }
+
+  .topicals-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 10px;
+  }
+
+  .topical-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-top: 2px solid var(--terra);
+    padding: 16px 18px;
+  }
+
+  .topical-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    color: var(--cream);
+    margin-bottom: 4px;
+  }
+
+  .topical-card .apply {
+    font-size: 9.5px;
+    letter-spacing: 0.15em;
+    color: var(--terra);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .topical-card p {
+    font-size: 11px;
+    color: var(--dim);
+    line-height: 1.6;
+  }
+
+  .divider {
+    height: 1px;
+    background: linear-gradient(to right, var(--brass), transparent);
+    margin: 40px 0;
+    opacity: 0.4;
+  }
+
+  .master-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11.5px;
+  }
+
+  .master-table th {
+    text-align: left;
+    padding: 10px 14px;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--brass);
+    background: var(--bg3);
+    border-bottom: 1px solid var(--border);
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 500;
+  }
+
+  .master-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--dim);
+    vertical-align: top;
+  }
+
+  .master-table tr:hover td {
+    background: var(--bg3);
+    color: var(--text);
+  }
+
+  .master-table td:first-child {
+    color: var(--cream);
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+  }
+
+  .tag-pill {
+    display: inline-block;
+    font-size: 8px;
+    letter-spacing: 0.1em;
+    padding: 2px 7px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    margin-right: 4px;
+  }
+
+  .tag-ay { background: rgba(201,150,58,0.15); color: var(--brass); }
+  .tag-tcm { background: rgba(122,158,126,0.15); color: var(--sage); }
+  .tag-mod { background: rgba(196,82,42,0.15); color: var(--terra); }
+
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 0;
+    color: var(--muted);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .highlight-bar {
+    background: linear-gradient(to right, rgba(201,150,58,0.08), transparent);
+    border-left: 3px solid var(--brass);
+    padding: 16px 20px;
+    margin-bottom: 32px;
+    font-size: 12px;
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  .highlight-bar strong {
+    color: var(--amber);
+    font-weight: 500;
+  }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <!-- ENCABEZADO -->
+  <header>
+    <div class="eyebrow">MCT · Ayurveda · Fisiología Moderna</div>
+    <h1>MECÁNICO<br><span>DEL CUERPO</span></h1>
+    <div class="subtitle">Manual de Campo — Protocolo de Mantenimiento Diario</div>
+  </header>
+
+  <div class="highlight-bar">
+    <strong>Principio central:</strong> El cuerpo no es un templo para venerar — es un vehículo para mantener. Los sistemas ancestrales mapearon la misma fisiología en distintos idiomas: agni = fuego metabólico, jing = reserva celular, wei qi = frontera inmune, ojas = vitalidad del sistema nervioso. La ciencia moderna ha llegado a la misma conclusión.
+  </div>
+
+  <!-- SECCIÓN 1: AMANECER -->
+  <div class="section-block">
+    <div class="section-label">
+      <div class="num">01</div>
+      <div class="title-wrap">
+        <h2>IGNICIÓN DEL AMANECER</h2>
+        <div class="time">4:30 – 7:00 AM · Brahma Muhurta · Yang en Ascenso</div>
+      </div>
+    </div>
+
+    <div class="practices-grid">
+      <div class="card">
+        <div class="card-tag">Ayurveda · Oral</div>
+        <h3>Raspado de Lengua</h3>
+        <p>7 pasadas de adelante hacia atrás con un raspador de cobre o acero inoxidable antes de que cualquier cosa toque la boca. Elimina el ama (capa bacteriana nocturna) y activa el reflejo digestivo oral.</p>
+        <div class="mechanic-note">Reduce la carga patógena antes de tragarla. El cobre es antimicrobiano por contacto directo.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-tag">Ayurveda · Oral</div>
+        <h3>Oil Pulling — Buches con Aceite</h3>
+        <p>1 cucharada de aceite de sésamo o coco, enjuagar 10–15 min mientras haces otras cosas. Escupir en el bote (no en el fregadero). Enjuagar con agua tibia con sal.</p>
+        <div class="mechanic-note">Emulsiona toxinas liposolubles del tejido gingival. Reduce Streptococcus mutans. Protege el microbioma oral mejor que solo cepillarse.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-tag">Ayurveda · Hidratación</div>
+        <h3>Agua Tibia con Jengibre o Limón</h3>
+        <p>500ml de agua tibia (no caliente) con rebanadas de jengibre fresco o limón. El primer aporte del día activa la producción de bilis y el peristaltismo antes de comer.</p>
+        <div class="mechanic-note">Enciende el agni. El limón prepara el pH del ácido gástrico. El jengibre es procinético comprobado — mueve las cosas mecánicamente.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-tag">Ayurveda · Nasal</div>
+        <h3>Nasya + Jala Neti</h3>
+        <p>Primero la lota con solución salina tibia (enjuagar). Luego 2 gotas de aceite de sésamo tibio o aceite nasya en cada fosa nasal, inhalar suavemente. Aplicar mañanas de ambiente seco o contaminado.</p>
+        <div class="mechanic-note">Lubrica la barrera mucosa — primera línea de defensa inmune. La irrigación salina diaria reduce significativamente las infecciones sinusales, confirmado por otorrinolaringología moderna.</div>
+      </div>
+
+      <div class="card sage">
+        <div class="card-tag">MCT · Circulación de Qi</div>
+        <h3>Qigong / Rotaciones Articulares</h3>
+        <p>5–10 min de círculos articulares sistemáticos: tobillos → rodillas → caderas → columna → hombros → cuello → muñecas. La secuencia Ba Duan Jin (Ocho Piezas de Brocado) es el original.</p>
+        <div class="mechanic-note">Moviliza el líquido sinovial hacia el cartílago antes de cargar peso. Activa los meridianos. Moderno: reduce el pico de cortisol matutino, mejora la VFC.</div>
+      </div>
+
+      <div class="card sage">
+        <div class="card-tag">MCT · Moderno · Luz</div>
+        <h3>Luz Solar Matutina</h3>
+        <p>10–20 min afuera dentro de los primeros 30 min al despertar. Sin lentes de sol. Funciona incluso nublado. Esto es innegociable para todo el sistema.</p>
+        <div class="mechanic-note">Calibra el reloj circadiano vía células de melanopsina retinal. Desencadena la cascada serotonina → melatonina. Baja el cortisol nocturno. Protocolo #1 de Huberman — plenamente validado.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- SECCIÓN 2: ABHYANGA -->
+  <div class="section-block">
+    <div class="section-label">
+      <div class="num">02</div>
+      <div class="title-wrap">
+        <h2>ABHYANGA — EL CAMBIO DE ACEITE</h2>
+        <div class="time">Antes de la Ducha · 10–15 Min · Innegociable Semanal, Ideal Diario</div>
+      </div>
+    </div>
+
+    <div class="highlight-bar" style="margin-bottom:20px;">
+      <strong>Este es el ritual central de mantenimiento.</strong> Aceite tibio + fricción = activación de la bomba linfática + apagado del sistema nervioso + fortalecimiento de la barrera cutánea. El Ayurveda lo llama la práctica más poderosa para pacificar vata. Moderno: estimula el sistema nervioso periférico, moviliza el fluido intersticial, reduce marcadores inflamatorios.
+    </div>
+
+    <div class="practices-grid">
+      <div class="card terra">
+        <div class="card-tag">Técnica</div>
+        <h3>Aceite de Sésamo Tibio — Cuerpo Completo</h3>
+        <p>Tibiar el aceite ligeramente (probar en muñeca). Trazos largos en extremidades hacia el corazón, circular en articulaciones. El cuero cabelludo merece atención especial. Dejar actuar 5–10 min antes de ducharse. Usar una toalla designada.</p>
+        <div class="mechanic-note">El sésamo penetra más profundo que cualquier otro aceite base. Calentar = vasodilatación antes de la absorción. Los trazos hacia el corazón asisten el retorno linfático.</div>
+      </div>
+
+      <div class="card terra">
+        <div class="card-tag">Ducha de Contraste</div>
+        <h3>Caliente → Cierre Frío</h3>
+        <p>Ducharse normalmente para enjuagar el aceite. Terminar con 30–60 seg de agua fría. No resistirla — respirar a través de ella. El frío es la señal de adaptación.</p>
+        <div class="mechanic-note">El frío dispara un pico de norepinefrina (hasta 300%). Activa el tejido adiposo pardo. Aumenta el tono vagal. Estimula citocinas inmunes. No es una tendencia — es fisiología.</div>
+      </div>
+
+      <div class="card terra">
+        <div class="card-tag">Alternativa en Seco</div>
+        <h3>Garshana (Guantes de Seda Seca)</h3>
+        <p>Si no hay tiempo para abhyanga completo — 5 min con guantes de seda natural o cepillo de cerdas naturales antes de ducharse. Movimientos circulares hacia los nódulos linfáticos (axilas, ingle, clavícula).</p>
+        <div class="mechanic-note">Exfolia la piel muerta, bombea el sistema linfático mecánicamente. Piénsalo como arrancar manualmente el sistema linfático que no tiene bomba propia.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- SECCIÓN 3: MEDIODÍA -->
+  <div class="section-block">
+    <div class="section-label">
+      <div class="num">03</div>
+      <div class="title-wrap">
+        <h2>MOTOR DE MEDIODÍA</h2>
+        <div class="time">11:00 AM – 2:00 PM · Agni al Máximo · Tiempo Pitta</div>
+      </div>
+    </div>
+
+    <div class="practices-grid">
+      <div class="card">
+        <div class="card-tag">Ayurveda · Nutrición</div>
+        <h3>La Comida Más Grande al Mediodía</h3>
+        <p>El sistema digestivo sigue un ritmo circadiano. El ácido gástrico, la bilis y las enzimas digestivas alcanzan su pico alrededor del mediodía solar. Ahí es cuando más combustible le metes.</p>
+        <div class="mechanic-note">La cronobiología confirma: la misma comida a mediodía vs. 8pm produce mejor sensibilidad a la insulina, triglicéridos más bajos y mayores hormonas de saciedad.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-tag">Ayurveda · Digestión</div>
+        <h3>Té CCF con las Comidas</h3>
+        <p>Partes iguales de semillas de Comino + Cilantro + Hinojo, hervidas 10 min. Tomar tibio con o después del almuerzo. Reemplaza el agua fría durante las comidas, que apaga el agni.</p>
+        <div class="mechanic-note">Comino: secreción de enzimas digestivas. Cilantro: flujo de bilis. Hinojo: antiespasmódico del músculo liso intestinal. En conjunto: reducen hinchazón, gases y digestión lenta.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-tag">Ayurveda · Moderno</div>
+        <h3>100 Pasos Después de Comer</h3>
+        <p>Shatapavali — 100 pasos (≈5 min caminata) después de la comida principal. Ligero, no es ejercicio. Solo lo suficiente para iniciar el vaciado gástrico y la respuesta metabólica.</p>
+        <div class="mechanic-note">Comprobado que reduce el pico de glucosa postprandial hasta un 30%. Más efectivo que caminar antes de comer. Simple, práctico, subutilizado.</div>
+      </div>
+
+      <div class="card sage">
+        <div class="card-tag">MCT · Acupresión</div>
+        <h3>ST36 — Zusanli</h3>
+        <p>4 dedos debajo de la rótula, un dedo afuera de la tibia. Aplicar presión firme con el pulgar 1–2 min por lado. Activa la función digestiva e inmune.</p>
+        <div class="mechanic-note">"Tres Millas de la Pierna" — el punto powerhouse de la MCT. Investigación: estimula el nervio vago, aumenta la actividad de células NK, reduce citocinas inflamatorias.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- SECCIÓN 4: TARDE-NOCHE -->
+  <div class="section-block">
+    <div class="section-label">
+      <div class="num">04</div>
+      <div class="title-wrap">
+        <h2>DESACELERACIÓN NOCTURNA</h2>
+        <div class="time">6:00 – 9:00 PM · Transición Vata · Construcción del Yin</div>
+      </div>
+    </div>
+
+    <div class="practices-grid">
+      <div class="card">
+        <div class="card-tag">Ayurveda · Horario</div>
+        <h3>Cena Ligera y Temprana</h3>
+        <p>Más pequeña que el almuerzo, idealmente antes de las 7pm. Sopas, kitchari, verduras cocidas — fáciles para el fuego digestivo que se apaga. Sin ensaladas crudas ni proteínas pesadas de noche.</p>
+        <div class="mechanic-note">Alimentación en tiempo restringido: terminar de comer 3–4 hrs antes de dormir. El cuerpo reconstruye tejido y desintoxica durante el sueño, no digiriendo comida. El hígado desintoxica principalmente de 1–3am.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-tag">Ayurveda · Sistema Nervioso</div>
+        <h3>Masaje de Cuero Cabelludo con Aceite Brahmi</h3>
+        <p>Aceite de brahmi o sésamo tibio trabajado en el cuero cabelludo con las yemas — 5 a 10 min. Trazos lentos, rítmicos, deliberados. Estimula los puntos Marma en la coronilla y las sienes.</p>
+        <div class="mechanic-note">Activa el parasimpático. El cuero cabelludo tiene terminaciones nerviosas densas — la presión mecánica lenta desencadena calma mediada por GABA. También repara la barrera del folículo piloso.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-tag">Ayurveda · Pies</div>
+        <h3>Padabhyanga — Aceite en los Pies</h3>
+        <p>Ghee tibio o sésamo en las plantas de los pies antes de dormir. Masajear con trazos firmes del pulgar. Usar calcetines para dormir si es necesario. Ancestral, efectivo, drásticamente subutilizado.</p>
+        <div class="mechanic-note">La planta del pie = mayor densidad de terminaciones nerviosas. Activa cascada parasimpática, reduce cortisol. Ensayos clínicos muestran mejora de calidad del sueño. Funciona para todos.</div>
+      </div>
+
+      <div class="card sage">
+        <div class="card-tag">MCT · Moderno · Respiración</div>
+        <h3>Nadi Shodhana / Respiración en Caja</h3>
+        <p>Respiración alterna por fosas nasales 5–10 min O respiración en caja (4-4-4-4). Hacerlo antes de dormir o durante cualquier pico de estrés. La exhalación es el sistema de frenos.</p>
+        <div class="mechanic-note">Estimulación directa del nervio vago mediante la respiración. Desacelera el corazón, baja la presión arterial, cambia de simpático a parasimpático en 3–5 ciclos. La herramienta gratuita más rápida del kit.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-tag">Ayurveda · Postura</div>
+        <h3>Viparita Karani — Piernas en la Pared</h3>
+        <p>10–15 min con las piernas contra la pared, caderas cerca, brazos abiertos. Es una puerta al yoga nidra. Hacerlo después de cenar o justo antes de dormir.</p>
+        <div class="mechanic-note">Revierte el estasis venoso en las extremidades inferiores. Drena la linfa de las piernas. La inversión suave calma el sistema nervioso y baja el cortisol. Sin equipo necesario.</div>
+      </div>
+
+      <div class="card sage">
+        <div class="card-tag">MCT · Moderno · Recuperación</div>
+        <h3>Dormir Antes de las 10 PM</h3>
+        <p>El tiempo pitta (10pm–2am) es la ventana de autoreparación del cuerpo. Perderla es tomar prestado de tu reserva de jing. Pantallas apagadas a las 9pm como mínimo.</p>
+        <div class="mechanic-note">La GH alcanza su pico en los ciclos de sueño profundo antes de medianoche. El sistema glinfático (drenaje linfático cerebral) opera principalmente en etapas 3–4. Cada hora antes de medianoche vale el doble.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- SECCIÓN 5: SUPLEMENTOS -->
+  <div class="section-block">
+    <div class="section-label">
+      <div class="num">05</div>
+      <div class="title-wrap">
+        <h2>LA PILA DE SUPLEMENTOS</h2>
+        <div class="time">Combustibles Esenciales — Optimización del Aporte Diario</div>
+      </div>
+    </div>
+
+    <p style="color: var(--dim); font-size: 11.5px; margin-bottom: 20px;">La calidad importa. Elegir extractos estandarizados, probados por terceros. Las hierbas ayurvédicas funcionan mejor en forma de alimento (polvos en leche o agua tibia) cuando es posible — no como cápsulas aisladas.</p>
+
+    <div class="supp-grid">
+
+      <div class="supp-row">
+        <div class="supp-icon">🌿</div>
+        <div>
+          <div class="supp-name">Ashwagandha (KSM-66)</div>
+          <div class="supp-dose">300–600mg · Noche · Con Grasa</div>
+          <div class="supp-why">Regulación del eje HPA, reducción de cortisol, soporte de testosterona, optimización de T3/T4 tiroideo. El adaptógeno más estudiado. Tomar de noche — no por la mañana.</div>
+        </div>
+      </div>
+
+      <div class="supp-row">
+        <div class="supp-icon">🪨</div>
+        <div>
+          <div class="supp-name">Shilajit (Purificado)</div>
+          <div class="supp-dose">200–400mg · Mañana · Forma de Resina</div>
+          <div class="supp-why">Transporte mineral por ácido fúlvico. Amplificación mitocondrial de CoQ10. Soporte de testosterona y DHEA. Tónico de jing — el equivalente ayurvédico de la suplementación de minerales traza para la energía celular.</div>
+        </div>
+      </div>
+
+      <div class="supp-row">
+        <div class="supp-icon">🫐</div>
+        <div>
+          <div class="supp-name">Triphala</div>
+          <div class="supp-dose">500mg–1g · Antes de Dormir · Polvo en Agua Tibia</div>
+          <div class="supp-why">Tres frutas (amalaki, bibhitaki, haritaki). Regulador intestinal, potencia antioxidante, prebiótico del microbioma, salud ocular. Rasayana — fórmula de rejuvenecimiento celular.</div>
+        </div>
+      </div>
+
+      <div class="supp-row">
+        <div class="supp-icon">🧠</div>
+        <div>
+          <div class="supp-name">Brahmi / Bacopa Monnieri</div>
+          <div class="supp-dose">300mg (55% bacósidos) · Mañana · Con Comida</div>
+          <div class="supp-why">Neuroplasticidad, consolidación de memoria, reducción de ansiedad. Tarda 6–8 semanas en alcanzar su pico. Equivalente MCT: He Shou Wu para longevidad cognitiva. La mejor inversión cerebral a largo plazo.</div>
+        </div>
+      </div>
+
+      <div class="supp-row">
+        <div class="supp-icon">🍊</div>
+        <div>
+          <div class="supp-name">Amla / Amalaki</div>
+          <div class="supp-dose">500mg–1g polvo diario · O fruta fresca</div>
+          <div class="supp-why">Vitamina C natural más alta (forma termoestable unida a taninos). Síntesis de colágeno, protección hepática, modulación inmune, reducción de lípidos. La fruta de longevidad ayurvédica — omite el ácido ascórbico sintético.</div>
+        </div>
+      </div>
+
+      <div class="supp-row">
+        <div class="supp-icon">🌙</div>
+        <div>
+          <div class="supp-name">Magnesio Glicinato</div>
+          <div class="supp-dose">300–400mg · Noche · Con Cena</div>
+          <div class="supp-why">El mineral más depleccionado en humanos modernos. Calidad del sueño, relajación muscular, calma del sistema nervioso, sensibilidad a la insulina, 300+ reacciones enzimáticas. El suplemento mineral de mayor apalancamiento.</div>
+        </div>
+      </div>
+
+      <div class="supp-row">
+        <div class="supp-icon">☀️</div>
+        <div>
+          <div class="supp-name">Vitamina D3 + K2</div>
+          <div class="supp-dose">3000–5000 UI D3 · 100–200mcg K2-MK7 · Mañana</div>
+          <div class="supp-why">D3 sin K2 es incompleto. K2 dirige el calcio al hueso (no a las arterias). D3 es el regulador maestro inmune, del ánimo, cofactor de testosterona. Mide tus niveles — optimiza a 50–80 ng/mL.</div>
+        </div>
+      </div>
+
+      <div class="supp-row">
+        <div class="supp-icon">🐟</div>
+        <div>
+          <div class="supp-name">Omega-3 (EPA/DHA)</div>
+          <div class="supp-dose">2–3g EPA+DHA combinados · Con la Comida Más Grande</div>
+          <div class="supp-why">Fluidez de membrana celular, estructura cerebral, cascada de prostaglandinas antiinflamatorias, cardiovascular, lubricación articular. Usa aceite de pescado en forma de triglicérido o algas (vegano). Refrigerar.</div>
+        </div>
+      </div>
+
+      <div class="supp-row">
+        <div class="supp-icon">🌾</div>
+        <div>
+          <div class="supp-name">Cúrcuma + Pimienta Negra + Grasa</div>
+          <div class="supp-dose">500mg–1g curcumina · Siempre con piperina + grasa</div>
+          <div class="supp-why">La curcumina sola se absorbe mal. La piperina (pimienta negra) aumenta la biodisponibilidad un 2000%. Liposoluble. Antiinflamatorio, protección hepática, salud articular. La leche dorada cubre los tres.</div>
+        </div>
+      </div>
+
+      <div class="supp-row">
+        <div class="supp-icon">🔴</div>
+        <div>
+          <div class="supp-name">Chyawanprash</div>
+          <div class="supp-dose">1–2 cdta · Mañana · Con Leche Tibia o Solo</div>
+          <div class="supp-why">Mermelada poliherbal ayurvédica con 40+ botánicos. Base de amla + ashwagandha, shatavari, pippali, ghee, miel. El tónico integral original. Reemplaza tu multivitamínico con esto.</div>
+        </div>
+      </div>
+
+      <div class="supp-row">
+        <div class="supp-icon">🦠</div>
+        <div>
+          <div class="supp-name">Probióticos / Alimentos Fermentados</div>
+          <div class="supp-dose">Diario · Variar cepas · Alimento primero</div>
+          <div class="supp-why">El microbioma es el segundo cerebro. Las cepas de Lactobacillus y Bifidobacterium regulan el ánimo vía eje intestino-cerebro, entrenan la respuesta inmune, producen neurotransmisores. Alimentos: kéfir, lassi, miso, kimchi.</div>
+        </div>
+      </div>
+
+      <div class="supp-row">
+        <div class="supp-icon">🌺</div>
+        <div>
+          <div class="supp-name">Azafrán (Crocus sativus)</div>
+          <div class="supp-dose">30mg diarios · Mañana</div>
+          <div class="supp-why">Subestimado. Ensayos clínicos muestran eficacia comparable a los ISRS para depresión leve. Protege la retina de la luz azul. Antiinflamatorio. MCT: mueve el qi, ilumina el espíritu. Dosis mínima — efecto enorme.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- SECCIÓN 6: COMBUSTIBLES -->
+  <div class="section-block">
+    <div class="section-label">
+      <div class="num">06</div>
+      <div class="title-wrap">
+        <h2>COMBUSTIBLES ESENCIALES</h2>
+        <div class="time">Comida como Medicina — La Dieta de Mantenimiento</div>
+      </div>
+    </div>
+
+    <div class="fuels-layout">
+
+      <div class="fuel-category">
+        <h3>Aceites y Grasas Sagradas</h3>
+        <div class="fuel-item">
+          <div class="fuel-dot"></div>
+          <div>
+            <div class="fuel-name">Ghee</div>
+            <div class="fuel-desc">Butirato para el revestimiento intestinal, transportador de vitaminas liposolubles, lubrica articulaciones. Oro ayurvédico — usar como grasa principal de cocción.</div>
+          </div>
+        </div>
+        <div class="fuel-item">
+          <div class="fuel-dot t"></div>
+          <div>
+            <div class="fuel-name">Semillas de Sésamo Negro</div>
+            <div class="fuel-desc">Tónico de jing renal en MCT. Calcio, lignanos, antioxidante sesamol. Consumir diario — tahini, esparcido o leche de sésamo.</div>
+          </div>
+        </div>
+        <div class="fuel-item">
+          <div class="fuel-dot s"></div>
+          <div>
+            <div class="fuel-name">Aguacate</div>
+            <div class="fuel-desc">Precursores de glutatión, K2, ácido oleico, grasa mitocondrial. La fuente de grasa integral más completa.</div>
+          </div>
+        </div>
+        <div class="fuel-item">
+          <div class="fuel-dot"></div>
+          <div>
+            <div class="fuel-name">Aceite de Coco / MCT</div>
+            <div class="fuel-desc">Energía cetónica inmediata, ácido láurico (antiviral/antifúngico), enfría el pitta. Solo crudo o a baja temperatura.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fuel-category">
+        <h3>Raíces, Especias y Activadores</h3>
+        <div class="fuel-item">
+          <div class="fuel-dot"></div>
+          <div>
+            <div class="fuel-name">Cúrcuma + Jengibre + Pimienta Negra</div>
+            <div class="fuel-desc">Trinidad antiinflamatoria. Dosis diaria en cocina, tés o leche dorada. Capa base innegociable.</div>
+          </div>
+        </div>
+        <div class="fuel-item">
+          <div class="fuel-dot t"></div>
+          <div>
+            <div class="fuel-name">Ajo (Crudo o Levemente Cocido)</div>
+            <div class="fuel-desc">Alicina: antimicrobiano, cardiovascular, inmune. Dejar reposar 10 min después de picar para activar la enzima aliinasa.</div>
+          </div>
+        </div>
+        <div class="fuel-item">
+          <div class="fuel-dot s"></div>
+          <div>
+            <div class="fuel-name">Hoja de Moringa</div>
+            <div class="fuel-desc">Aminoácidos completos, hierro, vitamina C, vitaminas B. Uno de los alimentos más nutritivos del planeta. Polvo en licuados o sopas.</div>
+          </div>
+        </div>
+        <div class="fuel-item">
+          <div class="fuel-dot"></div>
+          <div>
+            <div class="fuel-name">Amla / Grosella India</div>
+            <div class="fuel-desc">Vitamina C termoestable. Mayor ORAC antioxidante de cualquier fruta. Tónico hepático, constructor de colágeno. Polvo o fresca.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fuel-category">
+        <h3>Alimentos para el Intestino y el Microbioma</h3>
+        <div class="fuel-item">
+          <div class="fuel-dot s"></div>
+          <div>
+            <div class="fuel-name">Kitchari (Mung Dal + Arroz)</div>
+            <div class="fuel-desc">Comida de reinicio ayurvédica. Tridóshica, altamente biodisponible, da descanso al intestino mientras lo nutre. Semanal o cuando estés desequilibrado.</div>
+          </div>
+        </div>
+        <div class="fuel-item">
+          <div class="fuel-dot"></div>
+          <div>
+            <div class="fuel-name">Sopa de Miso</div>
+            <div class="fuel-desc">Alimento del bazo en MCT. Probióticos vivos, glutamatos para reparar el revestimiento intestinal, minerales traza. Solo sin pasteurizar — no hervir.</div>
+          </div>
+        </div>
+        <div class="fuel-item">
+          <div class="fuel-dot t"></div>
+          <div>
+            <div class="fuel-name">Kéfir / Lassi</div>
+            <div class="fuel-desc">50+ cepas bacterianas vs. 1–5 en el yogur. Lactobacillus kefiri es exclusivo del kéfir. Takra ayurvédico (suero de leche especiado) para digestión postcomida.</div>
+          </div>
+        </div>
+        <div class="fuel-item">
+          <div class="fuel-dot s"></div>
+          <div>
+            <div class="fuel-name">Caldo de Hueso / Caldo de Hongos</div>
+            <div class="fuel-desc">Colágeno, glicina, prolina para revestimiento intestinal + reparación articular. Caldo de shiitake/reishi para beta-glucanos inmunes. MCT: construye sangre y médula.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fuel-category">
+        <h3>Alimentos de Sangre, Jing y Vitalidad</h3>
+        <div class="fuel-item">
+          <div class="fuel-dot"></div>
+          <div>
+            <div class="fuel-name">Dátiles + Leche Tibia</div>
+            <div class="fuel-desc">Tónico reproductivo ayurvédico. Hierro, glucógeno rápido, triptófano para serotonina. MCT: nutre el yin, construye la sangre.</div>
+          </div>
+        </div>
+        <div class="fuel-item">
+          <div class="fuel-dot t"></div>
+          <div>
+            <div class="fuel-name">Betabel / Remolacha</div>
+            <div class="fuel-desc">Precursor de óxido nítrico vía nitratos → vasodilatación endotelial. Soporte de desintoxicación hepática fase 2. Rendimiento + cardiovascular.</div>
+          </div>
+        </div>
+        <div class="fuel-item">
+          <div class="fuel-dot s"></div>
+          <div>
+            <div class="fuel-name">Granada</div>
+            <div class="fuel-desc">Punicalaginas: el antioxidante más potente en alimentos. Urolitina-A (conversión del microbioma intestinal) para renovación mitocondrial. MCT: astringen el qi.</div>
+          </div>
+        </div>
+        <div class="fuel-item">
+          <div class="fuel-dot"></div>
+          <div>
+            <div class="fuel-name">Algas Marinas (Nori, Kelp, Wakame)</div>
+            <div class="fuel-desc">Yodo para la tiroides, espectro de minerales oceánicos, fucoidan para inmunidad. MCT: ablanda la dureza, resuelve la acumulación de flema.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- SECCIÓN 7: TÓPICOS -->
+  <div class="section-block">
+    <div class="section-label">
+      <div class="num">07</div>
+      <div class="title-wrap">
+        <h2>TÓPICOS — APLICACIONES EXTERNAS</h2>
+        <div class="time">La Piel es el Órgano Más Grande · Todo Penetra</div>
+      </div>
+    </div>
+
+    <div class="topicals-grid">
+
+      <div class="topical-card">
+        <h3>Aceite de Sésamo — Base Principal</h3>
+        <div class="apply">Cuerpo Completo · Abhyanga · Diario</div>
+        <p>El aceite base más cálido y de mayor penetración. Sesamina + sesamolina son antioxidantes únicos del sésamo. Pacifica vata — enraíza y lubrica el sistema nervioso a través de la piel.</p>
+      </div>
+
+      <div class="topical-card">
+        <h3>Aceite de Ricino — El Pack Detox</h3>
+        <div class="apply">Hígado · Articulaciones · Cuero Cabelludo · 3x/semana</div>
+        <p>Aplicado sobre el hígado (lado derecho, bajo las costillas) con un paño tibio — extrae el estancamiento, apoya el drenaje linfático. En articulaciones para inflamación. En cuero cabelludo para regenerar folículos pilosos. El ácido ricinoleico es profundamente antiinflamatorio.</p>
+      </div>
+
+      <div class="topical-card">
+        <h3>Aceite de Brahmi — Reparación Neural</h3>
+        <div class="apply">Cuero Cabelludo + Sienes · Noche</div>
+        <p>Bacopa infusionado en sésamo o coco. Actúa a través de los puntos marma del cuero cabelludo. Enfría el pitta en la cabeza, calma la actividad mental excesiva. Efecto calmante legítimo del SNC vía absorción tópica.</p>
+      </div>
+
+      <div class="topical-card">
+        <h3>Aceite de Neem — Antimicrobiano</h3>
+        <div class="apply">Condiciones de Piel · Cuero Cabelludo · Tratamiento Puntual</div>
+        <p>El compuesto azadiractina es antifúngico, antibacteriano, antiparasitario. Para problemas de cuero cabelludo, acné, infecciones cutáneas. Siempre diluir 1:10 en aceite base. Olor fuerte — usar de noche.</p>
+      </div>
+
+      <div class="topical-card">
+        <h3>Aceite de Kumkumadi — Rostro</h3>
+        <div class="apply">Rostro · Noche · 3–5 gotas</div>
+        <p>Aceite facial ayurvédico con azafrán y 16+ botánicos. Ilumina, repara la barrera, reduce la hiperpigmentación. El análogo ayurvédico al retinol — tarda semanas pero actúa de forma sistémica. Aplicar después de limpiar el rostro en la noche.</p>
+      </div>
+
+      <div class="topical-card">
+        <h3>Aceite Mahanarayan — Músculo Profundo</h3>
+        <div class="apply">Articulaciones · Columna · Post-Entrenamiento · Según Necesidad</div>
+        <p>Base de sésamo con 50+ hierbas incluyendo ashwagandha, shatavari, bala. Penetra profundamente en músculo y tejido articular. El equivalente ayurvédico de un tratamiento de tejido profundo. Tibiar antes de aplicar.</p>
+      </div>
+
+      <div class="topical-card">
+        <h3>Aceite de Magnesio (Transdérmico)</h3>
+        <div class="apply">Piernas · Pies · Post-Entrenamiento</div>
+        <p>Cloruro de magnesio en agua. Aplicado en piel evita problemas de absorción intestinal. Rociar en músculos adoloridos, pantorrillas antes de dormir o en pies. Alivio de calambres musculares en 20 min. Combinar con glicinato oral para cobertura completa.</p>
+      </div>
+
+      <div class="topical-card">
+        <h3>Agua de Cobre (Tamra Jal)</h3>
+        <div class="apply">Beber · Almacenar en Vasija de Cobre Toda la Noche</div>
+        <p>Almacenar agua filtrada en vasija de cobre mínimo 8 hrs. Se transfiere una pequeña cantidad de iones de cobre. Antimicrobiano y antioxidante ayurvédico. Moderno: efecto oligodinámico del cobre sobre patógenos confirmado por estudios de la OMS en purificación de agua.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- HORARIO MAESTRO -->
+  <div class="section-block">
+    <div class="section-label">
+      <div class="num">08</div>
+      <div class="title-wrap">
+        <h2>HORARIO MAESTRO</h2>
+        <div class="time">El Protocolo Completo — Comprimido</div>
+      </div>
+    </div>
+
+    <table class="master-table">
+      <thead>
+        <tr>
+          <th>Hora</th>
+          <th>Práctica</th>
+          <th>Sistema</th>
+          <th>Duración</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Despertar + 0 min</td>
+          <td>Raspar lengua → buches de aceite → agua tibia con jengibre</td>
+          <td><span class="tag-pill tag-ay">Ayurveda</span></td>
+          <td>15 min</td>
+        </tr>
+        <tr>
+          <td>Despertar + 15 min</td>
+          <td>Exposición solar afuera — sin pantallas</td>
+          <td><span class="tag-pill tag-tcm">MCT</span><span class="tag-pill tag-mod">Moderno</span></td>
+          <td>10–20 min</td>
+        </tr>
+        <tr>
+          <td>Despertar + 30 min</td>
+          <td>Qigong / rotaciones articulares / respiración</td>
+          <td><span class="tag-pill tag-tcm">MCT</span><span class="tag-pill tag-ay">Ayurveda</span></td>
+          <td>10–20 min</td>
+        </tr>
+        <tr>
+          <td>Pre-ducha</td>
+          <td>Abhyanga — aceite de sésamo tibio cuerpo completo</td>
+          <td><span class="tag-pill tag-ay">Ayurveda</span></td>
+          <td>10–15 min</td>
+        </tr>
+        <tr>
+          <td>Ducha</td>
+          <td>Enjuagar aceite → cerrar con 30–60 seg de frío</td>
+          <td><span class="tag-pill tag-mod">Moderno</span><span class="tag-pill tag-tcm">MCT</span></td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>Mañana</td>
+          <td>Chyawanprash + Shilajit + Azafrán + D3/K2</td>
+          <td><span class="tag-pill tag-ay">Ayurveda</span><span class="tag-pill tag-mod">Moderno</span></td>
+          <td>Con comida</td>
+        </tr>
+        <tr>
+          <td>Nasya</td>
+          <td>Neti salino → 2 gotas de sésamo en cada fosa nasal</td>
+          <td><span class="tag-pill tag-ay">Ayurveda</span></td>
+          <td>5 min</td>
+        </tr>
+        <tr>
+          <td>Mediodía</td>
+          <td>Comida más grande — especiada con el trío digestivo</td>
+          <td><span class="tag-pill tag-ay">Ayurveda</span><span class="tag-pill tag-mod">Moderno</span></td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>Post-almuerzo</td>
+          <td>Té CCF + caminata 5 min + acupresión ST36</td>
+          <td><span class="tag-pill tag-ay">Ayurveda</span><span class="tag-pill tag-tcm">MCT</span></td>
+          <td>10 min</td>
+        </tr>
+        <tr>
+          <td>Tarde</td>
+          <td>Brahmi / Bacopa + Omega-3 + Cúrcuma</td>
+          <td><span class="tag-pill tag-ay">Ayurveda</span><span class="tag-pill tag-mod">Moderno</span></td>
+          <td>Con comida</td>
+        </tr>
+        <tr>
+          <td>6–7 PM</td>
+          <td>Cena ligera y temprana — solo cocido, nada crudo</td>
+          <td><span class="tag-pill tag-ay">Ayurveda</span><span class="tag-pill tag-mod">Moderno</span></td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>7–8 PM</td>
+          <td>Piernas en la pared → respiración nadi shodhana</td>
+          <td><span class="tag-pill tag-ay">Ayurveda</span><span class="tag-pill tag-mod">Moderno</span></td>
+          <td>15–20 min</td>
+        </tr>
+        <tr>
+          <td>8–9 PM</td>
+          <td>Aceite brahmi en cuero cabelludo + padabhyanga + kumkumadi en rostro</td>
+          <td><span class="tag-pill tag-ay">Ayurveda</span></td>
+          <td>15 min</td>
+        </tr>
+        <tr>
+          <td>Pre-sueño</td>
+          <td>Triphala + Ashwagandha + Magnesio Glicinato</td>
+          <td><span class="tag-pill tag-ay">Ayurveda</span><span class="tag-pill tag-mod">Moderno</span></td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>9–10 PM</td>
+          <td>Pantallas apagadas. Dormir antes de las 10 PM.</td>
+          <td><span class="tag-pill tag-tcm">MCT</span><span class="tag-pill tag-mod">Moderno</span></td>
+          <td>Regla fija</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <footer>
+    <span>Mecánico del Cuerpo · MCT + Ayurveda + Fisiología Moderna</span>
+    <span>Construye el sistema. Ejecuta el mantenimiento. Confía en el protocolo.</span>
+  </footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,1601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARCADE // 2006</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap');
+
+  :root {
+    --neon-pink: #ff2d78;
+    --neon-cyan: #00f5ff;
+    --neon-yellow: #ffe600;
+    --neon-green: #39ff14;
+    --neon-purple: #bf00ff;
+    --carpet-dark: #1a0a2e;
+    --carpet-mid: #2d1060;
+    --screen-glow: rgba(0, 245, 255, 0.15);
+    --token-gold: #ffd700;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--carpet-dark);
+    font-family: 'Share Tech Mono', monospace;
+    overflow-x: hidden;
+    min-height: 100vh;
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20'%3E%3Ccircle cx='10' cy='10' r='8' fill='none' stroke='%2300f5ff' stroke-width='2'/%3E%3Ccircle cx='10' cy='10' r='2' fill='%23ff2d78'/%3E%3C/svg%3E") 10 10, crosshair;
+  }
+
+  /* CARPET TEXTURE */
+  .carpet {
+    position: fixed;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,230,0,0.03) 10px, rgba(255,230,0,0.03) 20px),
+      repeating-linear-gradient(-45deg, transparent, transparent 10px, rgba(191,0,255,0.03) 10px, rgba(191,0,255,0.03) 20px),
+      repeating-linear-gradient(0deg, transparent, transparent 8px, rgba(0,245,255,0.02) 8px, rgba(0,245,255,0.02) 16px);
+    background-color: var(--carpet-dark);
+    z-index: 0;
+  }
+
+  /* SCANLINE OVERLAY */
+  .scanlines {
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.15) 2px,
+      rgba(0,0,0,0.15) 4px
+    );
+    pointer-events: none;
+    z-index: 100;
+    animation: scanroll 8s linear infinite;
+  }
+
+  @keyframes scanroll {
+    0% { background-position: 0 0; }
+    100% { background-position: 0 100px; }
+  }
+
+  /* AMBIENT CEILING GLOW */
+  .ceiling-lights {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 120px;
+    background: linear-gradient(180deg,
+      rgba(191,0,255,0.12) 0%,
+      rgba(0,245,255,0.06) 60%,
+      transparent 100%
+    );
+    z-index: 1;
+    animation: ceilingPulse 4s ease-in-out infinite alternate;
+  }
+
+  @keyframes ceilingPulse {
+    0% { opacity: 0.7; }
+    100% { opacity: 1; }
+  }
+
+  /* MAIN LAYOUT */
+  .arcade-room {
+    position: relative;
+    z-index: 10;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px 60px;
+  }
+
+  /* MARQUEE HEADER */
+  .marquee-header {
+    text-align: center;
+    padding: 30px 0 20px;
+    position: relative;
+  }
+
+  .arcade-sign {
+    display: inline-block;
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(28px, 6vw, 72px);
+    font-weight: 900;
+    color: var(--neon-yellow);
+    text-shadow:
+      0 0 10px var(--neon-yellow),
+      0 0 30px var(--neon-yellow),
+      0 0 60px rgba(255,230,0,0.5),
+      0 0 120px rgba(255,230,0,0.2);
+    letter-spacing: 0.1em;
+    animation: signFlicker 6s steps(1) infinite;
+    border: 3px solid var(--neon-yellow);
+    padding: 12px 32px;
+    box-shadow:
+      0 0 20px var(--neon-yellow),
+      inset 0 0 20px rgba(255,230,0,0.1);
+    position: relative;
+  }
+
+  .arcade-sign::before,
+  .arcade-sign::after {
+    content: '★';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.4em;
+    color: var(--neon-pink);
+    text-shadow: 0 0 10px var(--neon-pink);
+    animation: starSpin 3s linear infinite;
+  }
+  .arcade-sign::before { left: 8px; }
+  .arcade-sign::after { right: 8px; animation-direction: reverse; }
+
+  @keyframes starSpin {
+    0% { transform: translateY(-50%) rotate(0deg); }
+    100% { transform: translateY(-50%) rotate(360deg); }
+  }
+
+  @keyframes signFlicker {
+    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
+    20%, 24%, 55% { opacity: 0.4; }
+  }
+
+  /* TICKER TAPE */
+  .ticker-wrap {
+    overflow: hidden;
+    background: rgba(0,0,0,0.6);
+    border-top: 2px solid var(--neon-cyan);
+    border-bottom: 2px solid var(--neon-cyan);
+    padding: 8px 0;
+    margin: 16px 0;
+    box-shadow: 0 0 15px rgba(0,245,255,0.3);
+  }
+
+  .ticker {
+    display: flex;
+    white-space: nowrap;
+    animation: ticker 25s linear infinite;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    color: var(--neon-cyan);
+    gap: 60px;
+  }
+
+  @keyframes ticker {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* TOKEN COUNTER */
+  .hud {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 20px;
+    background: rgba(0,0,0,0.7);
+    border: 1px solid rgba(0,245,255,0.3);
+    border-radius: 4px;
+    margin-bottom: 28px;
+    backdrop-filter: blur(4px);
+  }
+
+  .token-display {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 11px;
+  }
+
+  .token-coin {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #ffe87c, var(--token-gold), #b8860b);
+    border: 2px solid #ffe87c;
+    box-shadow: 0 0 12px rgba(255,215,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    cursor: pointer;
+    transition: transform 0.1s;
+    animation: coinSpin 0s;
+    user-select: none;
+  }
+
+  .token-coin:active { transform: scale(0.85); }
+  .token-coin.spin { animation: coinBounce 0.3s ease-out; }
+
+  @keyframes coinBounce {
+    0% { transform: scale(1); }
+    40% { transform: scale(1.3) rotate(10deg); }
+    100% { transform: scale(1) rotate(0deg); }
+  }
+
+  .token-count {
+    color: var(--token-gold);
+    text-shadow: 0 0 10px var(--token-gold);
+    min-width: 80px;
+  }
+
+  .hud-time {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    color: var(--neon-green);
+    text-shadow: 0 0 8px var(--neon-green);
+  }
+
+  .insert-coin-btn {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 9px;
+    background: none;
+    border: 2px solid var(--neon-pink);
+    color: var(--neon-pink);
+    padding: 8px 14px;
+    cursor: pointer;
+    text-shadow: 0 0 8px var(--neon-pink);
+    box-shadow: 0 0 10px rgba(255,45,120,0.3), inset 0 0 10px rgba(255,45,120,0.1);
+    transition: all 0.15s;
+    animation: btnPulse 2s ease-in-out infinite;
+    letter-spacing: 0.05em;
+  }
+
+  .insert-coin-btn:hover {
+    background: rgba(255,45,120,0.2);
+    box-shadow: 0 0 20px rgba(255,45,120,0.6), inset 0 0 20px rgba(255,45,120,0.2);
+  }
+
+  @keyframes btnPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+  }
+
+  /* CABINETS GRID */
+  .cabinets-section {
+    margin-bottom: 40px;
+  }
+
+  .section-label {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 9px;
+    color: var(--neon-purple);
+    text-shadow: 0 0 8px var(--neon-purple);
+    letter-spacing: 0.2em;
+    margin-bottom: 16px;
+    padding-left: 4px;
+    border-left: 3px solid var(--neon-purple);
+    padding-left: 12px;
+  }
+
+  .cabinets-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 24px;
+  }
+
+  /* CABINET */
+  .cabinet {
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.2s;
+  }
+
+  .cabinet:hover { transform: translateY(-4px); }
+  .cabinet:hover .cabinet-screen { animation: screenFlare 0.5s ease-out; }
+
+  @keyframes screenFlare {
+    0% { filter: brightness(1); }
+    50% { filter: brightness(1.5); }
+    100% { filter: brightness(1); }
+  }
+
+  .cabinet-body {
+    background: linear-gradient(160deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    border: 2px solid rgba(255,255,255,0.08);
+    border-radius: 8px 8px 4px 4px;
+    overflow: hidden;
+    box-shadow:
+      0 8px 32px rgba(0,0,0,0.6),
+      inset 0 1px 0 rgba(255,255,255,0.1);
+    position: relative;
+  }
+
+  /* MARQUEE TOP */
+  .cabinet-marquee {
+    padding: 8px 6px;
+    text-align: center;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    letter-spacing: 0.05em;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  /* SCREEN */
+  .cabinet-screen {
+    margin: 0 12px;
+    aspect-ratio: 4/3;
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+    box-shadow:
+      0 0 0 3px #111,
+      0 0 0 5px #333,
+      inset 0 0 40px rgba(0,0,0,0.5);
+  }
+
+  .screen-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 8px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+    position: relative;
+  }
+
+  .screen-content::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  /* ATTRACT MODE animations */
+  .attract-text {
+    animation: attract 1.5s steps(1) infinite;
+    font-size: 7px;
+    letter-spacing: 0.05em;
+  }
+
+  @keyframes attract {
+    0%, 49% { opacity: 1; }
+    50%, 100% { opacity: 0; }
+  }
+
+  .score-display {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+  }
+
+  /* CONTROLS AREA */
+  .cabinet-controls {
+    padding: 10px 12px 12px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .btn-joystick {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #555, #222);
+    border: 2px solid #444;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.5);
+  }
+
+  .btn-action {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid rgba(0,0,0,0.3);
+    box-shadow: 0 3px 4px rgba(0,0,0,0.5), inset 0 1px rgba(255,255,255,0.2);
+  }
+
+  .cabinet-label {
+    text-align: center;
+    padding: 8px 6px 4px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: rgba(255,255,255,0.7);
+    letter-spacing: 0.05em;
+  }
+
+  /* Individual cabinet themes */
+  .cab-racing .cabinet-marquee { background: #8b0000; color: #ff6b6b; text-shadow: 0 0 8px #ff0000; }
+  .cab-racing .cabinet-screen { box-shadow: 0 0 0 3px #111, 0 0 0 5px #333, 0 0 20px rgba(255,0,0,0.2), inset 0 0 40px rgba(0,0,0,0.5); }
+  .cab-racing .screen-content { background: linear-gradient(180deg, #0a0000 0%, #1a0000 100%); color: #ff4444; }
+
+  .cab-fighting .cabinet-marquee { background: #000080; color: #4fc3f7; text-shadow: 0 0 8px #0088ff; }
+  .cab-fighting .screen-content { background: linear-gradient(180deg, #000a1a 0%, #001030 100%); color: #4fc3f7; }
+
+  .cab-shooter .cabinet-marquee { background: #004d00; color: #39ff14; text-shadow: 0 0 8px #00ff00; }
+  .cab-shooter .screen-content { background: linear-gradient(180deg, #000a00 0%, #001500 100%); color: #39ff14; }
+
+  .cab-music .cabinet-marquee { background: #4a0080; color: #e040fb; text-shadow: 0 0 8px #aa00ff; }
+  .cab-music .screen-content { background: linear-gradient(180deg, #0a0015 0%, #150025 100%); color: #e040fb; }
+
+  .cab-dance .cabinet-marquee { background: #800040; color: #ff80ab; text-shadow: 0 0 8px #ff2d78; }
+  .cab-dance .screen-content { background: linear-gradient(180deg, #150005 0%, #200010 100%); color: #ff80ab; }
+
+  .cab-basketball .cabinet-marquee { background: #5a3000; color: #ffb74d; text-shadow: 0 0 8px #ff8c00; }
+  .cab-basketball .screen-content { background: linear-gradient(180deg, #100800 0%, #1a0f00 100%); color: #ffb74d; }
+
+  /* PRIZE COUNTER */
+  .prize-counter {
+    background: linear-gradient(135deg, rgba(26,0,46,0.9) 0%, rgba(15,0,30,0.95) 100%);
+    border: 2px solid rgba(191,0,255,0.4);
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 32px;
+    box-shadow: 0 0 30px rgba(191,0,255,0.15), inset 0 0 30px rgba(0,0,0,0.3);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .prize-counter::before {
+    content: 'PRIZE COUNTER';
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    color: rgba(191,0,255,0.4);
+    letter-spacing: 0.2em;
+  }
+
+  .prizes-shelf {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+
+  .prize-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 12px;
+    background: rgba(0,0,0,0.4);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    flex: 1;
+    min-width: 80px;
+  }
+
+  .prize-item:hover {
+    background: rgba(191,0,255,0.1);
+    border-color: rgba(191,0,255,0.4);
+    transform: translateY(-2px);
+  }
+
+  .prize-emoji { font-size: 32px; }
+
+  .prize-name {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: rgba(255,255,255,0.8);
+    text-align: center;
+  }
+
+  .prize-tickets {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    color: var(--neon-yellow);
+    text-shadow: 0 0 6px var(--neon-yellow);
+  }
+
+  /* LEADERBOARD */
+  .leaderboard {
+    background: rgba(0,0,0,0.7);
+    border: 1px solid rgba(0,245,255,0.2);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 32px;
+    backdrop-filter: blur(8px);
+  }
+
+  .leaderboard-title {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    color: var(--neon-cyan);
+    text-shadow: 0 0 10px var(--neon-cyan);
+    text-align: center;
+    margin-bottom: 16px;
+    letter-spacing: 0.15em;
+  }
+
+  .leaderboard-entry {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: 12px;
+  }
+
+  .leaderboard-entry:last-child { border-bottom: none; }
+
+  .rank {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 9px;
+    min-width: 32px;
+  }
+
+  .rank-1 { color: var(--neon-yellow); text-shadow: 0 0 8px var(--neon-yellow); }
+  .rank-2 { color: #c0c0c0; text-shadow: 0 0 8px #c0c0c0; }
+  .rank-3 { color: #cd7f32; text-shadow: 0 0 8px #cd7f32; }
+  .rank-other { color: rgba(255,255,255,0.4); }
+
+  .player-name {
+    flex: 1;
+    color: rgba(255,255,255,0.8);
+    font-family: 'Press Start 2P', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+  }
+
+  .player-score {
+    color: var(--neon-green);
+    text-shadow: 0 0 6px var(--neon-green);
+    font-family: 'Press Start 2P', monospace;
+    font-size: 9px;
+  }
+
+  /* AMBIENT SOUNDS PANEL */
+  .ambient-panel {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+  }
+
+  .sound-btn {
+    flex: 1;
+    min-width: 120px;
+    background: rgba(0,0,0,0.6);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 6px;
+    padding: 14px 12px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+    color: rgba(255,255,255,0.7);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+  }
+
+  .sound-btn:hover {
+    background: rgba(0,245,255,0.08);
+    border-color: rgba(0,245,255,0.3);
+    transform: translateY(-2px);
+  }
+
+  .sound-btn.active {
+    background: rgba(0,245,255,0.12);
+    border-color: var(--neon-cyan);
+    color: var(--neon-cyan);
+    box-shadow: 0 0 15px rgba(0,245,255,0.2);
+  }
+
+  .sound-icon { font-size: 24px; }
+
+  /* MODAL OVERLAY */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: linear-gradient(160deg, #0d001a 0%, #050010 100%);
+    border: 2px solid var(--neon-cyan);
+    border-radius: 8px;
+    padding: 32px;
+    max-width: 480px;
+    width: 90%;
+    box-shadow: 0 0 40px rgba(0,245,255,0.3), 0 0 80px rgba(0,245,255,0.1);
+    text-align: center;
+    position: relative;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 12px;
+    color: rgba(255,255,255,0.4);
+    cursor: pointer;
+    background: none;
+    border: none;
+  }
+  .modal-close:hover { color: var(--neon-pink); }
+
+  .modal-title {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 14px;
+    color: var(--neon-cyan);
+    text-shadow: 0 0 15px var(--neon-cyan);
+    margin-bottom: 16px;
+    letter-spacing: 0.1em;
+  }
+
+  .modal-screen {
+    aspect-ratio: 4/3;
+    border-radius: 4px;
+    margin: 0 auto 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid #333;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 12px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .modal-play-btn {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    background: none;
+    border: 2px solid var(--neon-yellow);
+    color: var(--neon-yellow);
+    padding: 12px 24px;
+    cursor: pointer;
+    text-shadow: 0 0 8px var(--neon-yellow);
+    box-shadow: 0 0 15px rgba(255,230,0,0.3);
+    transition: all 0.15s;
+    margin-top: 8px;
+  }
+
+  .modal-play-btn:hover {
+    background: rgba(255,230,0,0.1);
+    box-shadow: 0 0 25px rgba(255,230,0,0.5);
+  }
+
+  .token-cost {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    color: var(--token-gold);
+    margin-top: 12px;
+  }
+
+  /* GAME PLAYING STATE */
+  .playing-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    background: #000;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .playing-overlay.open { display: flex; }
+
+  .game-screen {
+    width: min(600px, 90vw);
+    aspect-ratio: 4/3;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+    border: 4px solid #333;
+    box-shadow: 0 0 60px rgba(0,0,0,0.8);
+  }
+
+  .game-hud {
+    width: min(600px, 90vw);
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 9px;
+    color: rgba(255,255,255,0.6);
+  }
+
+  .exit-game-btn {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+    background: none;
+    border: 1px solid rgba(255,45,120,0.5);
+    color: rgba(255,45,120,0.7);
+    padding: 8px 16px;
+    cursor: pointer;
+    margin-top: 16px;
+  }
+  .exit-game-btn:hover { border-color: var(--neon-pink); color: var(--neon-pink); }
+
+  /* TICKET RIBBON ANIMATION */
+  @keyframes ticketPop {
+    0% { opacity: 0; transform: translateY(20px) scale(0.5); }
+    60% { transform: translateY(-10px) scale(1.2); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .ticket-pop {
+    position: fixed;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 11px;
+    color: var(--neon-yellow);
+    text-shadow: 0 0 10px var(--neon-yellow);
+    pointer-events: none;
+    z-index: 500;
+    animation: ticketFloat 1.5s ease-out forwards;
+  }
+
+  @keyframes ticketFloat {
+    0% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-60px); }
+  }
+
+  /* FOOTER */
+  .arcade-footer {
+    text-align: center;
+    padding: 20px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    color: rgba(255,255,255,0.2);
+    letter-spacing: 0.15em;
+    animation: signFlicker 9s steps(1) infinite;
+  }
+</style>
+</head>
+<body>
+
+<div class="carpet"></div>
+<div class="scanlines"></div>
+<div class="ceiling-lights"></div>
+
+<!-- MAIN ARCADE ROOM -->
+<div class="arcade-room">
+
+  <!-- SIGN -->
+  <div class="marquee-header">
+    <div class="arcade-sign">GALAXY ARCADE</div>
+  </div>
+
+  <!-- TICKER -->
+  <div class="ticker-wrap">
+    <div class="ticker" id="tickerText">
+      <span>★ HIGH SCORE TODAY: 847,230 &nbsp;&nbsp;&nbsp; INSERT COIN TO PLAY &nbsp;&nbsp;&nbsp; ★ NEW: DANCE STATION PRO INSTALLED &nbsp;&nbsp;&nbsp; REDEMPTION TICKETS NOW DOUBLE &nbsp;&nbsp;&nbsp; ★ BIRTHDAY PARTIES BOOK AT COUNTER &nbsp;&nbsp;&nbsp; NO OUTSIDE FOOD OR DRINKS &nbsp;&nbsp;&nbsp; ★ WIN A GIANT STUFFED ANIMAL &nbsp;&nbsp;&nbsp;</span>
+      <span>★ HIGH SCORE TODAY: 847,230 &nbsp;&nbsp;&nbsp; INSERT COIN TO PLAY &nbsp;&nbsp;&nbsp; ★ NEW: DANCE STATION PRO INSTALLED &nbsp;&nbsp;&nbsp; REDEMPTION TICKETS NOW DOUBLE &nbsp;&nbsp;&nbsp; ★ BIRTHDAY PARTIES BOOK AT COUNTER &nbsp;&nbsp;&nbsp; NO OUTSIDE FOOD OR DRINKS &nbsp;&nbsp;&nbsp; ★ WIN A GIANT STUFFED ANIMAL &nbsp;&nbsp;&nbsp;</span>
+    </div>
+  </div>
+
+  <!-- HUD -->
+  <div class="hud">
+    <div class="token-display">
+      <div class="token-coin" id="coinBtn" title="Click to flip!">🪙</div>
+      <div class="token-count" id="tokenCount">TOKENS: 10</div>
+    </div>
+    <div class="hud-time" id="arcadeTime">--:-- --</div>
+    <button class="insert-coin-btn" onclick="addTokens()">INSERT COIN</button>
+  </div>
+
+  <!-- CABINETS -->
+  <div class="cabinets-section">
+    <div class="section-label">GAME FLOOR</div>
+    <div class="cabinets-grid" id="cabinetsGrid"></div>
+  </div>
+
+  <!-- LEADERBOARD -->
+  <div class="leaderboard">
+    <div class="leaderboard-title">◄ TODAY'S HIGH SCORES ►</div>
+    <div id="leaderboardEntries"></div>
+  </div>
+
+  <!-- PRIZE COUNTER -->
+  <div class="prize-counter">
+    <div class="section-label">TICKET REDEMPTION</div>
+    <div class="prizes-shelf">
+      <div class="prize-item" onclick="redeemPrize('Bouncy Ball', 50)">
+        <div class="prize-emoji">⚽</div>
+        <div class="prize-name">Bouncy Ball</div>
+        <div class="prize-tickets">50 🎟️</div>
+      </div>
+      <div class="prize-item" onclick="redeemPrize('Sticky Hand', 100)">
+        <div class="prize-emoji">🖐️</div>
+        <div class="prize-name">Sticky Hand</div>
+        <div class="prize-tickets">100 🎟️</div>
+      </div>
+      <div class="prize-item" onclick="redeemPrize('Yo-Yo', 250)">
+        <div class="prize-emoji">🪀</div>
+        <div class="prize-name">Yo-Yo</div>
+        <div class="prize-tickets">250 🎟️</div>
+      </div>
+      <div class="prize-item" onclick="redeemPrize('Stuffed Bear', 1000)">
+        <div class="prize-emoji">🧸</div>
+        <div class="prize-name">Giant Bear</div>
+        <div class="prize-tickets">1000 🎟️</div>
+      </div>
+      <div class="prize-item" onclick="redeemPrize('GameBoy', 2500)">
+        <div class="prize-emoji">🎮</div>
+        <div class="prize-name">Handheld</div>
+        <div class="prize-tickets">2500 🎟️</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AMBIENT SOUND PANEL -->
+  <div class="cabinets-section">
+    <div class="section-label">VIBE MIXER</div>
+    <div class="ambient-panel">
+      <button class="sound-btn" onclick="toggleVibe(this, 'crowd')">
+        <span class="sound-icon">👥</span>
+        Crowd Noise
+      </button>
+      <button class="sound-btn" onclick="toggleVibe(this, 'tokens')">
+        <span class="sound-icon">🪙</span>
+        Token Clatter
+      </button>
+      <button class="sound-btn" onclick="toggleVibe(this, 'music')">
+        <span class="sound-icon">🎵</span>
+        Cabinet Music
+      </button>
+      <button class="sound-btn" onclick="toggleVibe(this, 'tickets')">
+        <span class="sound-icon">🎟️</span>
+        Ticket Machines
+      </button>
+    </div>
+  </div>
+
+  <div class="arcade-footer">© 2006 GALAXY ENTERTAINMENT GROUP &nbsp;·&nbsp; ALL AGES WELCOME &nbsp;·&nbsp; PLAY RESPONSIBLY</div>
+</div>
+
+<!-- CABINET MODAL -->
+<div class="modal-overlay" id="cabinetModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-title" id="modalTitle">GAME TITLE</div>
+    <div class="modal-screen" id="modalScreen"></div>
+    <div class="token-cost" id="modalCost">1 TOKEN</div>
+    <button class="modal-play-btn" id="modalPlayBtn" onclick="startGame()">► PLAY</button>
+  </div>
+</div>
+
+<!-- PLAYING OVERLAY -->
+<div class="playing-overlay" id="playingOverlay">
+  <div class="game-hud">
+    <span id="gameScore">SCORE: 0</span>
+    <span id="gameTitle2">GAME</span>
+    <span id="gameTickets">TICKETS: 0</span>
+  </div>
+  <div class="game-screen" id="gameScreen"></div>
+  <button class="exit-game-btn" onclick="exitGame()">◄ EXIT GAME</button>
+</div>
+
+<script>
+  // STATE
+  let tokens = 10;
+  let tickets = 0;
+  let activeGame = null;
+  let gameScore = 0;
+  let gameInterval = null;
+  let selectedCabinet = null;
+
+  // CABINET DATA
+  const cabinets = [
+    {
+      id: 'racing',
+      name: 'TURBO ROAD',
+      class: 'cab-racing',
+      emoji: '🏎️',
+      genre: 'RACING',
+      hi: '482,900',
+      color: '#ff4444',
+      cost: 2,
+      attractMsg: 'RACE TO WIN',
+      gameType: 'racing',
+      btnColors: ['#ff4444', '#ff8800'],
+      description: 'Drift through neon streets at impossible speed. Avoid traffic. Beat the clock.'
+    },
+    {
+      id: 'fighting',
+      name: 'STEEL FIST III',
+      class: 'cab-fighting',
+      emoji: '👊',
+      genre: 'FIGHTING',
+      hi: '1,204,100',
+      color: '#4fc3f7',
+      cost: 2,
+      attractMsg: 'CHOOSE YOUR FIGHTER',
+      gameType: 'tap',
+      btnColors: ['#4fc3f7', '#ff4444', '#39ff14'],
+      description: 'Master the combo system. 24 fighters. Defeat the champion to unlock the secret boss.'
+    },
+    {
+      id: 'shooter',
+      name: 'ALIEN SWARM',
+      class: 'cab-shooter',
+      emoji: '👾',
+      genre: 'SHOOTER',
+      hi: '3,770,000',
+      color: '#39ff14',
+      cost: 1,
+      attractMsg: 'DEFEND EARTH',
+      gameType: 'shooter',
+      btnColors: ['#39ff14', '#39ff14'],
+      description: 'Classic wave shooter. 50 enemy types. How long can you survive?'
+    },
+    {
+      id: 'music',
+      name: 'GUITAR STORM',
+      class: 'cab-music',
+      emoji: '🎸',
+      genre: 'MUSIC',
+      hi: '999,999',
+      color: '#e040fb',
+      cost: 2,
+      attractMsg: 'HIT THE NOTES',
+      gameType: 'rhythm',
+      btnColors: ['#39ff14', '#ff4444', '#ffd700', '#4fc3f7', '#e040fb'],
+      description: 'Shred through 30 songs across 4 difficulty levels. Full band mode for up to 4 players.'
+    },
+    {
+      id: 'dance',
+      name: 'DANCE FEVER',
+      class: 'cab-dance',
+      emoji: '💃',
+      genre: 'DANCE',
+      hi: 'SSS RANK',
+      color: '#ff80ab',
+      cost: 2,
+      attractMsg: 'FEEL THE BEAT',
+      gameType: 'rhythm',
+      btnColors: ['#ff80ab', '#ff80ab'],
+      description: 'Step to the rhythm. Unlock new songs. The platform lights up with every move.'
+    },
+    {
+      id: 'basketball',
+      name: 'HOOPS PRO',
+      class: 'cab-basketball',
+      emoji: '🏀',
+      genre: 'SPORTS',
+      hi: '48 PTS',
+      color: '#ffb74d',
+      cost: 1,
+      attractMsg: 'SHOOT TO WIN',
+      gameType: 'tap',
+      btnColors: ['#ffb74d'],
+      description: '60-second timed basketball. More tickets the higher you score. Aim for the bonus hoop!'
+    }
+  ];
+
+  const leaderboard = [
+    { rank: 1, name: 'S.T.A.R.', score: '847,230', game: 'ALIEN SWARM' },
+    { rank: 2, name: 'JAX99', score: '720,100', game: 'STEEL FIST III' },
+    { rank: 3, name: 'LUNA', score: '601,500', game: 'GUITAR STORM' },
+    { rank: 4, name: 'ZERO_G', score: '482,900', game: 'TURBO ROAD' },
+    { rank: 5, name: 'KID_K', score: '201,300', game: 'DANCE FEVER' }
+  ];
+
+  // BUILD CABINETS
+  function buildCabinets() {
+    const grid = document.getElementById('cabinetsGrid');
+    cabinets.forEach(cab => {
+      const el = document.createElement('div');
+      el.className = `cabinet ${cab.class}`;
+      el.onclick = () => openCabinet(cab);
+
+      const btnHTML = cab.btnColors.slice(0,4).map(c =>
+        `<div class="btn-action" style="background:radial-gradient(circle at 35% 35%, ${c}88, ${c}44); border-color:${c}66;"></div>`
+      ).join('');
+
+      el.innerHTML = `
+        <div class="cabinet-body">
+          <div class="cabinet-marquee">${cab.name}</div>
+          <div class="cabinet-screen">
+            <div class="screen-content">
+              <div style="font-size:24px;">${cab.emoji}</div>
+              <div class="score-display" style="color:${cab.color};">${cab.hi}</div>
+              <div class="attract-text" style="color:${cab.color};">${cab.attractMsg}</div>
+            </div>
+          </div>
+          <div class="cabinet-controls">
+            <div class="btn-joystick"></div>
+            ${btnHTML}
+          </div>
+        </div>
+        <div class="cabinet-label">${cab.genre} · ${cab.cost} TOKEN${cab.cost > 1 ? 'S' : ''}</div>
+      `;
+      grid.appendChild(el);
+    });
+  }
+
+  // BUILD LEADERBOARD
+  function buildLeaderboard() {
+    const container = document.getElementById('leaderboardEntries');
+    leaderboard.forEach(entry => {
+      const rankClass = entry.rank <= 3 ? `rank-${entry.rank}` : 'rank-other';
+      const rankLabel = entry.rank === 1 ? '🥇' : entry.rank === 2 ? '🥈' : entry.rank === 3 ? '🥉' : `#${entry.rank}`;
+      container.innerHTML += `
+        <div class="leaderboard-entry">
+          <div class="rank ${rankClass}">${rankLabel}</div>
+          <div class="player-name">${entry.name}</div>
+          <div style="font-family:'Share Tech Mono',monospace;font-size:10px;color:rgba(255,255,255,0.4);">${entry.game}</div>
+          <div class="player-score">${entry.score}</div>
+        </div>
+      `;
+    });
+  }
+
+  // OPEN CABINET MODAL
+  function openCabinet(cab) {
+    selectedCabinet = cab;
+    document.getElementById('modalTitle').textContent = cab.name;
+    document.getElementById('modalCost').textContent = `💰 ${cab.cost} TOKEN${cab.cost>1?'S':''} TO PLAY`;
+
+    const screen = document.getElementById('modalScreen');
+    screen.style.background = `linear-gradient(160deg, #050010, #0a0020)`;
+    screen.innerHTML = `
+      <div style="font-family:'Press Start 2P',monospace;font-size:11px;color:${cab.color};text-align:center;padding:20px;text-shadow:0 0 15px ${cab.color};">
+        <div style="font-size:36px;margin-bottom:12px;">${cab.emoji}</div>
+        <div style="margin-bottom:12px;">${cab.name}</div>
+        <div style="font-size:8px;color:rgba(255,255,255,0.5);font-family:'Share Tech Mono',monospace;line-height:1.6;">${cab.description}</div>
+        <div style="margin-top:12px;font-size:8px;color:rgba(255,255,255,0.3);">HI SCORE: ${cab.hi}</div>
+      </div>
+    `;
+    screen.style.border = `3px solid ${cab.color}44`;
+    screen.style.boxShadow = `0 0 20px ${cab.color}33`;
+
+    document.getElementById('cabinetModal').classList.add('open');
+  }
+
+  function closeModal() {
+    document.getElementById('cabinetModal').classList.remove('open');
+  }
+
+  // START GAME
+  function startGame() {
+    if (!selectedCabinet) return;
+    if (tokens < selectedCabinet.cost) {
+      showPopup('❌ NEED MORE TOKENS!', document.getElementById('modalPlayBtn'));
+      return;
+    }
+    tokens -= selectedCabinet.cost;
+    updateHUD();
+    closeModal();
+
+    const overlay = document.getElementById('playingOverlay');
+    overlay.classList.add('open');
+    document.getElementById('gameTitle2').textContent = selectedCabinet.name;
+
+    gameScore = 0;
+    activeGame = selectedCabinet;
+    renderGameScreen();
+    startGameLoop();
+  }
+
+  function renderGameScreen() {
+    const screen = document.getElementById('gameScreen');
+    const cab = activeGame;
+
+    if (cab.gameType === 'shooter') {
+      screen.style.background = 'linear-gradient(180deg, #000a00 0%, #001500 100%)';
+      screen.innerHTML = `<canvas id="gameCanvas" style="width:100%;height:100%;display:block;"></canvas>`;
+      initShooterGame();
+    } else if (cab.gameType === 'racing') {
+      screen.style.background = 'linear-gradient(180deg, #0a0000 0%, #1a0000 100%)';
+      screen.innerHTML = `<canvas id="gameCanvas" style="width:100%;height:100%;display:block;"></canvas>`;
+      initRacingGame();
+    } else if (cab.gameType === 'rhythm') {
+      screen.style.background = `linear-gradient(180deg, #050010 0%, #150025 100%)`;
+      screen.innerHTML = `<canvas id="gameCanvas" style="width:100%;height:100%;display:block;"></canvas>`;
+      initRhythmGame();
+    } else {
+      screen.style.background = 'linear-gradient(160deg, #050010, #0a0020)';
+      screen.innerHTML = `<canvas id="gameCanvas" style="width:100%;height:100%;display:block;"></canvas>`;
+      initTapGame();
+    }
+  }
+
+  // SIMPLE SHOOTER GAME
+  let shooterState = null;
+  function initShooterGame() {
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+    const W = canvas.width, H = canvas.height;
+
+    shooterState = {
+      player: { x: W/2, y: H-40, w: 30, h: 20 },
+      bullets: [], enemies: [], particles: [],
+      wave: 1, score: 0, lives: 3,
+      enemyDir: 1, enemySpeed: 0.5,
+      keys: new Set(), shooting: false, shootCooldown: 0,
+      frame: 0
+    };
+
+    const s = shooterState;
+    spawnEnemyWave(s, W);
+
+    document.addEventListener('keydown', e => {
+      s.keys.add(e.key);
+      if (e.key === ' ' || e.key === 'ArrowUp') e.preventDefault();
+    });
+    document.addEventListener('keyup', e => s.keys.delete(e.key));
+    canvas.addEventListener('click', e => {
+      const rect = canvas.getBoundingClientRect();
+      s.player.x = (e.clientX - rect.left) * (W / rect.width);
+      firePlayerBullet(s);
+    });
+
+    clearInterval(gameInterval);
+    gameInterval = setInterval(() => {
+      shooterLoop(ctx, W, H, s);
+    }, 1000/60);
+  }
+
+  function spawnEnemyWave(s, W) {
+    s.enemies = [];
+    const cols = 8, rows = 3;
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        s.enemies.push({
+          x: 30 + c * (W/cols), y: 30 + r * 35,
+          w: 20, h: 14, alive: true,
+          emoji: r===0?'👾':r===1?'🔵':'🟡',
+          shootTimer: Math.random() * 200
+        });
+      }
+    }
+  }
+
+  function firePlayerBullet(s) {
+    if (s.shootCooldown <= 0) {
+      s.bullets.push({ x: s.player.x, y: s.player.y - 10, vy: -8, type: 'player' });
+      s.shootCooldown = 12;
+    }
+  }
+
+  function shooterLoop(ctx, W, H, s) {
+    s.frame++;
+    ctx.clearRect(0,0,W,H);
+
+    // BG stars
+    ctx.fillStyle = '#000a00';
+    ctx.fillRect(0,0,W,H);
+    if (s.frame % 3 === 0) {
+      for (let i=0;i<2;i++) {
+        ctx.fillStyle='rgba(255,255,255,0.5)';
+        ctx.fillRect(Math.random()*W, 0, 1, 1);
+      }
+    }
+
+    // PLAYER input
+    if (s.keys.has('ArrowLeft') || s.keys.has('a')) s.player.x = Math.max(15, s.player.x - 5);
+    if (s.keys.has('ArrowRight') || s.keys.has('d')) s.player.x = Math.min(W-15, s.player.x + 5);
+    if (s.keys.has(' ')) firePlayerBullet(s);
+    if (s.shootCooldown > 0) s.shootCooldown--;
+
+    // DRAW PLAYER
+    ctx.font = '24px serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('🚀', s.player.x, s.player.y);
+
+    // ENEMIES move
+    let edgeHit = false;
+    s.enemies.filter(e=>e.alive).forEach(e => {
+      e.x += s.enemyDir * (s.enemySpeed + s.wave*0.1);
+      if (e.x > W-15 || e.x < 15) edgeHit = true;
+
+      // enemy shoots
+      e.shootTimer--;
+      if (e.shootTimer <= 0) {
+        s.bullets.push({ x: e.x, y: e.y+10, vy: 3+Math.random()*2, type:'enemy' });
+        e.shootTimer = 100 + Math.random()*150;
+      }
+      ctx.fillText(e.emoji, e.x, e.y);
+    });
+    if (edgeHit) {
+      s.enemyDir *= -1;
+      s.enemies.forEach(e => { if(e.alive) e.y += 12; });
+    }
+
+    // BULLETS
+    s.bullets = s.bullets.filter(b => b.y > -10 && b.y < H+10);
+    s.bullets.forEach(b => {
+      b.y += b.vy;
+      ctx.fillStyle = b.type === 'player' ? '#39ff14' : '#ff2d78';
+      ctx.shadowColor = ctx.fillStyle;
+      ctx.shadowBlur = 6;
+      ctx.fillRect(b.x-2, b.y-8, 4, 12);
+      ctx.shadowBlur = 0;
+    });
+
+    // COLLISION
+    s.bullets.forEach(b => {
+      if (b.type !== 'player') return;
+      s.enemies.forEach(e => {
+        if (!e.alive) return;
+        if (Math.abs(b.x-e.x)<15 && Math.abs(b.y-e.y)<14) {
+          e.alive = false; b.y = -999;
+          s.score += 100 * s.wave;
+          gameScore = s.score;
+          document.getElementById('gameScore').textContent = `SCORE: ${s.score}`;
+          document.getElementById('gameTickets').textContent = `TICKETS: ${Math.floor(s.score/500)}`;
+        }
+      });
+    });
+
+    // enemy bullets hit player
+    s.bullets.forEach(b => {
+      if (b.type !== 'enemy') return;
+      if (Math.abs(b.x-s.player.x)<15 && Math.abs(b.y-s.player.y)<15) {
+        b.y = 999; s.lives--;
+        if (s.lives <= 0) { endGame(); }
+      }
+    });
+
+    // lives remaining
+    ctx.font = '14px monospace';
+    ctx.fillStyle = '#39ff14';
+    ctx.textAlign = 'left';
+    ctx.fillText('❤️'.repeat(s.lives), 5, H-8);
+
+    // next wave
+    if (s.enemies.every(e=>!e.alive)) {
+      s.wave++;
+      s.enemySpeed += 0.2;
+      spawnEnemyWave(s, W);
+    }
+  }
+
+  // SIMPLE RACING GAME
+  function initRacingGame() {
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+    const W = canvas.width, H = canvas.height;
+
+    let state = {
+      x: W/2, speed: 3, score: 0, frame: 0,
+      obstacles: [], roadOffset: 0,
+      keys: new Set()
+    };
+
+    for (let i=0;i<5;i++) state.obstacles.push({ x: W*0.2+Math.random()*W*0.6, y: -i*120, w: 40, h: 60 });
+
+    document.addEventListener('keydown', e => state.keys.add(e.key));
+    document.addEventListener('keyup', e => state.keys.delete(e.key));
+    canvas.addEventListener('click', e => {
+      const rect = canvas.getBoundingClientRect();
+      state.x = (e.clientX-rect.left)*(W/rect.width);
+    });
+    canvas.addEventListener('mousemove', e => {
+      const rect = canvas.getBoundingClientRect();
+      state.x = (e.clientX-rect.left)*(W/rect.width);
+    });
+
+    clearInterval(gameInterval);
+    gameInterval = setInterval(() => {
+      state.frame++;
+      state.score++;
+      state.speed = 3 + state.score/500;
+      state.roadOffset = (state.roadOffset + state.speed*2) % 80;
+
+      if (state.keys.has('ArrowLeft')) state.x = Math.max(W*0.15, state.x-5);
+      if (state.keys.has('ArrowRight')) state.x = Math.min(W*0.85, state.x+5);
+
+      ctx.fillStyle = '#0a0000';
+      ctx.fillRect(0,0,W,H);
+
+      // road
+      ctx.fillStyle = '#1a1a1a';
+      ctx.fillRect(W*0.1, 0, W*0.8, H);
+
+      // lane dashes
+      ctx.setLineDash([30,50]);
+      ctx.strokeStyle = '#ff440044';
+      ctx.lineWidth = 2;
+      [0.35,0.5,0.65].forEach(p => {
+        ctx.beginPath();
+        ctx.moveTo(W*p, -state.roadOffset);
+        ctx.lineTo(W*p, H-state.roadOffset+80);
+        ctx.stroke();
+      });
+      ctx.setLineDash([]);
+
+      // obstacles
+      state.obstacles.forEach(o => {
+        o.y += state.speed;
+        ctx.font = '36px serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('🚗', o.x, o.y);
+        if (o.y > H+40) { o.y = -60; o.x = W*0.15+Math.random()*W*0.7; }
+
+        if (Math.abs(state.x-o.x)<25 && Math.abs(H-70-o.y)<30) { endGame(); }
+      });
+
+      ctx.font = '32px serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('🏎️', state.x, H-50);
+
+      document.getElementById('gameScore').textContent = `SCORE: ${state.score}`;
+      gameScore = state.score;
+      document.getElementById('gameTickets').textContent = `TICKETS: ${Math.floor(state.score/100)}`;
+    }, 1000/60);
+  }
+
+  // RHYTHM GAME
+  function initRhythmGame() {
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+    const W = canvas.width, H = canvas.height;
+    const colors = ['#39ff14','#ff2d78','#00f5ff','#ffe600','#bf00ff'];
+    const cols = 5;
+    const colW = W/cols;
+    let notes = [], score = 0, combo = 0, frame = 0;
+    let spawnRate = 80;
+
+    canvas.addEventListener('click', e => {
+      const rect = canvas.getBoundingClientRect();
+      const cx = (e.clientX-rect.left)*(W/rect.width);
+      const col = Math.floor(cx/colW);
+      hitNote(col);
+    });
+
+    document.addEventListener('keydown', e => {
+      const map = {'a':0,'s':1,'d':2,'f':3,'g':4};
+      if (map[e.key] !== undefined) hitNote(map[e.key]);
+    });
+
+    function hitNote(col) {
+      const hit = notes.find(n => n.col===col && n.y > H*0.7 && n.y < H);
+      if (hit) {
+        hit.dead = true; score += 100*(1+Math.floor(combo/5));
+        combo++; gameScore = score;
+        document.getElementById('gameScore').textContent = `SCORE: ${score} x${combo}`;
+        document.getElementById('gameTickets').textContent = `TICKETS: ${Math.floor(score/200)}`;
+        // flash
+        ctx.fillStyle = colors[col]+'66';
+        ctx.fillRect(col*colW, 0, colW, H);
+      } else { combo = 0; }
+    }
+
+    clearInterval(gameInterval);
+    gameInterval = setInterval(() => {
+      frame++;
+      if (frame % spawnRate === 0) {
+        const col = Math.floor(Math.random()*cols);
+        notes.push({ col, y: 0, speed: 3+score/3000 });
+        if (spawnRate > 20) spawnRate--;
+      }
+
+      ctx.fillStyle = '#050010';
+      ctx.fillRect(0,0,W,H);
+
+      // columns
+      for (let i=0;i<cols;i++) {
+        ctx.fillStyle = colors[i]+'11';
+        ctx.fillRect(i*colW, 0, colW-2, H);
+        ctx.fillStyle = colors[i]+'33';
+        ctx.fillRect(i*colW, H*0.8, colW-2, H*0.2);
+      }
+
+      notes = notes.filter(n=>!n.dead && n.y < H+20);
+      notes.forEach(n => {
+        n.y += n.speed;
+        const x = n.col*colW;
+        ctx.fillStyle = colors[n.col];
+        ctx.shadowColor = colors[n.col];
+        ctx.shadowBlur = 10;
+        ctx.fillRect(x+4, n.y-20, colW-8, 20);
+        ctx.shadowBlur = 0;
+
+        if (n.y > H) { combo = 0; }
+      });
+
+      // hit zone line
+      ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(0, H*0.82);
+      ctx.lineTo(W, H*0.82);
+      ctx.stroke();
+
+      // labels
+      ctx.font = '9px monospace';
+      ctx.textAlign = 'center';
+      ['A','S','D','F','G'].forEach((k,i) => {
+        ctx.fillStyle = colors[i];
+        ctx.fillText(k, i*colW+colW/2, H-5);
+      });
+    }, 1000/60);
+  }
+
+  // TAP GAME
+  function initTapGame() {
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+    const W = canvas.width, H = canvas.height;
+    const cab = activeGame;
+    let score = 0, frame = 0, timeLeft = 60, targets = [];
+
+    function spawnTarget() {
+      targets.push({
+        x: 30+Math.random()*(W-60),
+        y: 30+Math.random()*(H-60),
+        r: 25+Math.random()*15,
+        life: 90, maxLife: 90,
+        color: cab.color,
+        emoji: cab.emoji
+      });
+    }
+
+    for(let i=0;i<3;i++) spawnTarget();
+
+    canvas.addEventListener('click', e => {
+      const rect = canvas.getBoundingClientRect();
+      const cx = (e.clientX-rect.left)*(W/rect.width);
+      const cy = (e.clientY-rect.top)*(H/rect.height);
+      targets.forEach(t => {
+        if (Math.hypot(cx-t.x,cy-t.y) < t.r) {
+          t.life = -1; score += Math.ceil(t.r);
+          gameScore = score;
+          document.getElementById('gameScore').textContent = `SCORE: ${score}`;
+          document.getElementById('gameTickets').textContent = `TICKETS: ${Math.floor(score/20)}`;
+        }
+      });
+    });
+
+    clearInterval(gameInterval);
+    let timerInterval = setInterval(() => {
+      timeLeft--;
+      if (timeLeft <= 0) { clearInterval(timerInterval); endGame(); }
+    }, 1000);
+
+    gameInterval = setInterval(() => {
+      frame++;
+      ctx.fillStyle = '#050010';
+      ctx.fillRect(0,0,W,H);
+
+      targets = targets.filter(t => t.life > 0);
+      while (targets.length < 4) spawnTarget();
+
+      targets.forEach(t => {
+        t.life--;
+        const alpha = t.life/t.maxLife;
+        ctx.globalAlpha = alpha;
+        ctx.beginPath();
+        ctx.arc(t.x, t.y, t.r, 0, Math.PI*2);
+        ctx.fillStyle = t.color+'33';
+        ctx.fill();
+        ctx.strokeStyle = t.color;
+        ctx.lineWidth = 2;
+        ctx.shadowColor = t.color;
+        ctx.shadowBlur = 10;
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+        ctx.globalAlpha = 1;
+        ctx.font = `${t.r}px serif`;
+        ctx.textAlign = 'center';
+        ctx.fillText(t.emoji, t.x, t.y+t.r*0.35);
+      });
+
+      ctx.fillStyle = 'rgba(255,255,255,0.6)';
+      ctx.font = '14px monospace';
+      ctx.textAlign = 'right';
+      ctx.fillText(`⏱ ${timeLeft}s`, W-8, 20);
+    }, 1000/60);
+  }
+
+  function startGameLoop() {
+    // handled per game type
+  }
+
+  function endGame() {
+    clearInterval(gameInterval);
+    const earnedTickets = Math.floor(gameScore / (activeGame.id === 'shooter' ? 500 : activeGame.id === 'racing' ? 100 : 200));
+    tickets += earnedTickets;
+
+    const screen = document.getElementById('gameScreen');
+    const cab = activeGame;
+    screen.innerHTML = `
+      <div style="width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(160deg,#050010,#0a0020);font-family:'Press Start 2P',monospace;text-align:center;gap:14px;padding:20px;">
+        <div style="font-size:32px;">GAME OVER</div>
+        <div style="font-size:12px;color:${cab.color};text-shadow:0 0 12px ${cab.color};">FINAL SCORE: ${gameScore.toLocaleString()}</div>
+        <div style="font-size:10px;color:#ffe600;text-shadow:0 0 8px #ffe600;">+${earnedTickets} TICKETS 🎟️</div>
+        <div style="font-size:9px;color:rgba(255,255,255,0.4);">TOTAL TICKETS: ${tickets}</div>
+      </div>
+    `;
+
+    showPopup(`+${earnedTickets} 🎟️`, document.getElementById('gameScreen'));
+  }
+
+  function exitGame() {
+    clearInterval(gameInterval);
+    document.getElementById('playingOverlay').classList.remove('open');
+    activeGame = null;
+  }
+
+  // TOKENS & HUD
+  function addTokens() {
+    tokens += 5;
+    updateHUD();
+    const btn = document.querySelector('.insert-coin-btn');
+    showPopup('+5 TOKENS 🪙', btn);
+  }
+
+  function updateHUD() {
+    document.getElementById('tokenCount').textContent = `TOKENS: ${tokens}`;
+  }
+
+  function updateTime() {
+    const now = new Date();
+    let h = now.getHours(), m = now.getMinutes().toString().padStart(2,'0');
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    h = h % 12 || 12;
+    document.getElementById('arcadeTime').textContent = `${h}:${m} ${ampm}`;
+  }
+
+  // COIN FLIP
+  document.getElementById('coinBtn').addEventListener('click', function() {
+    this.classList.remove('spin');
+    void this.offsetWidth;
+    this.classList.add('spin');
+  });
+
+  // PRIZE REDEMPTION
+  function redeemPrize(name, cost) {
+    if (tickets >= cost) {
+      tickets -= cost;
+      showPopup(`🎉 ${name}!`, document.querySelector('.prize-counter'));
+    } else {
+      showPopup(`Need ${cost} 🎟️`, document.querySelector('.prize-counter'));
+    }
+  }
+
+  // VIBE MIXER
+  function toggleVibe(btn, type) {
+    btn.classList.toggle('active');
+    const label = btn.querySelector('.sound-icon');
+    if (btn.classList.contains('active')) {
+      label.style.animation = 'starSpin 1s linear infinite';
+    } else {
+      label.style.animation = '';
+    }
+  }
+
+  // POPUP FLOAT
+  function showPopup(text, near) {
+    const el = document.createElement('div');
+    el.className = 'ticket-pop';
+    el.textContent = text;
+    const rect = (near || document.body).getBoundingClientRect();
+    el.style.left = `${rect.left + rect.width/2}px`;
+    el.style.top = `${rect.top - 10}px`;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 1500);
+  }
+
+  // INIT
+  buildCabinets();
+  buildLeaderboard();
+  updateTime();
+  setInterval(updateTime, 1000);
+</script>
+</body>
+</html>

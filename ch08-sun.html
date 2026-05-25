@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Sun, A Universal Deity — Secret Teachings of All Ages</title>
+<link href="https://fonts.googleapis.com/css2?family=Trirong:ital,wght@0,100;0,300;0,400;0,700;1,300;1,400&family=Cinzel:wght@400;600;700&family=Spectral:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void:         #050300;
+    --corona:       #100800;
+    --solar-deep:   #1a0c00;
+    --solar-mid:    #2a1400;
+    --flare:        #e85000;
+    --flare-bright: #ff7020;
+    --flare-dim:    #602000;
+    --amber:        #f0a020;
+    --amber-bright: #ffd060;
+    --amber-dim:    #604008;
+    --gold:         #f8c830;
+    --gold-white:   #fff8e0;
+    --gold-dim:     #705010;
+    --white-core:   #ffffff;
+    --corona-pale:  #fff0c0;
+    --solar-text:   #e8c888;
+    --solar-dim:    #806030;
+    --zenith:       #ffeaa0;
+    --horizon:      #e06020;
+    --midnight-sun: #4060a0;
+    --midnight-dim: #182040;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body {
+    background: var(--void);
+    color: var(--solar-text);
+    font-family: 'Spectral', serif;
+    overflow-x: hidden;
+  }
+
+  /* ── CURSOR: solar flare ── */
+  .cursor {
+    position:fixed; width:6px; height:6px;
+    background: var(--gold-white);
+    border-radius:50%; pointer-events:none; z-index:9999;
+    transform:translate(-50%,-50%);
+    mix-blend-mode:screen;
+    box-shadow:0 0 10px var(--amber), 0 0 24px rgba(240,160,32,0.6), 0 0 48px rgba(240,160,32,0.2);
+  }
+  .cursor-ring {
+    position:fixed; width:30px; height:30px;
+    border:1px solid rgba(240,160,32,0.4); border-radius:50%;
+    pointer-events:none; z-index:9998;
+    transform:translate(-50%,-50%);
+    transition:all 0.18s ease;
+  }
+
+  /* ══════════════════════════════════════
+     HERO — full blazing sun
+  ══════════════════════════════════════ */
+  .hero {
+    position:relative; min-height:100vh;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    text-align:center; overflow:hidden; z-index:1;
+  }
+  #solarCanvas {
+    position:absolute; inset:0; width:100%; height:100%;
+    pointer-events:none; z-index:0;
+  }
+  .hero-content { position:relative; z-index:2; padding:2rem; }
+
+  .chapter-label {
+    font-family:'Cinzel', serif; font-size:0.65rem;
+    letter-spacing:0.55em; color:var(--flare-dim);
+    text-transform:uppercase; margin-bottom:1.2rem;
+    opacity:0; animation:fadeUp 1s ease 0.5s forwards;
+  }
+  .hero-title {
+    font-family:'Trirong', serif; font-weight:700;
+    font-size:clamp(2.2rem,7vw,5.5rem);
+    line-height:1.0;
+    background:linear-gradient(180deg, var(--white-core) 0%, var(--amber-bright) 30%, var(--amber) 60%, var(--flare) 100%);
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+    background-clip:text;
+    filter:drop-shadow(0 0 40px rgba(240,160,32,0.6));
+    opacity:0; animation:fadeUp 1.3s ease 0.8s forwards;
+  }
+  .hero-title .sub {
+    display:block; font-weight:100; font-style:italic;
+    font-size:0.45em; letter-spacing:0.12em;
+    background:linear-gradient(90deg, var(--amber-bright), var(--corona-pale));
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+    background-clip:text; margin-top:0.4em;
+  }
+  .hero-sub {
+    font-size:clamp(0.8rem,1.6vw,1rem);
+    font-style:italic; color:var(--solar-dim);
+    margin-top:1.2rem; letter-spacing:0.08em;
+    opacity:0; animation:fadeUp 1s ease 1.5s forwards;
+  }
+  .solar-maxim {
+    font-family:'Cinzel', serif; font-weight:400;
+    font-size:clamp(0.75rem,1.4vw,0.95rem);
+    color:var(--amber-dim); letter-spacing:0.15em;
+    margin-top:2rem; line-height:1.8; text-transform:uppercase;
+    opacity:0; animation:fadeUp 1s ease 2s forwards;
+    text-shadow:0 0 20px rgba(240,160,32,0.3);
+  }
+  .scroll-cue {
+    position:absolute; bottom:2rem; left:50%; transform:translateX(-50%);
+    display:flex; flex-direction:column; align-items:center; gap:0.5rem;
+    font-family:'Cinzel', serif; font-size:0.55rem;
+    letter-spacing:0.5em; color:var(--flare-dim);
+    opacity:0; animation:fadeIn 1s ease 2.8s forwards;
+  }
+  .scroll-cue .vline {
+    width:1px; height:50px;
+    background:linear-gradient(to bottom,transparent,var(--flare-dim));
+    animation:solarPulse 2s ease-in-out 3.5s infinite;
+  }
+  @keyframes solarPulse { 0%,100%{opacity:0.3;transform:scaleY(1)} 50%{opacity:1;transform:scaleY(1.2)} }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes fadeIn { to{opacity:1} }
+
+  /* ══════════════════════════════════════
+     CIVILIZATIONS BAND
+  ══════════════════════════════════════ */
+  .civ-band {
+    position:relative; z-index:1;
+    background:linear-gradient(90deg, var(--solar-deep), var(--solar-mid), var(--solar-deep));
+    border-top:1px solid rgba(240,160,32,0.12);
+    border-bottom:1px solid rgba(240,160,32,0.12);
+    display:flex; flex-wrap:wrap;
+    justify-content:center;
+  }
+  .civ-cell {
+    flex:1; min-width:120px; max-width:180px;
+    padding:2rem 1rem; text-align:center;
+    border-right:1px solid rgba(240,160,32,0.07);
+    transition:background 0.4s; cursor:default;
+  }
+  .civ-cell:last-child { border-right:none; }
+  .civ-cell:hover { background:rgba(240,160,32,0.06); }
+  .civ-glyph { font-size:2rem; margin-bottom:0.6rem; display:block;
+    filter:drop-shadow(0 0 8px rgba(240,160,32,0.4));
+    transition:filter 0.3s;
+  }
+  .civ-cell:hover .civ-glyph { filter:drop-shadow(0 0 16px rgba(240,160,32,0.8)); }
+  .civ-name {
+    font-family:'Cinzel', serif; font-size:0.62rem;
+    letter-spacing:0.2em; color:var(--amber-dim); display:block; margin-bottom:0.25rem;
+  }
+  .civ-deity { font-size:0.85rem; color:var(--solar-dim); font-style:italic; }
+
+  /* ══════════════════════════════════════
+     SECTION
+  ══════════════════════════════════════ */
+  .section {
+    position:relative; z-index:1;
+    max-width:880px; margin:0 auto; padding:5rem 2rem;
+  }
+  .section-heading {
+    font-family:'Trirong', serif; font-weight:700;
+    font-size:clamp(1.1rem,2.5vw,1.9rem);
+    color:var(--amber-bright); letter-spacing:0.04em; margin-bottom:1.8rem;
+  }
+  .section-heading.flare { color:var(--flare-bright); }
+  .section-heading.zenith { color:var(--zenith); }
+  .section-heading.midnight { color:#a0b8e0; }
+
+  .body-text {
+    font-size:1.1rem; line-height:2.05; color:var(--solar-text); margin:1.5rem 0;
+  }
+  .drop-cap::first-letter {
+    font-family:'Trirong', serif; font-weight:700;
+    font-size:5rem; float:left;
+    line-height:0.72; margin:0.05em 0.1em 0 0;
+    color:var(--amber-bright);
+    text-shadow:0 0 30px rgba(255,208,96,0.7);
+  }
+
+  .ornament {
+    display:flex; align-items:center; gap:1.2rem;
+    margin:2.5rem auto; max-width:500px; padding:0 2rem;
+  }
+  .ornament-line { flex:1; height:1px; background:linear-gradient(to right,transparent,var(--flare-dim),transparent); }
+  .ornament-glyph { font-size:1.2rem; color:var(--amber); filter:drop-shadow(0 0 8px rgba(240,160,32,0.6)); }
+
+  .quote-block {
+    border-left:2px solid var(--flare-dim);
+    padding:1.5rem 2rem; margin:3rem 0;
+    background:rgba(240,160,32,0.03); position:relative;
+  }
+  .quote-block.zenith { border-left-color:var(--amber-dim); background:rgba(248,200,48,0.03); }
+  .quote-block::before {
+    content:'"'; font-family:'Trirong', serif; font-weight:700;
+    font-size:4.5rem; color:var(--flare-dim); opacity:0.25;
+    position:absolute; top:-0.8rem; left:0.8rem; line-height:1;
+  }
+  .quote-text { font-size:1.12rem; font-style:italic; line-height:1.95; color:var(--solar-text); }
+  .quote-attr {
+    font-family:'Cinzel', serif; font-size:0.65rem;
+    letter-spacing:0.22em; color:var(--solar-dim); margin-top:1rem;
+  }
+
+  /* ══════════════════════════════════════
+     THREE SUNS INTERACTIVE
+  ══════════════════════════════════════ */
+  .three-suns-section {
+    position:relative; z-index:1;
+    padding:5rem 2rem; text-align:center;
+    background:linear-gradient(180deg, transparent, rgba(26,12,0,0.5), transparent);
+  }
+  #threeSunsCanvas {
+    width:100%; max-width:700px; height:420px;
+    margin:2rem auto; display:block; cursor:pointer;
+  }
+  .suns-info {
+    max-width:680px; margin:0.8rem auto 0;
+    min-height:4rem; padding:1.2rem 1.5rem;
+    border:1px solid rgba(240,160,32,0.1);
+    background:rgba(240,160,32,0.02);
+    font-size:1rem; line-height:1.85;
+    color:var(--solar-dim); font-style:italic; transition:all 0.4s;
+  }
+
+  /* ══════════════════════════════════════
+     SOLAR TRINITY TABLE
+  ══════════════════════════════════════ */
+  .trinity-section {
+    position:relative; z-index:1;
+    padding:5rem 2rem;
+    background: var(--solar-deep);
+  }
+  .trinity-inner { max-width:880px; margin:0 auto; }
+  .trinity-grid {
+    display:grid; grid-template-columns:repeat(3,1fr);
+    gap:1px; background:rgba(240,160,32,0.08);
+    border:1px solid rgba(240,160,32,0.1);
+    margin:2.5rem 0;
+  }
+  .trinity-col {
+    background:var(--void); padding:2.5rem 1.8rem; text-align:center;
+    position:relative; overflow:hidden; transition:background 0.4s;
+  }
+  .trinity-col:hover { background:rgba(240,160,32,0.04); }
+  .trinity-col::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:2px;
+    transition:opacity 0.4s; opacity:0;
+  }
+  .trinity-col.rise::before { background:linear-gradient(90deg,transparent,#ff7020,transparent); }
+  .trinity-col.noon::before { background:linear-gradient(90deg,transparent,#ffd060,transparent); }
+  .trinity-col.set::before  { background:linear-gradient(90deg,transparent,#e06020,transparent); }
+  .trinity-col:hover::before { opacity:1; }
+  .trinity-glyph { font-size:2.5rem; margin-bottom:1rem; display:block; }
+  .trinity-aspect {
+    font-family:'Cinzel', serif; font-size:0.62rem;
+    letter-spacing:0.3em; margin-bottom:0.4rem;
+  }
+  .trinity-col.rise .trinity-aspect  { color:var(--flare-bright); }
+  .trinity-col.noon .trinity-aspect  { color:var(--amber-bright); }
+  .trinity-col.set  .trinity-aspect  { color:var(--horizon); }
+  .trinity-name {
+    font-family:'Trirong', serif; font-weight:700;
+    font-size:1.3rem; margin-bottom:0.8rem;
+  }
+  .trinity-col.rise .trinity-name { color:var(--flare-bright); }
+  .trinity-col.noon .trinity-name { color:var(--amber-bright); }
+  .trinity-col.set  .trinity-name { color:var(--horizon); }
+  .trinity-text { font-size:0.9rem; line-height:1.75; color:var(--solar-dim); }
+  .trinity-names-list {
+    margin-top:1rem; font-size:0.78rem; color:var(--solar-dim);
+    line-height:1.9; font-style:italic;
+  }
+
+  /* ══════════════════════════════════════
+     SOLAR CORONA INTERACTIVE
+  ══════════════════════════════════════ */
+  .corona-section {
+    position:relative; z-index:1;
+    padding:5rem 2rem; text-align:center;
+    overflow:hidden;
+  }
+  .corona-section::before {
+    content:''; position:absolute; inset:0;
+    background:radial-gradient(ellipse at 50% 50%, rgba(42,20,0,0.6) 0%, transparent 70%);
+    pointer-events:none;
+  }
+  #coronaCanvas {
+    width:100%; max-width:600px; height:600px;
+    margin:0 auto; display:block; cursor:crosshair;
+    position:relative; z-index:1;
+  }
+  .corona-info {
+    max-width:600px; margin:0.5rem auto 0;
+    font-size:0.95rem; line-height:1.8; color:var(--solar-dim);
+    font-style:italic; min-height:3rem; transition:color 0.4s;
+    position:relative; z-index:1;
+  }
+
+  /* ══════════════════════════════════════
+     SUN & CHRISTIANITY SECTION
+  ══════════════════════════════════════ */
+  .xian-section {
+    position:relative; z-index:1; padding:5rem 2rem;
+    background:linear-gradient(135deg, rgba(26,12,0,0.8), rgba(16,8,0,0.95), rgba(26,12,0,0.8));
+  }
+  .xian-inner { max-width:880px; margin:0 auto; }
+  .parallels-grid {
+    display:grid; grid-template-columns:1fr 1fr; gap:1px;
+    background:rgba(240,160,32,0.06);
+    border:1px solid rgba(240,160,32,0.08);
+    margin:2.5rem 0;
+  }
+  .parallel-cell {
+    background:var(--void); padding:2rem 1.8rem;
+    transition:background 0.3s;
+  }
+  .parallel-cell:hover { background:rgba(240,160,32,0.04); }
+  .par-solar {
+    font-family:'Cinzel', serif; font-size:0.6rem;
+    letter-spacing:0.3em; color:var(--amber-dim); margin-bottom:0.5rem;
+  }
+  .par-title {
+    font-family:'Trirong', serif; font-weight:700;
+    font-size:0.95rem; color:var(--solar-text); margin-bottom:0.6rem;
+  }
+  .par-body { font-size:0.9rem; line-height:1.75; color:var(--solar-dim); }
+
+  /* ══════════════════════════════════════
+     MIDNIGHT SUN
+  ══════════════════════════════════════ */
+  .midnight-section {
+    position:relative; z-index:1; padding:5rem 2rem;
+    overflow:hidden;
+  }
+  #midnightCanvas {
+    position:absolute; inset:0; width:100%; height:100%;
+    pointer-events:none; z-index:0;
+  }
+  .midnight-inner { position:relative; z-index:1; max-width:880px; margin:0 auto; }
+  .midnight-quote {
+    font-family:'Trirong', serif; font-style:italic; font-weight:300;
+    font-size:clamp(1.1rem,2.5vw,1.7rem);
+    color:#a0b8e0; line-height:1.8; text-align:center;
+    text-shadow:0 0 30px rgba(64,96,160,0.4);
+    opacity:0; transition:all 1.2s ease;
+  }
+  .midnight-quote.visible { opacity:1; }
+  .midnight-sub {
+    text-align:center; font-size:1rem; font-style:italic;
+    color:var(--midnight-dim); margin-top:1.5rem; line-height:1.9;
+    opacity:0; transition:all 1.2s ease 0.4s;
+  }
+  .midnight-sub.visible { opacity:1; }
+
+  /* ══════════════════════════════════════
+     SOLAR DEITIES ACCORDION
+  ══════════════════════════════════════ */
+  .deities-section {
+    position:relative; z-index:1; padding:5rem 2rem;
+    background:var(--solar-deep);
+  }
+  .deities-inner { max-width:880px; margin:0 auto; }
+  .accordion { margin:2rem 0; }
+  .acc-item { border-bottom:1px solid rgba(240,160,32,0.1); }
+  .acc-btn {
+    width:100%; background:none; border:none;
+    padding:1.3rem 1.5rem;
+    display:flex; justify-content:space-between; align-items:center;
+    cursor:pointer; transition:background 0.3s;
+    font-family:'Cinzel', serif; font-size:0.78rem;
+    letter-spacing:0.12em; color:var(--amber); text-align:left;
+  }
+  .acc-btn:hover { background:rgba(240,160,32,0.05); }
+  .acc-arr { transition:transform 0.4s; color:var(--amber-dim); }
+  .acc-btn.open .acc-arr { transform:rotate(180deg); }
+  .acc-body {
+    max-height:0; overflow:hidden;
+    transition:max-height 0.5s ease, padding 0.3s;
+    padding:0 1.5rem; font-size:0.98rem;
+    line-height:1.9; color:var(--solar-dim);
+  }
+  .acc-body.open { max-height:400px; padding:1rem 1.5rem 1.6rem; }
+
+  /* ══════════════════════════════════════
+     FOOTER
+  ══════════════════════════════════════ */
+  .book-nav {
+    position:relative; z-index:1;
+    padding:4rem 2rem; text-align:center;
+    border-top:1px solid rgba(240,160,32,0.1);
+    background:var(--void);
+  }
+  .book-nav-series {
+    font-family:'Cinzel', serif; font-size:0.6rem;
+    letter-spacing:0.4em; color:var(--amber-dim); margin-bottom:0.8rem;
+  }
+  .book-nav-title {
+    font-family:'Trirong', serif; font-weight:700;
+    font-size:0.95rem; color:var(--corona-pale); margin-bottom:2rem;
+  }
+  .nav-row { display:flex; justify-content:center; gap:1.5rem; flex-wrap:wrap; }
+  .nav-btn {
+    font-family:'Cinzel', serif; font-size:0.7rem;
+    letter-spacing:0.18em; color:var(--solar-text);
+    border:1px solid rgba(240,160,32,0.2);
+    padding:0.8rem 2rem; background:none;
+    transition:all 0.3s; text-decoration:none; cursor:pointer;
+  }
+  .nav-btn:hover {
+    border-color:var(--amber); color:var(--amber);
+    background:rgba(240,160,32,0.05);
+    box-shadow:0 0 20px rgba(240,160,32,0.1);
+  }
+  .nav-btn.prev { color:var(--solar-dim); border-color:rgba(96,64,8,0.3); }
+
+  /* ── BG ── */
+  .orb { position:fixed; border-radius:50%; filter:blur(120px); pointer-events:none; z-index:0; }
+  .orb-1 { width:700px; height:700px; background:#1a0c00; top:-200px; left:-200px; opacity:1; }
+  .orb-2 { width:500px; height:500px; background:var(--flare); bottom:-100px; right:-100px; opacity:0.04; }
+
+  /* ── REVEAL ── */
+  .reveal { opacity:0; transform:translateY(35px); transition:all 0.9s ease; }
+  .reveal.visible { opacity:1; transform:translateY(0); }
+
+  @media(max-width:640px){
+    .trinity-grid { grid-template-columns:1fr; }
+    .parallels-grid { grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <canvas id="solarCanvas"></canvas>
+  <div class="hero-content">
+    <p class="chapter-label">Chapter VIII · Secret Teachings of All Ages</p>
+    <h1 class="hero-title">
+      The Sun
+      <span class="sub">A Universal Deity</span>
+    </h1>
+    <p class="hero-sub">The Solar Trinity · Christianity & the Sun · The Birthday of the Sun · The Three Suns · The Celestial Inhabitants · The Midnight Sun</p>
+    <p class="solar-maxim">"The light of the sun is the shadow of God"<br><span style="font-size:0.8em;opacity:0.6">— Plato</span></p>
+  </div>
+  <div class="scroll-cue">
+    <div class="vline"></div>
+    <span>Rise</span>
+  </div>
+</section>
+
+<!-- ═══ CIVILIZATIONS BAND ═══ -->
+<div class="civ-band reveal">
+  <div class="civ-cell"><span class="civ-glyph">𓇳</span><span class="civ-name">Egypt</span><span class="civ-deity">Ra · Aten · Amun-Ra</span></div>
+  <div class="civ-cell"><span class="civ-glyph">☀️</span><span class="civ-name">Greece</span><span class="civ-deity">Helios · Apollo · Phoebus</span></div>
+  <div class="civ-cell"><span class="civ-glyph">♃</span><span class="civ-name">Rome</span><span class="civ-deity">Sol Invictus · Mithras</span></div>
+  <div class="civ-cell"><span class="civ-glyph">🔆</span><span class="civ-name">Persia</span><span class="civ-deity">Ahura Mazda · Mithras</span></div>
+  <div class="civ-cell"><span class="civ-glyph">🌞</span><span class="civ-name">Aztec</span><span class="civ-deity">Tonatiuh · Huitzilopochtli</span></div>
+  <div class="civ-cell"><span class="civ-glyph">⊕</span><span class="civ-name">Norse</span><span class="civ-deity">Sól · Baldur · Freyr</span></div>
+  <div class="civ-cell"><span class="civ-glyph">卐</span><span class="civ-name">Vedic</span><span class="civ-deity">Surya · Vishnu · Savitar</span></div>
+  <div class="civ-cell"><span class="civ-glyph">✝️</span><span class="civ-name">Christian</span><span class="civ-deity">Sol Iustitiae · Christ</span></div>
+</div>
+
+<!-- ═══ INTRO ═══ -->
+<div class="section">
+  <div class="ornament reveal">
+    <div class="ornament-line"></div>
+    <div class="ornament-glyph">☉</div>
+    <div class="ornament-line"></div>
+  </div>
+  <p class="body-text drop-cap reveal">
+    No symbol in all human history has been as universally worshipped, as persistently mystical, and as systematically misunderstood as the Sun. Hall opens this chapter with a thunderclap: <em>every major religion on earth has been, at its esoteric core, a form of solar worship.</em> Not metaphorically. Not by distant analogy. The same solar deity — born at the winter solstice, tempted in the desert, crucified at the spring equinox, resurrected after three days — appears in Egyptian, Persian, Greek, Roman, Norse, Vedic, Aztec, and Christian mythology with a consistency that can only be explained by a common esoteric source.
+  </p>
+  <p class="body-text reveal">
+    Hall is careful to distinguish the exoteric from the esoteric. The popular worshippers of Ra or Apollo may have believed they were venerating the literal fiery ball in the sky. The initiates knew otherwise: the physical sun was the <em>symbol</em> of the Spiritual Sun — the Central Fire of the universe, the visible manifestation of the divine intelligence that sustains all life. To worship the Sun was, for the initiate, to worship the source of consciousness itself.
+  </p>
+  <div class="quote-block reveal">
+    <p class="quote-text">The sun is the ancient symbol of the life-giving, mind-begetting father-principle. To the philosophers of the ancient world, it was not a coincidence that the greatest star illumined the world from the center of the solar system — it was the cosmological proof of the divine principle they already knew from inner experience.</p>
+    <p class="quote-attr">— Hall's opening thesis, Chapter VIII</p>
+  </div>
+</div>
+
+<!-- ═══ THREE SUNS ═══ -->
+<div class="three-suns-section">
+  <h2 class="section-heading reveal">The Three Suns</h2>
+  <p class="body-text reveal" style="max-width:660px;margin:0 auto;">
+    Hall's most original insight in this chapter: the ancients did not worship one sun but <em>three</em> — each a distinct philosophical principle revealed at a different phase of the day. Hover each sun to receive its teaching.
+  </p>
+  <canvas id="threeSunsCanvas" width="700" height="420"></canvas>
+  <div class="suns-info" id="sunsInfo">Hover a sun to receive its esoteric teaching</div>
+</div>
+
+<!-- ═══ SOLAR TRINITY ═══ -->
+<div class="trinity-section">
+  <div class="trinity-inner">
+    <h2 class="section-heading zenith reveal">The Solar Trinity Across Civilizations</h2>
+    <p class="body-text reveal">Every culture that developed a solar theology eventually arrived at the same triadic structure — three aspects of one solar principle, mapped onto the three great moments of the solar day. This is not cultural borrowing; it is the same philosophical observation made independently wherever the sun was watched with philosophical eyes.</p>
+    <div class="trinity-grid reveal">
+      <div class="trinity-col rise">
+        <span class="trinity-glyph">🌅</span>
+        <p class="trinity-aspect">The Rising Sun · Dawn</p>
+        <p class="trinity-name">The Son</p>
+        <p class="trinity-text">The newborn solar hero — Horus, Apollo, Mithras, the Christ Child. The principle of beginning, youth, potential, and hope. In the human soul: the rising of spiritual aspiration, the moment of new understanding.</p>
+        <p class="trinity-names-list">Egypt: Horus / Khepri<br>Greece: Apollo<br>Persia: Mithras<br>Christianity: The Son / Jesus<br>Vedic: Savitar</p>
+      </div>
+      <div class="trinity-col noon">
+        <span class="trinity-glyph">☀️</span>
+        <p class="trinity-aspect">The Noon Sun · Zenith</p>
+        <p class="trinity-name">The Father</p>
+        <p class="trinity-text">The all-powerful solar king at the height of his glory — Ra, Zeus, Ahura Mazda, the omnipotent Father God. The principle of fullness, authority, and creative power. In the soul: the full flowering of realized divine potential.</p>
+        <p class="trinity-names-list">Egypt: Ra / Amun-Ra<br>Greece: Zeus / Helios<br>Persia: Ahura Mazda<br>Christianity: God the Father<br>Vedic: Surya / Vishnu</p>
+      </div>
+      <div class="trinity-col set">
+        <span class="trinity-glyph">🌇</span>
+        <p class="trinity-aspect">The Setting Sun · Dusk</p>
+        <p class="trinity-name">The Holy Spirit</p>
+        <p class="trinity-text">The dying and transforming solar deity — Osiris, Dionysus, the Crucified Christ. The principle of sacrifice, descent, and the promise of resurrection. In the soul: the mystic death that precedes the highest spiritual awakening.</p>
+        <p class="trinity-names-list">Egypt: Osiris / Atum<br>Greece: Dionysus<br>Persia: Ahriman defeated<br>Christianity: Holy Spirit / Sacrifice<br>Vedic: Yama</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CORONA INTERACTIVE ═══ -->
+<div class="corona-section">
+  <h2 class="section-heading flare reveal">The Celestial Inhabitants of the Sun</h2>
+  <p class="body-text reveal" style="max-width:640px;margin:0 auto;">
+    Hall draws on Hermetic, Platonic, and Qabbalistic sources to describe the <em>spiritual entities</em> said to inhabit the Sun — not the physical star, but the Solar Logos, the divine intelligence radiating from it. Move your cursor across the solar corona to explore its inhabitants.
+  </p>
+  <canvas id="coronaCanvas" width="600" height="600"></canvas>
+  <p class="corona-info" id="coronaInfo">Move your cursor through the corona to encounter its inhabitants</p>
+</div>
+
+<!-- ═══ CHRISTIANITY & THE SUN ═══ -->
+<div class="xian-section">
+  <div class="xian-inner">
+    <h2 class="section-heading reveal">Christianity & the Sun — The Hidden Solar Gospel</h2>
+    <p class="body-text reveal">
+      Hall's most controversial and most carefully documented argument: the biography of Jesus Christ, as told in the Gospels, maps point-for-point onto the annual journey of the Sun through the twelve signs of the Zodiac. This is not reductionism — Hall explicitly denies that Christ was "merely" a solar myth. His argument is the reverse: the solar drama was already the highest expression of divine truth that the ancient world possessed, and the Christ event fulfilled and transcended it.
+    </p>
+    <div class="parallels-grid">
+      <div class="parallel-cell reveal">
+        <p class="par-solar">Solar Parallel</p>
+        <p class="par-title">Born at the Winter Solstice (Dec 25)</p>
+        <p class="par-body">The Sun is "reborn" each year at the winter solstice — the moment of its minimum power, when it begins its return journey. In the ancient world, virtually all solar deities were said to be born on December 25th: Mithras, Osiris-Horus, Sol Invictus, Dionysus.</p>
+      </div>
+      <div class="parallel-cell reveal">
+        <p class="par-solar">Solar Parallel</p>
+        <p class="par-title">Three Days in the Tomb</p>
+        <p class="par-body">At the winter solstice, the Sun appears to stand still for three days before resuming its northward journey. The solar hero's "three days in the tomb" before resurrection is the mythological encoding of this astronomical event, observed at Stonehenge, Karnak, and Newgrange.</p>
+      </div>
+      <div class="parallel-cell reveal">
+        <p class="par-solar">Solar Parallel</p>
+        <p class="par-title">Twelve Disciples = Twelve Signs</p>
+        <p class="par-body">The solar deity moves through twelve signs of the Zodiac — twelve "houses" that the Sun illuminates in turn. The twelve disciples are the twelve zodiacal constellations, each embodying a distinct facet of human nature that must be illumined by the central solar consciousness.</p>
+      </div>
+      <div class="parallel-cell reveal">
+        <p class="par-solar">Solar Parallel</p>
+        <p class="par-title">Crucified at the Spring Equinox</p>
+        <p class="par-body">The Sun is "crucified" on the cross of the zodiac — the celestial cross formed by the equinoctial and solstitial points. At the spring equinox, the Sun crosses the celestial equator. The cross is not an instrument of execution but the cosmic diagram of the solar journey through the four seasons.</p>
+      </div>
+      <div class="parallel-cell reveal">
+        <p class="par-solar">Solar Parallel</p>
+        <p class="par-title">The Halo / Nimbus</p>
+        <p class="par-body">The circular halo behind the heads of saints and gods in every religious tradition is the solar disk. When early Christian artists painted Christ, they borrowed directly from the iconography of Sol Invictus and Helios — the radiant crown of light that identifies the solar deity.</p>
+      </div>
+      <div class="parallel-cell reveal">
+        <p class="par-solar">Solar Parallel</p>
+        <p class="par-title">Sunday — The Lord's Day</p>
+        <p class="par-body">The early Church shifted the Sabbath from Saturday (Saturn's Day) to Sunday (Sol's Day) — the day sacred to the Sun in the Roman calendar. This was not coincidental. The Dies Solis was already the sacred day of Sol Invictus, Mithras, and the civic Roman sun cult when Constantine adopted it.</p>
+      </div>
+    </div>
+    <div class="quote-block zenith reveal">
+      <p class="quote-text">The solar mythologists who say "Christ is only the Sun" have made the same error as those who say "the Sun is only a ball of gas." Both are describing the outer husk of a mystery whose inner meaning they have not penetrated. The Sun is the physical symbol of the Spiritual Sun — and Christ is the Spiritual Sun, expressed in the terms available to a particular historical moment.</p>
+      <p class="quote-attr">— Hall's reconciliation of solar mythology and Christianity, Chapter VIII</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MIDNIGHT SUN ═══ -->
+<div class="midnight-section" id="midnightSection">
+  <canvas id="midnightCanvas"></canvas>
+  <div class="midnight-inner">
+    <h2 class="section-heading midnight reveal">The Midnight Sun</h2>
+    <p class="body-text reveal" style="max-width:660px;">
+      The most esoteric concept in the chapter — the Midnight Sun. Hall describes the experience of advanced initiates in the Egyptian mysteries who, after their ordeal in the King's Chamber, encountered the Sun at midnight. This was not a physical phenomenon but an initiatic state: the direct perception of the Solar Logos — the divine intelligence that is the source of all light — in the deepest darkness, without the mediation of the physical sun.
+    </p>
+    <p class="midnight-quote" id="midnightQuote">"At midnight the Sun shines with full splendor<br>for those who have eyes purified enough to see it."</p>
+    <p class="midnight-sub" id="midnightSub">The initiate who saw the Midnight Sun had transcended the need for the physical world to mediate the divine.<br>They had become, in that moment, a solar being themselves.</p>
+  </div>
+</div>
+
+<!-- ═══ SOLAR DEITIES ACCORDION ═══ -->
+<div class="deities-section">
+  <div class="deities-inner">
+    <h2 class="section-heading reveal">The Solar Logos — Deeper Teachings</h2>
+    <div class="accordion reveal">
+      <div class="acc-item">
+        <button class="acc-btn" onclick="toggleAcc(this)">
+          <span>The Birthday of the Sun — December 25th Across Traditions</span><span class="acc-arr">▾</span>
+        </button>
+        <div class="acc-body">The winter solstice — when the dying sun reaches its lowest point in the sky and begins to return — was the most sacred astronomical event in the pre-Christian world. Virtually every solar deity in the ancient world was said to be born on or around December 25th: Egyptian Horus, Roman Sol Invictus and Mithras, the Syrian sun god, and Persian Mithras. The Roman Saturnalia and the Mithraist Natalis Invicti were both celebrated on this date. When the early Church fixed the date of Christ's birth, it did not choose December 25th arbitrarily — it chose the most sacred solar birthday in the ancient world, claiming that Christ fulfilled and superseded all prior solar deities.</div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-btn" onclick="toggleAcc(this)">
+          <span>Aten — The Solar Revolution of Akhenaten</span><span class="acc-arr">▾</span>
+        </button>
+        <div class="acc-body">Around 1350 BCE, Pharaoh Akhenaten dismantled the entire Egyptian priestly establishment and declared that only one god existed: Aten — the solar disk itself, the visible light of the sun. He closed every temple except the Aten's, erased the name of Amun from all monuments, and moved the capital to a new city, Akhetaten. Hall identifies this as the only historical instance of an attempted state implementation of esoteric solar monotheism. It failed — Akhenaten's reforms were reversed immediately after his death. But Freud and others have argued that the expelled Atenist priests took their monotheistic theology to Israel — where it became the foundation of Mosaic religion.</div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-btn" onclick="toggleAcc(this)">
+          <span>Sol Invictus — The Unconquered Sun of Rome</span><span class="acc-arr">▾</span>
+        </button>
+        <div class="acc-body">The Emperor Aurelian formally established Sol Invictus as the supreme god of the Roman Empire in 274 CE — just 39 years before Constantine's Edict of Milan legalized Christianity. Constantine himself maintained his devotion to Sol Invictus even after converting to Christianity, as evidenced by coins, monuments, and legislative acts. Hall argues that what we call the "triumph of Christianity" in Rome was partly the absorption of the solar cult into a new theological framework that could carry its essential mysticism forward while providing it with a historical human figure at its center.</div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-btn" onclick="toggleAcc(this)">
+          <span>The Spiritual Sun — Plato's Cave & the Solar Intelligence</span><span class="acc-arr">▾</span>
+        </button>
+        <div class="acc-body">Plato's Allegory of the Cave culminates in the prisoner who escapes the cave and finally turns to face the Sun directly — unable at first to endure its brilliance. The Sun in this allegory is the Form of the Good — the ultimate reality, the source of all truth and existence. Hall identifies this Platonic Sun with the Solar Logos of the Hermetic tradition: the divine intelligence that the physical sun symbolizes and partially manifests. The entire trajectory of Platonic philosophy is solar — a journey from shadow toward light, from the imitation toward the original, from the temporal toward the eternal.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ FOOTER NAV ═══ -->
+<nav class="book-nav">
+  <p class="book-nav-series">The Secret Teachings of All Ages · Manly P. Hall · 1928</p>
+  <p class="book-nav-title">Chapter IX: The Zodiac and Its Signs →</p>
+  <div class="nav-row">
+    <a class="nav-btn prev" href="ch07-isis.html">← Chapter VII</a>
+    <a class="nav-btn" href="#">Chapter IX →</a>
+  </div>
+</nav>
+
+<script>
+// ── CURSOR ──
+const cursor=document.getElementById('cursor'), ring=document.getElementById('cursorRing');
+document.addEventListener('mousemove',e=>{
+  cursor.style.left=e.clientX+'px'; cursor.style.top=e.clientY+'px';
+  setTimeout(()=>{ring.style.left=e.clientX+'px';ring.style.top=e.clientY+'px';},90);
+});
+
+// ── SCROLL REVEAL ──
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});
+},{threshold:0.07});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+// Midnight reveal
+const midObs=new IntersectionObserver(entries=>{
+  if(entries[0].isIntersecting){
+    document.getElementById('midnightQuote').classList.add('visible');
+    document.getElementById('midnightSub').classList.add('visible');
+  }
+},{threshold:0.3});
+const ms=document.getElementById('midnightSection');
+if(ms) midObs.observe(ms);
+
+// ── ACCORDION ──
+function toggleAcc(btn){
+  const body=btn.nextElementSibling,isOpen=body.classList.contains('open');
+  document.querySelectorAll('.acc-body.open').forEach(b=>{b.classList.remove('open');b.previousElementSibling.classList.remove('open');});
+  if(!isOpen){body.classList.add('open');btn.classList.add('open');}
+}
+
+// ── HERO SOLAR CANVAS ──
+(function(){
+  const c=document.getElementById('solarCanvas');
+  const ctx=c.getContext('2d');
+  function resize(){c.width=window.innerWidth;c.height=window.innerHeight;}
+  resize(); window.addEventListener('resize',resize);
+
+  let t=0, mx=0.5, my=0.5;
+  document.addEventListener('mousemove',e=>{mx=e.clientX/window.innerWidth;my=e.clientY/window.innerHeight;});
+
+  // Corona rays
+  const rays=Array.from({length:36},(_,i)=>({
+    angle:i*(Math.PI*2/36),
+    len:0.15+Math.random()*0.25,
+    width:0.003+Math.random()*0.008,
+    speed:(Math.random()-0.5)*0.002,
+    phase:Math.random()*Math.PI*2,
+  }));
+
+  // Solar particles (prominences)
+  const particles=Array.from({length:80},()=>({
+    angle:Math.random()*Math.PI*2,
+    r:0.12+Math.random()*0.08,
+    speed:0.001+Math.random()*0.003,
+    phase:Math.random()*Math.PI*2,
+    alpha:Math.random()*0.6+0.1,
+    size:Math.random()*3+0.5,
+  }));
+
+  function draw(){
+    ctx.clearRect(0,0,c.width,c.height);
+    const cx=c.width/2, cy=c.height/2;
+    const R=Math.min(c.width,c.height)*0.18; // sun radius
+
+    // Deep space bg
+    const bg=ctx.createRadialGradient(cx,cy,0,cx,cy,c.width*0.8);
+    bg.addColorStop(0,'#1a0c00');
+    bg.addColorStop(0.4,'#100800');
+    bg.addColorStop(1,'#050300');
+    ctx.fillStyle=bg; ctx.fillRect(0,0,c.width,c.height);
+
+    // Outer corona glow (mouse-reactive)
+    const coronaX=cx+(mx-0.5)*40, coronaY=cy+(my-0.5)*40;
+    const outerCor=ctx.createRadialGradient(coronaX,coronaY,R*0.8,coronaX,coronaY,R*5);
+    outerCor.addColorStop(0,`rgba(240,160,32,${0.12+0.04*Math.sin(t*0.01)})`);
+    outerCor.addColorStop(0.3,`rgba(180,80,0,${0.06})`);
+    outerCor.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=outerCor; ctx.fillRect(0,0,c.width,c.height);
+
+    // Rays
+    rays.forEach(ray=>{
+      ray.angle+=ray.speed;
+      const flicker=0.7+0.3*Math.sin(t*0.04+ray.phase);
+      const len=R*(1.2+ray.len*flicker);
+      const x2=coronaX+Math.cos(ray.angle)*len;
+      const y2=coronaY+Math.sin(ray.angle)*len;
+      const grad=ctx.createLinearGradient(coronaX,coronaY,x2,y2);
+      grad.addColorStop(0,`rgba(255,220,100,${0.08*flicker})`);
+      grad.addColorStop(0.3,`rgba(240,160,32,${0.04*flicker})`);
+      grad.addColorStop(1,'rgba(240,160,32,0)');
+      const w=R*ray.width*(0.5+0.5*flicker);
+      ctx.beginPath();
+      ctx.moveTo(coronaX,coronaY);
+      const perp={x:Math.sin(ray.angle),y:-Math.cos(ray.angle)};
+      ctx.lineTo(x2+perp.x*w,y2+perp.y*w);
+      ctx.lineTo(x2-perp.x*w,y2-perp.y*w);
+      ctx.closePath();
+      ctx.fillStyle=grad; ctx.fill();
+    });
+
+    // Solar disk gradient
+    const diskGrad=ctx.createRadialGradient(coronaX-R*0.15,coronaY-R*0.15,0,coronaX,coronaY,R);
+    diskGrad.addColorStop(0,'rgba(255,255,240,1)');
+    diskGrad.addColorStop(0.3,'rgba(255,230,120,0.98)');
+    diskGrad.addColorStop(0.7,'rgba(240,160,32,0.95)');
+    diskGrad.addColorStop(1,'rgba(200,80,0,0.9)');
+    ctx.beginPath(); ctx.arc(coronaX,coronaY,R,0,Math.PI*2);
+    ctx.fillStyle=diskGrad; ctx.fill();
+
+    // Inner limb darkening
+    const limb=ctx.createRadialGradient(coronaX,coronaY,R*0.3,coronaX,coronaY,R);
+    limb.addColorStop(0,'rgba(0,0,0,0)');
+    limb.addColorStop(1,'rgba(0,0,0,0.35)');
+    ctx.beginPath(); ctx.arc(coronaX,coronaY,R,0,Math.PI*2);
+    ctx.fillStyle=limb; ctx.fill();
+
+    // Solar particles (flares)
+    particles.forEach(p=>{
+      p.angle+=p.speed;
+      const pr=R*(p.r+0.05*Math.sin(t*0.03+p.phase));
+      const px=coronaX+Math.cos(p.angle)*pr;
+      const py=coronaY+Math.sin(p.angle)*pr;
+      // Only show outside sun disk
+      const dist=Math.sqrt((px-coronaX)**2+(py-coronaY)**2);
+      if(dist<R*0.95) return;
+      const a=p.alpha*(0.5+0.5*Math.sin(t*0.04+p.phase));
+      ctx.beginPath(); ctx.arc(px,py,p.size,0,Math.PI*2);
+      ctx.fillStyle=`rgba(255,200,80,${a*0.6})`; ctx.fill();
+    });
+
+    t++;
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ── THREE SUNS CANVAS ──
+(function(){
+  const canvas=document.getElementById('threeSunsCanvas');
+  if(!canvas) return;
+  const ctx=canvas.getContext('2d');
+  const W=700,H=420; canvas.width=W; canvas.height=H;
+  const info=document.getElementById('sunsInfo');
+
+  const suns=[
+    {
+      id:'rising', cx:120, cy:280, r:55,
+      label:'The Rising Sun', timeLabel:'DAWN · 6AM',
+      color1:'#ff7020', color2:'#ffb040', color3:'#ffd080',
+      glyph:'🌅',
+      title:'Horus — The Newborn Solar Hero',
+      desc:'The rising sun represents the divine child — Horus, Mithras, the infant Christ, the young Apollo. In the human soul, this is the moment of spiritual awakening: the first light of true understanding breaking over the horizon of consciousness. Characterized by aspiration, wonder, and the energy of new beginnings. The initiates greeted the rising sun with prayers of gratitude for another day of potential transformation.',
+    },
+    {
+      id:'noon', cx:350, cy:130, r:75,
+      label:'The Noon Sun', timeLabel:'ZENITH · NOON',
+      color1:'#ffffff', color2:'#fff8c0', color3:'#ffd040',
+      glyph:'☀️',
+      title:'Ra / Amun-Ra — The All-Father at Zenith',
+      desc:'The noon sun at its full power represents the divine Father — omnipotent, all-illumining, the full expression of creative solar power. Ra in the solar bark at noon, Zeus at the height of his authority, the Father God of Christian theology. In the soul: the state of complete spiritual realization, the noonday clarity that banishes every shadow of doubt or ignorance. The most powerful — and most blinding — form of the solar deity.',
+    },
+    {
+      id:'setting', cx:580, cy:280, r:55,
+      label:'The Setting Sun', timeLabel:'DUSK · 6PM',
+      color1:'#c82010', color2:'#e04010', color3:'#f08030',
+      glyph:'🌇',
+      title:'Osiris — The Dying God at the Horizon',
+      desc:'The setting sun represents the divine sacrifice — Osiris descending to the underworld, Dionysus torn apart by the Titans, Christ on the cross. The solar hero who must die so that he may be reborn. In the soul: the mystic death — the willingness to surrender the current level of understanding so that a higher understanding can be born. The most painful and most necessary stage. Without the setting sun there is no midnight; without midnight there is no dawn.',
+    },
+  ];
+
+  // Horizon line and sky gradient
+  const HORIZON=310;
+  let hovered=null, t=0;
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    t+=0.5;
+
+    // Sky gradient (dawn colors)
+    const sky=ctx.createLinearGradient(0,0,0,HORIZON);
+    sky.addColorStop(0,'#050300');
+    sky.addColorStop(0.4,'#1a0c00');
+    sky.addColorStop(1,'#402010');
+    ctx.fillStyle=sky; ctx.fillRect(0,0,W,HORIZON);
+
+    // Ground
+    const gnd=ctx.createLinearGradient(0,HORIZON,0,H);
+    gnd.addColorStop(0,'#2a1400');
+    gnd.addColorStop(1,'#0a0400');
+    ctx.fillStyle=gnd; ctx.fillRect(0,HORIZON,W,H-HORIZON);
+
+    // Horizon glow line
+    const hGlow=ctx.createLinearGradient(0,HORIZON,W,HORIZON);
+    hGlow.addColorStop(0,'rgba(200,80,0,0)');
+    hGlow.addColorStop(0.15,'rgba(255,160,32,0.3)');
+    hGlow.addColorStop(0.5,'rgba(255,200,80,0.15)');
+    hGlow.addColorStop(0.85,'rgba(200,80,0,0.3)');
+    hGlow.addColorStop(1,'rgba(200,80,0,0)');
+    ctx.fillStyle=hGlow; ctx.fillRect(0,HORIZON-2,W,6);
+
+    // Arc path (sun's journey)
+    ctx.beginPath();
+    ctx.moveTo(30,HORIZON);
+    ctx.quadraticCurveTo(350,HORIZON-300,670,HORIZON);
+    ctx.strokeStyle='rgba(240,160,32,0.08)'; ctx.lineWidth=1;
+    ctx.setLineDash([4,8]); ctx.stroke(); ctx.setLineDash([]);
+
+    // Draw suns
+    suns.forEach(sun=>{
+      const isHov=hovered===sun;
+      const pulse=isHov?4*Math.sin(t*0.1):0;
+      const R=sun.r+pulse;
+
+      // Outer glow
+      const outerG=ctx.createRadialGradient(sun.cx,sun.cy,R*0.6,sun.cx,sun.cy,R*3.5);
+      outerG.addColorStop(0,sun.color1+(isHov?'50':'25'));
+      outerG.addColorStop(0.5,sun.color2+(isHov?'20':'0a'));
+      outerG.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.beginPath(); ctx.arc(sun.cx,sun.cy,R*3.5,0,Math.PI*2);
+      ctx.fillStyle=outerG; ctx.fill();
+
+      // Corona rays for noon sun
+      if(sun.id==='noon'){
+        for(let i=0;i<12;i++){
+          const a=(i/12)*Math.PI*2+t*0.005;
+          const rl=R*(1.4+0.3*Math.sin(t*0.04+i));
+          const rg=ctx.createLinearGradient(sun.cx,sun.cy,
+            sun.cx+Math.cos(a)*rl,sun.cy+Math.sin(a)*rl);
+          rg.addColorStop(0,`rgba(255,255,200,0.15)`);
+          rg.addColorStop(1,'rgba(255,200,80,0)');
+          ctx.beginPath();
+          ctx.moveTo(sun.cx,sun.cy);
+          ctx.lineTo(sun.cx+Math.cos(a+0.08)*rl,sun.cy+Math.sin(a+0.08)*rl);
+          ctx.lineTo(sun.cx+Math.cos(a-0.08)*rl,sun.cy+Math.sin(a-0.08)*rl);
+          ctx.closePath(); ctx.fillStyle=rg; ctx.fill();
+        }
+      }
+
+      // Disk
+      const diskG=ctx.createRadialGradient(sun.cx-R*0.2,sun.cy-R*0.2,0,sun.cx,sun.cy,R);
+      diskG.addColorStop(0,sun.color3);
+      diskG.addColorStop(0.6,sun.color2);
+      diskG.addColorStop(1,sun.color1);
+      ctx.beginPath(); ctx.arc(sun.cx,sun.cy,R,0,Math.PI*2);
+      ctx.fillStyle=diskG; ctx.fill();
+
+      // Limb darkening
+      const ld=ctx.createRadialGradient(sun.cx,sun.cy,R*0.4,sun.cx,sun.cy,R);
+      ld.addColorStop(0,'rgba(0,0,0,0)');
+      ld.addColorStop(1,'rgba(0,0,0,0.3)');
+      ctx.beginPath(); ctx.arc(sun.cx,sun.cy,R,0,Math.PI*2);
+      ctx.fillStyle=ld; ctx.fill();
+
+      // Label
+      ctx.font=`bold 11px 'Cinzel',serif`;
+      ctx.fillStyle=isHov?sun.color3:'rgba(240,160,32,0.5)';
+      ctx.textAlign='center';
+      ctx.shadowBlur=isHov?10:0; ctx.shadowColor=sun.color2;
+      ctx.fillText(sun.label.toUpperCase(),sun.cx,sun.cy+R+18);
+      ctx.fillText(sun.timeLabel,sun.cx,sun.cy+R+32);
+      ctx.shadowBlur=0;
+    });
+
+    requestAnimationFrame(draw);
+  }
+
+  canvas.addEventListener('mousemove',e=>{
+    const rect=canvas.getBoundingClientRect();
+    const mx=(e.clientX-rect.left)*(W/rect.width);
+    const my=(e.clientY-rect.top)*(H/rect.height);
+    hovered=null;
+    suns.forEach(s=>{
+      const dx=mx-s.cx, dy=my-s.cy;
+      if(Math.sqrt(dx*dx+dy*dy)<s.r+12) hovered=s;
+    });
+    if(hovered){
+      info.innerHTML=`<strong style="font-family:'Trirong',serif;color:${hovered.color2};font-size:1.05rem">${hovered.title}</strong><br>${hovered.desc}`;
+      info.style.borderColor=hovered.color1+'55';
+      info.style.color='var(--solar-text)';
+    } else {
+      info.textContent='Hover a sun to receive its esoteric teaching';
+      info.style.borderColor=''; info.style.color='';
+    }
+  });
+  canvas.addEventListener('mouseleave',()=>{
+    hovered=null;
+    info.textContent='Hover a sun to receive its esoteric teaching';
+    info.style.borderColor=''; info.style.color='';
+  });
+  draw();
+})();
+
+// ── CORONA INHABITANTS CANVAS ──
+(function(){
+  const canvas=document.getElementById('coronaCanvas');
+  if(!canvas) return;
+  const ctx=canvas.getContext('2d');
+  const W=600,H=600,cx=W/2,cy=H/2;
+  const info=document.getElementById('coronaInfo');
+
+  const inhabitants=[
+    {angle:270, r:0, glyph:'☉', name:'The Solar Logos', color:'#ffffff',
+     desc:'THE SOLAR LOGOS — The supreme intelligence residing at the heart of the Sun. Not the physical star but the divine consciousness that animates it. Plato identified this with the Form of the Good. The Hermetists called it the Nous of the visible world. Every ray of sunlight is an expression of its thought.'},
+    {angle:270, r:100, glyph:'🦅', name:'The Solar Angels', color:'#fff8c0',
+     desc:'SOLAR ANGELS (Agathoi Daimones) — The highest order of spiritual beings in the Hermetic system, dwelling in the innermost sphere of the Sun. They are intermediaries between the Solar Logos and the planetary intelligences, carrying divine intentions into manifestation. In Platonic terms, the Ideas themselves.'},
+    {angle:30,  r:155, glyph:'🔆', name:'The Salamanders', color:'#ff9030',
+     desc:'SALAMANDERS — Elemental spirits of Fire, whose home is the Solar sphere. Paracelsus described them as beings of pure fire-intelligence, neither mortal nor fully divine, animating all flame and solar radiation. When the initiate works with solar energy in magical or alchemical operations, it is with the Salamanders that he interacts.'},
+    {angle:150, r:155, glyph:'☀️', name:'The Spirits of the Sun', color:'#ffd040',
+     desc:'SPIRITS OF THE SUN (Intelligences of Tiphareth) — In the Qabbalistic system, the Sephirah Tiphareth (Beauty) corresponds to the Sun at the center of the Tree of Life. Its intelligences — the Malachim, the Kings — administer beauty, harmony, and healing throughout creation. The solar plexus in the human body is their anatomical correspondence.'},
+    {angle:210, r:155, glyph:'🌞', name:'The Archangel Michael', color:'#ffaa30',
+     desc:'MICHAEL — The solar archangel, whose name means "Who is like God?" Michael is the regent of the Sun in both Jewish and Christian angelology, bearing the solar sword that slays the dragon of ignorance. His celestial metal is gold; his day is Sunday; his color the radiant yellow of midday.'},
+    {angle:90,  r:155, glyph:'⚡', name:'The Solarized Heroes', color:'#ffe090',
+     desc:'THE SOLAR HEROES — Heracles, Perseus, Bellerophon, Siegfried: every culture produced mythological heroes whose twelve labors, dragon-slayings, and solar journeys encoded the initiatic curriculum. These are not merely folklore figures but the individualized expressions of the solar initiation — the soul that has taken the solar path and undergone its full ordeal.'},
+    {angle:330, r:105, glyph:'🌀', name:'The Vortex of Life', color:'#ffb060',
+     desc:'THE VORTEX OF LIFE — Hall draws on Paracelsian and Rosicrucian sources to describe a solar vortex: a rotating field of vital force emanating from the Solar Logos, entering through the sun, and animating all living things in the solar system. The prana of Indian philosophy, the Od force of the Mesmerists, the etheric body of Anthroposophy — all names for the same solar life-current.'},
+  ];
+
+  let mx=cx, my=cy, t=0;
+
+  canvas.addEventListener('mousemove',e=>{
+    const rect=canvas.getBoundingClientRect();
+    mx=(e.clientX-rect.left)*(W/rect.width);
+    my=(e.clientY-rect.top)*(H/rect.height);
+  });
+  canvas.addEventListener('mouseleave',()=>{mx=cx;my=cy;});
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    t+=0.4;
+
+    // Background
+    const bg=ctx.createRadialGradient(cx,cy,0,cx,cy,W*0.6);
+    bg.addColorStop(0,'#1a0c00');
+    bg.addColorStop(0.5,'#0f0600');
+    bg.addColorStop(1,'#050300');
+    ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
+
+    // Orbit rings
+    [100,155].forEach(r=>{
+      ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2);
+      ctx.strokeStyle='rgba(240,160,32,0.06)'; ctx.lineWidth=0.6; ctx.stroke();
+    });
+
+    // Mouse proximity glow
+    const mdx=mx-cx, mdy=my-cy;
+    const mDist=Math.sqrt(mdx*mdx+mdy*mdy);
+    if(mDist<250){
+      const mGlow=ctx.createRadialGradient(mx,my,0,mx,my,60);
+      mGlow.addColorStop(0,'rgba(255,200,80,0.08)');
+      mGlow.addColorStop(1,'rgba(255,200,80,0)');
+      ctx.beginPath(); ctx.arc(mx,my,60,0,Math.PI*2);
+      ctx.fillStyle=mGlow; ctx.fill();
+    }
+
+    // Solar core
+    const coreR=50+3*Math.sin(t*0.04);
+    const coreG=ctx.createRadialGradient(cx-12,cy-12,0,cx,cy,coreR);
+    coreG.addColorStop(0,'rgba(255,255,230,1)');
+    coreG.addColorStop(0.4,'rgba(255,220,100,0.95)');
+    coreG.addColorStop(0.8,'rgba(240,160,32,0.9)');
+    coreG.addColorStop(1,'rgba(200,80,0,0.85)');
+    ctx.beginPath(); ctx.arc(cx,cy,coreR,0,Math.PI*2);
+    ctx.fillStyle=coreG; ctx.fill();
+
+    // Corona spikes from core
+    for(let i=0;i<8;i++){
+      const a=(i/8)*Math.PI*2+t*0.008;
+      const fl=0.8+0.2*Math.sin(t*0.05+i);
+      const len=coreR*(1.5+0.4*fl);
+      const g=ctx.createLinearGradient(cx,cy,cx+Math.cos(a)*len,cy+Math.sin(a)*len);
+      g.addColorStop(0,'rgba(255,220,100,0.2)');
+      g.addColorStop(1,'rgba(255,160,32,0)');
+      ctx.beginPath();
+      ctx.moveTo(cx,cy);
+      ctx.lineTo(cx+Math.cos(a+0.12)*len,cy+Math.sin(a+0.12)*len);
+      ctx.lineTo(cx+Math.cos(a-0.12)*len,cy+Math.sin(a-0.12)*len);
+      ctx.closePath(); ctx.fillStyle=g; ctx.fill();
+    }
+
+    // Draw inhabitants
+    let closestInhab=null, closestDist=Infinity;
+    inhabitants.forEach(inh=>{
+      const spin=t*(inh.r>120?0.006:inh.r>0?0.01:0);
+      const posAngle=(inh.angle*Math.PI/180)+spin;
+      const px=inh.r===0?cx:cx+Math.cos(posAngle)*inh.r;
+      const py=inh.r===0?cy:cy+Math.sin(posAngle)*inh.r;
+
+      const dx=mx-px, dy=my-py;
+      const dist=Math.sqrt(dx*dx+dy*dy);
+      if(dist<closestDist&&dist<40){closestDist=dist;closestInhab=inh;}
+
+      const isNear=dist<40;
+      const rr=inh.r===0?18:(isNear?20:13);
+
+      // Halo
+      const halo=ctx.createRadialGradient(px,py,0,px,py,rr*2.5);
+      halo.addColorStop(0,inh.color+(isNear?'40':'18'));
+      halo.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.beginPath(); ctx.arc(px,py,rr*2.5,0,Math.PI*2);
+      ctx.fillStyle=halo; ctx.fill();
+
+      // Circle
+      ctx.beginPath(); ctx.arc(px,py,rr,0,Math.PI*2);
+      ctx.fillStyle=inh.color+(isNear?'30':'12'); ctx.fill();
+      ctx.strokeStyle=isNear?inh.color:inh.color+'44';
+      ctx.lineWidth=isNear?1.5:0.6; ctx.stroke();
+
+      // Glyph
+      ctx.font=`${inh.r===0?22:(isNear?18:13)}px serif`;
+      ctx.fillStyle=isNear?inh.color:inh.color+'aa';
+      ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.shadowBlur=isNear?12:inh.r===0?10:0; ctx.shadowColor=inh.color;
+      ctx.fillText(inh.glyph,px,py);
+      ctx.shadowBlur=0;
+    });
+
+    if(closestInhab){
+      info.innerHTML=`<strong style="color:${closestInhab.color};font-family:'Trirong',serif">${closestInhab.name}</strong><br>${closestInhab.desc}`;
+      info.style.color='var(--solar-text)';
+    } else {
+      info.textContent='Move your cursor through the corona to encounter its inhabitants';
+      info.style.color='';
+    }
+
+    t++;
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ── MIDNIGHT SUN CANVAS ──
+(function(){
+  const c=document.getElementById('midnightCanvas');
+  const section=document.getElementById('midnightSection');
+  if(!c||!section) return;
+  const ctx=c.getContext('2d');
+  function resize(){c.width=section.offsetWidth;c.height=section.offsetHeight;}
+  resize(); window.addEventListener('resize',resize);
+  let t=0;
+  function draw(){
+    ctx.clearRect(0,0,c.width,c.height);
+    const cx=c.width/2, cy=c.height/2;
+
+    // Deep night
+    const bg=ctx.createRadialGradient(cx,cy*0.3,0,cx,cy,c.width*0.6);
+    bg.addColorStop(0,'#182040');
+    bg.addColorStop(0.5,'#0c1428');
+    bg.addColorStop(1,'#050300');
+    ctx.fillStyle=bg; ctx.fillRect(0,0,c.width,c.height);
+
+    // Midnight sun (blue-white, far away)
+    const sR=40+3*Math.sin(t*0.03);
+    const sG=ctx.createRadialGradient(cx,cy*0.4,0,cx,cy*0.4,sR*4);
+    sG.addColorStop(0,'rgba(180,210,255,0.25)');
+    sG.addColorStop(0.3,'rgba(100,140,220,0.08)');
+    sG.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=sG; ctx.fillRect(0,0,c.width,c.height);
+
+    const diskG=ctx.createRadialGradient(cx,cy*0.4,0,cx,cy*0.4,sR);
+    diskG.addColorStop(0,'rgba(255,255,255,0.4)');
+    diskG.addColorStop(0.5,'rgba(180,210,255,0.25)');
+    diskG.addColorStop(1,'rgba(100,150,220,0.1)');
+    ctx.beginPath(); ctx.arc(cx,cy*0.4,sR,0,Math.PI*2);
+    ctx.fillStyle=diskG; ctx.fill();
+
+    // Stars
+    for(let i=0;i<50;i++){
+      const sx=(Math.sin(i*127.1)*0.5+0.5)*c.width;
+      const sy=(Math.sin(i*311.7)*0.5+0.5)*c.height*0.8;
+      const a=(0.3+0.2*Math.sin(t*0.02+i))*0.7;
+      ctx.beginPath(); ctx.arc(sx,sy,0.8,0,Math.PI*2);
+      ctx.fillStyle=`rgba(200,216,240,${a})`; ctx.fill();
+    }
+
+    // Horizon reflections (water)
+    const waterY=c.height*0.65;
+    ctx.fillStyle='rgba(18,32,64,0.4)';
+    ctx.fillRect(0,waterY,c.width,c.height-waterY);
+    for(let i=0;i<4;i++){
+      ctx.beginPath();
+      for(let x=0;x<=c.width;x+=4){
+        const y=waterY+4+Math.sin(x*0.02+t*0.02+i*0.8)*3;
+        if(x===0)ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      }
+      ctx.strokeStyle=`rgba(100,140,220,${0.04-i*0.008})`;
+      ctx.lineWidth=0.8; ctx.stroke();
+    }
+    // Moon column reflection
+    const reflG=ctx.createLinearGradient(cx-20,waterY,cx+20,waterY);
+    reflG.addColorStop(0,'rgba(180,210,255,0)');
+    reflG.addColorStop(0.5,'rgba(180,210,255,0.06)');
+    reflG.addColorStop(1,'rgba(180,210,255,0)');
+    ctx.fillStyle=reflG;
+    ctx.fillRect(cx-20,waterY,40,c.height-waterY);
+
+    t++;
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+</script>
+</body>
+</html>

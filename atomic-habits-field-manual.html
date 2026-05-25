@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Atomic Habits Field Manual — A Distilled Reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..900,0..100;1,9..144,300..900,0..100&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300..600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F2EDE1;
+    --paper-deep: #EAE3D2;
+    --ink: #161310;
+    --ink-soft: #52483C;
+    --ink-faint: #8E8374;
+    --rust: #B8432C;
+    --rust-deep: #7F2A17;
+    --olive: #5C6345;
+    --line: #D2C7B1;
+    --line-soft: #E2DAC6;
+
+    --f-display: "Fraunces", "Times New Roman", serif;
+    --f-body: "Instrument Sans", -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+    --f-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--f-body);
+    font-size: 16px;
+    line-height: 1.55;
+    font-weight: 400;
+    overflow-x: hidden;
+    /* subtle paper grain */
+    background-image:
+      radial-gradient(circle at 18% 22%, rgba(140, 110, 70, 0.04) 0, transparent 60%),
+      radial-gradient(circle at 82% 78%, rgba(80, 60, 40, 0.035) 0, transparent 55%);
+  }
+
+  /* paper grain overlay */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.08 0 0 0 0 0.06 0 0 0 0 0.04 0 0 0 0.35 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.35;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .wrap {
+    position: relative;
+    z-index: 2;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  /* ─── HEADER ─────────────────────────────────────────── */
+
+  header.masthead {
+    padding: 56px 0 28px;
+    border-bottom: 1px solid var(--ink);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 40px;
+  }
+
+  .eyebrow {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    font-weight: 500;
+  }
+
+  .masthead .eyebrow {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .masthead .eyebrow::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+    max-width: 180px;
+  }
+
+  h1.booktitle {
+    font-family: var(--f-display);
+    font-weight: 400;
+    font-size: clamp(54px, 8vw, 104px);
+    line-height: 0.92;
+    letter-spacing: -0.028em;
+    font-variation-settings: "opsz" 144, "SOFT" 30;
+    margin-top: 6px;
+  }
+  h1.booktitle em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--rust);
+    font-variation-settings: "opsz" 144, "SOFT" 80;
+  }
+
+  .masthead-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 18px;
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+  .masthead-meta .row {
+    display: flex;
+    gap: 14px;
+    align-items: baseline;
+  }
+  .masthead-meta .label {
+    font-family: var(--f-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    min-width: 84px;
+  }
+
+  /* atomic motif */
+  .atom {
+    width: 180px;
+    height: 180px;
+    flex-shrink: 0;
+    animation: spin 40s linear infinite;
+  }
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+  .atom .orbit { fill: none; stroke: var(--ink); stroke-width: 0.7; }
+  .atom .orbit-2 { stroke: var(--rust); stroke-width: 0.9; }
+  .atom .nucleus { fill: var(--rust); }
+  .atom .electron { fill: var(--ink); }
+
+  .dateline {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--line);
+    font-family: var(--f-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  /* ─── LEAD / OPENING SPREAD ──────────────────────────── */
+
+  .lead {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 56px;
+    padding: 48px 0 72px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .lead-title {
+    font-family: var(--f-display);
+    font-size: 44px;
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    font-weight: 300;
+    font-variation-settings: "opsz" 144, "SOFT" 60;
+  }
+  .lead-title em {
+    font-style: italic;
+    color: var(--rust);
+  }
+  .lead-title .rule {
+    display: block;
+    width: 60px;
+    height: 2px;
+    background: var(--ink);
+    margin-top: 18px;
+  }
+
+  .lead-body p {
+    font-size: 17px;
+    line-height: 1.62;
+    color: var(--ink);
+    margin-bottom: 18px;
+  }
+  .lead-body p:first-letter {
+    font-family: var(--f-display);
+    font-size: 58px;
+    float: left;
+    line-height: 0.9;
+    padding: 4px 10px 0 0;
+    font-weight: 400;
+    color: var(--rust);
+    font-variation-settings: "opsz" 144, "SOFT" 30;
+  }
+  .lead-body .equation {
+    font-family: var(--f-mono);
+    font-size: 15px;
+    letter-spacing: 0.02em;
+    color: var(--ink-soft);
+    padding: 14px 18px;
+    border-left: 2px solid var(--rust);
+    background: rgba(184, 67, 44, 0.05);
+    margin-top: 18px;
+  }
+
+  /* ─── SECTION HEADERS ────────────────────────────────── */
+
+  section.part { padding: 80px 0 40px; }
+
+  .part-header {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 28px;
+    align-items: baseline;
+    margin-bottom: 48px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid var(--ink);
+  }
+  .part-number {
+    font-family: var(--f-mono);
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--rust);
+    font-weight: 500;
+    padding-top: 16px;
+  }
+  .part-title-block h2 {
+    font-family: var(--f-display);
+    font-size: clamp(38px, 5.5vw, 68px);
+    line-height: 0.98;
+    letter-spacing: -0.022em;
+    font-weight: 300;
+    font-variation-settings: "opsz" 144, "SOFT" 50;
+  }
+  .part-title-block h2 em {
+    font-style: italic;
+    color: var(--rust);
+  }
+  .part-title-block .subtitle {
+    font-family: var(--f-display);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 19px;
+    color: var(--ink-soft);
+    margin-top: 12px;
+    max-width: 640px;
+  }
+
+  /* ─── CHAPTER CARDS ──────────────────────────────────── */
+
+  .chapter-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    border-top: 1px solid var(--line);
+    border-left: 1px solid var(--line);
+  }
+
+  .chapter {
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 32px 28px 28px;
+    position: relative;
+    transition: background 0.3s ease;
+  }
+  .chapter:hover { background: var(--paper-deep); }
+
+  .chap-header {
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+    margin-bottom: 18px;
+  }
+  .chap-num {
+    font-family: var(--f-display);
+    font-size: 52px;
+    line-height: 0.85;
+    font-weight: 300;
+    color: var(--rust);
+    font-variation-settings: "opsz" 144, "SOFT" 40;
+    min-width: 58px;
+    letter-spacing: -0.03em;
+  }
+  .chap-title {
+    font-family: var(--f-display);
+    font-size: 21px;
+    line-height: 1.15;
+    font-weight: 500;
+    letter-spacing: -0.012em;
+    color: var(--ink);
+    padding-top: 6px;
+    font-variation-settings: "opsz" 36, "SOFT" 20;
+  }
+
+  .chap-rule {
+    width: 28px;
+    height: 2px;
+    background: var(--ink);
+    margin: 8px 0 16px;
+  }
+
+  .takeaways {
+    list-style: none;
+    margin-bottom: 20px;
+  }
+  .takeaways li {
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: var(--ink);
+    padding: 8px 0 8px 22px;
+    position: relative;
+    border-bottom: 1px dotted var(--line-soft);
+  }
+  .takeaways li:last-child { border-bottom: none; }
+  .takeaways li::before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    top: 8px;
+    color: var(--rust);
+    font-family: var(--f-mono);
+    font-size: 13px;
+  }
+  .takeaways li strong {
+    font-weight: 600;
+    color: var(--ink);
+    background: linear-gradient(transparent 60%, rgba(184, 67, 44, 0.18) 60%);
+    padding: 0 1px;
+  }
+
+  .try-this {
+    font-family: var(--f-mono);
+    font-size: 11.5px;
+    letter-spacing: 0.02em;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    background: rgba(92, 99, 69, 0.08);
+    border-left: 2px solid var(--olive);
+    padding: 10px 12px;
+    margin-top: 14px;
+  }
+  .try-this::before {
+    content: "TRY THIS →";
+    display: block;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    color: var(--olive);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  /* ─── FOUR LAWS STATEMENT SPREAD ─────────────────────── */
+
+  .laws-statement {
+    padding: 88px 0;
+    background:
+      linear-gradient(var(--paper-deep), var(--paper-deep)),
+      repeating-linear-gradient(90deg, transparent 0 40px, rgba(22,19,16,0.04) 40px 41px);
+    background-blend-mode: multiply;
+    margin: 40px -200vw;
+    padding-left: 200vw;
+    padding-right: 200vw;
+    border-top: 1px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+  }
+  .laws-statement-inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+  .laws-eyebrow {
+    text-align: center;
+    margin-bottom: 12px;
+  }
+  .laws-headline {
+    text-align: center;
+    font-family: var(--f-display);
+    font-size: clamp(40px, 6vw, 76px);
+    line-height: 0.98;
+    letter-spacing: -0.025em;
+    font-weight: 300;
+    font-variation-settings: "opsz" 144, "SOFT" 60;
+    margin-bottom: 56px;
+  }
+  .laws-headline em {
+    font-style: italic;
+    color: var(--rust);
+  }
+  .laws-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border-top: 1px solid var(--ink);
+    border-left: 1px solid var(--ink);
+  }
+  .law-card {
+    padding: 28px 20px 28px;
+    border-right: 1px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    text-align: left;
+    background: var(--paper);
+  }
+  .law-card .num {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    color: var(--rust);
+    font-weight: 500;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .law-card h3 {
+    font-family: var(--f-display);
+    font-size: 30px;
+    line-height: 1.05;
+    font-weight: 400;
+    letter-spacing: -0.018em;
+    margin-bottom: 14px;
+    font-variation-settings: "opsz" 72, "SOFT" 40;
+  }
+  .law-card .verb {
+    display: block;
+    font-family: var(--f-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+  }
+  .law-card .inversion {
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px dotted var(--line);
+    font-family: var(--f-mono);
+    font-size: 11px;
+    letter-spacing: 0.02em;
+    color: var(--ink-soft);
+  }
+  .law-card .inversion em {
+    font-family: var(--f-display);
+    font-style: italic;
+    font-size: 14px;
+    color: var(--ink);
+    display: block;
+    margin-top: 4px;
+  }
+
+  /* ─── CHEAT SHEET ─────────────────────────────────────── */
+
+  .cheatsheet {
+    padding: 80px 0;
+    border-top: 2px solid var(--ink);
+    margin-top: 60px;
+  }
+  .cs-title {
+    font-family: var(--f-display);
+    font-size: clamp(40px, 5.5vw, 68px);
+    line-height: 1;
+    letter-spacing: -0.022em;
+    font-weight: 300;
+    margin-bottom: 48px;
+    font-variation-settings: "opsz" 144, "SOFT" 50;
+  }
+  .cs-title em {
+    font-style: italic;
+    color: var(--rust);
+  }
+  .cs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+  }
+  .cs-column h3 {
+    font-family: var(--f-mono);
+    font-size: 12px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--ink);
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--ink);
+    margin-bottom: 18px;
+  }
+  .cs-column.break h3 { color: var(--rust); border-bottom-color: var(--rust); }
+  .cs-law {
+    margin-bottom: 22px;
+  }
+  .cs-law-title {
+    font-family: var(--f-display);
+    font-size: 21px;
+    font-weight: 500;
+    letter-spacing: -0.012em;
+    margin-bottom: 10px;
+    font-variation-settings: "opsz" 36, "SOFT" 20;
+  }
+  .cs-column.break .cs-law-title { color: var(--rust-deep); }
+  .cs-law ul { list-style: none; }
+  .cs-law ul li {
+    font-size: 13.5px;
+    line-height: 1.5;
+    padding: 6px 0 6px 26px;
+    position: relative;
+    color: var(--ink);
+    border-bottom: 1px dotted var(--line-soft);
+  }
+  .cs-law ul li::before {
+    content: attr(data-num);
+    position: absolute;
+    left: 0;
+    top: 6px;
+    font-family: var(--f-mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0.02em;
+  }
+
+  /* ─── CLOSING / FOOTER ───────────────────────────────── */
+
+  .closing {
+    padding: 100px 0 40px;
+    text-align: center;
+    border-top: 1px solid var(--line);
+  }
+  .closing-quote {
+    font-family: var(--f-display);
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(26px, 4vw, 40px);
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    max-width: 780px;
+    margin: 0 auto 24px;
+    font-variation-settings: "opsz" 144, "SOFT" 80;
+  }
+  .closing-quote .mark {
+    color: var(--rust);
+    font-size: 1.4em;
+    line-height: 0;
+    position: relative;
+    top: 0.3em;
+  }
+  .closing-cite {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  footer.colophon {
+    padding: 40px 0 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--ink);
+    font-family: var(--f-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  /* ─── REVEAL ANIMATION ───────────────────────────────── */
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ─── RESPONSIVE ─────────────────────────────────────── */
+
+  @media (max-width: 820px) {
+    .wrap { padding: 0 22px; }
+    header.masthead { grid-template-columns: 1fr; gap: 24px; }
+    .atom { width: 120px; height: 120px; }
+    .lead { grid-template-columns: 1fr; gap: 28px; padding: 32px 0 48px; }
+    .chapter-grid { grid-template-columns: 1fr; }
+    .laws-grid { grid-template-columns: 1fr 1fr; }
+    .cs-grid { grid-template-columns: 1fr; }
+    .part-header { grid-template-columns: 1fr; gap: 8px; }
+    .part-number { padding-top: 0; }
+  }
+  @media (max-width: 480px) {
+    .laws-grid { grid-template-columns: 1fr; }
+  }
+
+  @media print {
+    body { background: white; }
+    body::before { display: none; }
+    .chapter:hover { background: transparent; }
+    .laws-statement { margin: 0; padding: 40px 0; }
+    .reveal { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- MASTHEAD -->
+  <header class="masthead">
+    <div>
+      <div class="eyebrow"><span>№ 001</span><span>A Field Manual</span></div>
+      <h1 class="booktitle">Atomic<br/><em>Habits</em></h1>
+      <div class="masthead-meta">
+        <div class="row"><span class="label">Source</span><span>James Clear · 2018 · 20 chapters</span></div>
+        <div class="row"><span class="label">Format</span><span>One-page reference · distilled for implementation</span></div>
+        <div class="row"><span class="label">Scope</span><span>Fundamentals · Four Laws · Advanced Tactics</span></div>
+      </div>
+    </div>
+    <svg class="atom" viewBox="-100 -100 200 200" aria-hidden="true">
+      <ellipse class="orbit" cx="0" cy="0" rx="90" ry="32" />
+      <ellipse class="orbit" cx="0" cy="0" rx="90" ry="32" transform="rotate(60)" />
+      <ellipse class="orbit orbit-2" cx="0" cy="0" rx="90" ry="32" transform="rotate(120)" />
+      <circle class="nucleus" cx="0" cy="0" r="8" />
+      <circle class="electron" cx="90" cy="0" r="3.2" />
+      <circle class="electron" cx="45" cy="-27.7" r="3.2" transform="rotate(60)" />
+      <circle class="electron" cx="-45" cy="-27.7" r="3.2" transform="rotate(120)" />
+    </svg>
+  </header>
+
+  <div class="dateline">
+    <span>The fundamentals</span>
+    <span>Four laws of behavior change</span>
+    <span>Advanced tactics</span>
+    <span>Implementation cheat sheet</span>
+  </div>
+
+  <!-- LEAD / OPENING -->
+  <section class="lead">
+    <div class="lead-title">
+      Tiny changes.<br/>
+      <em>Remarkable</em> results.
+      <span class="rule"></span>
+    </div>
+    <div class="lead-body">
+      <p>Habits are the compound interest of self-improvement. A 1% improvement, repeated daily, doesn't feel like much on any given Tuesday — yet over years it is the single most powerful force shaping who you become. The problem is rarely motivation. The problem is almost always the system.</p>
+      <p>This manual distills all twenty chapters into one reference you can live by. Every chapter gets its core insight, its key mechanics, and one concrete thing to try. Skim it weekly. Act on one piece at a time.</p>
+      <div class="equation">habit = cue → craving → response → reward</div>
+    </div>
+  </section>
+
+  <!-- PART I: THE FUNDAMENTALS -->
+  <section class="part" id="fundamentals">
+    <div class="part-header reveal">
+      <div class="part-number">Part I · Ch 1 – 3</div>
+      <div class="part-title-block">
+        <h2>The <em>Fundamentals</em></h2>
+        <div class="subtitle">Why tiny changes compound, how identity drives every habit, and the four-step loop running underneath all of it.</div>
+      </div>
+    </div>
+
+    <div class="chapter-grid">
+
+      <article class="chapter reveal">
+        <div class="chap-header">
+          <div class="chap-num">01</div>
+          <div class="chap-title">The Surprising Power of Atomic Habits</div>
+        </div>
+        <div class="chap-rule"></div>
+        <ul class="takeaways">
+          <li><strong>1% better every day compounds.</strong> The math of daily improvement is ruthless in both directions.</li>
+          <li>Results <strong>lag far behind</strong> effort — expect a long, flat "valley of disappointment" before breakthrough.</li>
+          <li>You do not rise to the level of your goals; you <strong>fall to the level of your systems</strong>.</li>
+          <li>An atomic habit is a tiny routine that's part of a larger system — <strong>the unit, not the whole</strong>.</li>
+        </ul>
+        <div class="try-this">Pick one domain (money, health, work). Identify one 1%-better action you can do daily for 30 days without relying on motivation.</div>
+      </article>
+
+      <article class="chapter reveal">
+        <div class="chap-header">
+          <div class="chap-num">02</div>
+          <div class="chap-title">How Your Habits Shape Your Identity (and Vice Versa)</div>
+        </div>
+        <div class="chap-rule"></div>
+        <ul class="takeaways">
+          <li>Three layers of change: <strong>outcomes → processes → identity</strong>. Most people start at the wrong layer.</li>
+          <li>Don't ask "what do I want?" — ask <strong>"who do I want to become?"</strong> and work back from there.</li>
+          <li>Every action is a <strong>vote for a type of person</strong>. You don't need unanimous votes, just a majority.</li>
+          <li>Habits don't just get results — they <strong>rewrite your beliefs</strong> about who you are.</li>
+        </ul>
+        <div class="try-this">Complete this sentence: "I am the kind of person who ____." Then list 2 daily habits that cast votes for that identity.</div>
+      </article>
+
+      <article class="chapter reveal">
+        <div class="chap-header">
+          <div class="chap-num">03</div>
+          <div class="chap-title">How to Build Better Habits in 4 Simple Steps</div>
+        </div>
+        <div class="chap-rule"></div>
+        <ul class="takeaways">
+          <li>A habit is any behavior repeated enough to become <strong>automatic</strong> — the brain's way of solving recurring problems cheaply.</li>
+          <li>Every habit runs on a four-part loop: <strong>cue → craving → response → reward</strong>.</li>
+          <li>To <em>build</em> a habit: make it <strong>obvious, attractive, easy, satisfying</strong>.</li>
+          <li>To <em>break</em> a habit: make it <strong>invisible, unattractive, difficult, unsatisfying</strong>.</li>
+        </ul>
+        <div class="try-this">Take a habit you're struggling with. Diagnose which of the four laws you're violating — that's your leverage point.</div>
+      </article>
+
+      <article class="chapter reveal" style="background: var(--paper-deep);">
+        <div class="chap-header">
+          <div class="chap-num" style="color: var(--olive);">·</div>
+          <div class="chap-title" style="font-style: italic; color: var(--ink-soft);">Bridge to the Four Laws</div>
+        </div>
+        <div class="chap-rule"></div>
+        <p style="font-size: 14.5px; line-height: 1.6; color: var(--ink-soft);">
+          The rest of the book is structured as a <strong style="color: var(--ink);">one-for-one map of this loop</strong>. Each law targets one stage of the cycle. When a habit isn't sticking, it's almost always because one of these four screws is loose.
+        </p>
+        <div class="try-this" style="border-color: var(--rust); background: rgba(184,67,44,0.05); color: var(--ink);">
+          <span style="color: var(--rust); font-weight: 600;">REMEMBER →</span>
+          The first three laws get a habit to happen <em>this time</em>. The fourth law is what gets it to happen <em>next time</em>.
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+</div>
+
+<!-- FULL-BLEED FOUR LAWS STATEMENT -->
+<section class="laws-statement">
+  <div class="laws-statement-inner">
+    <div class="eyebrow laws-eyebrow">The Four Laws of Behavior Change</div>
+    <h2 class="laws-headline">Four screws.<br/>One <em>feedback loop</em>.</h2>
+
+    <div class="laws-grid">
+
+      <div class="law-card">
+        <div class="num">1st Law · Cue</div>
+        <span class="verb">To build</span>
+        <h3>Make It Obvious</h3>
+        <div class="inversion">
+          <span class="verb" style="letter-spacing: 0.18em; font-size: 9.5px;">To break — Inversion</span>
+          <em>Make It Invisible</em>
+        </div>
+      </div>
+
+      <div class="law-card">
+        <div class="num">2nd Law · Craving</div>
+        <span class="verb">To build</span>
+        <h3>Make It Attractive</h3>
+        <div class="inversion">
+          <span class="verb" style="letter-spacing: 0.18em; font-size: 9.5px;">To break — Inversion</span>
+          <em>Make It Unattractive</em>
+        </div>
+      </div>
+
+      <div class="law-card">
+        <div class="num">3rd Law · Response</div>
+        <span class="verb">To build</span>
+        <h3>Make It Easy</h3>
+        <div class="inversion">
+          <span class="verb" style="letter-spacing: 0.18em; font-size: 9.5px;">To break — Inversion</span>
+          <em>Make It Difficult</em>
+        </div>
+      </div>
+
+      <div class="law-card">
+        <div class="num">4th Law · Reward</div>
+        <span class="verb">To build</span>
+        <h3>Make It Satisfying</h3>
+        <div class="inversion">
+          <span class="verb" style="letter-spacing: 0.18em; font-size: 9.5px;">To break — Inversion</span>
+          <em>Make It Unsatisfying</em>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+
+  <!-- PART II: LAW 1 — MAKE IT OBVIOUS -->
+  <section class="part" id="law-1">
+    <div class="part-header reveal">
+      <div class="part-number">The 1st Law · Ch 4 – 7</div>
+      <div class="part-title-block">
+        <h2>Make It <em>Obvious</em></h2>
+        <div class="subtitle">Awareness first, then environment. Most failed habits aren't a willpower problem — they're a <em>cue</em> problem.</div>
+      </div>
+    </div>
+
+    <div class="chapter-grid">
+
+      <article class="chapter reveal">
+        <div class="chap-header">
+          <div class="chap-num">04</div>
+          <div class="chap-title">The Man Who Didn't Look Right</div>
+        </div>
+        <div class="chap-rule"></div>
+        <ul class="takeaways">
+          <li>Change always starts with <strong>awareness</strong>. You can't modify what you can't see.</li>
+          <li>Once automatic, habits <strong>disappear from consciousness</strong> — that's the whole point, and the whole trap.</li>
+          <li><strong>Pointing-and-Calling:</strong> name the habit out loud as you do it to drag it back into awareness.</li>
+          <li>Keep a <strong>Habits Scorecard</strong> — list every daily habit and mark each + (good), − (bad), or = (neutral).</li>
+        </ul>
+        <div class="try-this">Spend one morning writing down every habit from waking up to leaving the house. Don't judge yet — just observe.</div>
+      </article>
+
+      <article class="chapter reveal">
+        <div class="chap-header">
+          <div class="chap-num">05</div>
+          <div class="chap-title">The Best Way to Start a New Habit</div>
+        </div>
+        <div class="chap-rule"></div>
+        <ul class="takeaways">
+          <li><strong>Implementation intentions</strong> beat vague goals by an enormous margin: <em>"I will [X] at [TIME] in [LOCATION]."</em></li>
+          <li><strong>Habit stacking</strong> grafts a new behavior onto an existing one: <em>"After [CURRENT HABIT], I will [NEW HABIT]."</em></li>
+          <li>The two cues that matter most are <strong>time</strong> and <strong>location</strong> — specificity is the multiplier.</li>
+          <li>Don't leave habits to decide-in-the-moment. Pre-schedule them into the architecture of your day.</li>
+        </ul>
+        <div class="try-this">Write one implementation intention right now. Format: "I will [behavior] at [time] in [location]." Don't close this page until it exists.</div>
+      </article>
+
+      <article class="chapter reveal">
+        <div class="chap-header">
+          <div class="chap-num">06</div>
+          <div class="chap-title">Motivation Is Overrated; Environment Often Matters More</div>
+        </div>
+        <div class="chap-rule"></div>
+        <ul class="takeaways">
+          <li>Small changes in <strong>context</strong> produce large changes in behavior — the cafeteria experiment beat all willpower interventions.</li>
+          <li>Eventually, habits don't attach to a single trigger; they attach to <strong>the whole environment</strong>.</li>
+          <li>Make the cues of desired habits <strong>impossible to miss</strong>. Books on the pillow. Guitar on a stand. Water on the desk.</li>
+          <li>New environments are the easiest place to build new habits — <strong>old contexts carry old cues</strong>.</li>
+        </ul>
+        <div class="try-this">Pick one room. Rearrange it tonight so the habit you want is the most visible thing, and the one you don't want is out of sight.</div>
+      </article>
+
+      <article class="chapter reveal">
+        <div class="chap-header">
+          <div class="chap-num">07</div>
+          <div class="chap-title">The Secret to Self-Control</div>
+        </div>
+        <div class="chap-rule"></div>
+        <ul class="takeaways">
+          <li>"Disciplined" people aren't special — they've <strong>engineered lives that don't require much willpower</strong>.</li>
+          <li>Willpower is a short-term tool. <strong>Environment design</strong> is the long-term fix.</li>
+          <li>Once a habit is formed, it doesn't get erased — you just <strong>stop feeding it cues</strong>.</li>
+          <li>The practical move for any bad habit: <strong>reduce exposure</strong> to the cue. It is far easier than resisting the urge.</li>
+        </ul>
+        <div class="try-this">Identify the single strongest cue for your worst habit. Remove it from your environment before the day ends — delete the app, toss the snack, unfollow the account.</div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- PART III: LAW 2 — MAKE IT ATTRACTIVE -->
+  <section class="part" id="law-2">
+    <div class="part-header reveal">
+      <div class="part-number">The 2nd Law · Ch 8 – 10</div>
+      <div class="part-title-block">
+        <h2>Make It <em>Attractive</em></h2>
+        <div class="subtitle">Dopamine doesn't reward the behavior — it rewards the <em>anticipation</em> of it. Work with that chemistry, not against it.</div>
+      </div>
+    </div>
+
+    <div class="chapter-grid">
+
+      <article class="chapter reveal">
+        <div class="chap-header">
+          <div class="chap-num">08</div>
+          <div class="chap-title">How to Make a Habit Irresistible</div>
+        </div>
+        <div class="chap-rule"></div>
+        <ul class="takeaways">
+          <li>It's the <strong>anticipation of reward</strong>, not the reward itself, that drives action. Dopamine spikes <em>before</em> the payoff.</li>
+          <li>Attractiveness is the craving's amplifier — <strong>the more appealing, the more habit-forming</strong>.</li>
+          <li><strong>Temptation bundling:</strong> pair something you <em>need</em> to do with something you <em>want</em> to do.</li>
+          <li>Common formula: <em>"After [HABIT I NEED], I will [HABIT I WANT]"</em> or run them in parallel.</li>
+        </ul>
+        <div class="try-this">Bundle one chore with one indulgence: only listen to your favorite podcast while doing your least-favorite task. Let the craving carry the effort.</div>
+      </article>
+
+      <article class="chapter reveal">
+        <div class="chap-header">
+          <div class="chap-num">09</div>
+          <div class="chap-title">The Role of Family and Friends in Shaping Your Habits</div>
+        </div>
+        <div class="chap-rule"></div>
+        <ul class="takeaways">
+          <li>We imitate three tribes: <strong>the close</strong> (family, friends), <strong>the many</strong> (our broader culture), <strong>the powerful</strong> (high-status figures).</li>
+          <li>The fastest way to change a habit is to <strong>join a culture where your target behavior is already the norm</strong>.</li>
+          <li>We'd rather be <strong>wrong with the crowd than right alone</strong>. Belonging beats logic.</li>
+          <li>If a behavior earns <strong>status, respect, or approval</strong>, the brain codes it as attractive.</li>
+        </ul>
+        <div class="try-this">Find one group (online or off) where the person you're trying to become is already average. Spend real time there.</div>
+      </article>
+
+      <article class="chapter reveal">
+        <div class="chap-header">
+          <div class="chap-num">10</div>
+          <div class="chap-title">How to Find and Fix the Causes of Your Bad Habits</div>
+        </div>
+        <div class="chap-rule"></div>
+        <ul class="takeaways">
+          <li>Beneath every craving is a <strong>deeper underlying motive</strong> — connection, safety, status, relief.</li>
+          <li>Your habits are <strong>modern solutions to ancient desires</strong>. Check Instagram ≠ want to scroll; it = want approval.</li>
+          <li>The cause of a habit is the <strong>prediction</strong> your brain makes about what's coming next.</li>
+          <li><strong>Reframe the craving:</strong> highlight the benefits of avoiding the bad habit, or the costs of giving in.</li>
+        </ul>
+        <div class="try-this">For one bad habit, finish this: "I crave ____ because it gives me ____." Then name one other way to get that same thing.</div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- PART IV: LAW 3 — MAKE IT EASY -->
+  <section class="part" id="law-3">
+    <div class="part-header reveal">
+      <div class="part-number">The 3rd Law · Ch 11 – 14</div>
+      <div class="part-title-block">
+        <h2>Make It <em>Easy</em></h2>
+        <div class="subtitle">Repetitions build habits, not minutes. Your only job is to reduce the friction between you and the rep.</div>
+      </div>
+    </div>
+
+    <div class="chapter-grid">
+
+      <article class="chapter reveal">
+        <div class="chap-header">
+          <div class="chap-num">11</div>
+          <div class="chap-title">Walk Slowly, but Never Backward</div>
+        </div>
+        <div class="chap-rule"></div>
+        <ul class="takeaways">
+          <li>Beware <strong>motion masquerading as action</strong> — planning, researching, outlining. None of it encodes a habit.</li>
+          <li>Habits form through <strong>frequency, not time</strong>. Ten imperfect reps beat one flawless one.</li>
+          <li>Practice <em>is</em> the strategy. You learn by doing the thing, not by preparing to do the thing.</li>
+          <li>Showing up poorly still counts. The only disqualifying rep is <strong>the one you skip</strong>.</li>
+        </ul>
+        <div class="try-this">For the next 7 days, pick a bar so low you can't miss it — one pushup, one page, one cold call. Rep count > quality.</div>
+      </article>
+
+      <article class="chapter reveal">
+        <div class="chap-header">
+          <div class="chap-num">12</div>
+          <div class="chap-title">The Law of Least Effort</div>
+        </div>
+        <div class="chap-rule"></div>
+        <ul class="takeaways">
+          <li>Humans are <strong>energy-conserving machines</strong>. We drift toward whatever requires the least work.</li>
+          <li>Don't fight your nature — <strong>engineer your environment</strong> so the right thing is the easy thing.</li>
+          <li>Reduce friction for good habits (1–2 fewer steps). Add friction for bad ones (1–2 more steps).</li>
+          <li><strong>Prime the environment:</strong> lay out workout clothes the night before, pre-chop veggies, pre-load the browser tabs.</li>
+        </ul>
+        <div class="try-this">Walk through tomorrow's plan in reverse: remove 1 step between you and your good habit, add 1 step in front of a bad one.</div>
+      </article>
+
+      <article class="chapter reveal">
+        <div class="chap-header">
+          <div class="chap-num">13</div>
+          <div class="chap-title">How to Stop Procrastinating: The Two-Minute Rule</div>
+        </div>
+        <div class="chap-rule"></div>
+        <ul class="takeaways">
+          <li>Every habit should start as a <strong>version that takes less than two minutes to do</strong>.</li>
+          <li>"Read more" → <strong>"Read one page"</strong>. "Run daily" → <strong>"Put on running shoes"</strong>.</li>
+          <li><strong>Master showing up first</strong>. You can't optimize a habit that doesn't exist.</li>
+          <li>A decisive moment (the first 2 minutes) determines the shape of the next 2 hours — <strong>ritualize the entry</strong>.</li>
+        </ul>
+        <div class="try-this">Take the habit you've been putting off. Shrink it to a two-minute version right now. That version is the only version you do this week.</div>
+      </article>
+
+      <article class="chapter reveal">
+        <div class="chap-header">
+          <div class="chap-num">14</div>
+          <div class="chap-title">How to Make Good Habits Inevitable and Bad Habits Impossible</div>
+        </div>
+        <div class="chap-rule"></div>
+        <ul class="takeaways">
+          <li><strong>Commitment devices</strong> are choices made now that remove the option to fail later.</li>
+          <li><strong>Automate what you can</strong>. One-time decisions compound over years of right behavior.</li>
+          <li>One-time purchases (better mattress, water filter, good shoes) <strong>pay dividends daily</strong>.</li>
+          <li>Use technology ruthlessly: auto-transfer to savings, screen-time locks, ad blockers, site blockers. <strong>Willpower should be your last line, not your first.</strong></li>
+        </ul>
+        <div class="try-this">Set up one automation this week that locks in a habit you keep forgetting — a recurring calendar block, an auto-deposit, an app timer.</div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- PART V: LAW 4 — MAKE IT SATISFYING -->
+  <section class="part" id="law-4">
+    <div class="part-header reveal">
+      <div class="part-number">The 4th Law · Ch 15 – 17</div>
+      <div class="part-title-block">
+        <h2>Make It <em>Satisfying</em></h2>
+        <div class="subtitle">The first three laws get you to start. This one is what gets you to come back tomorrow.</div>
+      </div>
+    </div>
+
+    <div class="chapter-grid">
+
+      <article class="chapter reveal">
+        <div class="chap-header">
+          <div class="chap-num">15</div>
+          <div class="chap-title">The Cardinal Rule of Behavior Change</div>
+        </div>
+        <div class="chap-rule"></div>
+        <ul class="takeaways">
+          <li><strong>What gets immediately rewarded gets repeated. What gets immediately punished gets avoided.</strong></li>
+          <li>The brain is wired for the present. Delayed rewards (health, wealth, mastery) are <strong>chronically underweighted</strong>.</li>
+          <li>Build an <strong>immediate reward</strong> into good habits — even a small one. A checkmark. A moment of savoring. A small ritual payoff.</li>
+          <li>The reward must <strong>reinforce the identity</strong>, not contradict it. Don't reward workouts with junk food.</li>
+        </ul>
+        <div class="try-this">Attach one small instant reward to a habit that only pays off long-term. Savings, fitness, learning — each needs a today-feeling.</div>
+      </article>
+
+      <article class="chapter reveal">
+        <div class="chap-header">
+          <div class="chap-num">16</div>
+          <div class="chap-title">How to Stick with Good Habits Every Day</div>
+        </div>
+        <div class="chap-rule"></div>
+        <ul class="takeaways">
+          <li><strong>Habit trackers work</strong> because progress is intrinsically satisfying — a visible chain is its own reward.</li>
+          <li><strong>Don't break the chain.</strong> Each completed day fuels the next.</li>
+          <li><strong>Never miss twice.</strong> One skip is an accident. Two is the start of a new habit — in the wrong direction.</li>
+          <li>Caveat: don't confuse the measurable with the meaningful. <strong>Don't measure steps if the goal is health.</strong></li>
+        </ul>
+        <div class="try-this">Pick one habit. Mark an X on a physical calendar after each rep. Hang the calendar where you'll see it daily.</div>
+      </article>
+
+      <article class="chapter reveal">
+        <div class="chap-header">
+          <div class="chap-num">17</div>
+          <div class="chap-title">How an Accountability Partner Can Change Everything</div>
+        </div>
+        <div class="chap-rule"></div>
+        <ul class="takeaways">
+          <li>An accountability partner creates an <strong>immediate cost to inaction</strong> — social pain is felt now, unlike future regret.</li>
+          <li>A <strong>habit contract</strong> formalizes consequences: write it, sign it, give it a witness.</li>
+          <li>We care enormously about how we're seen. <strong>Use that pressure deliberately.</strong></li>
+          <li>Knowing someone will ask how it went is one of the strongest forces in behavior change.</li>
+        </ul>
+        <div class="try-this">Text one person today: "I'm committing to X for 30 days. Will you check in on me every Sunday?" Commitment beats intention.</div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- PART VI: ADVANCED TACTICS -->
+  <section class="part" id="advanced">
+    <div class="part-header reveal">
+      <div class="part-number">Part VI · Ch 18 – 20</div>
+      <div class="part-title-block">
+        <h2>Advanced <em>Tactics</em></h2>
+        <div class="subtitle">From merely good to truly great: choosing the right game, staying motivated past the plateau, and not letting your own habits blind you.</div>
+      </div>
+    </div>
+
+    <div class="chapter-grid">
+
+      <article class="chapter reveal">
+        <div class="chap-header">
+          <div class="chap-num">18</div>
+          <div class="chap-title">The Truth About Talent</div>
+        </div>
+        <div class="chap-rule"></div>
+        <ul class="takeaways">
+          <li>Genes don't cancel hard work — they <strong>tell you what to work hard on</strong>.</li>
+          <li>Habits are dramatically easier when aligned with <strong>natural strengths and temperament</strong>.</li>
+          <li><strong>Pick a game that favors you</strong>. If no game fits, invent the game — niche down until you're the obvious choice.</li>
+          <li>The right field of competition matters as much as effort inside it.</li>
+        </ul>
+        <div class="try-this">List 3 things that come easier to you than to most people. Your biggest leverage lives at the intersection of those three.</div>
+      </article>
+
+      <article class="chapter reveal">
+        <div class="chap-header">
+          <div class="chap-num">19</div>
+          <div class="chap-title">The Goldilocks Rule</div>
+        </div>
+        <div class="chap-rule"></div>
+        <ul class="takeaways">
+          <li>Motivation peaks at the <strong>edge of current ability</strong> — just hard enough to challenge, just easy enough to win.</li>
+          <li>The real enemy of mastery isn't failure — <strong>it's boredom</strong>.</li>
+          <li>Professionals stick to the schedule when the schedule is boring. <strong>Amateurs wait for the mood.</strong></li>
+          <li>Learn to <strong>fall in love with the plateau</strong>. That's where almost all real progress is actually happening.</li>
+        </ul>
+        <div class="try-this">Turn a weekly habit into a pro-grade one: put it on the calendar as a non-negotiable appointment. Keep it on the boring days.</div>
+      </article>
+
+      <article class="chapter reveal">
+        <div class="chap-header">
+          <div class="chap-num">20</div>
+          <div class="chap-title">The Downside of Creating Good Habits</div>
+        </div>
+        <div class="chap-rule"></div>
+        <ul class="takeaways">
+          <li>Habits make things automatic — that's the gift. The <strong>shadow</strong> is you stop noticing small errors and drift into "good enough."</li>
+          <li><strong>Habits + Deliberate Practice = Mastery.</strong> Automaticity alone only gets you to competent.</li>
+          <li>Build a <strong>reflection & review</strong> rhythm (weekly / quarterly / annually) to stay honest about what's actually happening.</li>
+          <li>Hold identity <strong>loosely</strong>. The tighter you cling to who you've been, the harder it is to become who you need to be next.</li>
+        </ul>
+        <div class="try-this">Put a 20-minute "weekly review" on your calendar. Ask: what worked, what didn't, what's the one experiment for next week?</div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- CHEAT SHEET -->
+  <section class="cheatsheet" id="cheatsheet">
+    <h2 class="cs-title">The <em>Implementation</em><br/>Cheat Sheet</h2>
+    <div class="cs-grid">
+
+      <div class="cs-column build">
+        <h3>To Build a Good Habit</h3>
+
+        <div class="cs-law">
+          <div class="cs-law-title">1st Law — Make It Obvious</div>
+          <ul>
+            <li data-num="1.1">Fill out the Habits Scorecard — write down current habits to become aware of them.</li>
+            <li data-num="1.2">Use implementation intentions: <em>"I will [BEHAVIOR] at [TIME] in [LOCATION]."</em></li>
+            <li data-num="1.3">Use habit stacking: <em>"After [CURRENT HABIT], I will [NEW HABIT]."</em></li>
+            <li data-num="1.4">Design your environment — make the cues of good habits obvious and visible.</li>
+          </ul>
+        </div>
+
+        <div class="cs-law">
+          <div class="cs-law-title">2nd Law — Make It Attractive</div>
+          <ul>
+            <li data-num="2.1">Use temptation bundling — pair something you want to do with something you need to do.</li>
+            <li data-num="2.2">Join a culture where your desired behavior is the normal behavior.</li>
+            <li data-num="2.3">Create a motivation ritual — do something you enjoy immediately before a difficult habit.</li>
+          </ul>
+        </div>
+
+        <div class="cs-law">
+          <div class="cs-law-title">3rd Law — Make It Easy</div>
+          <ul>
+            <li data-num="3.1">Reduce friction — decrease the number of steps between you and your good habits.</li>
+            <li data-num="3.2">Prime the environment — prepare your surroundings to make future actions easier.</li>
+            <li data-num="3.3">Master the decisive moment — optimize the small choices that deliver outsized impact.</li>
+            <li data-num="3.4">Use the Two-Minute Rule — downscale habits until they take two minutes or less.</li>
+            <li data-num="3.5">Automate your habits — invest in technology and onetime purchases that lock in future behavior.</li>
+          </ul>
+        </div>
+
+        <div class="cs-law">
+          <div class="cs-law-title">4th Law — Make It Satisfying</div>
+          <ul>
+            <li data-num="4.1">Use reinforcement — give yourself an immediate reward when you complete the habit.</li>
+            <li data-num="4.2">Make "doing nothing" enjoyable when avoiding a bad habit — design a visible benefit to inaction.</li>
+            <li data-num="4.3">Use a habit tracker — don't break the chain.</li>
+            <li data-num="4.4">Never miss twice — when you forget, get back on track immediately.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="cs-column break">
+        <h3>To Break a Bad Habit</h3>
+
+        <div class="cs-law">
+          <div class="cs-law-title">Inversion 1 — Make It Invisible</div>
+          <ul>
+            <li data-num="1.5">Reduce exposure — remove the cues of your bad habits from your environment.</li>
+          </ul>
+        </div>
+
+        <div class="cs-law">
+          <div class="cs-law-title">Inversion 2 — Make It Unattractive</div>
+          <ul>
+            <li data-num="2.4">Reframe your mindset — highlight the benefits of avoiding your bad habits.</li>
+          </ul>
+        </div>
+
+        <div class="cs-law">
+          <div class="cs-law-title">Inversion 3 — Make It Difficult</div>
+          <ul>
+            <li data-num="3.6">Increase friction — raise the number of steps between you and your bad habits.</li>
+            <li data-num="3.7">Use a commitment device — restrict your future choices to the ones that benefit you.</li>
+          </ul>
+        </div>
+
+        <div class="cs-law">
+          <div class="cs-law-title">Inversion 4 — Make It Unsatisfying</div>
+          <ul>
+            <li data-num="4.5">Get an accountability partner — ask someone to watch your behavior.</li>
+            <li data-num="4.6">Create a habit contract — make the costs of your bad habits public and painful.</li>
+          </ul>
+        </div>
+
+        <div class="cs-law" style="margin-top: 32px; padding-top: 24px; border-top: 1px dotted var(--line);">
+          <div class="cs-law-title" style="color: var(--ink);">The One Question</div>
+          <p style="font-size: 14px; line-height: 1.55; color: var(--ink-soft); font-family: var(--f-display); font-style: italic;">
+            When a habit isn't working, walk down this list. Nine times out of ten, one of these four screws is loose — not your character.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CLOSING -->
+  <section class="closing">
+    <div class="closing-quote">
+      <span class="mark">&ldquo;</span>You do not rise to the level of your goals.<br/>
+      You <em>fall</em> to the level of your systems.<span class="mark">&rdquo;</span>
+    </div>
+    <div class="closing-cite">— James Clear · Atomic Habits</div>
+  </section>
+
+  <footer class="colophon">
+    <span>A one-page field manual</span>
+    <span>№ 001 / Atomic Habits</span>
+    <span>Built to be implemented, not admired</span>
+  </footer>
+
+</div>
+
+<script>
+  // Staggered reveal-on-scroll
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        const siblings = [...e.target.parentElement.querySelectorAll('.reveal')];
+        const idx = siblings.indexOf(e.target);
+        e.target.style.transitionDelay = `${Math.min(idx, 6) * 70}ms`;
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>

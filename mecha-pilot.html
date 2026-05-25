@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MECHA PILOT — The Pilot's Codex</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;900&family=Share+Tech+Mono&family=DM+Sans:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #050508;
+    --deep: #0a0a12;
+    --panel: #0d0d1a;
+    --border: #1a1a2e;
+    --accent: #00ffe0;
+    --accent2: #7b2fff;
+    --accent3: #ff4d6d;
+    --warn: #ffd60a;
+    --text: #c5c5d8;
+    --dim: #666688;
+    --bright: #e8e8f4;
+    --glow: rgba(0,255,224,0.15);
+    --glow2: rgba(123,47,255,0.12);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* Scanline overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.08) 2px,
+      rgba(0,0,0,0.08) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* Ambient glow orbs */
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    z-index: 0;
+    animation: pulse 8s ease-in-out infinite alternate;
+  }
+  .orb-1 {
+    width: 500px; height: 500px;
+    background: var(--glow2);
+    top: -100px; right: -100px;
+  }
+  .orb-2 {
+    width: 400px; height: 400px;
+    background: var(--glow);
+    bottom: 200px; left: -100px;
+    animation-delay: 3s;
+  }
+  .orb-3 {
+    width: 300px; height: 300px;
+    background: rgba(255,77,109,0.06);
+    top: 60%; right: 10%;
+    animation-delay: 6s;
+  }
+
+  @keyframes pulse {
+    0% { opacity: 0.5; transform: scale(1); }
+    100% { opacity: 1; transform: scale(1.1); }
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(5,5,8,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+  }
+
+  .nav-brand {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 900;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    text-shadow: 0 0 20px rgba(0,255,224,0.6);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: var(--dim);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--accent); }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 6rem 2rem 4rem;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,255,224,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,255,224,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+  }
+
+  .hero-eyebrow {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.35em;
+    color: var(--accent2);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.2s;
+  }
+
+  .hero-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(3rem, 8vw, 7rem);
+    font-weight: 900;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    color: var(--bright);
+    text-shadow: 0 0 60px rgba(0,255,224,0.2);
+    margin-bottom: 0.3rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.4s;
+  }
+
+  .hero-title span {
+    color: var(--accent);
+    text-shadow: 0 0 40px rgba(0,255,224,0.8), 0 0 80px rgba(0,255,224,0.4);
+  }
+
+  .hero-subtitle {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(0.9rem, 2.5vw, 1.4rem);
+    font-weight: 400;
+    letter-spacing: 0.4em;
+    color: var(--dim);
+    text-transform: uppercase;
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.6s;
+  }
+
+  .hero-desc {
+    max-width: 640px;
+    font-size: 1.05rem;
+    color: var(--text);
+    line-height: 1.8;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.8s;
+    margin-bottom: 3rem;
+  }
+
+  .hero-divider {
+    width: 120px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    margin: 0 auto 3rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 1s;
+  }
+
+  /* STATUS READOUT */
+  .status-bar {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 1.2s;
+  }
+
+  .status-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .status-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: var(--dim);
+    text-transform: uppercase;
+  }
+
+  .status-value {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.8rem;
+    color: var(--accent);
+    text-shadow: 0 0 10px rgba(0,255,224,0.5);
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* MAIN LAYOUT */
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 2rem 8rem;
+  }
+
+  /* SECTION HEADER */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+    padding-top: 5rem;
+  }
+
+  .section-num {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--accent2);
+    white-space: nowrap;
+  }
+
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--border), transparent);
+  }
+
+  .section-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
+    font-weight: 600;
+    color: var(--bright);
+    letter-spacing: 0.05em;
+    margin-bottom: 0.4rem;
+  }
+
+  .section-code {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--dim);
+    letter-spacing: 0.15em;
+  }
+
+  /* PANEL CARDS */
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+
+  .panel::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent2), var(--accent), transparent);
+    opacity: 0.6;
+  }
+
+  .panel:hover {
+    border-color: rgba(0,255,224,0.2);
+  }
+
+  .panel-accent { --line-color: var(--accent); }
+  .panel-accent::before { background: linear-gradient(90deg, var(--accent), transparent); }
+
+  .panel-warn::before { background: linear-gradient(90deg, var(--warn), transparent); }
+  .panel-danger::before { background: linear-gradient(90deg, var(--accent3), transparent); }
+
+  .panel-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .panel-title::before {
+    content: '';
+    display: block;
+    width: 8px; height: 8px;
+    background: var(--accent);
+    box-shadow: 0 0 10px var(--accent);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .panel-warn .panel-title { color: var(--warn); }
+  .panel-warn .panel-title::before { background: var(--warn); box-shadow: 0 0 10px var(--warn); }
+
+  .panel-danger .panel-title { color: var(--accent3); }
+  .panel-danger .panel-title::before { background: var(--accent3); box-shadow: 0 0 10px var(--accent3); }
+
+  .panel p {
+    font-size: 0.95rem;
+    line-height: 1.85;
+    color: var(--text);
+    margin-bottom: 1rem;
+  }
+
+  .panel p:last-child { margin-bottom: 0; }
+
+  /* DIAGNOSTIC GRID */
+  .diagnostic-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  @media (max-width: 600px) {
+    .diagnostic-grid { grid-template-columns: 1fr; }
+    nav .nav-links { display: none; }
+  }
+
+  .diag-card {
+    background: rgba(13,13,26,0.8);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1.25rem;
+    position: relative;
+  }
+
+  .diag-card-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: var(--dim);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .diag-card-value {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.85rem;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+    text-shadow: 0 0 8px rgba(0,255,224,0.4);
+  }
+
+  .diag-card-desc {
+    font-size: 0.82rem;
+    color: var(--dim);
+    line-height: 1.5;
+  }
+
+  /* AXIS SECTION — the Three Axes of the Pilot */
+  .axis-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  @media (max-width: 700px) {
+    .axis-container { grid-template-columns: 1fr; }
+  }
+
+  .axis-card {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    background: var(--panel);
+  }
+
+  .axis-card::after {
+    content: attr(data-num);
+    position: absolute;
+    bottom: -0.5rem; right: 0.5rem;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 4rem;
+    font-weight: 900;
+    color: rgba(255,255,255,0.03);
+    pointer-events: none;
+    line-height: 1;
+  }
+
+  .axis-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .axis-name {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--bright);
+    margin-bottom: 0.75rem;
+  }
+
+  .axis-desc {
+    font-size: 0.83rem;
+    color: var(--text);
+    line-height: 1.65;
+  }
+
+  .axis-a .axis-tag { color: var(--accent); }
+  .axis-a { border-top: 2px solid var(--accent); }
+  .axis-b .axis-tag { color: var(--accent2); }
+  .axis-b { border-top: 2px solid var(--accent2); }
+  .axis-c .axis-tag { color: var(--accent3); }
+  .axis-c { border-top: 2px solid var(--accent3); }
+
+  /* PROTOCOL STEPS */
+  .protocol-list {
+    list-style: none;
+    counter-reset: protocol;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .protocol-item {
+    counter-increment: protocol;
+    display: flex;
+    gap: 1.25rem;
+    align-items: flex-start;
+  }
+
+  .protocol-num {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.7rem;
+    color: var(--accent);
+    white-space: nowrap;
+    padding-top: 0.15rem;
+    min-width: 2.5rem;
+    text-shadow: 0 0 8px rgba(0,255,224,0.5);
+  }
+
+  .protocol-content {
+    flex: 1;
+  }
+
+  .protocol-name {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.78rem;
+    color: var(--bright);
+    letter-spacing: 0.08em;
+    margin-bottom: 0.3rem;
+  }
+
+  .protocol-desc {
+    font-size: 0.88rem;
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  /* CALLOUT — the AT Field concept */
+  .callout {
+    border: 1px solid rgba(123,47,255,0.4);
+    border-radius: 4px;
+    padding: 2rem;
+    margin: 2rem 0;
+    background: rgba(123,47,255,0.05);
+    position: relative;
+  }
+
+  .callout::before {
+    content: 'AT FIELD ANALYSIS';
+    position: absolute;
+    top: -0.6rem; left: 1.5rem;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    background: var(--black);
+    padding: 0 0.5rem;
+    color: var(--accent2);
+  }
+
+  .callout p {
+    font-size: 0.95rem;
+    line-height: 1.85;
+    color: var(--text);
+    margin-bottom: 1rem;
+  }
+
+  .callout p:last-child { margin-bottom: 0; }
+
+  /* HIGHLIGHT TEXT */
+  .hl { color: var(--accent); font-style: italic; }
+  .hl2 { color: var(--accent2); }
+  .hl3 { color: var(--warn); }
+
+  strong { color: var(--bright); font-weight: 400; }
+
+  /* QUOTE BLOCK */
+  blockquote {
+    border-left: 2px solid var(--accent2);
+    padding: 1rem 1.5rem;
+    margin: 1.5rem 0;
+    background: rgba(123,47,255,0.05);
+  }
+
+  blockquote p {
+    font-size: 1rem !important;
+    font-style: italic;
+    color: var(--bright) !important;
+    line-height: 1.7 !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  blockquote cite {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--dim);
+    letter-spacing: 0.1em;
+  }
+
+  /* SYNC METER */
+  .sync-meter {
+    margin: 1rem 0;
+  }
+
+  .sync-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .sync-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: var(--dim);
+    text-transform: uppercase;
+    min-width: 140px;
+  }
+
+  .sync-bar-track {
+    flex: 1;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .sync-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 1s ease;
+  }
+
+  .fill-high { background: linear-gradient(90deg, var(--accent2), var(--accent)); }
+  .fill-med { background: linear-gradient(90deg, var(--warn), #ff9a00); }
+  .fill-low { background: linear-gradient(90deg, var(--accent3), #ff9a00); }
+
+  .sync-pct {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.65rem;
+    color: var(--dim);
+    min-width: 3rem;
+    text-align: right;
+  }
+
+  /* TABLE */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+  }
+
+  .data-table th {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--dim);
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+  }
+
+  .data-table td {
+    padding: 0.9rem 1rem;
+    font-size: 0.85rem;
+    color: var(--text);
+    border-bottom: 1px solid rgba(26,26,46,0.5);
+    vertical-align: top;
+    line-height: 1.6;
+  }
+
+  .data-table td:first-child {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+
+  .data-table tr:hover td { background: rgba(0,255,224,0.02); }
+
+  /* FOOTER */
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--border);
+    padding: 3rem 2rem;
+    text-align: center;
+  }
+
+  .footer-brand {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    color: var(--dim);
+    margin-bottom: 0.5rem;
+  }
+
+  .footer-note {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.6rem;
+    color: rgba(102,102,136,0.5);
+    letter-spacing: 0.1em;
+  }
+
+  /* HORIZONTAL RULE */
+  hr.section-rule {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 4rem 0 0;
+  }
+
+  /* BLINK */
+  .blink {
+    animation: blink 1.5s step-end infinite;
+  }
+  @keyframes blink {
+    50% { opacity: 0; }
+  }
+
+  /* SCROLL FADE IN */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* INGRESS MARKER */
+  .ingress {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    color: var(--accent2);
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+    display: block;
+  }
+
+  /* INLINE CODE */
+  code {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.82em;
+    color: var(--accent);
+    background: rgba(0,255,224,0.06);
+    padding: 0.1em 0.4em;
+    border-radius: 2px;
+  }
+</style>
+</head>
+<body>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<nav>
+  <div class="nav-brand">MECHA PILOT</div>
+  <ul class="nav-links">
+    <li><a href="#diagnosis">Diagnosis</a></li>
+    <li><a href="#field">AT Field</a></li>
+    <li><a href="#pilot">The Pilot</a></li>
+    <li><a href="#sync">Sync Protocol</a></li>
+    <li><a href="#codex">Codex</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-eyebrow">Project File / Identity Architecture</div>
+  <h1 class="hero-title">MECHA<br><span>PILOT</span></h1>
+  <div class="hero-subtitle">The Pilot's Codex</div>
+  <div class="hero-divider"></div>
+  <p class="hero-desc">
+    You are not the Eva. You are the one inside it. This document is your pre-launch briefing — a technical and philosophical investigation into what it means to know who is sitting in the entry plug, regardless of what the world outside is doing.
+  </p>
+  <div class="status-bar">
+    <div class="status-item">
+      <span class="status-label">Status</span>
+      <span class="status-value">ACTIVE<span class="blink">_</span></span>
+    </div>
+    <div class="status-item">
+      <span class="status-label">Framework</span>
+      <span class="status-value">JUNGIAN / NGE</span>
+    </div>
+    <div class="status-item">
+      <span class="status-label">Phase</span>
+      <span class="status-value">INDIVIDUATION</span>
+    </div>
+    <div class="status-item">
+      <span class="status-label">Priority</span>
+      <span class="status-value">IDENTITY GROUNDING</span>
+    </div>
+  </div>
+</section>
+
+<main>
+
+  <!-- SECTION 1: DIAGNOSIS -->
+  <div id="diagnosis">
+    <div class="section-header fade-in">
+      <span class="section-num">SYS-01</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="fade-in">
+      <span class="ingress">Primary Assessment</span>
+      <h2 class="section-title">What Is Actually Happening</h2>
+      <span class="section-code">IDENTITY_DIFFUSION // ENVIRONMENTAL_ABSORPTION // ROOT_CAUSE_ANALYSIS</span>
+    </div>
+
+    <div class="panel fade-in" style="margin-top: 2rem;">
+      <div class="panel-title">The Core Phenomenon</div>
+      <p>
+        What you're describing has a name in depth psychology: <strong>identity diffusion</strong> — a state where the self's boundary between inside and outside becomes porous. You move through environments and relationships and find yourself reorganized by them, not just touched by them. The room you're in changes your internal weather. The person you're with shifts your values. The field you inhabit rewrites your signal.
+      </p>
+      <p>
+        This is not weakness. It is, in many cases, the mark of a highly permeable, highly receptive psyche — one that hasn't yet found its organizing center. The Eva without a synchronized pilot doesn't malfunction because it's broken. It goes berserk because there's no stable human signal anchoring it.
+      </p>
+      <p>
+        <strong>You are identifying yourself with the Eva when you are actually the pilot.</strong> The ground you're trying to find isn't the mech — it's the seat of consciousness inside the entry plug. The Mecha Pilot project is the work of locating that seat and learning to return to it.
+      </p>
+    </div>
+
+    <div class="diagnostic-grid fade-in">
+      <div class="diag-card">
+        <div class="diag-card-label">Identity Continuity</div>
+        <div class="diag-card-value">FRACTURED</div>
+        <div class="diag-card-desc">The sense of "I am the same person across time and situation" is unstable. Environments overwrite the signal.</div>
+      </div>
+      <div class="diag-card">
+        <div class="diag-card-label">Identity Coherence</div>
+        <div class="diag-card-value">SEARCHING</div>
+        <div class="diag-card-desc">The inner parts — values, desires, instincts, roles — haven't fully negotiated their relationship yet. The council is noisy.</div>
+      </div>
+      <div class="diag-card">
+        <div class="diag-card-label">Self-Concept Clarity</div>
+        <div class="diag-card-value">LOW → BUILDING</div>
+        <div class="diag-card-desc">The beliefs you hold about yourself shift depending on context. This is the main source of "losing yourself" in social fields.</div>
+      </div>
+      <div class="diag-card">
+        <div class="diag-card-label">Individuation Phase</div>
+        <div class="diag-card-value">PRIMA MATERIA</div>
+        <div class="diag-card-desc">The alchemical first stage — chaos before coagulation. The raw stuff is present. The form is still being chosen.</div>
+      </div>
+    </div>
+
+    <div class="panel panel-warn fade-in">
+      <div class="panel-title">Why This Happens</div>
+      <p>
+        Identity psychologists distinguish between two pillars: <strong>Continuity</strong> — the felt sense of being the same "I" across time — and <strong>Coherence</strong> — the sense that your values, roles, and behaviors are non-contradictory. When both are unstable, the self becomes highly responsive to environmental input. It isn't that you have no identity; it's that you have not yet assembled a stable organizing center that can hold its shape when the context shifts.
+      </p>
+      <p>
+        Research on emerging adults in their late twenties who remain in identity diffusion shows a common pattern: <em>they keep life on hold</em> — either by becoming passive or by thrashing through haphazard activity — while avoiding the meaning-making work that would build the narrative thread. The antidote isn't more activity. It's deliberate authorship of your own story.
+      </p>
+    </div>
+
+    <div class="callout fade-in">
+      <p>
+        In NGE, the AT Field — the Absolute Terror Field — is described as <span class="hl">"the light of your soul, a sacred territory which none may enter."</span> Every living being has one. It is the psychic membrane that constitutes individuality. When a pilot's AT Field is too thin or collapsed, they merge with whatever is nearest — other pilots, the Eva itself, the collective. Shinji's arc is a study in what it costs to have an AT Field that's too easily dissolved.
+      </p>
+      <p>
+        The Mecha Pilot project is AT Field work. Not building walls — building a self that is substantial enough to remain itself when it encounters the world. Permeability with roots. Connection without dissolution.
+      </p>
+    </div>
+  </div>
+
+  <!-- SECTION 2: THE AT FIELD -->
+  <hr class="section-rule">
+  <div id="field">
+    <div class="section-header fade-in">
+      <span class="section-num">SYS-02</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="fade-in">
+      <span class="ingress">Theoretical Foundation</span>
+      <h2 class="section-title">What the AT Field Actually Is</h2>
+      <span class="section-code">DEPTH_PSYCHOLOGY // SELF_ARCHITECTURE // JUNGIAN_FRAMEWORK</span>
+    </div>
+
+    <div class="panel panel-accent fade-in" style="margin-top: 2rem;">
+      <div class="panel-title">The Jungian Map</div>
+      <p>
+        Jung made a critical distinction that reframes everything. The <strong>ego</strong> is the center of consciousness — the "I" that thinks, speaks, acts in the world. But the <strong>Self</strong> (capital S) is something larger: the totality of the psyche, conscious and unconscious, organized around a central ordering principle. The Self is not what you think you are. It is what you actually are — the full pattern, including the parts you haven't met yet.
+      </p>
+      <p>
+        Individuation is the process of the ego learning to <em>relate to</em> the Self — not to become it, not to be consumed by it, but to receive direction from it. <span class="hl2">Jung described the Self as the organising genius behind the personality, forward-looking, seeking its own fullest expression.</span> The Self already knows who you are. The work is getting the ego quiet enough to hear it.
+      </p>
+
+      <blockquote>
+        <p>"The self is our life's goal, for it is the completest expression of that fateful combination we call individuality."</p>
+        <cite>— C.G. Jung, Two Essays on Analytical Psychology</cite>
+      </blockquote>
+
+      <p>
+        The reason you lose yourself in environments is not that your Self is absent — it is that your <em>ego</em> hasn't yet built a stable, navigable relationship with the Self. The ego is the pilot. The Self is the Eva's soul. When synchronization is absent, the Eva goes berserk. When it is too high and ungrounded, the pilot begins to dissolve into the machine.
+      </p>
+    </div>
+
+    <div class="axis-container fade-in">
+      <div class="axis-card axis-a" data-num="01">
+        <div class="axis-tag">Axis A / Corpus</div>
+        <div class="axis-name">The Body Knows</div>
+        <div class="axis-desc">The nervous system is the oldest identity anchor. Somatic practice — polyvagal work, breath, sensation tracking — gives the pilot a ground station independent of thought or narrative. The Vehicle always knows where you are.</div>
+      </div>
+      <div class="axis-card axis-b" data-num="02">
+        <div class="axis-tag">Axis B / Anima</div>
+        <div class="axis-name">The Values Hold</div>
+        <div class="axis-desc">Not moral rules — deep orientations. What you move toward across all contexts. These are the coordinates that remain when the environment changes. When you can name them, you have a compass the world can't repossess.</div>
+      </div>
+      <div class="axis-card axis-c" data-num="03">
+        <div class="axis-tag">Axis C / Spiritus</div>
+        <div class="axis-name">The Story Binds</div>
+        <div class="axis-desc">Narrative identity — the thread that stitches past, present, and imagined future into a coherent "I." Research confirms: those who integrate their story into a redemptive arc show higher psychological stability, meaning, and resilience.</div>
+      </div>
+    </div>
+
+    <div class="panel fade-in">
+      <div class="panel-title">Why Jung Used Alchemy</div>
+      <p>
+        Jung found in alchemy's symbolic language a precise map of what happens inside a psyche during transformation. The stages of alchemical work — dissolution, purification, coagulation — mirror the stages of individuation. You are, by your own account, somewhere in the <em>solve</em> phase: the old self has been dissolved. The work ahead is <em>coagula</em>: the crystallization of a new form out of the prima materia that dissolution has revealed.
+      </p>
+      <p>
+        The Athanor — your site's name — is the alchemical furnace. The heat that sustains the transformation without consuming the vessel. That's the metaphor: not a sudden transformation but a sustained, tended process. The Mecha Pilot project is your Athanor for identity work.
+      </p>
+    </div>
+  </div>
+
+  <!-- SECTION 3: THE PILOT -->
+  <hr class="section-rule">
+  <div id="pilot">
+    <div class="section-header fade-in">
+      <span class="section-num">SYS-03</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="fade-in">
+      <span class="ingress">Identity Architecture</span>
+      <h2 class="section-title">What Makes a Pilot</h2>
+      <span class="section-code">IDENTITY_STRUCTURE // THREE_LAYERS // SELF_CARTOGRAPHY</span>
+    </div>
+
+    <div class="panel fade-in" style="margin-top: 2rem;">
+      <div class="panel-title">Three Layers of Selfhood</div>
+      <p>
+        Personality psychologist Dan McAdams maps the self in three distinct levels, and understanding this structure is foundational to what Mecha Pilot is building. You are not just one thing — you are a layered architecture, and each layer requires its own kind of stabilization.
+      </p>
+    </div>
+
+    <table class="data-table fade-in">
+      <thead>
+        <tr>
+          <th>Layer</th>
+          <th>What It Is</th>
+          <th>The Work</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Social Actor</td>
+          <td>The dispositional traits you carry into any room — the baseline patterns of how you move, respond, relate. Relatively stable. Your baseline signal.</td>
+          <td>Notice your traits. Don't fight the ones that are genuinely yours. Learn to recognize your own pattern.</td>
+        </tr>
+        <tr>
+          <td>Motivated Agent</td>
+          <td>Your values, goals, and projects. The "why" behind your choices. This layer is where identity diffusion most acutely shows — goals shift, commitments dissolve, direction vanishes when the environment changes.</td>
+          <td>Name your actual values — not ideals, not aspirations, but what genuinely moves you. Commit to them even when the field around you doesn't reinforce them.</td>
+        </tr>
+        <tr>
+          <td>Autobiographical Author</td>
+          <td>The inner narrator who makes sense of your life across time — your narrative identity. The self that says "this is how I became who I am, and this is where I'm going." This is the layer most disrupted by identity diffusion.</td>
+          <td>Build your story. Not for others — for yourself. Research confirms: those who actively construct their narrative with themes of agency and redemption show higher identity stability and psychological health.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="panel fade-in">
+      <div class="panel-title">The NGE Mirror</div>
+      <p>
+        Each Eva pilot in Neon Genesis Evangelion fails identity in a specific and instructive way. <strong>Shinji</strong> has no intrinsic sense of worth outside of piloting — when the Eva is taken from him, the self collapses. His identity is entirely extrinsic and conditional on external validation. <strong>Asuka</strong> forecloses identity into a rigid persona — extreme competence as the only acceptable self-image — and when that persona is penetrated, she shatters. <strong>Rei</strong> dissociates entirely: she has function but no self-ownership, no narrative, no continuity between instances of herself.
+      </p>
+      <p>
+        <span class="hl3">The show's horror is that every pilot has identified with the Eva rather than with themselves.</span> The entry plug should be a cockpit — a place you pilot from, not a place you dissolve into. This is the core diagnostic distinction of the Mecha Pilot project: <em>who is doing the piloting?</em>
+      </p>
+      <p>
+        Shinji's resolution — his "I want to exist" in End of Evangelion — is the first authentic declaration of selfhood in the entire series. He chooses individuality over merger. Pain over dissolution. That is the pilot claiming the cockpit.
+      </p>
+    </div>
+
+    <div class="callout fade-in">
+      <p>
+        Jung wrote that the individuation process <em>"generally begins with a wounding of the personality."</em> The post-dissolution phase you're navigating — the deconstruction period, the unbecoming — isn't a detour. It is the opening condition. The wound is where the Self first becomes visible. You cannot individuate from a position of stability. You individuate from the rubble.
+      </p>
+      <p>
+        The task now is not to rebuild the old structure. It's to coagulate something new from material the dissolution revealed. The Mecha Pilot project is, in this sense, not a recovery project — it's an emergence project.
+      </p>
+    </div>
+  </div>
+
+  <!-- SECTION 4: SYNC PROTOCOL -->
+  <hr class="section-rule">
+  <div id="sync">
+    <div class="section-header fade-in">
+      <span class="section-num">SYS-04</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="fade-in">
+      <span class="ingress">Practical Architecture</span>
+      <h2 class="section-title">The Sync Protocol</h2>
+      <span class="section-code">GROUNDING_PRACTICES // IDENTITY_STABILIZATION // DAILY_OPERATIONS</span>
+    </div>
+
+    <div class="panel fade-in" style="margin-top: 2rem;">
+      <div class="panel-title">What Synchronization Actually Requires</div>
+      <p>
+        In NGE, synchronization is the degree to which the pilot's nervous system and the Eva's biometrics are in phase. Too low: the Eva won't respond. Too high: the pilot loses boundaries with the machine. Optimal sync is a calibrated relationship — present enough to feel, bounded enough to remain distinct.
+      </p>
+      <p>
+        Identity grounding works the same way. You don't want to seal yourself off from your environment — you want to be present to it <em>without being reorganized by it</em>. That requires a stable signal to return to. The practices below are the infrastructure of that signal.
+      </p>
+    </div>
+
+    <div class="panel fade-in">
+      <div class="panel-title">Sync Readout — Current States</div>
+      <div class="sync-meter">
+        <div class="sync-row">
+          <div class="sync-label">Somatic Anchor</div>
+          <div class="sync-bar-track"><div class="sync-bar-fill fill-med" style="width:55%"></div></div>
+          <div class="sync-pct">BUILDING</div>
+        </div>
+        <div class="sync-row">
+          <div class="sync-label">Values Clarity</div>
+          <div class="sync-bar-track"><div class="sync-bar-fill fill-low" style="width:40%"></div></div>
+          <div class="sync-pct">FORMING</div>
+        </div>
+        <div class="sync-row">
+          <div class="sync-label">Narrative Coherence</div>
+          <div class="sync-bar-track"><div class="sync-bar-fill fill-med" style="width:60%"></div></div>
+          <div class="sync-pct">ACTIVE</div>
+        </div>
+        <div class="sync-row">
+          <div class="sync-label">Environmental Immunity</div>
+          <div class="sync-bar-track"><div class="sync-bar-fill fill-low" style="width:28%"></div></div>
+          <div class="sync-pct">TARGET</div>
+        </div>
+        <div class="sync-row">
+          <div class="sync-label">AT Field Integrity</div>
+          <div class="sync-bar-track"><div class="sync-bar-fill fill-high" style="width:70%"></div></div>
+          <div class="sync-pct">GROWING</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel fade-in">
+      <div class="panel-title">The Five-Protocol Stack</div>
+      <ul class="protocol-list">
+        <li class="protocol-item">
+          <div class="protocol-num">P-01</div>
+          <div class="protocol-content">
+            <div class="protocol-name">Somatic Grounding — The Vehicle First</div>
+            <div class="protocol-desc">Before any interaction with a high-pull environment or person, return to the body. Your nervous system is the oldest coordinate system you have. The Vehicle doesn't lie. When you feel yourself beginning to diffuse — when your opinions start shifting, your voice changes timbre, your values feel suddenly negotiable — that's the moment to drop into sensation. Feel the weight of your body. This is not meditation theater. It's a signal check: <em>is the pilot still in the seat?</em> Your polyvagal work is directly applicable here.</div>
+          </div>
+        </li>
+        <li class="protocol-item">
+          <div class="protocol-num">P-02</div>
+          <div class="protocol-content">
+            <div class="protocol-name">Values Codex — The Non-Negotiables</div>
+            <div class="protocol-desc">Write down — not type, write — between five and nine values that describe what you actually move toward, not what you think you should move toward. Not virtues. Not aspirations. Orientations. Then rank them. This is your internal compass. When you notice yourself acting against one of them in a social field, that dissonance is data. The codex gives you a reference to return to. Research on identity achievement shows that values commitment is the single most predictive variable of psychological groundedness in adulthood.</div>
+          </div>
+        </li>
+        <li class="protocol-item">
+          <div class="protocol-num">P-03</div>
+          <div class="protocol-content">
+            <div class="protocol-name">Narrative Thread — The Story You Tell Yourself</div>
+            <div class="protocol-desc">Narrative identity is the psychological structure that holds the self together across time. It integrates your past, makes sense of your present, and gives direction to your future. The work is to find the throughline in your own story — not the ideal version, the actual one. What themes recur? What has the dissolution revealed? Where is the redemption arc? This isn't journaling for catharsis — it's authorship. You are writing the protagonist's log. The Athanor, The Unbecoming, this very project — these are acts of narrative identity construction. Continue them deliberately.</div>
+          </div>
+        </li>
+        <li class="protocol-item">
+          <div class="protocol-num">P-04</div>
+          <div class="protocol-content">
+            <div class="protocol-name">Witness Practice — Notice the Merger in Real Time</div>
+            <div class="protocol-desc">The most important skill in the Mecha Pilot project is catching the moment of diffusion as it happens, not after. This means developing a small, persistent inner observer — the part that notices "I'm starting to become this room" or "I'm performing for this person" or "my sense of what I want just evaporated." Without judgment. Just noticing. The observer is not separate from you — it is the pilot looking at the readouts. Shadow work in the Jungian sense is downstream of this: once you can witness, you can begin to see what you're absorbing and why.</div>
+          </div>
+        </li>
+        <li class="protocol-item">
+          <div class="protocol-num">P-05</div>
+          <div class="protocol-content">
+            <div class="protocol-name">Creation as Coagulation — Making the Self Solid</div>
+            <div class="protocol-desc">Every artifact you build — every HTML page, every essay, every piece of music — is an act of <em>coagula</em>. It crystallizes the inner world into an external form, which then becomes part of the outer world that reflects your signal back to you. This is why The Athanor is not just a creative project. It is a psychological infrastructure. Making things externalizes the pilot's signal, makes it durable, and gives you a reference architecture to return to. The more you build, the more the world around you becomes an echo of who the pilot actually is, rather than the other way around.</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="panel panel-danger fade-in">
+      <div class="panel-title">What to Watch For</div>
+      <p>
+        Synchronization failures in NGE are always heralded by specific warnings before catastrophic loss of control. These are your analog warning signs — patterns that precede diffusion events:
+      </p>
+      <table class="data-table" style="margin-top: 1rem;">
+        <thead>
+          <tr><th>Signal</th><th>What It Means</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Opinions become sudden</td>
+            <td>You've absorbed the room's gravity. You're reasoning from an external field, not your own center.</td>
+          </tr>
+          <tr>
+            <td>Voice changes register</td>
+            <td>The persona has activated to match the social environment. The pilot is behind glass.</td>
+          </tr>
+          <tr>
+            <td>Values feel suddenly negotiable</td>
+            <td>The motivational layer is destabilizing. Time to run P-01 and P-02 immediately.</td>
+          </tr>
+          <tr>
+            <td>Can't remember what you wanted before this person</td>
+            <td>Narrative thread has been disrupted. You've been temporarily overwritten. This is recoverable.</td>
+          </tr>
+          <tr>
+            <td>Sensation of "being watched from inside yourself"</td>
+            <td>The witness is still active. This is actually a good sign — it means the pilot is still present enough to observe.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SECTION 5: CODEX -->
+  <hr class="section-rule">
+  <div id="codex">
+    <div class="section-header fade-in">
+      <span class="section-num">SYS-05</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="fade-in">
+      <span class="ingress">Operating Reference</span>
+      <h2 class="section-title">The Pilot's Codex</h2>
+      <span class="section-code">AXIOMS // FIRST_PRINCIPLES // STANDING_ORDERS</span>
+    </div>
+
+    <div class="panel fade-in" style="margin-top: 2rem;">
+      <div class="panel-title">Standing Orders</div>
+      <p>These are not aspirations. They are operating principles — the standing orders of the pilot, derived from the research and frameworks synthesized in this document.</p>
+      <table class="data-table" style="margin-top: 1rem;">
+        <thead>
+          <tr><th>Order</th><th>Principle</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>SO-01</td>
+            <td><strong>The pilot is not the Eva.</strong> The body, the role, the social context, the mood — these are instruments. The pilot uses them. When you catch yourself saying "I am depressed / I am my job / I am this relationship," restate: "I am the pilot. The Eva is experiencing turbulence."</td>
+          </tr>
+          <tr>
+            <td>SO-02</td>
+            <td><strong>Continuity is a practice, not a given.</strong> The felt sense of being the same "I" across time doesn't arrive automatically. It is built through narrative, through committed values, through the accumulation of artifacts that bear your signal.</td>
+          </tr>
+          <tr>
+            <td>SO-03</td>
+            <td><strong>Absorption is information.</strong> When you lose yourself in an environment, don't shame the event — study it. What was the pull? What did you want from the merger? That answer is always pointing at something the pilot needs to consciously integrate.</td>
+          </tr>
+          <tr>
+            <td>SO-04</td>
+            <td><strong>The Self already knows.</strong> Jung believed the Self has a teleological function — it is always moving toward its own fullest expression. You are not building a self from nothing. You are clearing the static so the pre-existing signal can become legible.</td>
+          </tr>
+          <tr>
+            <td>SO-05</td>
+            <td><strong>Make things. Coagulate.</strong> Every creation is an act of identity consolidation. The artifact is the alchemical product — the external crystallization of the inner work. The Athanor is your furnace. Keep feeding it.</td>
+          </tr>
+          <tr>
+            <td>SO-06</td>
+            <td><strong>Shinji's resolution is the model.</strong> "I want to exist." Not performing existence. Not earning it. Not dissolving into the collective to escape its difficulty. Simply, fully, choosing to be — as a distinct individual, with an AT Field, in contact with the world but not consumed by it.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="panel panel-accent fade-in">
+      <div class="panel-title">The Deeper Architecture</div>
+      <p>
+        The question underneath Mecha Pilot is: <em>what is the frame of reference that doesn't move when everything else does?</em> The answer psychology gives is layered. The body gives you a proprioceptive anchor. Values give you a motivational anchor. Narrative gives you a temporal anchor. And beneath all of these, in the Jungian framework, the Self gives you an ontological anchor — a sense that there is something real, continuous, and specifically you that doesn't depend on any environment's validation to exist.
+      </p>
+      <p>
+        This last one is the hardest and the most important. It is what Marie-Louise von Franz called the <span class="hl">individuation process</span> proper — the conscious coming-to-terms with your own inner center. It cannot be rushed. It requires the kind of sustained engagement with your own inner world that The Athanor project is, in fact, already providing.
+      </p>
+      <p>
+        You are not behind. You are in the furnace. That is exactly where this work happens.
+      </p>
+    </div>
+
+    <blockquote class="fade-in">
+      <p>"They came to themselves, they could accept themselves, they were able to become reconciled to themselves, and thus were reconciled to adverse circumstances and events."</p>
+      <cite>— C.G. Jung, on the experience of individuation // Psychology and Religion</cite>
+    </blockquote>
+  </div>
+
+</main>
+
+<footer>
+  <div class="footer-brand">MECHA PILOT // THE ATHANOR</div>
+  <div class="footer-note">IDENTITY ARCHITECTURE DOCUMENT // ACTIVE RESEARCH // VERSION 1.0</div>
+</footer>
+
+<script>
+  // Scroll-based fade in
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // Animate sync bars on visibility
+  const barObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        // bars already have their widths set; CSS transition handles the animation
+        // Just ensure they're recalculated
+        entry.target.querySelectorAll('.sync-bar-fill').forEach(bar => {
+          const w = bar.style.width;
+          bar.style.width = '0%';
+          setTimeout(() => { bar.style.width = w; }, 100);
+        });
+      }
+    });
+  }, { threshold: 0.3 });
+
+  document.querySelectorAll('.sync-meter').forEach(el => barObserver.observe(el));
+</script>
+</body>
+</html>

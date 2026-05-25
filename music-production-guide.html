@@ -1,0 +1,1424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Producer's Map — Music Production with LMMS</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+
+:root {
+  --bg: #0d0f0e;
+  --panel: #131614;
+  --surface: #1a1d1b;
+  --border: #252924;
+  --border2: #2e342c;
+  --green: #4ade80;
+  --green-dim: #2d6b47;
+  --lime: #a3e635;
+  --amber: #fbbf24;
+  --orange: #fb923c;
+  --red: #f87171;
+  --blue: #60a5fa;
+  --purple: #a78bfa;
+  --teal: #2dd4bf;
+  --text: #d4d8d2;
+  --text-dim: #6b7268;
+  --text-mid: #9ba89a;
+  --mono: 'DM Mono', monospace;
+  --sans: 'DM Sans', sans-serif;
+  --display: 'Bebas Neue', sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ─── GRAIN ─── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: overlay;
+}
+
+/* ─── NAV ─── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  background: rgba(13,15,14,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 0;
+  height: 48px;
+  padding: 0 1.5rem;
+}
+.nav-logo {
+  font-family: var(--display);
+  font-size: 1.1rem;
+  letter-spacing: 0.05em;
+  color: var(--green);
+  margin-right: 2rem;
+  white-space: nowrap;
+}
+nav a {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  color: var(--text-dim);
+  text-decoration: none;
+  padding: 0 1rem;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  border-right: 1px solid var(--border);
+  transition: all 0.2s;
+  text-transform: uppercase;
+}
+nav a:first-of-type { border-left: 1px solid var(--border); }
+nav a:hover { color: var(--green); background: rgba(74,222,128,0.04); }
+
+/* ─── HERO ─── */
+.hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding-top: 48px;
+  border-bottom: 1px solid var(--border);
+}
+.hero-left {
+  padding: 5rem 3rem 5rem 4rem;
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+}
+.hero-left::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(ellipse at top left, rgba(74,222,128,0.04) 0%, transparent 60%);
+  pointer-events: none;
+}
+.tag {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  color: var(--green);
+  text-transform: uppercase;
+  margin-bottom: 1.2rem;
+  opacity: 0;
+  animation: fadein 0.8s 0.2s forwards;
+}
+.hero-title {
+  font-family: var(--display);
+  font-size: clamp(4rem, 8vw, 7rem);
+  line-height: 0.95;
+  letter-spacing: 0.02em;
+  color: #fff;
+  opacity: 0;
+  animation: fadein 0.8s 0.4s forwards;
+}
+.hero-title span { color: var(--green); }
+.hero-sub {
+  margin-top: 2rem;
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--text-mid);
+  max-width: 460px;
+  opacity: 0;
+  animation: fadein 0.8s 0.6s forwards;
+}
+.hero-sub strong { color: var(--text); font-weight: 500; }
+.hero-badges {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+  opacity: 0;
+  animation: fadein 0.8s 0.8s forwards;
+}
+.badge {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  padding: 0.3rem 0.7rem;
+  border: 1px solid var(--border2);
+  color: var(--text-dim);
+}
+.badge.active { border-color: var(--green-dim); color: var(--green); }
+
+.hero-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 5rem 4rem 5rem 3rem;
+}
+.hero-definition {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  line-height: 2;
+  color: var(--text-mid);
+}
+.hero-definition .key { color: var(--amber); }
+.hero-definition .val { color: var(--text); }
+.hero-definition .comment { color: var(--text-dim); font-style: italic; }
+.code-block {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+  opacity: 0;
+  animation: fadein 0.8s 0.7s forwards;
+}
+.code-block-label {
+  position: absolute;
+  top: -1px;
+  left: 1rem;
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.15em;
+  background: var(--green);
+  color: #000;
+  padding: 0.15rem 0.5rem;
+  font-weight: 500;
+}
+.code-line { display: flex; gap: 0.5rem; }
+.ln { color: var(--border2); min-width: 1.5rem; user-select: none; }
+
+@keyframes fadein {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── SECTION BASE ─── */
+section { border-bottom: 1px solid var(--border); }
+.section-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1.5rem;
+  padding: 2rem 3rem 0;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 0;
+}
+.section-num {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  letter-spacing: 0.1em;
+}
+.section-title-text {
+  font-family: var(--display);
+  font-size: 2.2rem;
+  letter-spacing: 0.04em;
+  color: #fff;
+  padding-bottom: 1rem;
+}
+.section-desc {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  max-width: 600px;
+  margin-left: auto;
+  padding-bottom: 1rem;
+  line-height: 1.7;
+}
+
+/* ─── ANATOMY: THE 6 DOMAINS ─── */
+.domains-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+}
+.domain {
+  padding: 2.5rem 2.5rem;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  transition: background 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.domain:nth-child(3n) { border-right: none; }
+.domain:hover { background: rgba(255,255,255,0.012); }
+.domain-num {
+  font-family: var(--mono);
+  font-size: 3rem;
+  font-weight: 300;
+  color: var(--border2);
+  line-height: 1;
+  margin-bottom: 1rem;
+  transition: color 0.3s;
+}
+.domain:hover .domain-num { color: var(--border); }
+.domain-accent {
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px;
+  height: 100%;
+}
+.domain-tag {
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.2em;
+  margin-bottom: 0.5rem;
+}
+.domain-name {
+  font-family: var(--display);
+  font-size: 1.6rem;
+  letter-spacing: 0.04em;
+  color: #fff;
+  margin-bottom: 1rem;
+  line-height: 1.1;
+}
+.domain-desc {
+  font-size: 0.85rem;
+  color: var(--text-mid);
+  line-height: 1.8;
+  margin-bottom: 1.2rem;
+}
+.domain-desc strong { font-weight: 500; }
+.domain-items {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.domain-items li {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+.domain-items li::before { content: '→'; flex-shrink: 0; }
+.domain-items li span { color: var(--text-mid); }
+
+/* Domain color classes */
+.d-green .domain-accent { background: var(--green); }
+.d-green .domain-tag { color: var(--green); }
+.d-amber .domain-accent { background: var(--amber); }
+.d-amber .domain-tag { color: var(--amber); }
+.d-orange .domain-accent { background: var(--orange); }
+.d-orange .domain-tag { color: var(--orange); }
+.d-blue .domain-accent { background: var(--blue); }
+.d-blue .domain-tag { color: var(--blue); }
+.d-purple .domain-accent { background: var(--purple); }
+.d-purple .domain-tag { color: var(--purple); }
+.d-teal .domain-accent { background: var(--teal); }
+.d-teal .domain-tag { color: var(--teal); }
+
+/* ─── SIGNAL FLOW ─── */
+.signal-flow {
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.signal-step {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  border: 1px solid var(--border);
+  margin-bottom: -1px;
+  transition: background 0.2s;
+}
+.signal-step:hover { background: rgba(255,255,255,0.01); }
+.signal-left {
+  padding: 1.5rem 1.5rem;
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.signal-index {
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  color: var(--text-dim);
+  letter-spacing: 0.1em;
+}
+.signal-name {
+  font-family: var(--display);
+  font-size: 1.3rem;
+  letter-spacing: 0.04em;
+  color: #fff;
+  line-height: 1;
+}
+.signal-tool {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  color: var(--green);
+  margin-top: 0.3rem;
+}
+.signal-right {
+  padding: 1.5rem 2rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+.signal-desc {
+  font-size: 0.88rem;
+  color: var(--text-mid);
+  line-height: 1.8;
+}
+.signal-desc strong { color: var(--text); font-weight: 500; }
+.signal-tips {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.tip {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  display: flex;
+  gap: 0.5rem;
+  line-height: 1.5;
+}
+.tip-icon { flex-shrink: 0; }
+.tip.good .tip-icon { color: var(--green); }
+.tip.warn .tip-icon { color: var(--amber); }
+.tip.note .tip-icon { color: var(--blue); }
+
+/* ─── LMMS MAP ─── */
+.lmms-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0;
+}
+.lmms-window {
+  padding: 2rem 2.5rem;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+.lmms-window:nth-child(2n) { border-right: none; }
+.window-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.2rem;
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--text-dim);
+}
+.dot { width: 10px; height: 10px; border-radius: 50%; }
+.dot.r { background: #ff5f57; }
+.dot.y { background: #febc2e; }
+.dot.g { background: #28c840; }
+.window-title-bar {
+  flex: 1;
+  background: var(--surface);
+  padding: 0.2rem 0.6rem;
+  color: var(--text-mid);
+  text-align: center;
+  font-size: 0.6rem;
+}
+.lmms-shortcut {
+  position: absolute;
+  top: 2rem;
+  right: 2.5rem;
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  color: var(--green);
+  background: rgba(74,222,128,0.08);
+  border: 1px solid rgba(74,222,128,0.2);
+  padding: 0.2rem 0.5rem;
+}
+.window-name {
+  font-family: var(--display);
+  font-size: 1.4rem;
+  letter-spacing: 0.04em;
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+.window-desc {
+  font-size: 0.85rem;
+  color: var(--text-mid);
+  line-height: 1.8;
+  margin-bottom: 1.2rem;
+}
+.window-features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.window-features li {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  line-height: 1.5;
+}
+.feat-bullet {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+
+/* ─── SKILL LADDER ─── */
+.skill-ladder {
+  padding: 3rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0;
+}
+.skill-tier {
+  border: 1px solid var(--border);
+  margin-right: -1px;
+  padding: 2rem 2rem;
+  position: relative;
+  overflow: hidden;
+}
+.tier-label {
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  margin-bottom: 0.5rem;
+}
+.tier-name {
+  font-family: var(--display);
+  font-size: 1.8rem;
+  letter-spacing: 0.04em;
+  color: #fff;
+  margin-bottom: 0.3rem;
+}
+.tier-time {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  margin-bottom: 1.5rem;
+}
+.tier-tasks {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+.tier-task {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+.task-name {
+  font-size: 0.85rem;
+  color: var(--text);
+  font-weight: 500;
+}
+.task-desc {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+.tier-bg {
+  position: absolute;
+  bottom: -1rem;
+  right: -1rem;
+  font-family: var(--display);
+  font-size: 6rem;
+  color: rgba(255,255,255,0.015);
+  letter-spacing: -0.02em;
+  pointer-events: none;
+}
+.t1 .tier-label { color: var(--green); }
+.t2 .tier-label { color: var(--amber); }
+.t3 .tier-label { color: var(--purple); }
+
+/* ─── GROWTH ENGINE ─── */
+.growth-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.growth-col {
+  padding: 3rem;
+  border-right: 1px solid var(--border);
+}
+.growth-col:last-child { border-right: none; }
+.growth-title {
+  font-family: var(--display);
+  font-size: 1.5rem;
+  letter-spacing: 0.04em;
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+.growth-sub {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  color: var(--text-dim);
+  margin-bottom: 2rem;
+  letter-spacing: 0.1em;
+}
+.habit-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.habit {
+  display: flex;
+  gap: 1.2rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border);
+  align-items: flex-start;
+}
+.habit:last-child { border-bottom: none; }
+.habit-icon {
+  font-size: 1rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.habit-body {}
+.habit-name {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 0.2rem;
+}
+.habit-detail {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+
+/* ─── REFERENCE STRIP ─── */
+.ref-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+}
+.ref-card {
+  padding: 2rem 2rem;
+  border-right: 1px solid var(--border);
+}
+.ref-card:last-child { border-right: none; }
+.ref-cat {
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+}
+.ref-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.ref-item {
+  font-size: 0.82rem;
+  color: var(--text-mid);
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+.ref-name { color: var(--text); font-weight: 500; }
+.ref-note { font-family: var(--mono); font-size: 0.6rem; color: var(--text-dim); }
+
+/* ─── FOOTER ─── */
+footer {
+  padding: 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+.footer-title {
+  font-family: var(--display);
+  font-size: 2.5rem;
+  letter-spacing: 0.04em;
+  color: var(--border2);
+  line-height: 1;
+}
+.footer-note {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  color: var(--text-dim);
+  line-height: 1.8;
+  text-align: right;
+}
+
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border2); }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 900px) {
+  .hero { grid-template-columns: 1fr; }
+  .hero-right { border-top: 1px solid var(--border); padding: 3rem 2rem; }
+  .hero-left { padding: 4rem 2rem; }
+  .domains-grid { grid-template-columns: 1fr; }
+  .domain { border-right: none; }
+  .domain:nth-child(3n) { border-right: none; }
+  .signal-step { grid-template-columns: 1fr; }
+  .signal-left { border-right: none; border-bottom: 1px solid var(--border); }
+  .signal-right { grid-template-columns: 1fr; }
+  .lmms-grid { grid-template-columns: 1fr; }
+  .lmms-window { border-right: none; }
+  .skill-ladder { grid-template-columns: 1fr; }
+  .skill-tier { margin-right: 0; margin-bottom: -1px; }
+  .growth-section { grid-template-columns: 1fr; }
+  .growth-col { border-right: none; border-bottom: 1px solid var(--border); }
+  .ref-strip { grid-template-columns: 1fr 1fr; }
+  .section-header { flex-direction: column; gap: 0.5rem; padding: 1.5rem 1.5rem 0; }
+  .signal-flow, .skill-ladder { padding: 1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">PRODUCER'S MAP</div>
+  <a href="#anatomy">Anatomy</a>
+  <a href="#flow">Signal Flow</a>
+  <a href="#lmms">LMMS</a>
+  <a href="#skills">Skills</a>
+  <a href="#growth">Growth</a>
+  <a href="#resources">Resources</a>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════════
+     HERO
+══════════════════════════════════════════════════════════════ -->
+<div class="hero">
+  <div class="hero-left">
+    <p class="tag">// v1.0 — LMMS Edition — Beginner to Intermediate</p>
+    <h1 class="hero-title">THE<br><span>PRODUCER'S</span><br>MAP</h1>
+    <p class="hero-sub">
+      "Music production" is a <strong>cloud of overlapping disciplines</strong> — composition, sound design, arrangement, mixing, mastering, and artistry — all happening in a single window. This guide demystifies each layer and gives you a concrete path forward using <strong>LMMS</strong>, free and powerful.
+    </p>
+    <div class="hero-badges">
+      <span class="badge active">LMMS 1.x</span>
+      <span class="badge active">Free & Open Source</span>
+      <span class="badge">Win / Mac / Linux</span>
+      <span class="badge">No prior experience</span>
+      <span class="badge">Solo artist path</span>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="code-block">
+      <span class="code-block-label">WHAT IS MUSIC PRODUCTION?</span>
+      <div class="hero-definition">
+        <div class="code-line"><span class="ln">01</span><span class="comment">// the full lifecycle of turning an idea into a finished track</span></div>
+        <div class="code-line"><span class="ln">02</span></div>
+        <div class="code-line"><span class="ln">03</span><span class="key">composition</span><span style="color:var(--text-dim)"> = </span><span class="val">"writing: melody, chords, rhythm"</span></div>
+        <div class="code-line"><span class="ln">04</span><span class="key">arrangement</span><span style="color:var(--text-dim)"> = </span><span class="val">"structure: intro → verse → chorus → outro"</span></div>
+        <div class="code-line"><span class="ln">05</span><span class="key">sound_design</span><span style="color:var(--text-dim)"> = </span><span class="val">"shaping timbre of each instrument"</span></div>
+        <div class="code-line"><span class="ln">06</span><span class="key">mixing</span><span style="color:var(--text-dim)"> = </span><span class="val">"balancing levels, EQ, panning, effects"</span></div>
+        <div class="code-line"><span class="ln">07</span><span class="key">mastering</span><span style="color:var(--text-dim)"> = </span><span class="val">"final loudness, polish, export-ready"</span></div>
+        <div class="code-line"><span class="ln">08</span><span class="key">artistry</span><span style="color:var(--text-dim)"> = </span><span class="val">"taste, identity, vision — cannot be automated"</span></div>
+        <div class="code-line"><span class="ln">09</span></div>
+        <div class="code-line"><span class="ln">10</span><span class="comment">// all of these happen in LMMS. you wear every hat.</span></div>
+      </div>
+    </div>
+    <div style="background: var(--surface); border: 1px solid var(--border); padding: 1.2rem 1.5rem; opacity: 0; animation: fadein 0.8s 1s forwards;">
+      <p style="font-family: var(--mono); font-size: 0.65rem; color: var(--green); margin-bottom: 0.5rem; letter-spacing: 0.1em;">// THE REAL SECRET</p>
+      <p style="font-size: 0.88rem; color: var(--text-mid); line-height: 1.8;">
+        Most beginners think they're bad at music. They're not. They're just confusing <strong style="color:var(--text)">six different skills</strong> and trying to do them all simultaneously. Separating them is the first move.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     ANATOMY: THE 6 DOMAINS
+══════════════════════════════════════════════════════════════ -->
+<section id="anatomy">
+  <div class="section-header">
+    <span class="section-num">01 ──</span>
+    <h2 class="section-title-text">THE 6 DOMAINS OF MUSIC PRODUCTION</h2>
+    <p class="section-desc">Every finished track is a product of six distinct skill areas. You don't need to master all of them to start — but knowing they're separate stops you from blaming the wrong thing when something sounds off.</p>
+  </div>
+  <div class="domains-grid">
+
+    <div class="domain d-green">
+      <div class="domain-accent"></div>
+      <div class="domain-num">01</div>
+      <p class="domain-tag">FOUNDATION</p>
+      <h3 class="domain-name">Composition & Music Theory</h3>
+      <p class="domain-desc">The <strong>raw material</strong>. This is what notes you play, in what order, at what rhythm. Music theory is the grammar — you don't need all of it, but the basics (scales, chord progressions, rhythm) transform guessing into craft.</p>
+      <ul class="domain-items">
+        <li><span>Key & Scale — the "home base" that keeps notes from clashing</span></li>
+        <li><span>Chord Progressions — I–IV–V–I, i–VI–III–VII, etc.</span></li>
+        <li><span>Melody — the thing people hum after the song ends</span></li>
+        <li><span>Rhythm & Time Signature — 4/4 is 4 beats per bar (most common)</span></li>
+        <li><span>Tempo (BPM) — pace of your track</span></li>
+      </ul>
+    </div>
+
+    <div class="domain d-amber">
+      <div class="domain-accent"></div>
+      <div class="domain-num">02</div>
+      <p class="domain-tag">ARCHITECTURE</p>
+      <h3 class="domain-name">Arrangement</h3>
+      <p class="domain-desc">The <strong>structure of time</strong>. You have a great loop — now what? Arrangement decides when instruments enter and exit, how tension builds and releases, what the listener hears at bar 1 vs. bar 32.</p>
+      <ul class="domain-items">
+        <li><span>Song Sections — intro, verse, pre-chorus, chorus, bridge, outro</span></li>
+        <li><span>Layering — adding instruments builds energy</span></li>
+        <li><span>Drops & Breakdowns — the art of contrast</span></li>
+        <li><span>The 8-bar Rule — most electronic sections are 8 or 16 bars</span></li>
+        <li><span>Transitions — fills, risers, crashes between sections</span></li>
+      </ul>
+    </div>
+
+    <div class="domain d-orange">
+      <div class="domain-accent"></div>
+      <div class="domain-num">03</div>
+      <p class="domain-tag">TIMBRE</p>
+      <h3 class="domain-name">Sound Design</h3>
+      <p class="domain-desc">The <strong>texture of each sound</strong>. A note on a piano vs. a synth vs. a plucked bass — same pitch, completely different character. Sound design is sculpting that character using oscillators, filters, envelopes, and effects.</p>
+      <ul class="domain-items">
+        <li><span>Oscillator — generates the raw waveform (sine, saw, square, noise)</span></li>
+        <li><span>Filter — removes frequencies; cutoff + resonance = character</span></li>
+        <li><span>Envelope (ADSR) — Attack, Decay, Sustain, Release controls shape over time</span></li>
+        <li><span>LFO — creates movement (wobble, tremolo, auto-filter)</span></li>
+        <li><span>Presets — valid starting point; tweak to make them yours</span></li>
+      </ul>
+    </div>
+
+    <div class="domain d-blue">
+      <div class="domain-accent"></div>
+      <div class="domain-num">04</div>
+      <p class="domain-tag">BALANCE</p>
+      <h3 class="domain-name">Mixing</h3>
+      <p class="domain-desc">Where <strong>everything fits together</strong>. Mixing is not about making things louder — it's about giving every element its own space in frequency, volume, and stereo position so nothing clashes and everything is heard.</p>
+      <ul class="domain-items">
+        <li><span>Volume Faders — relative balance between instruments</span></li>
+        <li><span>EQ — cut frequencies that clash; boost what matters</span></li>
+        <li><span>Panning — left/right placement creates width</span></li>
+        <li><span>Compression — controls dynamics, adds punch</span></li>
+        <li><span>Reverb & Delay — add space and depth to dry sounds</span></li>
+      </ul>
+    </div>
+
+    <div class="domain d-purple">
+      <div class="domain-accent"></div>
+      <div class="domain-num">05</div>
+      <p class="domain-tag">FINISH</p>
+      <h3 class="domain-name">Mastering</h3>
+      <p class="domain-desc">The <strong>final 3–5%</strong>. Mastering takes your stereo mix and prepares it for the world — optimizing loudness, tonal balance, and stereo width so it sounds great on earbuds, speakers, and club systems alike.</p>
+      <ul class="domain-items">
+        <li><span>Stereo EQ — final tonal shaping on the full mix</span></li>
+        <li><span>Limiting — brings up loudness without clipping</span></li>
+        <li><span>Stereo Widening — controlled expansion of the field</span></li>
+        <li><span>Headroom — keep -6dBFS on your mix before mastering</span></li>
+        <li><span>Export: WAV 24-bit, 44.1kHz for distribution</span></li>
+      </ul>
+    </div>
+
+    <div class="domain d-teal">
+      <div class="domain-accent"></div>
+      <div class="domain-num">06</div>
+      <p class="domain-tag">INEFFABLE</p>
+      <h3 class="domain-name">Artistry & Voice</h3>
+      <p class="domain-desc">The <strong>unautomatable part</strong>. What you choose, what you avoid, what emotion you're after. Your taste accumulates over time. The goal isn't "professional sounding" — it's <em>unmistakably you</em>.</p>
+      <ul class="domain-items">
+        <li><span>Reference tracks — study what you love; internalize why</span></li>
+        <li><span>Genre fluency — make things outside your comfort zone</span></li>
+        <li><span>Constraints — limit yourself to 5 sounds; forces creativity</span></li>
+        <li><span>Finishing tracks — done beats perfect, every time</span></li>
+        <li><span>Ears over eyes — trust what you hear, not the meters</span></li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SIGNAL FLOW
+══════════════════════════════════════════════════════════════ -->
+<section id="flow">
+  <div class="section-header">
+    <span class="section-num">02 ──</span>
+    <h2 class="section-title-text">THE PRODUCTION SIGNAL FLOW</h2>
+    <p class="section-desc">A track is built in stages, not all at once. This is the general order — though in practice you'll loop back constantly. Don't try to mix while you're still composing.</p>
+  </div>
+  <div class="signal-flow">
+
+    <div class="signal-step">
+      <div class="signal-left">
+        <span class="signal-index">STEP 01</span>
+        <span class="signal-name">IDEA</span>
+        <span class="signal-tool">// Phone Voice Memo → LMMS</span>
+      </div>
+      <div class="signal-right">
+        <div class="signal-desc">Start with a seed — a melody in your head, a drum groove, a chord progression that moved you. <strong>Record everything immediately.</strong> The difference between producers with 100 tracks and those with 0 is that one type records the idea before it evaporates.</div>
+        <div class="signal-tips">
+          <div class="tip good"><span class="tip-icon">✓</span><span>Use your phone to hum a melody the second it hits you</span></div>
+          <div class="tip good"><span class="tip-icon">✓</span><span>Keep an LMMS project open 24/7 as a scratchpad</span></div>
+          <div class="tip warn"><span class="tip-icon">!</span><span>Don't edit or judge in this phase. Capture only.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="signal-step">
+      <div class="signal-left">
+        <span class="signal-index">STEP 02</span>
+        <span class="signal-name">SKETCH</span>
+        <span class="signal-tool">// Beat+Bassline + Piano Roll</span>
+      </div>
+      <div class="signal-right">
+        <div class="signal-desc">Build the <strong>core loop</strong> — drums, bass, and lead melody together. This is your proof of concept. If 8 bars of the core loop don't feel right, the arrangement won't fix it. Get the vibe first. Ignore mix quality completely.</div>
+        <div class="signal-tips">
+          <div class="tip note"><span class="tip-icon">→</span><span>Start with drums in Beat+Bassline (kick, snare, hat)</span></div>
+          <div class="tip note"><span class="tip-icon">→</span><span>Add bass in Piano Roll (follow root notes of melody)</span></div>
+          <div class="tip warn"><span class="tip-icon">!</span><span>Don't touch the FX Mixer yet — premature mixing kills ideas</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="signal-step">
+      <div class="signal-left">
+        <span class="signal-index">STEP 03</span>
+        <span class="signal-name">ARRANGE</span>
+        <span class="signal-tool">// Song Editor</span>
+      </div>
+      <div class="signal-right">
+        <div class="signal-desc">Build the full song structure in the <strong>Song Editor</strong>. Copy and mutate your loops to create different sections. The rule of thumb: if it sounds the same for more than 16 bars with no variation, listeners disengage. Add, subtract, and vary constantly.</div>
+        <div class="signal-tips">
+          <div class="tip good"><span class="tip-icon">✓</span><span>Write intro (stripped) → build-up → drop → breakdown → drop 2</span></div>
+          <div class="tip good"><span class="tip-icon">✓</span><span>Create multiple Beat+Bassline patterns (verse version, chorus version)</span></div>
+          <div class="tip note"><span class="tip-icon">→</span><span>Use Automation tracks for filter sweeps, volume fades, effects</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="signal-step">
+      <div class="signal-left">
+        <span class="signal-index">STEP 04</span>
+        <span class="signal-name">SOUND DESIGN</span>
+        <span class="signal-tool">// TripleOscillator / ZynAddSubFX</span>
+      </div>
+      <div class="signal-right">
+        <div class="signal-desc">Once the arrangement is locked, <strong>refine the sounds</strong>. Load a preset, then tweak it — change the envelope, adjust cutoff, layer with another synth. In LMMS, TripleOscillator is your workhorse for basics; ZynAddSubFX is a universe for advanced tones.</div>
+        <div class="signal-tips">
+          <div class="tip note"><span class="tip-icon">→</span><span>Attack: how fast a sound starts (0 = instant pop, high = fade in)</span></div>
+          <div class="tip note"><span class="tip-icon">→</span><span>Filter Cutoff: turn it down for warmth, up for brightness</span></div>
+          <div class="tip warn"><span class="tip-icon">!</span><span>ZynAddSubFX: start from presets, don't build from scratch yet</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="signal-step">
+      <div class="signal-left">
+        <span class="signal-index">STEP 05</span>
+        <span class="signal-name">MIX</span>
+        <span class="signal-tool">// FX Mixer (F9)</span>
+      </div>
+      <div class="signal-right">
+        <div class="signal-desc">Route each instrument to its own FX Mixer channel. Set relative volumes. Apply EQ — <strong>cut problem frequencies before boosting anything</strong>. Add compression for punch. Reverb for space. Pan drums (kick center, hats slightly left/right, snare center). Leave headroom at -6dBFS.</div>
+        <div class="signal-tips">
+          <div class="tip good"><span class="tip-icon">✓</span><span>Kick + bass in center, everything else pan outward from there</span></div>
+          <div class="tip good"><span class="tip-icon">✓</span><span>High-pass filter every non-bass instrument to clear mud below 100Hz</span></div>
+          <div class="tip warn"><span class="tip-icon">!</span><span>Check your mix on earbuds AND speakers — they lie differently</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="signal-step">
+      <div class="signal-left">
+        <span class="signal-index">STEP 06</span>
+        <span class="signal-name">MASTER</span>
+        <span class="signal-tool">// Master FX Channel</span>
+      </div>
+      <div class="signal-right">
+        <div class="signal-desc">Apply light processing on the Master FX channel: a final EQ, gentle compression, and a limiter to bring loudness up. <strong>Export as 24-bit WAV at 44.1kHz</strong>. For beginners, even simple online mastering tools (LANDR, etc.) work — the goal is just to make it translate.</div>
+        <div class="signal-tips">
+          <div class="tip note"><span class="tip-icon">→</span><span>Limiter ceiling: -1dBFS to prevent clipping on streaming platforms</span></div>
+          <div class="tip good"><span class="tip-icon">✓</span><span>File → Export Song: choose WAV, 44100 Hz, Stereo</span></div>
+          <div class="tip warn"><span class="tip-icon">!</span><span>Don't master to ear fatigue — take a break first, then listen fresh</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     LMMS WINDOW MAP
+══════════════════════════════════════════════════════════════ -->
+<section id="lmms">
+  <div class="section-header">
+    <span class="section-num">03 ──</span>
+    <h2 class="section-title-text">LMMS — YOUR 6 WINDOWS</h2>
+    <p class="section-desc">LMMS is a multi-window DAW. Each window does something specific. Most confusion comes from using the wrong window for the wrong job.</p>
+  </div>
+  <div class="lmms-grid">
+
+    <div class="lmms-window">
+      <div class="window-bar">
+        <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+        <div class="window-title-bar">Song Editor</div>
+      </div>
+      <div class="lmms-shortcut">Ctrl+W</div>
+      <h3 class="window-name">Song Editor</h3>
+      <p class="window-desc">The <strong>bird's eye view</strong> of your entire track. All your patterns, loops, and sample tracks are arranged here on a timeline. This is where you build structure — intro, drop, breakdown, outro. Think of each colored block as a musical phrase.</p>
+      <ul class="window-features">
+        <li><span class="feat-bullet" style="background:var(--green)"></span>Drag blocks to arrange sections along the timeline</li>
+        <li><span class="feat-bullet" style="background:var(--green)"></span>Right-click a segment → duplicate for instant variation</li>
+        <li><span class="feat-bullet" style="background:var(--green)"></span>Add Instrument Track, BB Track, Sample Track, or Automation Track</li>
+        <li><span class="feat-bullet" style="background:var(--green)"></span>Mute (green light) / Solo individual tracks</li>
+      </ul>
+    </div>
+
+    <div class="lmms-window">
+      <div class="window-bar">
+        <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+        <div class="window-title-bar">Beat+Bassline Editor</div>
+      </div>
+      <div class="lmms-shortcut">Ctrl+B</div>
+      <h3 class="window-name">Beat+Bassline Editor</h3>
+      <p class="window-desc">A <strong>step sequencer</strong> for drums and repetitive patterns. Each row is an instrument; each column is a 16th-note step. Click to activate a step. Scroll on an active step to change its velocity (loudness). Perfect for building drum patterns, percussion loops, and short rhythmic phrases.</p>
+      <ul class="window-features">
+        <li><span class="feat-bullet" style="background:var(--amber)"></span>Default: 16 steps = 1 bar. Add steps for longer patterns</li>
+        <li><span class="feat-bullet" style="background:var(--amber)"></span>Right-click step → "Open in Piano Roll" for fine control</li>
+        <li><span class="feat-bullet" style="background:var(--amber)"></span>Drag drum samples from My Samples sidebar into the editor</li>
+        <li><span class="feat-bullet" style="background:var(--amber)"></span>Create multiple BB patterns (Verse Beat, Chorus Beat, etc.)</li>
+      </ul>
+    </div>
+
+    <div class="lmms-window">
+      <div class="window-bar">
+        <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+        <div class="window-title-bar">Piano Roll</div>
+      </div>
+      <div class="lmms-shortcut">Ctrl+E</div>
+      <h3 class="window-name">Piano Roll</h3>
+      <p class="window-desc">Where you <strong>write melodies, chords, and basslines</strong>. The grid shows time (horizontal) and pitch (vertical). Draw notes with the pencil tool. The velocity bars at the bottom control how hard each note is played — lower velocity = softer/quieter.</p>
+      <ul class="window-features">
+        <li><span class="feat-bullet" style="background:var(--orange)"></span>Pencil: Draw notes. Eraser: Delete. Select (Ctrl+A): move/copy</li>
+        <li><span class="feat-bullet" style="background:var(--orange)"></span>Snap to grid: choose 1/16, 1/8, 1/4 from the dropdown</li>
+        <li><span class="feat-bullet" style="background:var(--orange)"></span>Shift+arrow keys to transpose selected notes by semitone</li>
+        <li><span class="feat-bullet" style="background:var(--orange)"></span>Ctrl+arrow keys to transpose by full octave</li>
+      </ul>
+    </div>
+
+    <div class="lmms-window">
+      <div class="window-bar">
+        <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+        <div class="window-title-bar">FX Mixer</div>
+      </div>
+      <div class="lmms-shortcut">F9</div>
+      <h3 class="window-name">FX Mixer</h3>
+      <p class="window-desc">Your <strong>mixing console</strong>. Route each instrument track to a numbered FX channel. Then apply EQ, compression, reverb, and other effects per channel. The Master channel (channel 0) processes the entire mix. This is where your track goes from "loop" to "record."</p>
+      <ul class="window-features">
+        <li><span class="feat-bullet" style="background:var(--blue)"></span>Assign tracks: click instrument → FX Channel number in instrument window</li>
+        <li><span class="feat-bullet" style="background:var(--blue)"></span>Send: route one FX channel into another (e.g., reverb return)</span></li>
+        <li><span class="feat-bullet" style="background:var(--blue)"></span>Add effects: click "+" button on a channel → browse built-in plugins</li>
+        <li><span class="feat-bullet" style="background:var(--blue)"></span>EQ: use Equalizer plugin; cut low mids (300–600Hz) to reduce mud</li>
+      </ul>
+    </div>
+
+    <div class="lmms-window">
+      <div class="window-bar">
+        <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+        <div class="window-title-bar">Automation Editor</div>
+      </div>
+      <div class="lmms-shortcut">Ctrl+A (new track in Song Editor)</div>
+      <h3 class="window-name">Automation Editor</h3>
+      <p class="window-desc">Makes <strong>parameters move over time</strong>. Want a filter to sweep open during a build-up? A volume fade at the end? Automation handles this. Right-click any knob in LMMS → "Set value" → "Add automation pattern" to start recording changes.</p>
+      <ul class="window-features">
+        <li><span class="feat-bullet" style="background:var(--purple)"></span>Right-click any knob/slider → "Add automation pattern"</li>
+        <li><span class="feat-bullet" style="background:var(--purple)"></span>Draw mode: click to place points; curves create smooth transitions</li>
+        <li><span class="feat-bullet" style="background:var(--purple)"></span>Use for: filter cutoff, volume, reverb wet level, panning</li>
+        <li><span class="feat-bullet" style="background:var(--purple)"></span>Automate effect on/off for drop moments</li>
+      </ul>
+    </div>
+
+    <div class="lmms-window">
+      <div class="window-bar">
+        <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+        <div class="window-title-bar">Instrument Plugins</div>
+      </div>
+      <div class="lmms-shortcut">Click instrument name in Song Editor</div>
+      <h3 class="window-name">Built-in Synths & Samplers</h3>
+      <p class="window-desc">LMMS ships with <strong>16+ synthesizers and samplers</strong>. Each has its own engine and parameters. You don't need all of them — master 2–3 to start. Start with TripleOscillator for bread-and-butter synths and ZynAddSubFX for complex textures.</p>
+      <ul class="window-features">
+        <li><span class="feat-bullet" style="background:var(--teal)"></span><strong>TripleOscillator</strong> — 3 oscillators, filter, ADSR. Workhorse synth.</li>
+        <li><span class="feat-bullet" style="background:var(--teal)"></span><strong>ZynAddSubFX</strong> — deep additive/subtractive synthesis. Huge preset library.</li>
+        <li><span class="feat-bullet" style="background:var(--teal)"></span><strong>AudioFileProcessor</strong> — load any WAV/MP3 sample and pitch/chop it</li>
+        <li><span class="feat-bullet" style="background:var(--teal)"></span><strong>SF2 Player</strong> — plays SoundFont banks (realistic piano, strings, etc.)</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SKILL LADDER
+══════════════════════════════════════════════════════════════ -->
+<section id="skills">
+  <div class="section-header">
+    <span class="section-num">04 ──</span>
+    <h2 class="section-title-text">THE SKILL PROGRESSION</h2>
+    <p class="section-desc">This is not a timeline — it's a focus map. Don't try to advance to the next tier until the current one feels boring, not until it feels perfect. Boring means you've internalized it.</p>
+  </div>
+  <div class="skill-ladder">
+
+    <div class="skill-tier t1">
+      <div class="tier-label">TIER 01 — BEGINNER</div>
+      <div class="tier-name">GET SOUNDS OUT</div>
+      <div class="tier-time">// First 1–3 months</div>
+      <ul class="tier-tasks">
+        <li class="tier-task">
+          <div class="task-name">Navigate LMMS without panic</div>
+          <div class="task-desc">Song Editor, Beat+Bassline, Piano Roll, FX Mixer — know what each window does without looking it up</div>
+        </li>
+        <li class="tier-task">
+          <div class="task-name">Make a 4/4 drum beat</div>
+          <div class="task-desc">Kick on 1+3, snare on 2+4, hi-hats on every beat. Master this first. Then mess with it.</div>
+        </li>
+        <li class="tier-task">
+          <div class="task-name">Write a 4-chord progression</div>
+          <div class="task-desc">Pick a key. Try C major: C–Am–F–G. Put it in the Piano Roll. Add a simple melody on top.</div>
+        </li>
+        <li class="tier-task">
+          <div class="task-name">Build one 8-bar loop</div>
+          <div class="task-desc">Drums + bass + chords + melody. Just 8 bars, looping. If it grooves, you've done everything.</div>
+        </li>
+        <li class="tier-task">
+          <div class="task-name">Export a finished file</div>
+          <div class="task-desc">File → Export → WAV. Send it to yourself. Listen in headphones. You're a producer now.</div>
+        </li>
+      </ul>
+      <div class="tier-bg">01</div>
+    </div>
+
+    <div class="skill-tier t2">
+      <div class="tier-label">TIER 02 — INTERMEDIATE</div>
+      <div class="tier-name">MAKE IT YOURS</div>
+      <div class="tier-time">// Months 3–12+</div>
+      <ul class="tier-tasks">
+        <li class="tier-task">
+          <div class="task-name">Arrange a full song (2–3 min)</div>
+          <div class="task-desc">Intro → build → drop → breakdown → drop 2 → outro. Use the Song Editor. Make it breathe.</div>
+        </li>
+        <li class="tier-task">
+          <div class="task-name">Use the FX Mixer properly</div>
+          <div class="task-desc">Every instrument on its own channel. EQ, compression, reverb applied with intention, not randomness.</div>
+        </li>
+        <li class="tier-task">
+          <div class="task-name">Tweak synth parameters</div>
+          <div class="task-desc">Stop just using presets. Change the filter cutoff. Mess with the ADSR. Understand why it sounds different.</div>
+        </li>
+        <li class="tier-task">
+          <div class="task-name">Automate something</div>
+          <div class="task-desc">A filter sweep on the synth during the build. A volume fade on the drums. One automation = instant professional feel.</div>
+        </li>
+        <li class="tier-task">
+          <div class="task-name">Finish 10 tracks (not 1 perfect one)</div>
+          <div class="task-desc">Finishing is the skill. Done > perfect. Track 10 will be dramatically better than Track 1.</div>
+        </li>
+      </ul>
+      <div class="tier-bg">02</div>
+    </div>
+
+    <div class="skill-tier t3">
+      <div class="tier-label">TIER 03 — ADVANCED BEGINNER</div>
+      <div class="tier-name">DEVELOP YOUR EAR</div>
+      <div class="tier-time">// Year 1–2</div>
+      <ul class="tier-tasks">
+        <li class="tier-task">
+          <div class="task-name">Reference track analysis</div>
+          <div class="task-desc">Pick a song you love. Import it into LMMS. Compare your mix levels. Hear the gap. Shrink the gap.</div>
+        </li>
+        <li class="tier-task">
+          <div class="task-name">Sound design from scratch</div>
+          <div class="task-desc">Build a bass patch using TripleOscillator. Build a pad in ZynAddSubFX from a preset you've modified 70%.</div>
+        </li>
+        <li class="tier-task">
+          <div class="task-name">Learn basic music theory</div>
+          <div class="task-desc">Major/minor scales, 7th chords, pentatonic scale, how chord tension and resolution work emotionally.</div>
+        </li>
+        <li class="tier-task">
+          <div class="task-name">VST plugins (first 2–3)</div>
+          <div class="task-desc">LMMS supports VSTs. Add 1 free reverb (Dragonfly), 1 free EQ (MEqualizer). Explore LADSPA plugins already bundled.</div>
+        </li>
+        <li class="tier-task">
+          <div class="task-name">Share publicly (even one track)</div>
+          <div class="task-desc">SoundCloud, Bandcamp, Reddit r/WeAreTheMusicMakers. Feedback accelerates growth faster than anything.</div>
+        </li>
+      </ul>
+      <div class="tier-bg">03</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     GROWTH ENGINE
+══════════════════════════════════════════════════════════════ -->
+<section id="growth">
+  <div class="section-header">
+    <span class="section-num">05 ──</span>
+    <h2 class="section-title-text">THE GROWTH ENGINE — STAYING ALIVE AS A SOLO ARTIST</h2>
+    <p class="section-desc">Technical skill compounds with consistency. The artists who grow fastest are not the most talented — they're the most systematic about the non-glamorous parts.</p>
+  </div>
+  <div class="growth-section">
+    <div class="growth-col">
+      <div class="growth-title">Daily / Weekly Habits</div>
+      <div class="growth-sub">// INPUTS THAT COMPOUND</div>
+      <ul class="habit-list">
+        <li class="habit">
+          <span class="habit-icon">🎵</span>
+          <div class="habit-body">
+            <div class="habit-name">Intentional Listening (30 min/day)</div>
+            <div class="habit-detail">Don't just play music — study it. Ask: what's the arrangement doing? Where does the kick sit in the mix? What makes the chorus feel bigger? This is free ear training.</div>
+          </div>
+        </li>
+        <li class="habit">
+          <span class="habit-icon">🛠️</span>
+          <div class="habit-body">
+            <div class="habit-name">One Skill Per Session</div>
+            <div class="habit-detail">Don't open LMMS to "work on music." Open it to practice one specific thing: parallel compression, writing a bridge, building a filter sweep automation. Focused reps build muscle memory.</div>
+          </div>
+        </li>
+        <li class="habit">
+          <span class="habit-icon">✅</span>
+          <div class="habit-body">
+            <div class="habit-name">Finish Every Track (Even the Bad Ones)</div>
+            <div class="habit-detail">The hardest skill is finishing. A polished bad track teaches you more than an abandoned almost-good one. The export button is sacred. Press it even if you hate the track.</div>
+          </div>
+        </li>
+        <li class="habit">
+          <span class="habit-icon">📓</span>
+          <div class="habit-body">
+            <div class="habit-name">Keep a Sound Diary</div>
+            <div class="habit-detail">A short voice memo or text note every time you hear something that excites you — a drum pattern, a chord, a film score moment. Your taste library. Reference it when you're stuck.</div>
+          </div>
+        </li>
+        <li class="habit">
+          <span class="habit-icon">⏱️</span>
+          <div class="habit-body">
+            <div class="habit-name">Timed Challenges</div>
+            <div class="habit-detail">Set a 30-minute timer. Make something complete. This obliterates perfectionism and forces you into creative decisions. The results are often more interesting than hour-long sessions.</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="growth-col">
+      <div class="growth-title">The Plateau Toolkit</div>
+      <div class="growth-sub">// WHAT TO DO WHEN YOU'RE STUCK</div>
+      <ul class="habit-list">
+        <li class="habit">
+          <span class="habit-icon">🌍</span>
+          <div class="habit-body">
+            <div class="habit-name">Genre Tourism</div>
+            <div class="habit-detail">Make something in a genre you've never touched. If you make lo-fi hip-hop, try afrobeats. If you do EDM, try jazz chord progressions. Every genre is a technique library. Steal from everywhere.</div>
+          </div>
+        </li>
+        <li class="habit">
+          <span class="habit-icon">🔬</span>
+          <div class="habit-body">
+            <div class="habit-name">Deconstruct a Track You Love</div>
+            <div class="habit-detail">Import a reference song. Try to recreate just the drum pattern. Then just the bass. You don't need to copy the track — you need to understand the decisions. This is the fastest ear training method.</div>
+          </div>
+        </li>
+        <li class="habit">
+          <span class="habit-icon">🚫</span>
+          <div class="habit-body">
+            <div class="habit-name">Deliberate Constraints</div>
+            <div class="habit-detail">Limit yourself to 5 instruments total. Or no drums. Or only sounds from one synth. Constraints break creative block because they eliminate infinite choices and force creative problem-solving.</div>
+          </div>
+        </li>
+        <li class="habit">
+          <span class="habit-icon">👂</span>
+          <div class="habit-body">
+            <div class="habit-name">External Feedback Cycles</div>
+            <div class="habit-detail">Post to r/WeAreTheMusicMakers, the LMMS forums, or SoundCloud. One piece of honest feedback is worth 10 hours of solo tweaking. Your ears get trained to your own work — outside ears hear what you've stopped hearing.</div>
+          </div>
+        </li>
+        <li class="habit">
+          <span class="habit-icon">🔄</span>
+          <div class="habit-body">
+            <div class="habit-name">The 80% Rule</div>
+            <div class="habit-detail">When a track feels 80% done, ask: is the remaining 20% improving the track, or just changing it? Most "finishing" work is compulsive tinkering. When you can't tell, export it. Ship it. Start the next one.</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     RESOURCES
+══════════════════════════════════════════════════════════════ -->
+<section id="resources">
+  <div class="section-header">
+    <span class="section-num">06 ──</span>
+    <h2 class="section-title-text">RESOURCES & NEXT STEPS</h2>
+    <p class="section-desc">Curated for LMMS users specifically. Don't collect resources — use one from each category until it no longer teaches you anything new.</p>
+  </div>
+  <div class="ref-strip">
+    <div class="ref-card">
+      <div class="ref-cat">// LMMS SPECIFIC</div>
+      <ul class="ref-list">
+        <li class="ref-item">
+          <span class="ref-name">docs.lmms.io</span>
+          <span class="ref-note">Official manual — read "Your First Song" start to finish</span>
+        </li>
+        <li class="ref-item">
+          <span class="ref-name">musikBear on YouTube</span>
+          <span class="ref-note">LMMS Rookie Guide + 1000+ tutorials — best LMMS-specific channel</span>
+        </li>
+        <li class="ref-item">
+          <span class="ref-name">lmms.io/forum</span>
+          <span class="ref-note">Active community — post your track, ask anything</span>
+        </li>
+        <li class="ref-item">
+          <span class="ref-name">lmms.io/wiki</span>
+          <span class="ref-note">Deeper reference for synths and effects</span>
+        </li>
+        <li class="ref-item">
+          <span class="ref-name">LMMS Discord</span>
+          <span class="ref-note">Real-time help from active producers</span>
+        </li>
+      </ul>
+    </div>
+    <div class="ref-card">
+      <div class="ref-cat">// FREE SOUNDS & PLUGINS</div>
+      <ul class="ref-list">
+        <li class="ref-item">
+          <span class="ref-name">freesound.org</span>
+          <span class="ref-note">CC-licensed samples — every texture imaginable</span>
+        </li>
+        <li class="ref-item">
+          <span class="ref-name">looperman.com</span>
+          <span class="ref-note">Free loops, drum breaks, vocal samples</span>
+        </li>
+        <li class="ref-item">
+          <span class="ref-name">Dragonfly Reverb (free VST)</span>
+          <span class="ref-note">Professional reverb, better than LMMS built-in</span>
+        </li>
+        <li class="ref-item">
+          <span class="ref-name">OB-Xd / Surge XT (free VST)</span>
+          <span class="ref-note">Powerful synths that work via VeSTige in LMMS</span>
+        </li>
+        <li class="ref-item">
+          <span class="ref-name">SoundFonts (sf2files.com)</span>
+          <span class="ref-note">Realistic instruments for LMMS SF2 Player</span>
+        </li>
+      </ul>
+    </div>
+    <div class="ref-card">
+      <div class="ref-cat">// MUSIC THEORY (LIGHT)</div>
+      <ul class="ref-list">
+        <li class="ref-item">
+          <span class="ref-name">musictheory.net</span>
+          <span class="ref-note">Interactive lessons from scratch — start with Lessons 1–10</span>
+        </li>
+        <li class="ref-item">
+          <span class="ref-name">"12tone" on YouTube</span>
+          <span class="ref-note">Music theory without the stuffiness — songwriting focus</span>
+        </li>
+        <li class="ref-item">
+          <span class="ref-name">Adam Neely on YouTube</span>
+          <span class="ref-note">Deep dives into harmony and groove — intermediate/advanced</span>
+        </li>
+        <li class="ref-item">
+          <span class="ref-name">hooktheory.com</span>
+          <span class="ref-note">Visual chord progressions pulled from real songs</span>
+        </li>
+        <li class="ref-item">
+          <span class="ref-name">Ear training: tonedear.com</span>
+          <span class="ref-note">Daily interval/chord recognition — trains the ear fast</span>
+        </li>
+      </ul>
+    </div>
+    <div class="ref-card">
+      <div class="ref-cat">// COMMUNITY & GROWTH</div>
+      <ul class="ref-list">
+        <li class="ref-item">
+          <span class="ref-name">r/WeAreTheMusicMakers</span>
+          <span class="ref-note">Most welcoming producer community online — post your work</span>
+        </li>
+        <li class="ref-item">
+          <span class="ref-name">SoundCloud (free tier)</span>
+          <span class="ref-note">Put tracks out publicly — even unfinished. Accountability.</span>
+        </li>
+        <li class="ref-item">
+          <span class="ref-name">Bandcamp</span>
+          <span class="ref-note">When you have 5+ tracks — make a free EP. Name your price.</span>
+        </li>
+        <li class="ref-item">
+          <span class="ref-name">"In the Mix" on YouTube</span>
+          <span class="ref-note">Mixing fundamentals — DAW-agnostic, principles that apply in LMMS</span>
+        </li>
+        <li class="ref-item">
+          <span class="ref-name">edmprod.com</span>
+          <span class="ref-note">Electronic music production roadmaps — genre-agnostic skills</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════════════════════════ -->
+<footer>
+  <div class="footer-title">MAKE<br>THINGS.<br>FINISH<br>THEM.</div>
+  <div class="footer-note">
+    <span style="color: var(--green); font-family: var(--mono); font-size: 0.6rem;">// THE CORE LOOP</span><br><br>
+    Idea → Sketch → Arrange → Mix → Export → Share → Repeat<br><br>
+    The producers you admire made 100 bad tracks<br>
+    before they made 1 good one. You're on your way.<br><br>
+    <span style="color: var(--text-dim);">Built for LMMS · Free software, real music</span>
+  </div>
+</footer>
+
+<script>
+  // Scroll reveal for domains
+  const observer = new IntersectionObserver(
+    entries => entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    }),
+    { threshold: 0.1 }
+  );
+
+  document.querySelectorAll('.domain, .signal-step, .lmms-window, .skill-tier, .ref-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(16px)';
+    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    observer.observe(el);
+  });
+
+  // Nav active state
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('nav a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 100) current = s.id;
+    });
+    navLinks.forEach(a => {
+      a.style.color = a.href.includes(current) && current ? 'var(--green)' : '';
+    });
+  });
+</script>
+</body>
+</html>

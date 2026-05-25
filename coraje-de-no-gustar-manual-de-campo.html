@@ -1,0 +1,1356 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>El Coraje de No Gustar — Un Diálogo Destilado</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300..600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #EFE8D7;
+    --paper-deep: #E5DDC8;
+    --ink: #1A2140;
+    --ink-soft: #3E4568;
+    --ink-faint: #7A7F99;
+    --gold: #A6782D;
+    --gold-deep: #724F15;
+    --olive: #5A6648;
+    --line: #CEC4A8;
+    --line-soft: #DED5BA;
+
+    --f-display: "Cormorant Garamond", "Times New Roman", serif;
+    --f-body: "Instrument Sans", -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+    --f-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--f-body);
+    font-size: 16px;
+    line-height: 1.55;
+    font-weight: 400;
+    overflow-x: hidden;
+    background-image:
+      radial-gradient(circle at 20% 20%, rgba(60, 50, 90, 0.04) 0, transparent 60%),
+      radial-gradient(circle at 80% 80%, rgba(90, 70, 40, 0.035) 0, transparent 55%);
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.08 0 0 0 0 0.08 0 0 0 0 0.12 0 0 0 0.3 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.35;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .wrap {
+    position: relative;
+    z-index: 2;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  /* ─── MASTHEAD ───────────────────────────────────────── */
+
+  header.masthead {
+    padding: 56px 0 28px;
+    border-bottom: 1px solid var(--ink);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 40px;
+  }
+
+  .eyebrow {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    font-weight: 500;
+  }
+
+  .masthead .eyebrow {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .masthead .eyebrow::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+    max-width: 180px;
+  }
+
+  h1.booktitle {
+    font-family: var(--f-display);
+    font-weight: 400;
+    font-size: clamp(50px, 7.5vw, 92px);
+    line-height: 0.96;
+    letter-spacing: -0.022em;
+    margin-top: 6px;
+  }
+  h1.booktitle em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--gold);
+  }
+  h1.booktitle .the {
+    display: block;
+    font-style: italic;
+    font-size: 0.38em;
+    font-weight: 300;
+    color: var(--ink-soft);
+    letter-spacing: 0.02em;
+    margin-bottom: 6px;
+  }
+
+  .masthead-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 18px;
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+  .masthead-meta .row {
+    display: flex;
+    gap: 14px;
+    align-items: baseline;
+  }
+  .masthead-meta .label {
+    font-family: var(--f-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    min-width: 92px;
+  }
+
+  /* constellation motif — 5 nights */
+  .constellation {
+    width: 200px;
+    height: 200px;
+    flex-shrink: 0;
+  }
+  .constellation .line {
+    stroke: var(--ink);
+    stroke-width: 0.5;
+    opacity: 0.35;
+    fill: none;
+  }
+  .constellation .star {
+    fill: var(--ink);
+  }
+  .constellation .star.big {
+    fill: var(--gold);
+  }
+  .constellation .star {
+    animation: twinkle 3.5s ease-in-out infinite;
+    transform-origin: center;
+    transform-box: fill-box;
+  }
+  .constellation .star:nth-child(2) { animation-delay: 0.4s; }
+  .constellation .star:nth-child(3) { animation-delay: 0.9s; }
+  .constellation .star:nth-child(4) { animation-delay: 1.4s; }
+  .constellation .star:nth-child(5) { animation-delay: 2s; }
+  .constellation .star:nth-child(6) { animation-delay: 2.6s; }
+  @keyframes twinkle {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.55; transform: scale(0.85); }
+  }
+
+  .dateline {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--line);
+    font-family: var(--f-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  /* ─── LEAD ─────────────────────────────────────────── */
+
+  .lead {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 56px;
+    padding: 48px 0 72px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .lead-title {
+    font-family: var(--f-display);
+    font-size: 46px;
+    line-height: 1.02;
+    letter-spacing: -0.018em;
+    font-weight: 300;
+  }
+  .lead-title em {
+    font-style: italic;
+    color: var(--gold);
+  }
+  .lead-title .rule {
+    display: block;
+    width: 60px;
+    height: 2px;
+    background: var(--ink);
+    margin-top: 18px;
+  }
+
+  .lead-body p {
+    font-size: 17px;
+    line-height: 1.64;
+    color: var(--ink);
+    margin-bottom: 18px;
+  }
+  .lead-body p:first-letter {
+    font-family: var(--f-display);
+    font-size: 62px;
+    float: left;
+    line-height: 0.88;
+    padding: 4px 10px 0 0;
+    font-weight: 400;
+    color: var(--gold);
+  }
+  .lead-body .equation {
+    font-family: var(--f-mono);
+    font-size: 14px;
+    letter-spacing: 0.02em;
+    color: var(--ink-soft);
+    padding: 14px 18px;
+    border-left: 2px solid var(--gold);
+    background: rgba(166, 120, 45, 0.06);
+    margin-top: 18px;
+  }
+
+  /* ─── PART / NIGHT HEADERS ────────────────────────────── */
+
+  section.part { padding: 80px 0 40px; }
+
+  .part-header {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 28px;
+    align-items: baseline;
+    margin-bottom: 48px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid var(--ink);
+  }
+  .part-number {
+    font-family: var(--f-mono);
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 500;
+    padding-top: 16px;
+  }
+  .part-title-block h2 {
+    font-family: var(--f-display);
+    font-size: clamp(40px, 5.8vw, 72px);
+    line-height: 0.98;
+    letter-spacing: -0.018em;
+    font-weight: 300;
+  }
+  .part-title-block h2 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+  .part-title-block .subtitle {
+    font-family: var(--f-display);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 20px;
+    color: var(--ink-soft);
+    margin-top: 12px;
+    max-width: 740px;
+    line-height: 1.35;
+  }
+
+  /* ─── TEACHING CARDS ──────────────────────────────────── */
+
+  .chapter-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    border-top: 1px solid var(--line);
+    border-left: 1px solid var(--line);
+  }
+
+  .chapter {
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 32px 28px 28px;
+    position: relative;
+    transition: background 0.3s ease;
+  }
+  .chapter:hover { background: var(--paper-deep); }
+
+  .chap-header {
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+    margin-bottom: 18px;
+  }
+  .chap-num {
+    font-family: var(--f-display);
+    font-size: 54px;
+    line-height: 0.82;
+    font-weight: 300;
+    color: var(--gold);
+    min-width: 64px;
+    letter-spacing: -0.02em;
+    font-style: italic;
+  }
+  .chap-title {
+    font-family: var(--f-display);
+    font-size: 23px;
+    line-height: 1.12;
+    font-weight: 500;
+    letter-spacing: -0.008em;
+    color: var(--ink);
+    padding-top: 6px;
+  }
+
+  .chap-rule {
+    width: 28px;
+    height: 2px;
+    background: var(--ink);
+    margin: 8px 0 16px;
+  }
+
+  .takeaways {
+    list-style: none;
+    margin-bottom: 20px;
+  }
+  .takeaways li {
+    font-size: 14.5px;
+    line-height: 1.58;
+    color: var(--ink);
+    padding: 8px 0 8px 22px;
+    position: relative;
+    border-bottom: 1px dotted var(--line-soft);
+  }
+  .takeaways li:last-child { border-bottom: none; }
+  .takeaways li::before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    top: 8px;
+    color: var(--gold);
+    font-family: var(--f-mono);
+    font-size: 13px;
+  }
+  .takeaways li strong {
+    font-weight: 600;
+    color: var(--ink);
+    background: linear-gradient(transparent 60%, rgba(166, 120, 45, 0.22) 60%);
+    padding: 0 1px;
+  }
+  .takeaways li em {
+    font-family: var(--f-display);
+    font-style: italic;
+    font-size: 1.05em;
+    color: var(--ink);
+  }
+
+  .try-this {
+    font-family: var(--f-mono);
+    font-size: 11.5px;
+    letter-spacing: 0.02em;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    background: rgba(90, 102, 72, 0.08);
+    border-left: 2px solid var(--olive);
+    padding: 10px 12px;
+    margin-top: 14px;
+  }
+  .try-this::before {
+    content: "APLÍCALO →";
+    display: block;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    color: var(--olive);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  /* ─── INTERLUDE ──────────────────────────────────────── */
+
+  .interlude {
+    padding: 80px 0;
+    text-align: center;
+    margin: 30px -200vw;
+    padding-left: 200vw;
+    padding-right: 200vw;
+    background: linear-gradient(var(--paper-deep), var(--paper-deep));
+    border-top: 1px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+  }
+  .interlude-inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+  .interlude .eyebrow {
+    display: inline-block;
+    margin-bottom: 16px;
+  }
+  .interlude h2 {
+    font-family: var(--f-display);
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(36px, 5.2vw, 60px);
+    line-height: 1.08;
+    letter-spacing: -0.015em;
+    max-width: 960px;
+    margin: 0 auto 18px;
+  }
+  .interlude h2 em {
+    color: var(--gold);
+    font-weight: 400;
+  }
+  .interlude .attribution {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  /* ─── THREE KEYS FULL-BLEED ──────────────────────────── */
+
+  .keys-statement {
+    padding: 88px 0;
+    background:
+      linear-gradient(var(--paper-deep), var(--paper-deep)),
+      repeating-linear-gradient(90deg, transparent 0 40px, rgba(26,33,64,0.04) 40px 41px);
+    background-blend-mode: multiply;
+    margin: 40px -200vw;
+    padding-left: 200vw;
+    padding-right: 200vw;
+    border-top: 1px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+  }
+  .keys-inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+  .keys-eyebrow {
+    text-align: center;
+    margin-bottom: 12px;
+  }
+  .keys-headline {
+    text-align: center;
+    font-family: var(--f-display);
+    font-size: clamp(40px, 6vw, 74px);
+    line-height: 1.02;
+    letter-spacing: -0.018em;
+    font-weight: 300;
+    margin-bottom: 18px;
+  }
+  .keys-headline em { font-style: italic; color: var(--gold); }
+  .keys-subhead {
+    text-align: center;
+    font-family: var(--f-display);
+    font-style: italic;
+    font-size: 20px;
+    color: var(--ink-soft);
+    max-width: 720px;
+    margin: 0 auto 56px;
+    line-height: 1.4;
+  }
+  .keys-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    border-top: 1px solid var(--ink);
+    border-left: 1px solid var(--ink);
+  }
+  .key-card {
+    padding: 28px 24px 32px;
+    border-right: 1px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    text-align: left;
+    background: var(--paper);
+  }
+  .key-card .num {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    color: var(--gold);
+    font-weight: 500;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .key-card h3 {
+    font-family: var(--f-display);
+    font-size: 30px;
+    line-height: 1.04;
+    font-weight: 400;
+    letter-spacing: -0.012em;
+    margin-bottom: 14px;
+  }
+  .key-card h3 em { font-style: italic; }
+  .key-card p {
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+  }
+  .keys-arrow {
+    text-align: center;
+    margin-top: 40px;
+    font-family: var(--f-display);
+    font-style: italic;
+    font-size: 20px;
+    color: var(--ink);
+    line-height: 1.5;
+  }
+  .keys-arrow strong {
+    font-weight: 500;
+    color: var(--gold);
+  }
+
+  /* ─── CHEAT SHEET ──────────────────────────── */
+
+  .cheatsheet {
+    padding: 80px 0;
+    border-top: 2px solid var(--ink);
+    margin-top: 60px;
+  }
+  .cs-title {
+    font-family: var(--f-display);
+    font-size: clamp(42px, 5.6vw, 70px);
+    line-height: 1;
+    letter-spacing: -0.018em;
+    font-weight: 300;
+    margin-bottom: 14px;
+  }
+  .cs-title em { font-style: italic; color: var(--gold); }
+  .cs-tagline {
+    font-family: var(--f-display);
+    font-style: italic;
+    font-size: 20px;
+    color: var(--ink-soft);
+    margin-bottom: 48px;
+    max-width: 720px;
+  }
+  .cs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+  }
+  .cs-column h3 {
+    font-family: var(--f-mono);
+    font-size: 12px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--ink);
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--ink);
+    margin-bottom: 22px;
+  }
+  .cs-column.adopt h3 { color: var(--gold); border-bottom-color: var(--gold); }
+  .cs-row {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 18px;
+    padding: 14px 0;
+    border-bottom: 1px dotted var(--line-soft);
+    align-items: start;
+  }
+  .cs-row:last-child { border-bottom: none; }
+  .cs-label {
+    font-family: var(--f-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    padding-top: 3px;
+  }
+  .cs-text {
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--ink);
+  }
+  .cs-text strong {
+    font-family: var(--f-display);
+    font-weight: 500;
+    font-size: 1.08em;
+  }
+  .cs-column.adopt .cs-text strong { color: var(--gold-deep); }
+
+  .cs-coda {
+    margin-top: 48px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line);
+    font-family: var(--f-display);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 22px;
+    line-height: 1.4;
+    color: var(--ink);
+    text-align: center;
+    max-width: 820px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* ─── CLOSING / FOOTER ───────────────────────────────── */
+
+  .closing {
+    padding: 100px 0 40px;
+    text-align: center;
+    border-top: 1px solid var(--line);
+  }
+  .closing-quote {
+    font-family: var(--f-display);
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(28px, 4.2vw, 44px);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    max-width: 860px;
+    margin: 0 auto 24px;
+  }
+  .closing-quote .mark {
+    color: var(--gold);
+    font-size: 1.4em;
+    line-height: 0;
+    position: relative;
+    top: 0.3em;
+  }
+  .closing-cite {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  footer.colophon {
+    padding: 40px 0 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--ink);
+    font-family: var(--f-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  /* ─── REVEAL ANIMATION ───────────────────────────────── */
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ─── RESPONSIVE ─────────────────────────────────────── */
+
+  @media (max-width: 820px) {
+    .wrap { padding: 0 22px; }
+    header.masthead { grid-template-columns: 1fr; gap: 24px; }
+    .constellation { width: 140px; height: 140px; }
+    .lead { grid-template-columns: 1fr; gap: 28px; padding: 32px 0 48px; }
+    .chapter-grid { grid-template-columns: 1fr; }
+    .keys-grid { grid-template-columns: 1fr; }
+    .cs-grid { grid-template-columns: 1fr; }
+    .part-header { grid-template-columns: 1fr; gap: 8px; }
+    .part-number { padding-top: 0; }
+    .cs-row { grid-template-columns: 1fr; gap: 4px; }
+  }
+
+  @media print {
+    body { background: white; }
+    body::before { display: none; }
+    .chapter:hover { background: transparent; }
+    .keys-statement, .interlude { margin: 0; padding: 40px 0; }
+    .reveal { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- MASTHEAD -->
+  <header class="masthead">
+    <div>
+      <div class="eyebrow"><span>Nº 002</span><span>Un Manual de Campo</span></div>
+      <h1 class="booktitle"><span class="the">El</span>Coraje de No<br/><em>Gustar</em></h1>
+      <div class="masthead-meta">
+        <div class="row"><span class="label">Fuente</span><span>Ichiro Kishimi y Fumitake Koga · 2013 · 5 noches</span></div>
+        <div class="row"><span class="label">Tradición</span><span>Psicología adleriana · diálogo socrático</span></div>
+        <div class="row"><span class="label">Formato</span><span>Referencia de una página · destilada para vivir</span></div>
+      </div>
+    </div>
+    <svg class="constellation" viewBox="-100 -100 200 200" aria-hidden="true">
+      <path class="line" d="M -60,-55 L -20,-20 L 35,-55 L 15,30 L -45,40 Z" />
+      <path class="line" d="M -20,-20 L 15,30 M -20,-20 L 35,-55 M -20,-20 L -45,40" />
+      <circle class="star" cx="-60" cy="-55" r="3" />
+      <circle class="star" cx="35" cy="-55" r="2.5" />
+      <circle class="star big" cx="-20" cy="-20" r="5" />
+      <circle class="star" cx="15" cy="30" r="3" />
+      <circle class="star" cx="-45" cy="40" r="2.5" />
+    </svg>
+  </header>
+
+  <div class="dateline">
+    <span>Noche I · Negar el trauma</span>
+    <span>II · Interpersonal</span>
+    <span>III · Separar tareas</span>
+    <span>IV · Comunidad</span>
+    <span>V · Aquí y ahora</span>
+  </div>
+
+  <!-- LEAD -->
+  <section class="lead">
+    <div class="lead-title">
+      El mundo es simple.<br/>
+      <em>Tú</em> lo complicas.
+      <span class="rule"></span>
+    </div>
+    <div class="lead-body">
+      <p>Este libro es un diálogo que transcurre a lo largo de cinco noches entre un joven convencido de que su infelicidad se la entregó su pasado, y un filósofo que desmonta con paciencia cada excusa que ofrece. Su fuente es Alfred Adler — el tercer gigante de la psicología, a menudo olvidado, cuyas ideas están más cerca de la filosofía griega que de la maquinaria freudiana.</p>
+      <p>El movimiento central es severo: no nos empuja el pasado, nos atrae una meta. El trauma es una historia que elegimos contar. Nuestros problemas no son solo nuestros; son cómo nos situamos frente a los demás. Y la felicidad no es una cima que se escala — es algo que se practica, ahora, en forma de contribución y del coraje para vivir libremente.</p>
+      <div class="equation">infelicidad ≠ falta de capacidad · infelicidad = falta de coraje</div>
+    </div>
+  </section>
+
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <!-- NOCHE I: NEGAR EL TRAUMA -->
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <section class="part" id="noche-1">
+    <div class="part-header reveal">
+      <div class="part-number">La Primera Noche</div>
+      <div class="part-title-block">
+        <h2>Negar el <em>Trauma</em></h2>
+        <div class="subtitle">No nos moldea lo que nos ocurrió — sino el significado que hemos elegido darle. El pasado no nos empuja; una meta sí.</div>
+      </div>
+    </div>
+
+    <div class="chapter-grid">
+
+      <article class="chapter reveal">
+        <div class="chap-header">
+          <div class="chap-num">i</div>
+          <div class="chap-title">Teleología, No Etiología</div>
+        </div>
+        <div class="chap-rule"></div>
+        <ul class="takeaways">
+          <li>Freud pregunta <em>"¿qué causó esto?"</em> — Adler pregunta <em>"¿para qué sirve esto?"</em>. El giro no es cosmético. Es toda la psicología.</li>
+          <li><strong>La etiología (causa) lleva al determinismo:</strong> si el pasado te hizo, no puedes rehacerte. La teleología lleva a la libertad.</li>
+          <li>Toda conducta apunta a una meta — incluso las que parecen síntomas indefensos. La meta suele estar oculta para quien la vive.</li>
+          <li>Pregúntate ante cualquier patrón atascado: <strong>"¿A qué está sirviendo esto? ¿De qué resultado me protege?"</strong></li>
+        </ul>
+        <div class="try-this">Toma una queja que has repetido durante años. En lugar de "porque me pasó X", completa: "Hago esto con el fin de ____". Observa lo que emerge.</div>
+      </article>
+
+      <article class="chapter reveal">
+        <div class="chap-header">
+          <div class="chap-num">ii</div>
+          <div class="chap-title">El Trauma No Existe</div>
+        </div>
+        <div class="chap-rule"></div>
+        <ul class="takeaways">
+          <li>La afirmación más provocadora de Adler: <strong>ninguna experiencia es en sí misma causa de éxito o fracaso</strong>. Hacemos de nuestras experiencias lo que conviene a nuestros propósitos.</li>
+          <li>Ocurren cosas malas. Su significado no es automático — <strong>el significado es la parte que aún estás escribiendo</strong>.</li>
+          <li>Dos personas pueden vivir sucesos casi idénticos y construir vidas completamente distintas a partir de ellos. La diferencia es interpretación, no destino.</li>
+          <li>Esto no es crueldad hacia los heridos. Es negarse a entregarles una cadena perpetua.</li>
+        </ul>
+        <div class="try-this">Nombra un suceso pasado al que culpas de quién eres. Escribe otros dos significados posibles que podría tener. No tienes que creértelos — demuéstrate que el significado siempre es plural.</div>
+      </article>
+
+      <article class="chapter reveal">
+        <div class="chap-header">
+          <div class="chap-num">iii</div>
+          <div class="chap-title">Tu Estilo de Vida Es una Elección</div>
+        </div>
+        <div class="chap-rule"></div>
+        <ul class="takeaways">
+          <li>A lo que llamamos "personalidad", Adler lo llama <strong>estilo de vida</strong> — tus tendencias de pensamiento y acción, cómo ves el mundo y a ti mismo.</li>
+          <li>El estilo de vida no se hereda. Se <strong>elige</strong>, normalmente de forma inconsciente, alrededor de los diez años. Puede volver a elegirse en cualquier momento posterior.</li>
+          <li>¿Por qué la gente se queda atascada? Porque el estilo actual es <strong>familiar, predecible, traquetea de formas conocidas</strong>. Uno nuevo aterra — resultados desconocidos.</li>
+          <li>No nos falta capacidad para cambiar. Tomamos una y otra vez <strong>la decisión de no cambiar</strong>. Esa decisión se renueva cada día.</li>
+        </ul>
+        <div class="try-this">Identifica un rasgo de tu "personalidad" que has llamado permanente. Pregúntate: ¿qué me permite evitar el conservarlo? Ese es el contrato oculto.</div>
+      </article>
+
+      <article class="chapter reveal">
+        <div class="chap-header">
+          <div class="chap-num">iv</div>
+          <div class="chap-title">Coraje, No Capacidad</div>
+        </div>
+        <div class="chap-rule"></div>
+        <ul class="takeaways">
+          <li>La psicología adleriana es <strong>una psicología del coraje</strong>. Su diagnóstico no es "te falta capacidad" sino "te falta el coraje para ser feliz".</li>
+          <li>"Si tan solo fuera X, sería feliz" es una <strong>excusa para no cambiar</strong>. Preserva la cómoda posibilidad de "podría, si lo intentara".</li>
+          <li>El cambio real exige entregar el trabajo — arriesgarse al rechazo, al fracaso, a ser visto como ordinario. La mayoría no lo hace. Protege la fantasía en su lugar.</li>
+          <li><strong>No importa lo que haya ocurrido hasta ahora, no debería tener ninguna incidencia en cómo vives a partir de este momento.</strong> Esa es la radical misericordia de la teleología.</li>
+        </ul>
+        <div class="try-this">¿Sobre qué llevas diciendo "si tan solo ____, entonces ____"? Entrega un borrador de esa cosa esta semana. No la versión terminada — la entregada.</div>
+      </article>
+
+    </div>
+  </section>
+
+</div>
+
+<!-- FULL-BLEED INTERLUDE -->
+<section class="interlude">
+  <div class="interlude-inner">
+    <div class="eyebrow">La Afirmación Central</div>
+    <h2>«Todos los problemas son problemas de <em>relaciones interpersonales</em>».</h2>
+    <div class="attribution">— Alfred Adler</div>
+  </div>
+</section>
+
+<div class="wrap">
+
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <!-- NOCHE II: RELACIONES INTERPERSONALES -->
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <section class="part" id="noche-2">
+    <div class="part-header reveal">
+      <div class="part-number">La Segunda Noche</div>
+      <div class="part-title-block">
+        <h2>Todos los Problemas Son <em>Interpersonales</em></h2>
+        <div class="subtitle">Si estuvieras verdaderamente solo en el universo, tus problemas desaparecerían. No lo hacen, porque existimos solo en relación — y ahí vive todo nudo real.</div>
+      </div>
+    </div>
+
+    <div class="chapter-grid">
+
+      <article class="chapter reveal">
+        <div class="chap-header">
+          <div class="chap-num">i</div>
+          <div class="chap-title">Por Qué Te Detestas</div>
+        </div>
+        <div class="chap-rule"></div>
+        <ul class="takeaways">
+          <li>Detestarte no es un accidente — es <strong>una resolución</strong>. Has decidido no quererte, y cazas pruebas para sostener la decisión.</li>
+          <li>La meta detrás del autodesprecio es normalmente <strong>no ser herido por los demás</strong>. Si me rechazo yo primero, ningún rechazo externo podrá sorprenderme.</li>
+          <li>Ser "como soy, con todos estos defectos" se convierte en <strong>una virtud, una justificación, un escudo</strong> — una razón por adelantado para cada desprecio.</li>
+          <li>El costo es alto: cambias la posibilidad de ser querido por la certeza de no ser decepcionado.</li>
+        </ul>
+        <div class="try-this">Enumera tres "defectos" con los que te presentas. Pregunta: ¿qué arriesgaría si dejara de hacerlo? Ese riesgo es lo que estás evitando.</div>
+      </article>
+
+      <article class="chapter reveal">
+        <div class="chap-header">
+          <div class="chap-num">ii</div>
+          <div class="chap-title">Inferioridad: ¿Combustible o Excusa?</div>
+        </div>
+        <div class="chap-rule"></div>
+        <ul class="takeaways">
+          <li><strong>Los sentimientos de inferioridad</strong> son universales, subjetivos, y para nada una enfermedad. Son la brecha entre donde estás y donde quieres estar.</li>
+          <li>Bien usados, esa brecha es <strong>una plataforma de despegue</strong> — impulsa crecimiento, esfuerzo, la búsqueda de un ideal.</li>
+          <li>Mal usados, se convierten en un <strong>complejo de inferioridad</strong>: "Como A, no puedo B". El sentimiento se transforma en una excusa permanente.</li>
+          <li>La otra cara es el <strong>complejo de superioridad</strong> — presumir, alardear, usar la desgracia propia para controlar a otros. Todos son prueba de inferioridad oculta, no de fortaleza.</li>
+        </ul>
+        <div class="try-this">Caza a ti mismo esta semana diciendo "Como ____, no puedo ____". Cámbialo por "A pesar de ____, voy a ____". La gramática es la palanca.</div>
+      </article>
+
+      <article class="chapter reveal">
+        <div class="chap-header">
+          <div class="chap-num">iii</div>
+          <div class="chap-title">La Vida No Es una Competencia</div>
+        </div>
+        <div class="chap-rule"></div>
+        <ul class="takeaways">
+          <li>La búsqueda de superioridad no es una carrera — es <strong>caminar hacia adelante en terreno plano</strong>, junto a otros, no por encima de ellos.</li>
+          <li>La inferioridad sana te compara con <strong>tu yo ideal</strong>. La insana te compara con <strong>otras personas</strong>. La segunda convierte a cada persona en un enemigo.</li>
+          <li>"No somos iguales, pero somos equivalentes". La diferencia es real. El rango es imaginario.</li>
+          <li>Cuando dejas de competir, la gente a tu alrededor <strong>deja de ser rival y se convierte en camarada</strong>. Por fin puedes celebrar sus logros sin que te cuesten nada.</li>
+        </ul>
+        <div class="try-this">Nota la próxima vez que el éxito de alguien te contraiga. Esa reacción es el marco de competencia. Practica decir — aunque sea en silencio — "su victoria no me cuesta nada".</div>
+      </article>
+
+      <article class="chapter reveal">
+        <div class="chap-header">
+          <div class="chap-num">iv</div>
+          <div class="chap-title">Las Tres Tareas Vitales y la Mentira Vital</div>
+        </div>
+        <div class="chap-rule"></div>
+        <ul class="takeaways">
+          <li>Adler nombra tres tareas interpersonales de las que nadie escapa: <strong>trabajo, amistad, amor</strong>. Cada una exige coraje proporcional a su profundidad.</li>
+          <li>Cuando tememos una tarea, fabricamos razones para evitarla. Inventamos defectos ajenos para esquivar la relación. Nos mantenemos ocupados para esquivar el amor.</li>
+          <li>Adler lo llama la <strong>mentira vital</strong>: inventar pretextos para evitar las tareas vitales, y echar la culpa de los pretextos a otros o a las circunstancias.</li>
+          <li>La mentira vital preserva la preciosa historia <em>"podría, si tan solo..."</em> a costa precisamente de lo que querías.</li>
+        </ul>
+        <div class="try-this">Elige una tarea vital (trabajo, una amistad, una relación) en la que estás flotando. Nombra el pretexto que usas para no profundizar. Luego ignóralo en una sola acción esta semana.</div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <!-- NOCHE III: DESCARTA LAS TAREAS DE LOS DEMÁS -->
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <section class="part" id="noche-3">
+    <div class="part-header reveal">
+      <div class="part-number">La Tercera Noche</div>
+      <div class="part-title-block">
+        <h2>Descarta las Tareas de los <em>Demás</em></h2>
+        <div class="subtitle">Casi todo enredo interpersonal viene de hacer el trabajo de otro — o de dejar que otros hagan el tuyo. El cuchillo es más afilado de lo que parece el nudo.</div>
+      </div>
+    </div>
+
+    <div class="chapter-grid">
+
+      <article class="chapter reveal">
+        <div class="chap-header">
+          <div class="chap-num">i</div>
+          <div class="chap-title">Niega el Deseo de Reconocimiento</div>
+        </div>
+        <div class="chap-rule"></div>
+        <ul class="takeaways">
+          <li>No vives para satisfacer las expectativas ajenas. Y ellos no viven para satisfacer las tuyas. <strong>Esto no es nihilismo — es la base de la libertad.</strong></li>
+          <li>La necesidad compulsiva de ser reconocido remonta al <strong>condicionamiento de premio y castigo</strong>: actúa bien para ser elogiado, actúa mal para evitar regaños. Se instaló; se puede desinstalar.</li>
+          <li>Cuando la aprobación es tu brújula, acabas <strong>viviendo la vida de otros</strong> — y aún así te sientes invisible, porque la aprobación nunca aterriza donde está la herida.</li>
+          <li>Perseguir reconocimiento parece altruista. En realidad es profundamente egocéntrico — tú eres el único sujeto en el cuadro.</li>
+        </ul>
+        <div class="try-this">Haz hoy una cosa pequeña que quieras hacer, que nadie vaya a elogiar. Siéntate con la incomodidad de la falta de aplauso. Esa incomodidad es el músculo.</div>
+      </article>
+
+      <article class="chapter reveal">
+        <div class="chap-header">
+          <div class="chap-num">ii</div>
+          <div class="chap-title">La Separación de Tareas</div>
+        </div>
+        <div class="chap-rule"></div>
+        <ul class="takeaways">
+          <li>Antes de actuar, pregunta: <strong>"¿De quién es esta tarea?"</strong>. La prueba es simple — ¿quién recibe finalmente las consecuencias?</li>
+          <li>El estudio de un hijo es tarea del hijo. La opinión de un colega sobre ti es su tarea. Que a alguien le gustes o no es su tarea.</li>
+          <li>Casi todo problema interpersonal viene de <strong>invadir las tareas ajenas, o dejar que invadan las tuyas</strong>. Separarlas disuelve la mayor parte del enredo.</li>
+          <li>Separación no es abandono. Puedes seguir ofreciendo ayuda — pero no ordenas, ni rescatas, ni controlas.</li>
+        </ul>
+        <div class="try-this">Hoy, cuando sientas el impulso de gestionar el resultado de otra persona, detente. Dite: "esta es su tarea". Ofrece ayuda solo si te la piden. Nota cuánto más ligero se vuelve el día.</div>
+      </article>
+
+      <article class="chapter reveal">
+        <div class="chap-header">
+          <div class="chap-num">iii</div>
+          <div class="chap-title">La Libertad Es No Gustar</div>
+        </div>
+        <div class="chap-rule"></div>
+        <ul class="takeaways">
+          <li>El precio de vivir según tus propios principios es este: <strong>a algunos no les gustará</strong>. Ese es el precio de la libertad, y no es negociable a la baja.</li>
+          <li>Intentar gustarle a todos significa <strong>jurar lealtad a todos</strong> — una promesa imposible y que te borra a ti mismo.</li>
+          <li>No gustar es <strong>prueba de que estás ejerciendo la libertad</strong>. Significa que dejaste de contorsionarte para encajar con las preferencias de cada uno.</li>
+          <li>"No quiero que me detesten" es tu tarea. "Si fulano me detesta o no" es la suya. Mantenlas separadas y podrás actuar.</li>
+        </ul>
+        <div class="try-this">Identifica una decisión que has suavizado o aplazado específicamente para evitar el disgusto de alguien. Tómala — limpiamente, sin disculparte ni dar explicaciones de más.</div>
+      </article>
+
+      <article class="chapter reveal">
+        <div class="chap-header">
+          <div class="chap-num">iv</div>
+          <div class="chap-title">Tienes las Cartas en la Mano</div>
+        </div>
+        <div class="chap-rule"></div>
+        <ul class="takeaways">
+          <li>"Puedes llevar un caballo al agua, pero no puedes hacerlo beber". Tu tarea es llevar. Beber es tarea del caballo.</li>
+          <li>No necesitas que el otro cambie para empezar. El <strong>primer paso siempre es tuyo</strong>, y solo eso transforma la relación.</li>
+          <li>Cuando dejas de esperar a que los demás se disculpen, aprueben o lleguen — <strong>la dinámica se mueve</strong>. Tú tienes las cartas. Las tuviste todo el tiempo.</li>
+          <li>Si una relación solo funciona cuando cargas con los dos lados, separar las tareas lo mostrará con claridad. A veces la respuesta es alejarse con las manos limpias.</li>
+        </ul>
+        <div class="try-this">En una relación atascada, nombra lo que has estado esperando que <em>ellos</em> hagan primero. Da hoy un paso que no dependa de su respuesta.</div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <!-- NOCHE IV: DÓNDE ESTÁ EL CENTRO DEL MUNDO -->
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <section class="part" id="noche-4">
+    <div class="part-header reveal">
+      <div class="part-number">La Cuarta Noche</div>
+      <div class="part-title-block">
+        <h2>Dónde Está el Centro del <em>Mundo</em></h2>
+        <div class="subtitle">Eres el protagonista de tu vida — pero no del mundo. La separación fue el punto de partida. El sentimiento de comunidad es el destino.</div>
+      </div>
+    </div>
+
+    <div class="chapter-grid">
+
+      <article class="chapter reveal">
+        <div class="chap-header">
+          <div class="chap-num">i</div>
+          <div class="chap-title">No Eres el Centro</div>
+        </div>
+        <div class="chap-rule"></div>
+        <ul class="takeaways">
+          <li>La persona que se detesta y la que se adora comparten una cosa: <strong>ambas están obsesionadas con el "yo"</strong>.</li>
+          <li>Creer que eres el centro del mundo convierte cada decepción en traición — <em>"no hicieron lo que yo necesitaba, así que son mi enemigo"</em>.</li>
+          <li>Eres <strong>parte de la comunidad, no su eje</strong>. Un miembro, no un monarca. Ese descenso es, en realidad, un alivio.</li>
+          <li>La meta es pasar de <strong>apego al yo → interés por los demás</strong>. No autoborrado — solo dejar que la cámara apunte hacia afuera a veces.</li>
+        </ul>
+        <div class="try-this">En una conversación hoy, suelta la pregunta "¿cómo me están percibiendo?" y cámbiala por "¿qué necesita en realidad esta persona ahora mismo?".</div>
+      </article>
+
+      <article class="chapter reveal">
+        <div class="chap-header">
+          <div class="chap-num">ii</div>
+          <div class="chap-title">Horizontal, No Vertical</div>
+        </div>
+        <div class="chap-rule"></div>
+        <ul class="takeaways">
+          <li>Las relaciones verticales clasifican a la gente: <strong>arriba/abajo, superior/inferior, juez/juzgado</strong>. Producen complejos de inferioridad por diseño.</li>
+          <li>Las relaciones horizontales reconocen la diferencia sin rango: <strong>"iguales pero no idénticos"</strong>.</li>
+          <li>Un director ejecutivo y un padre que se queda en casa tienen roles distintos, no distinto valor humano. Confundir eso envenena cada hogar y cada lugar de trabajo que toca.</li>
+          <li>La prueba: ¿Trato a esta persona como a un igual, o como a alguien que estoy calificando en silencio? Si es lo segundo, estás en marco vertical — y ambos perdéis.</li>
+        </ul>
+        <div class="try-this">Elige una relación donde tú haces "del mayor" (padre/madre, jefe, mentor). Durante una semana, interactúa como si fueran tu igual en valor, solo con distinta experiencia. Nota qué se mueve.</div>
+      </article>
+
+      <article class="chapter reveal">
+        <div class="chap-header">
+          <div class="chap-num">iii</div>
+          <div class="chap-title">Ni Elogies, Ni Regañes. Anima.</div>
+        </div>
+        <div class="chap-rule"></div>
+        <ul class="takeaways">
+          <li>El elogio y el regaño son <strong>ambos actos de juicio vertical</strong> — los "capaces" evaluando a los "incapaces". Ambos son manipulación, solo que con herramientas opuestas.</li>
+          <li>"Bien hecho" a un hijo o pareja suena amable pero instala silenciosamente: <em>estás debajo de mí, esperando mi veredicto</em>.</li>
+          <li>Sustituye el elogio por <strong>gratitud y expresión directa</strong>: "gracias", "eso me ayudó", "me alegra". Estas vienen de la igualdad, no de la jerarquía.</li>
+          <li>Cuando alguien lucha, no le falta capacidad — <strong>ha perdido el coraje para enfrentar su tarea</strong>. Tu trabajo es ayudarle a recuperarlo, no calificarlo.</li>
+        </ul>
+        <div class="try-this">Esta semana, elimina "bien hecho" y "muy bien" de tu vocabulario. Usa "gracias" y "eso me ayudó" en su lugar. Observa cómo se recalibra la relación.</div>
+      </article>
+
+      <article class="chapter reveal">
+        <div class="chap-header">
+          <div class="chap-num">iv</div>
+          <div class="chap-title">Valor a Través de la Contribución</div>
+        </div>
+        <div class="chap-rule"></div>
+        <ul class="takeaways">
+          <li>Te sientes valioso cuando sientes <strong>"soy de utilidad para alguien"</strong>. No cuando te califican alto — cuando has contribuido con algo significativo.</li>
+          <li>El sentimiento de contribución es <strong>subjetivo, no verificable</strong>. No necesitas que el receptor lo confirme; solo necesitas haber ofrecido algo genuinamente.</li>
+          <li>Por eso falla la búsqueda de reconocimiento: el elogio externo es un <strong>sustituto hueco</strong> del sentido vivido de utilidad. Nunca llena el hueco real.</li>
+          <li>El valor se construye desde adentro, a través de la contribución. Cualquier otra ruta es un desvío al mismo vacío.</li>
+        </ul>
+        <div class="try-this">Termina el día hoy preguntándote: "¿con qué contribuí hoy a alguien?". Aunque sea diminuto: un mensaje, una puerta sostenida, una tarea quitada del plato ajeno. Nota cuál se sintió más vivo.</div>
+      </article>
+
+    </div>
+  </section>
+
+</div>
+
+<!-- FULL-BLEED THREE KEYS -->
+<section class="keys-statement">
+  <div class="keys-inner">
+    <div class="eyebrow keys-eyebrow">Las Tres Claves del Sentimiento de Comunidad</div>
+    <h2 class="keys-headline">Tres movimientos. Una <em>llegada</em>.</h2>
+    <div class="keys-subhead">La receta de Adler para pasar del miedo al coraje se reduce a tres prácticas. Cada una depende de la anterior.</div>
+
+    <div class="keys-grid">
+
+      <div class="key-card">
+        <div class="num">Clave I · El Yo</div>
+        <h3><em>Autoaceptación</em></h3>
+        <p>No la mentira de la autoafirmación ("en realidad soy 100%"). Sino: acéptate al 60%, ve el trabajo con claridad, y pon tu energía en lo que sí puedes cambiar.</p>
+      </div>
+
+      <div class="key-card">
+        <div class="num">Clave II · El Otro</div>
+        <h3>Confianza en los <em>Demás</em></h3>
+        <p>No la confianza calculada ("creeré si me lo demuestran"). La confianza incondicional — la voluntad de ser herido — es el único fundamento de una relación profunda.</p>
+      </div>
+
+      <div class="key-card">
+        <div class="num">Clave III · El Mundo</div>
+        <h3>Contribución a los <em>Demás</em></h3>
+        <p>No es autosacrificio. Es actuar de modo que puedas sentir "soy de utilidad aquí" — así es como una persona genera, en lugar de mendigar, su propio sentido de valor.</p>
+      </div>
+
+    </div>
+
+    <div class="keys-arrow">
+      acéptate &nbsp;→&nbsp; confía incondicionalmente &nbsp;→&nbsp; contribuye &nbsp;=&nbsp; <strong>sentimiento de comunidad</strong> &nbsp;=&nbsp; <strong>felicidad</strong>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <!-- NOCHE V: VIVIR CON SERIEDAD EN EL AQUÍ Y AHORA -->
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+  <section class="part" id="noche-5">
+    <div class="part-header reveal">
+      <div class="part-number">La Quinta Noche</div>
+      <div class="part-title-block">
+        <h2>Vivir en Serio en el <em>Aquí y Ahora</em></h2>
+        <div class="subtitle">La noche final condensa todo en una postura: acepta el yo que tienes, confía en los demás, y baila el momento en el que estás.</div>
+      </div>
+    </div>
+
+    <div class="chapter-grid">
+
+      <article class="chapter reveal">
+        <div class="chap-header">
+          <div class="chap-num">i</div>
+          <div class="chap-title">Autoaceptación, No Autoafirmación</div>
+        </div>
+        <div class="chap-rule"></div>
+        <ul class="takeaways">
+          <li>La autoafirmación dice <em>"en realidad soy 100% — solo tuve un mal día"</em>. Es una mentira con pintura de confianza.</li>
+          <li>La autoaceptación dice <em>"estoy al 60%. ¿Cómo me acerco al 100%?"</em>. Es honesta, y se mueve.</li>
+          <li>Adler lo llama <strong>resignación afirmativa</strong> — ver con claridad la verdad de tu situación, y actuar desde allí.</li>
+          <li>La Oración de la Serenidad es, en el fondo, una instrucción adleriana: acepta lo que no puedes cambiar, cambia lo que sí, y discierne la diferencia.</li>
+        </ul>
+        <div class="try-this">Nombra una cosa tuya que estés ocultando con bombo (entusiasmo) o con resignación (derrota). Llévala al medio: ¿qué es verdad realmente, y qué cosa puedo hacer al respecto?</div>
+      </article>
+
+      <article class="chapter reveal">
+        <div class="chap-header">
+          <div class="chap-num">ii</div>
+          <div class="chap-title">Confianza Sobre el Crédito</div>
+        </div>
+        <div class="chap-rule"></div>
+        <ul class="takeaways">
+          <li>El <strong>crédito</strong> es condicional — <em>"te presto esto porque puedes devolverlo"</em>. Es una transacción que se hace llamar relación.</li>
+          <li>La <strong>confianza</strong> es incondicional — <em>"creo en ti sin exigir garantía"</em>. Es el único suelo en el que crecen las relaciones profundas.</li>
+          <li>Sí, a veces se aprovecharán de ti. La alternativa — la duda como fundamento — garantiza construir relaciones superficiales para siempre.</li>
+          <li>Si alguien se aprovecha de ti, esa es <strong>su tarea</strong>. Elegir confiar es la tuya. Mantenlas separadas.</li>
+        </ul>
+        <div class="try-this">En una relación donde llevas cuentas, suelta el libro mayor. Da sin anotar esta semana. Si el otro lleva cuentas, aprenderás algo importante sobre la relación misma.</div>
+      </article>
+
+      <article class="chapter reveal">
+        <div class="chap-header">
+          <div class="chap-num">iii</div>
+          <div class="chap-title">El Coraje de Ser Normal</div>
+        </div>
+        <div class="chap-rule"></div>
+        <ul class="takeaways">
+          <li>Muchas personas oscilan entre dos polos: <strong>"especialmente bueno"</strong> (hiperlogrador) y, cuando eso colapsa, <strong>"especialmente malo"</strong> (actuar en negativo). Ambos buscan lo mismo: ser especiales.</li>
+          <li>Ambos son una <strong>búsqueda de superioridad fácil</strong> — atajos para sentirse alguien, sin el trabajo lento de serlo de verdad.</li>
+          <li>La cura no es bajar tus estándares. Es <strong>el coraje de ser ordinario</strong> — dejar que tu valor viva en lo que haces, no en sobresalir.</li>
+          <li>Ser normal no es ser incapaz. Es negarse a presumir. La mayoría de las vidas admirables, vistas de cerca, son bastante normales.</li>
+        </ul>
+        <div class="try-this">Cázate representando especialismo esta semana — credenciales soltadas, logros intercalados, señales de estatus. Deja pasar una sin empujarla. Nota que sigues bien.</div>
+      </article>
+
+      <article class="chapter reveal">
+        <div class="chap-header">
+          <div class="chap-num">iv</div>
+          <div class="chap-title">La Vida Es una Serie de Momentos</div>
+        </div>
+        <div class="chap-rule"></div>
+        <ul class="takeaways">
+          <li>No trates la vida como una línea que va del nacimiento hacia una cima. Bajo una lupa, la línea se disuelve en <strong>una serie de puntos — momentos llamados "ahora"</strong>.</li>
+          <li><em>Cinesis</em> de Aristóteles: movimiento hacia un destino (el ascenso a la montaña). Solo vale si llegas. <em>Energeia</em>: donde el proceso <strong>es</strong> el resultado (la danza, el viaje).</li>
+          <li>Trata la vida como <em>energeial</em>. Si termina a los veinte o a los noventa, <strong>ya está completa</strong>. Ningún momento fue "preparatorio".</li>
+          <li>Esto no es hedonismo. Es vivir cada instante con seriedad — estudiar las ecuaciones de hoy, bailar la danza de hoy — sin convertir el hoy en sala de espera del mañana.</li>
+        </ul>
+        <div class="try-this">Identifica una cosa que haces solo por una recompensa futura. Durante una sesión, hazla como si el hacer mismo fuera la recompensa. Nota si realmente baja la calidad.</div>
+      </article>
+
+      <article class="chapter reveal">
+        <div class="chap-header">
+          <div class="chap-num">v</div>
+          <div class="chap-title">Dar Sentido a una Vida sin Sentido</div>
+        </div>
+        <div class="chap-rule"></div>
+        <ul class="takeaways">
+          <li>La vida en general no tiene sentido incorporado. El universo no te dejó uno debajo de una piedra. Esto no es un problema — es <strong>permiso</strong>.</li>
+          <li>Tú asignas el significado. El sentido de tu vida lo decides tú solo, en la forma en que la vives.</li>
+          <li>La mentira vital más grande es el aplazamiento: <em>"viviré de verdad cuando ____"</em>. Mientras la vida se aplaza, se pasa, no se vive.</li>
+          <li>Enfoca el reflector estrecho sobre el aquí y ahora. No verás el pasado ni el futuro con claridad — y no lo necesitarás.</li>
+        </ul>
+        <div class="try-this">Escribe una sola frase: "El sentido que quiero dar a mi vida es ____". No lo pienses de más. Actúa en consecuencia una vez hoy, por pequeño que sea. Mañana, actúa otra vez.</div>
+      </article>
+
+      <article class="chapter reveal" style="background: var(--paper-deep);">
+        <div class="chap-header">
+          <div class="chap-num" style="color: var(--olive);">·</div>
+          <div class="chap-title" style="font-style: italic; color: var(--ink-soft);">El Libro Entero en Una Línea</div>
+        </div>
+        <div class="chap-rule"></div>
+        <p style="font-size: 15px; line-height: 1.6; color: var(--ink-soft); margin-bottom: 12px;">
+          La tesis de Adler, comprimida: <strong style="color: var(--ink);">la infelicidad no se te impone — es la forma que toma tu vida cuando te falta el coraje para elegir otra cosa</strong>. Niega el trauma. Separa tareas. Contribuye. Baila el momento.
+        </p>
+        <div class="try-this" style="border-color: var(--gold); background: rgba(166,120,45,0.07); color: var(--ink);">
+          <span style="color: var(--gold-deep); font-weight: 600;">RECUERDA →</span>
+          No necesitas el permiso de nadie — ni el de tus padres, ni el de tu jefe, ni el de tu yo pasado — para empezar a vivir libremente. Ese permiso nunca fue de nadie para darlo.
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- CHEAT SHEET: BRÚJULA ADLERIANA -->
+  <section class="cheatsheet" id="brujula">
+    <h2 class="cs-title">La <em>Brújula</em> Adleriana</h2>
+    <div class="cs-tagline">Cuando te quedes atascado, lee la columna izquierda para ver a qué has vuelto por defecto. Luego lee de lado a la respuesta adleriana.</div>
+
+    <div class="cs-grid">
+
+      <div class="cs-column reject">
+        <h3>Qué Soltar</h3>
+
+        <div class="cs-row">
+          <div class="cs-label">Sobre el pasado</div>
+          <div class="cs-text"><strong>Etiología:</strong> "Mi pasado me hizo así. Las causas fluyen río abajo hasta mi presente".</div>
+        </div>
+        <div class="cs-row">
+          <div class="cs-label">Sentimientos</div>
+          <div class="cs-text"><strong>Emoción como amo:</strong> "El enojo me dominó. No pude evitarlo". (La emoción tenía un propósito que elegiste).</div>
+        </div>
+        <div class="cs-row">
+          <div class="cs-label">Personalidad</div>
+          <div class="cs-text"><strong>Yo fijo:</strong> "Es que soy así". (Un estilo de vida se vuelve a elegir cada día).</div>
+        </div>
+        <div class="cs-row">
+          <div class="cs-label">Los demás</div>
+          <div class="cs-text"><strong>Marco competitivo:</strong> ver a cada persona como rival, cada victoria ajena como derrota propia.</div>
+        </div>
+        <div class="cs-row">
+          <div class="cs-label">Aprobación</div>
+          <div class="cs-text"><strong>Deseo de reconocimiento:</strong> organizar la vida en torno a ser elogiado, visto, validado.</div>
+        </div>
+        <div class="cs-row">
+          <div class="cs-label">Control</div>
+          <div class="cs-text"><strong>Invadir tareas ajenas:</strong> arreglar, gestionar, rescatar, mandar. Fingir que es por ellos.</div>
+        </div>
+        <div class="cs-row">
+          <div class="cs-label">Jerarquía</div>
+          <div class="cs-text"><strong>Relaciones verticales:</strong> elogio, regaño, juicio — todas variantes del arriba/abajo.</div>
+        </div>
+        <div class="cs-row">
+          <div class="cs-label">Especialismo</div>
+          <div class="cs-text"><strong>Superioridad fácil:</strong> necesitar ser especialmente bueno (o especialmente malo) para sentirse alguien.</div>
+        </div>
+        <div class="cs-row">
+          <div class="cs-label">Forma de la vida</div>
+          <div class="cs-text"><strong>Vida como ascenso:</strong> la vida real empieza después de la cima; el resto es tentativo, "en tránsito".</div>
+        </div>
+        <div class="cs-row">
+          <div class="cs-label">Tiempo</div>
+          <div class="cs-text"><strong>Aplazamiento:</strong> "Viviré de verdad cuando ____". Una vida indefinidamente pospuesta.</div>
+        </div>
+      </div>
+
+      <div class="cs-column adopt">
+        <h3>Qué Adoptar</h3>
+
+        <div class="cs-row">
+          <div class="cs-label">Sobre el pasado</div>
+          <div class="cs-text"><strong>Teleología:</strong> pregunta "¿para qué sirve esta conducta?". El pasado es dato; tu meta es el motor.</div>
+        </div>
+        <div class="cs-row">
+          <div class="cs-label">Sentimientos</div>
+          <div class="cs-text"><strong>Emoción como herramienta:</strong> "Elegí el enojo para lograr X". Aceptarlo devuelve el volante.</div>
+        </div>
+        <div class="cs-row">
+          <div class="cs-label">Personalidad</div>
+          <div class="cs-text"><strong>Estilo re-elegible:</strong> elegiste esta visión del mundo, a menudo sin saberlo. Puedes volver a elegirla.</div>
+        </div>
+        <div class="cs-row">
+          <div class="cs-label">Los demás</div>
+          <div class="cs-text"><strong>Camaradas, no enemigos:</strong> terreno plano, caminando juntos, celebrando sus victorias sin reparos.</div>
+        </div>
+        <div class="cs-row">
+          <div class="cs-label">Aprobación</div>
+          <div class="cs-text"><strong>Libertad = no gustar:</strong> a algunos no les gustarán tus elecciones. Ese es el precio, no un fracaso.</div>
+        </div>
+        <div class="cs-row">
+          <div class="cs-label">Control</div>
+          <div class="cs-text"><strong>Separación de tareas:</strong> "¿De quién es esta tarea?". Lleva al caballo; beber es tarea suya.</div>
+        </div>
+        <div class="cs-row">
+          <div class="cs-label">Jerarquía</div>
+          <div class="cs-text"><strong>Relaciones horizontales:</strong> iguales pero no idénticos. Cambia el elogio por "gracias".</div>
+        </div>
+        <div class="cs-row">
+          <div class="cs-label">Especialismo</div>
+          <div class="cs-text"><strong>Coraje de ser normal:</strong> lo ordinario no es inferior. El valor crece de la contribución, no de la distinción.</div>
+        </div>
+        <div class="cs-row">
+          <div class="cs-label">Forma de la vida</div>
+          <div class="cs-text"><strong>Vida como danza (energeia):</strong> cada momento ya está completo. Ningún momento es "preparatorio".</div>
+        </div>
+        <div class="cs-row">
+          <div class="cs-label">Tiempo</div>
+          <div class="cs-text"><strong>Aquí y ahora:</strong> un reflector estrecho sobre este momento, vivido en serio. Sin pasado ni futuro donde esconderse.</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="cs-coda">
+      «Lo importante no es con qué uno nace,<br/>sino el uso que uno hace de ese equipamiento». — Adler
+    </div>
+  </section>
+
+  <!-- CIERRE -->
+  <section class="closing">
+    <div class="closing-quote">
+      <span class="mark">«</span>El coraje para ser feliz también incluye<br/>
+      el coraje de <em>no gustar</em>.<span class="mark">»</span>
+    </div>
+    <div class="closing-cite">— Kishimi y Koga · El Coraje de No Gustar</div>
+  </section>
+
+  <footer class="colophon">
+    <span>Un manual de campo de una página</span>
+    <span>Nº 002 / El Coraje de No Gustar</span>
+    <span>Hecho para el aquí y ahora</span>
+  </footer>
+
+</div>
+
+<script>
+  // Staggered reveal-on-scroll
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) {
+        const siblings = [...e.target.parentElement.querySelectorAll('.reveal')];
+        const idx = siblings.indexOf(e.target);
+        e.target.style.transitionDelay = `${Math.min(idx, 6) * 70}ms`;
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>

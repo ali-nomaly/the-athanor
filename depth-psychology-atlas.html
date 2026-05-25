@@ -1,0 +1,1813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Depth Atlas — A Complete Reference to Depth Psychology</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Cinzel:wght@400;500;700&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1410;
+    --parchment: #f2e8d5;
+    --parchment-dark: #e8d9c0;
+    --parchment-deep: #d4c4a8;
+    --gold: #b8922a;
+    --gold-bright: #d4a832;
+    --gold-pale: #e8d080;
+    --crimson: #7a1a1a;
+    --crimson-deep: #5a0f0f;
+    --indigo: #1a1a4a;
+    --sienna: #8b4513;
+    --verdigris: #2a5a4a;
+    --ash: #4a4035;
+    --shadow: rgba(26,20,16,0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: #0e0c09;
+    color: var(--ink);
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 17px;
+    line-height: 1.75;
+    min-height: 100vh;
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: #0e0c09; }
+  ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
+
+  /* ── AMBIENT BACKGROUND ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background: radial-gradient(ellipse at 20% 20%, rgba(184,146,42,0.04) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 80%, rgba(122,26,26,0.05) 0%, transparent 60%);
+    pointer-events: none; z-index: 0;
+  }
+
+  /* ── OUTER FRAME ── */
+  .codex {
+    max-width: 1100px;
+    margin: 0 auto;
+    background: var(--parchment);
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 0 80px rgba(184,146,42,0.2), 0 0 200px rgba(0,0,0,0.8);
+  }
+
+  /* ── BORDER ORNAMENT ── */
+  .codex-inner {
+    border: 3px solid var(--gold);
+    margin: 12px;
+    border-image: none;
+    position: relative;
+  }
+  .codex-inner::before {
+    content: '';
+    position: absolute; inset: 6px;
+    border: 1px solid rgba(184,146,42,0.4);
+    pointer-events: none; z-index: 1;
+  }
+
+  /* ── CORNER ORNAMENTS ── */
+  .corner { position: absolute; width: 40px; height: 40px; z-index: 2; }
+  .corner::before, .corner::after { content: ''; position: absolute; background: var(--gold); }
+  .corner-tl { top: -2px; left: -2px; }
+  .corner-tr { top: -2px; right: -2px; }
+  .corner-bl { bottom: -2px; left: -2px; }
+  .corner-br { bottom: -2px; right: -2px; }
+
+  /* ── NAVIGATION ── */
+  .nav-strip {
+    background: var(--ink);
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0;
+    border-bottom: 2px solid var(--gold);
+    position: sticky; top: 0; z-index: 100;
+  }
+  .nav-strip a {
+    color: var(--gold-pale);
+    text-decoration: none;
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    padding: 10px 14px;
+    text-transform: uppercase;
+    transition: all 0.2s;
+    border-right: 1px solid rgba(184,146,42,0.2);
+  }
+  .nav-strip a:hover { background: rgba(184,146,42,0.12); color: var(--gold-bright); }
+
+  /* ── MASTHEAD ── */
+  .masthead {
+    background: var(--ink);
+    padding: 60px 40px 50px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .masthead::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: 
+      radial-gradient(ellipse at 50% 0%, rgba(184,146,42,0.15) 0%, transparent 70%),
+      radial-gradient(ellipse at 20% 100%, rgba(122,26,26,0.1) 0%, transparent 60%);
+  }
+  .masthead-eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    opacity: 0.8;
+  }
+  .masthead h1 {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(32px, 5vw, 58px);
+    font-weight: 700;
+    color: var(--parchment);
+    letter-spacing: 0.06em;
+    line-height: 1.1;
+    position: relative;
+  }
+  .masthead h1 span { color: var(--gold); }
+  .masthead-rule {
+    width: 280px;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold), transparent);
+    margin: 22px auto;
+  }
+  .masthead-sub {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    color: var(--parchment-deep);
+    font-size: 18px;
+    opacity: 0.85;
+    position: relative;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .masthead-glyph {
+    font-size: 52px;
+    margin-bottom: 10px;
+    color: var(--gold);
+    opacity: 0.6;
+    display: block;
+    position: relative;
+    filter: sepia(1) saturate(2);
+  }
+
+  /* ── SECTIONS ── */
+  section {
+    padding: 50px 50px 40px;
+    border-bottom: 1px solid rgba(184,146,42,0.25);
+    position: relative;
+  }
+  section:last-of-type { border-bottom: none; }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(184,146,42,0.3);
+  }
+  .section-number {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    opacity: 0.7;
+    min-width: 28px;
+  }
+  .section-title {
+    font-family: 'Cinzel', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--crimson-deep);
+    letter-spacing: 0.05em;
+  }
+  .section-rule {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, rgba(184,146,42,0.4), transparent);
+  }
+
+  /* ── INTRO TEXT ── */
+  .lede {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 19px;
+    color: var(--ash);
+    margin-bottom: 24px;
+    padding-left: 20px;
+    border-left: 3px solid var(--gold);
+  }
+
+  p { margin-bottom: 16px; color: #2a2018; font-size: 16.5px; }
+  strong { color: var(--crimson-deep); font-weight: 600; }
+  em { font-style: italic; }
+
+  /* ── TIMELINE ── */
+  .timeline {
+    position: relative;
+    padding-left: 40px;
+    margin: 30px 0;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute; left: 12px; top: 0; bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--gold), var(--crimson), var(--gold));
+  }
+  .timeline-event {
+    position: relative;
+    margin-bottom: 28px;
+    padding: 16px 20px;
+    background: rgba(212,200,168,0.3);
+    border: 1px solid rgba(184,146,42,0.2);
+    border-radius: 2px;
+    transition: background 0.2s;
+  }
+  .timeline-event:hover { background: rgba(212,200,168,0.55); }
+  .timeline-event::before {
+    content: '';
+    position: absolute; left: -33px; top: 20px;
+    width: 12px; height: 12px;
+    background: var(--gold);
+    border-radius: 50%;
+    box-shadow: 0 0 0 3px var(--parchment), 0 0 0 5px rgba(184,146,42,0.3);
+  }
+  .timeline-year {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+  .timeline-title {
+    font-weight: 600;
+    color: var(--crimson-deep);
+    font-size: 15px;
+    margin-bottom: 5px;
+  }
+  .timeline-desc {
+    font-size: 14.5px;
+    color: var(--ash);
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  /* ── FIGURE CARDS ── */
+  .figure-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 22px;
+    margin: 28px 0;
+  }
+  .figure-card {
+    background: linear-gradient(135deg, #f7f0e4 0%, #ede0c8 100%);
+    border: 1px solid rgba(184,146,42,0.35);
+    padding: 22px 20px 20px;
+    position: relative;
+    transition: all 0.25s;
+    cursor: default;
+  }
+  .figure-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--gold);
+  }
+  .figure-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(26,20,16,0.15);
+    border-color: var(--gold);
+  }
+  .figure-card.crimson::before { background: var(--crimson); }
+  .figure-card.verdigris::before { background: var(--verdigris); }
+  .figure-card.indigo::before { background: var(--indigo); }
+  .figure-card.sienna::before { background: var(--sienna); }
+  .figure-name {
+    font-family: 'Cinzel', serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--crimson-deep);
+    margin-bottom: 3px;
+    letter-spacing: 0.04em;
+  }
+  .figure-dates {
+    font-size: 12px;
+    color: var(--gold);
+    letter-spacing: 0.08em;
+    margin-bottom: 10px;
+    font-family: 'Cinzel', serif;
+  }
+  .figure-school {
+    display: inline-block;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border: 1px solid currentColor;
+    margin-bottom: 10px;
+    font-family: 'Cinzel', serif;
+  }
+  .figure-school.fs-psychoanalysis { color: var(--crimson); border-color: var(--crimson); }
+  .figure-school.fs-analytical { color: var(--indigo); border-color: var(--indigo); }
+  .figure-school.fs-adlerian { color: var(--sienna); border-color: var(--sienna); }
+  .figure-school.fs-archetypal { color: var(--verdigris); border-color: var(--verdigris); }
+  .figure-school.fs-object { color: #5a3a6a; border-color: #5a3a6a; }
+  .figure-school.fs-post { color: #2a4a3a; border-color: #2a4a3a; }
+  .figure-body { font-size: 14px; color: var(--ash); line-height: 1.6; margin: 0; }
+  .figure-contrib {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(184,146,42,0.25);
+    font-size: 13px;
+    color: var(--crimson-deep);
+  }
+
+  /* ── PSYCHE MAP ── */
+  .psyche-map {
+    margin: 30px 0;
+    background: var(--ink);
+    padding: 40px 30px;
+    position: relative;
+    overflow: hidden;
+  }
+  .psyche-map::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 50%, rgba(184,146,42,0.06) 0%, transparent 70%);
+  }
+  .psyche-diagram {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    position: relative;
+    z-index: 1;
+  }
+  .psyche-layer {
+    width: 100%;
+    max-width: 640px;
+    text-align: center;
+    padding: 16px 20px;
+    position: relative;
+    transition: transform 0.2s;
+  }
+  .psyche-layer:hover { transform: scaleX(1.015); }
+  .layer-ego {
+    background: linear-gradient(135deg, #d4a832, #b8922a);
+    clip-path: polygon(8% 0%, 92% 0%, 100% 100%, 0% 100%);
+    width: 30%;
+    min-width: 180px;
+  }
+  .layer-personal {
+    background: linear-gradient(135deg, #5a3a1a, #4a2a10);
+    clip-path: polygon(4% 0%, 96% 0%, 100% 100%, 0% 100%);
+    width: 62%;
+    min-width: 300px;
+    margin-top: -2px;
+  }
+  .layer-collective {
+    background: linear-gradient(135deg, #1a1a3a, #0e0e28);
+    width: 100%;
+    max-width: 640px;
+    margin-top: -2px;
+    border-left: 1px solid rgba(184,146,42,0.2);
+    border-right: 1px solid rgba(184,146,42,0.2);
+  }
+  .layer-name {
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    letter-spacing: 0.15em;
+    margin-bottom: 4px;
+  }
+  .layer-ego .layer-name { color: var(--ink); }
+  .layer-personal .layer-name { color: var(--gold-pale); }
+  .layer-collective .layer-name { color: var(--gold); }
+  .layer-desc {
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  .layer-ego .layer-desc { color: rgba(26,20,16,0.8); }
+  .layer-personal .layer-desc { color: rgba(232,208,128,0.75); }
+  .layer-collective .layer-desc { color: rgba(232,208,128,0.6); }
+  .layer-tags {
+    display: flex; flex-wrap: wrap; gap: 5px;
+    justify-content: center; margin-top: 8px;
+  }
+  .layer-tag {
+    font-size: 10px; letter-spacing: 0.1em;
+    padding: 2px 7px;
+    border-radius: 2px;
+    font-family: 'Cinzel', serif;
+  }
+  .layer-ego .layer-tag { background: rgba(26,20,16,0.2); color: var(--ink); }
+  .layer-personal .layer-tag { background: rgba(184,146,42,0.2); color: var(--gold-pale); border: 1px solid rgba(184,146,42,0.3); }
+  .layer-collective .layer-tag { background: rgba(184,146,42,0.08); color: var(--gold); border: 1px solid rgba(184,146,42,0.2); }
+
+  /* ── TERM GLOSSARY ── */
+  .term-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+    margin: 28px 0;
+  }
+  .term-card {
+    padding: 18px 20px;
+    background: rgba(240,228,210,0.5);
+    border: 1px solid rgba(184,146,42,0.2);
+    border-left: 4px solid transparent;
+    transition: all 0.2s;
+  }
+  .term-card:hover { background: rgba(240,228,210,0.85); border-left-color: var(--gold); }
+  .term-card.t-jungian { border-left-color: var(--indigo); }
+  .term-card.t-freudian { border-left-color: var(--crimson); }
+  .term-card.t-object { border-left-color: #5a3a6a; }
+  .term-card.t-adlerian { border-left-color: var(--sienna); }
+  .term-card.t-archetypal { border-left-color: var(--verdigris); }
+  .term-name {
+    font-family: 'Cinzel', serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 2px;
+  }
+  .term-origin {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+    font-family: 'Cinzel', serif;
+  }
+  .term-def { font-size: 14px; color: var(--ash); line-height: 1.65; margin: 0; }
+
+  /* ── ARCHETYPE WHEEL ── */
+  .arch-wheel-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 22px;
+    margin: 28px 0;
+  }
+  .arch-wheel {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    flex: 1;
+    min-width: 280px;
+  }
+  .arch-cell {
+    padding: 16px 14px;
+    text-align: center;
+    background: var(--ink);
+    position: relative;
+    transition: all 0.25s;
+    cursor: default;
+  }
+  .arch-cell:hover { background: #2a2418; transform: scale(1.03); }
+  .arch-cell.center-cell {
+    grid-column: 2; grid-row: 2;
+    background: linear-gradient(135deg, var(--crimson-deep), #2a0808);
+    border: 1px solid rgba(184,146,42,0.4);
+  }
+  .arch-glyph {
+    font-size: 22px;
+    margin-bottom: 5px;
+    display: block;
+    opacity: 0.85;
+  }
+  .arch-cell-name {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--gold);
+    margin-bottom: 4px;
+    text-transform: uppercase;
+  }
+  .arch-cell-desc {
+    font-size: 11.5px;
+    color: rgba(232,208,128,0.65);
+    line-height: 1.5;
+    margin: 0;
+  }
+  .arch-side-info {
+    flex: 0 0 280px;
+  }
+  .arch-info-block {
+    background: rgba(240,228,210,0.5);
+    border: 1px solid rgba(184,146,42,0.2);
+    padding: 18px;
+    margin-bottom: 16px;
+  }
+  .arch-info-title {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    color: var(--crimson-deep);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .arch-info-list {
+    list-style: none;
+    padding: 0;
+  }
+  .arch-info-list li {
+    font-size: 13.5px;
+    color: var(--ash);
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(184,146,42,0.15);
+    padding-left: 14px;
+    position: relative;
+  }
+  .arch-info-list li::before {
+    content: '◆';
+    position: absolute; left: 0;
+    font-size: 7px;
+    color: var(--gold);
+    top: 8px;
+  }
+  .arch-info-list li:last-child { border-bottom: none; }
+
+  /* ── INDIVIDUATION PATH ── */
+  .path-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 28px 0;
+    position: relative;
+  }
+  .path-step {
+    display: flex;
+    gap: 24px;
+    padding: 22px 20px;
+    background: rgba(240,228,210,0.4);
+    border: 1px solid rgba(184,146,42,0.18);
+    border-top: none;
+    transition: background 0.2s;
+    position: relative;
+  }
+  .path-step:first-child { border-top: 1px solid rgba(184,146,42,0.18); }
+  .path-step:hover { background: rgba(240,228,210,0.7); }
+  .path-step-num {
+    font-family: 'Cinzel', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: rgba(184,146,42,0.25);
+    min-width: 40px;
+    line-height: 1;
+    padding-top: 2px;
+  }
+  .path-step-content { flex: 1; }
+  .path-step-title {
+    font-family: 'Cinzel', serif;
+    font-size: 15px;
+    color: var(--crimson-deep);
+    margin-bottom: 5px;
+    letter-spacing: 0.04em;
+  }
+  .path-step-archetype {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    border: 1px solid rgba(184,146,42,0.4);
+    padding: 2px 8px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+  .path-step-desc { font-size: 14.5px; color: var(--ash); margin: 0; line-height: 1.65; }
+  .path-connector {
+    width: 2px;
+    height: 16px;
+    background: linear-gradient(to bottom, var(--gold), rgba(184,146,42,0.3));
+    margin-left: 30px;
+  }
+
+  /* ── SCHOOLS TABLE ── */
+  .schools-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 24px 0;
+    font-size: 14px;
+  }
+  .schools-table th {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--parchment);
+    background: var(--ink);
+    padding: 12px 16px;
+    text-align: left;
+    border-right: 1px solid rgba(184,146,42,0.2);
+  }
+  .schools-table th:last-child { border-right: none; }
+  .schools-table td {
+    padding: 12px 16px;
+    color: var(--ash);
+    border-bottom: 1px solid rgba(184,146,42,0.15);
+    border-right: 1px solid rgba(184,146,42,0.1);
+    vertical-align: top;
+    line-height: 1.6;
+  }
+  .schools-table td:last-child { border-right: none; }
+  .schools-table tr:nth-child(even) td { background: rgba(212,200,168,0.2); }
+  .schools-table tr:hover td { background: rgba(212,200,168,0.45); }
+  .school-badge {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 2px;
+    display: inline-block;
+  }
+  .sb-psycho { background: rgba(122,26,26,0.15); color: var(--crimson); border: 1px solid rgba(122,26,26,0.3); }
+  .sb-jung { background: rgba(26,26,74,0.12); color: var(--indigo); border: 1px solid rgba(26,26,74,0.25); }
+  .sb-adler { background: rgba(139,69,19,0.12); color: var(--sienna); border: 1px solid rgba(139,69,19,0.25); }
+  .sb-object { background: rgba(90,58,106,0.12); color: #5a3a6a; border: 1px solid rgba(90,58,106,0.25); }
+  .sb-arch { background: rgba(42,90,74,0.12); color: var(--verdigris); border: 1px solid rgba(42,90,74,0.25); }
+
+  /* ── METHODS GRID ── */
+  .methods-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+  }
+  .method-card {
+    padding: 20px 18px;
+    background: var(--ink);
+    position: relative;
+    transition: all 0.2s;
+  }
+  .method-card:hover { background: #1e1810; transform: translateY(-2px); }
+  .method-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--gold);
+  }
+  .method-glyph { font-size: 28px; margin-bottom: 10px; display: block; }
+  .method-name {
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+  .method-desc { font-size: 13px; color: rgba(232,208,128,0.7); line-height: 1.6; margin: 0; }
+
+  /* ── COMPARISON ── */
+  .compare-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin: 24px 0;
+  }
+  .compare-col {
+    padding: 22px 20px;
+    border: 1px solid rgba(184,146,42,0.25);
+  }
+  .compare-col.freud-col {
+    background: linear-gradient(160deg, rgba(122,26,26,0.06) 0%, transparent 100%);
+    border-color: rgba(122,26,26,0.3);
+  }
+  .compare-col.jung-col {
+    background: linear-gradient(160deg, rgba(26,26,74,0.06) 0%, transparent 100%);
+    border-color: rgba(26,26,74,0.3);
+  }
+  .compare-name {
+    font-family: 'Cinzel', serif;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(184,146,42,0.2);
+  }
+  .freud-col .compare-name { color: var(--crimson); }
+  .jung-col .compare-name { color: var(--indigo); }
+  .compare-item {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    align-items: flex-start;
+  }
+  .compare-item-label {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    min-width: 80px;
+    color: var(--gold);
+    padding-top: 2px;
+  }
+  .compare-item-val { font-size: 14px; color: var(--ash); line-height: 1.55; }
+
+  /* ── APPLICATIONS ── */
+  .apply-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 18px;
+    margin: 24px 0;
+  }
+  .apply-card {
+    padding: 20px 18px;
+    background: rgba(240,228,210,0.45);
+    border: 1px solid rgba(184,146,42,0.2);
+    border-top: 3px solid var(--gold);
+    transition: all 0.2s;
+  }
+  .apply-card:hover { background: rgba(240,228,210,0.75); transform: translateY(-2px); }
+  .apply-domain {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    color: var(--crimson-deep);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+  .apply-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+  .apply-desc { font-size: 14px; color: var(--ash); line-height: 1.65; margin: 0; }
+
+  /* ── QUOTE BLOCK ── */
+  .pull-quote {
+    margin: 28px 0;
+    padding: 24px 28px;
+    background: var(--ink);
+    border-left: 4px solid var(--gold);
+    position: relative;
+  }
+  .pull-quote::before {
+    content: '\201C';
+    position: absolute; top: -8px; left: 18px;
+    font-size: 60px;
+    font-family: 'Cinzel', serif;
+    color: var(--gold);
+    opacity: 0.3;
+    line-height: 1;
+  }
+  .pull-quote p {
+    font-family: 'IM Fell English', serif;
+    font-style: italic;
+    font-size: 17px;
+    color: var(--parchment);
+    margin: 0 0 8px;
+    position: relative;
+    z-index: 1;
+  }
+  .pull-quote cite {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    opacity: 0.8;
+    text-transform: uppercase;
+  }
+
+  /* ── LEGEND ── */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 16px 0 28px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-family: 'Cinzel', serif;
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    color: var(--ash);
+    text-transform: uppercase;
+  }
+  .legend-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ── FOOTER ── */
+  .codex-footer {
+    background: var(--ink);
+    padding: 28px 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 2px solid var(--gold);
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .footer-text {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: rgba(184,146,42,0.6);
+    text-transform: uppercase;
+  }
+  .footer-glyph {
+    font-size: 20px;
+    color: rgba(184,146,42,0.4);
+  }
+
+  /* ── DECORATIVE DIVIDERS ── */
+  .ornament {
+    text-align: center;
+    color: var(--gold);
+    font-size: 16px;
+    opacity: 0.5;
+    letter-spacing: 0.5em;
+    margin: 6px 0 20px;
+  }
+
+  @media (max-width: 700px) {
+    section { padding: 36px 22px 28px; }
+    .figure-grid, .arch-wheel-container { flex-direction: column; }
+    .compare-grid { grid-template-columns: 1fr; }
+    .masthead { padding: 40px 22px 36px; }
+    .nav-strip a { font-size: 9px; padding: 8px 10px; }
+    .codex-footer { padding: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="codex">
+  <div class="codex-inner">
+
+    <!-- NAV -->
+    <nav class="nav-strip">
+      <a href="#history">History</a>
+      <a href="#figures">Figures</a>
+      <a href="#psyche">The Psyche</a>
+      <a href="#terms">Glossary</a>
+      <a href="#archetypes">Archetypes</a>
+      <a href="#individuation">Individuation</a>
+      <a href="#schools">Schools</a>
+      <a href="#methods">Methods</a>
+      <a href="#compare">Freud vs Jung</a>
+      <a href="#applications">Applications</a>
+    </nav>
+
+    <!-- MASTHEAD -->
+    <header class="masthead">
+      <p class="masthead-eyebrow">A Complete Reference Atlas</p>
+      <span class="masthead-glyph">☿</span>
+      <h1>The <span>Depth</span> Atlas</h1>
+      <div class="masthead-rule"></div>
+      <p class="masthead-sub">On the history, vocabulary, and living practice of depth psychology — from Breuer's first case to the archetypal soul</p>
+    </header>
+
+    <!-- I. HISTORY -->
+    <section id="history">
+      <div class="section-header">
+        <span class="section-number">I</span>
+        <h2 class="section-title">Origins & Historical Arc</h2>
+        <div class="section-rule"></div>
+      </div>
+
+      <p class="lede">Depth psychology did not begin with a theory — it began with a symptom no one could explain.</p>
+
+      <p>The term <em>Tiefenpsychologie</em> ("depth psychology") was coined by the Swiss psychiatrist <strong>Eugen Bleuler</strong> around the turn of the 20th century — the same man who later named schizophrenia. Bleuler directed the Burghölzli Asylum in Zürich, where Carl Jung began his career. The term referred to any psychological approach that descended below the surface of conscious behavior to reach its deeper motivating roots. Bleuler drew the term from the German, foregrounding the spatial metaphor that would define the field: the psyche as something with <em>depth</em>.</p>
+
+      <p>The genealogy begins earlier, however, with <strong>Josef Breuer</strong> — Freud's mentor — who used hypnosis and free association with his patient Anna O. (Bertha Pappenheim) in the 1880s, discovering that allowing repressed material to surface brought relief from hysterical symptoms. This was the first empirical demonstration of the unconscious as a therapeutic field. Breuer himself had privately defined depth psychology as any approach that takes the unconscious into account. Freud took the method and built a monument.</p>
+
+      <div class="timeline">
+        <div class="timeline-event">
+          <div class="timeline-year">1880–1882</div>
+          <div class="timeline-title">Anna O. & the Talking Cure</div>
+          <p class="timeline-desc">Josef Breuer's treatment of Bertha Pappenheim via hypnosis and free association produces the first documented case of unconscious material driving symptoms. The patient herself coins the phrase "talking cure." This case seeds psychoanalysis.</p>
+        </div>
+        <div class="timeline-event">
+          <div class="timeline-year">1895</div>
+          <div class="timeline-title">Studies on Hysteria — Breuer & Freud</div>
+          <p class="timeline-desc">The landmark joint publication formalizes the cathartic method. Freud begins articulating the structural theory of the unconscious as the locus of repressed, pathogenic material.</p>
+        </div>
+        <div class="timeline-event">
+          <div class="timeline-year">1900</div>
+          <div class="timeline-title">The Interpretation of Dreams — Freud</div>
+          <p class="timeline-desc">Freud's foundational work establishes dreams as the "royal road to the unconscious." The dream-work (condensation, displacement, symbolism) becomes the primary method of accessing repressed wishes. He called it his most important book.</p>
+        </div>
+        <div class="timeline-event">
+          <div class="timeline-year">1902–1910</div>
+          <div class="timeline-title">The Wednesday Psychological Society</div>
+          <p class="timeline-desc">Freud's inner circle forms in Vienna — including Adler, Rank, Stekel, and eventually Jung. This is the crucible of early depth psychology. Disagreements over the primacy of sexuality begin fracturing the group.</p>
+        </div>
+        <div class="timeline-event">
+          <div class="timeline-year">1907–1912</div>
+          <div class="timeline-title">The Freud–Jung Alliance & Break</div>
+          <p class="timeline-desc">Jung joins the movement; Freud designates him crown prince and heir. By 1912, Jung's <em>Symbols of Transformation</em> diverges sharply from Freudian libido theory. Freud sees it as betrayal. The break becomes one of the defining schisms of intellectual history.</p>
+        </div>
+        <div class="timeline-event">
+          <div class="timeline-year">1911</div>
+          <div class="timeline-title">Adler Departs — Individual Psychology</div>
+          <p class="timeline-desc">Alfred Adler breaks with Freud over the primacy of sexuality as motive. He develops Individual Psychology — a framework foregrounding social striving, inferiority feelings, and the unity of the personality within social context. First major schism.</p>
+        </div>
+        <div class="timeline-event">
+          <div class="timeline-year">1913–1920</div>
+          <div class="timeline-title">Jung's Confrontation with the Unconscious</div>
+          <p class="timeline-desc">Following the break with Freud, Jung enters a prolonged period of self-experiment — descending deliberately into his own unconscious through what he later called "active imagination." This harrowing experience produces his concept of the collective unconscious, archetypes, and eventually <em>The Red Book</em>.</p>
+        </div>
+        <div class="timeline-event">
+          <div class="timeline-year">1921</div>
+          <div class="timeline-title">Psychological Types — Jung</div>
+          <p class="timeline-desc">Jung introduces his typology: the four functions (thinking, feeling, sensation, intuition) crossed with two attitudes (introversion, extraversion). The precursor to the MBTI. The theory explains how consciousness can be "one-sided" and in need of compensation.</p>
+        </div>
+        <div class="timeline-event">
+          <div class="timeline-year">1923–1928</div>
+          <div class="timeline-title">The Structural Model — Freud</div>
+          <p class="timeline-desc">Freud replaces his earlier topographic model (conscious/preconscious/unconscious) with the structural model: <em>id, ego, superego</em>. This becomes the dominant Freudian framework and the foundation of ego psychology.</p>
+        </div>
+        <div class="timeline-event">
+          <div class="timeline-year">1930s–1950s</div>
+          <div class="timeline-title">British Object Relations School</div>
+          <p class="timeline-desc">Melanie Klein, Donald Winnicott, Ronald Fairbairn, and Harry Guntrip develop object relations theory — shifting focus from drives to early relational patterns. The "object" (the internalized representation of another person) becomes central. Winnicott introduces concepts like the "true self," "transitional objects," and the "holding environment."</p>
+        </div>
+        <div class="timeline-event">
+          <div class="timeline-year">1951–1961</div>
+          <div class="timeline-title">Jung's Late Work — Aion, Mysterium, Answer to Job</div>
+          <p class="timeline-desc">Jung's final major works synthesize depth psychology with alchemy, Gnosticism, Eastern thought, and the question of God as a psychological reality. Alchemy becomes his preferred symbolic system for individuation. The Self as God-image.</p>
+        </div>
+        <div class="timeline-event">
+          <div class="timeline-year">1975–1990s</div>
+          <div class="timeline-title">James Hillman — Archetypal Psychology</div>
+          <p class="timeline-desc">Hillman breaks from the ego-centered individuation narrative, proposing that the psyche is inherently multiple and imaginal. He "re-visions" psychology as <em>poiesis</em> — soul-making through image, metaphor, and myth. Founders the Post-Jungian "imaginal school."</p>
+        </div>
+        <div class="timeline-event">
+          <div class="timeline-year">1980s–present</div>
+          <div class="timeline-title">Contemporary Expansions</div>
+          <p class="timeline-desc">Relational psychoanalysis, neuroscience-informed depth work, somatic depth approaches (Levine, Ogden), intersubjective psychoanalysis (Stolorow, Atwood), feminist rereadings (Marion Woodman, Clarissa Pinkola Estés), and transpersonal psychology all extend the field into new territories.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- II. FIGURES -->
+    <section id="figures">
+      <div class="section-header">
+        <span class="section-number">II</span>
+        <h2 class="section-title">The Key Figures</h2>
+        <div class="section-rule"></div>
+      </div>
+
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--crimson)"></div>Psychoanalysis</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--indigo)"></div>Analytical (Jungian)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--sienna)"></div>Adlerian</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--verdigris)"></div>Archetypal / Post-Jungian</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#5a3a6a"></div>Object Relations</div>
+      </div>
+
+      <div class="figure-grid">
+        <div class="figure-card">
+          <div class="figure-name">Sigmund Freud</div>
+          <div class="figure-dates">1856 – 1939</div>
+          <span class="figure-school fs-psychoanalysis">Psychoanalysis</span>
+          <p class="figure-body">The architect of psychoanalysis and the first systematic theorist of the unconscious. Freud established that repressed wishes, memories, and conflicts — particularly from childhood — drive adult behavior through mechanisms invisible to consciousness.</p>
+          <div class="figure-contrib">Key contributions: unconscious, id/ego/superego, Oedipus complex, dream interpretation, free association, transference, defense mechanisms, libido theory, pleasure principle.</div>
+        </div>
+
+        <div class="figure-card indigo-top" style="--top-color: var(--indigo)">
+          <div style="position:absolute; top:0; left:0; right:0; height:3px; background:var(--indigo)"></div>
+          <div class="figure-name">Carl Gustav Jung</div>
+          <div class="figure-dates">1875 – 1961</div>
+          <span class="figure-school fs-analytical">Analytical Psychology</span>
+          <p class="figure-body">The most expansive theorist of depth psychology. Where Freud found pathology, Jung found meaning. He expanded the unconscious beyond the personal, into the collective — a vast psychic inheritance shared by all humans. His is a psychology of transformation toward wholeness.</p>
+          <div class="figure-contrib">Key contributions: collective unconscious, archetypes, individuation, shadow, anima/animus, self, synchronicity, psychological types, active imagination, the transcendent function, alchemy as psychological metaphor.</div>
+        </div>
+
+        <div class="figure-card">
+          <div style="position:absolute; top:0; left:0; right:0; height:3px; background:var(--sienna)"></div>
+          <div class="figure-name">Alfred Adler</div>
+          <div class="figure-dates">1870 – 1937</div>
+          <span class="figure-school fs-adlerian">Individual Psychology</span>
+          <p class="figure-body">First major defector from Freud. Adler argued that psychology must situate the individual within their social context. The core motivation is not libido but the striving for belonging and significance — from a primary sense of inferiority toward a felt goal of completion.</p>
+          <div class="figure-contrib">Key contributions: inferiority/superiority complex, social interest (Gemeinschaftsgefühl), lifestyle, fictional finalism, birth order, holistic personality, teleological psychology.</div>
+        </div>
+
+        <div class="figure-card">
+          <div style="position:absolute; top:0; left:0; right:0; height:3px; background:#5a3a6a"></div>
+          <div class="figure-name">Melanie Klein</div>
+          <div class="figure-dates">1882 – 1960</div>
+          <span class="figure-school fs-object">Object Relations</span>
+          <p class="figure-body">Extended psychoanalysis into early infancy. Klein argued that the infant's first months are structured by phantasies of the mother's body as both good and bad object. Her work revealed the early architecture of love and hate, envy and gratitude, splitting and integration.</p>
+          <div class="figure-contrib">Key contributions: paranoid-schizoid position, depressive position, projective identification, envy and gratitude, internal objects, part-objects, play therapy.</div>
+        </div>
+
+        <div class="figure-card">
+          <div style="position:absolute; top:0; left:0; right:0; height:3px; background:#5a3a6a"></div>
+          <div class="figure-name">Donald Winnicott</div>
+          <div class="figure-dates">1896 – 1971</div>
+          <span class="figure-school fs-object">Object Relations</span>
+          <p class="figure-body">A pediatrician-turned-analyst whose gentle, experiential sensibility transformed depth psychology. Winnicott focused on the mother-infant matrix — the relational container in which the self either grows or distorts. His prose is unusually accessible and metaphorically rich.</p>
+          <div class="figure-contrib">Key contributions: true self / false self, holding environment, transitional object, "good enough" mothering, potential space, playing, the capacity to be alone in the presence of another.</div>
+        </div>
+
+        <div class="figure-card">
+          <div style="position:absolute; top:0; left:0; right:0; height:3px; background:var(--verdigris)"></div>
+          <div class="figure-name">James Hillman</div>
+          <div class="figure-dates">1926 – 2011</div>
+          <span class="figure-school fs-archetypal">Archetypal Psychology</span>
+          <p class="figure-body">The most poetic and provocative of the post-Jungians. Hillman "re-visioned" psychology away from the therapeutic goal of wholeness toward an embrace of the psyche's inherent multiplicity and imaginal life. His work merges psychology with poetry, mythology, and ecological thinking.</p>
+          <div class="figure-contrib">Key contributions: archetypal psychology, the imaginal, pathologizing as soul-making, the acorn theory (daimon), "we've had a hundred years of psychotherapy and the world is getting worse," anima mundi.</div>
+        </div>
+
+        <div class="figure-card">
+          <div style="position:absolute; top:0; left:0; right:0; height:3px; background:var(--crimson)"></div>
+          <div class="figure-name">Otto Rank</div>
+          <div class="figure-dates">1884 – 1939</div>
+          <span class="figure-school fs-psychoanalysis">Post-Freudian</span>
+          <p class="figure-body">One of Freud's inner circle who eventually broke away. Rank proposed that the birth trauma (separation from the womb) was the primal anxiety underlying all neurosis. He later moved toward a humanistic, will-centered psychology and profoundly influenced Carl Rogers.</p>
+          <div class="figure-contrib">Key contributions: birth trauma, will therapy, the hero myth, creative will, separation anxiety, influence on existential and humanistic psychology.</div>
+        </div>
+
+        <div class="figure-card">
+          <div style="position:absolute; top:0; left:0; right:0; height:3px; background:#5a5a1a"></div>
+          <div class="figure-name">Marion Woodman</div>
+          <div class="figure-dates">1928 – 2018</div>
+          <span class="figure-school fs-archetypal">Feminist Jungian</span>
+          <p class="figure-body">A Jungian analyst who brought the body and the feminine into depth psychology with unusual rigor. Woodman worked at the intersection of eating disorders, addiction, and the repression of the feminine principle. Her work is deeply somatic and alchemical.</p>
+          <div class="figure-contrib">Key contributions: the feminine principle, body as psyche, conscious femininity, addiction and the wounded feminine, the "bone woman," patriarchal consciousness and its wounds.</div>
+        </div>
+
+        <div class="figure-card">
+          <div style="position:absolute; top:0; left:0; right:0; height:3px; background:var(--verdigris)"></div>
+          <div class="figure-name">Clarissa Pinkola Estés</div>
+          <div class="figure-dates">1945 –</div>
+          <span class="figure-school fs-archetypal">Mythopoetic</span>
+          <p class="figure-body">A Jungian analyst and cantadora (keeper of old stories). Estés argues that indigenous and aboriginal peoples are the original practitioners of archetypal psychology, carrying the maps of the soul's journey in song, tale, dream, and ritual. Her <em>Women Who Run With the Wolves</em> is a landmark of depth storytelling.</p>
+          <div class="figure-contrib">Key contributions: the Wild Woman archetype, mythopoetic analysis, the instinctual nature, story as psychological medicine, the clarissa tradition.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- III. THE PSYCHE MAP -->
+    <section id="psyche">
+      <div class="section-header">
+        <span class="section-number">III</span>
+        <h2 class="section-title">Anatomy of the Psyche</h2>
+        <div class="section-rule"></div>
+      </div>
+
+      <p class="lede">The Jungian model of the psyche is stratified — like geological strata, or the layers of the sea. Consciousness floats at the surface; the collective unconscious has no visible bottom.</p>
+
+      <p>The psyche, for Jung, is not the brain — it is the totality of all psychological processes, both conscious and unconscious. It is the whole territory of inner life, with its seen and unseen regions. Crucially, the unconscious is not simply a dump for repressed material (as Freud largely held) — it is an autonomous, generative system with its own intelligence, symbolism, and purposiveness.</p>
+
+      <div class="psyche-map">
+        <div class="psyche-diagram">
+          <div class="psyche-layer layer-ego">
+            <div class="layer-name">EGO — CONSCIOUS MIND</div>
+            <p class="layer-desc">The center of consciousness. The "I" that wakes in the morning. Acquired during the individual's lifetime. Necessary but partial — it is not the whole psyche.</p>
+            <div class="layer-tags">
+              <span class="layer-tag">Waking Self</span>
+              <span class="layer-tag">Persona</span>
+              <span class="layer-tag">Will</span>
+              <span class="layer-tag">Rationality</span>
+            </div>
+          </div>
+          <div class="psyche-layer layer-personal">
+            <div class="layer-name">PERSONAL UNCONSCIOUS</div>
+            <p class="layer-desc">Forgotten experiences, repressed memories, subliminal perceptions, undeveloped potentials. Contains the shadow and emotional complexes. Accessible through dreams, slips, and analysis.</p>
+            <div class="layer-tags">
+              <span class="layer-tag">Shadow</span>
+              <span class="layer-tag">Complexes</span>
+              <span class="layer-tag">Repressed Material</span>
+              <span class="layer-tag">Forgotten Memories</span>
+            </div>
+          </div>
+          <div class="psyche-layer layer-collective">
+            <div class="layer-name">COLLECTIVE UNCONSCIOUS</div>
+            <p class="layer-desc">The psychic inheritance of all humankind — transpersonal, pre-individual, archetypal. Not acquired through personal experience but present from birth as latent forms, activated by experience. Universal yet impersonal. The psyche's depth has no floor.</p>
+            <div class="layer-tags">
+              <span class="layer-tag">Archetypes</span>
+              <span class="layer-tag">Anima / Animus</span>
+              <span class="layer-tag">Self</span>
+              <span class="layer-tag">Mythology</span>
+              <span class="layer-tag">Instinct</span>
+              <span class="layer-tag">Numinosity</span>
+              <span class="layer-tag">World Soul</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pull-quote">
+        <p>The unconscious is not just evil by nature; it is also the source of the highest good: not only dark but also light, not only bestial, semi-human, and demonic but superhuman, spiritual, and in the classical sense of the word, divine.</p>
+        <cite>— C.G. Jung, The Practice of Psychotherapy</cite>
+      </div>
+
+      <p>Freud's version of this map had three layers as well — but different ones: the <strong>conscious</strong> (all that is immediately accessible), the <strong>preconscious</strong> (accessible with effort — like a half-remembered name), and the <strong>unconscious</strong> (sealed off, accessible only indirectly, the site of repressed wishes and infantile sexuality). His later structural model overlaid this with the <strong>id</strong> (the reservoir of drives, operating on the pleasure principle), the <strong>ego</strong> (the mediating rational self), and the <strong>superego</strong> (the internalized moral authority, heir to the Oedipus complex). These structures are not places but dynamic systems, always in tension.</p>
+    </section>
+
+    <!-- IV. GLOSSARY -->
+    <section id="terms">
+      <div class="section-header">
+        <span class="section-number">IV</span>
+        <h2 class="section-title">Core Vocabulary</h2>
+        <div class="section-rule"></div>
+      </div>
+
+      <p class="lede">The language of depth psychology is its most immediate entry point — each term a lens that, once learned, becomes impossible to unsee.</p>
+
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--indigo)"></div>Jungian</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--crimson)"></div>Freudian</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#5a3a6a"></div>Object Relations</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--sienna)"></div>Adlerian</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--verdigris)"></div>Archetypal</div>
+      </div>
+
+      <div class="term-grid">
+        <div class="term-card t-freudian">
+          <div class="term-name">The Unconscious</div>
+          <div class="term-origin">Freud · Core Concept</div>
+          <p class="term-def">The psychic region inaccessible to ordinary consciousness, containing repressed memories, wishes, and conflicts. Freud held it to be primarily the repository of what was too painful or threatening to remain in awareness. Jung vastly expanded this concept beyond the personal.</p>
+        </div>
+        <div class="term-card t-freudian">
+          <div class="term-name">Repression</div>
+          <div class="term-origin">Freud · Defense Mechanism</div>
+          <p class="term-def">The psyche's primary defense: the active expulsion of unwanted thoughts, wishes, or memories from consciousness into the unconscious. Freud saw it as the cornerstone of neurosis — the repressed always returns in distorted form through symptoms, dreams, and slips.</p>
+        </div>
+        <div class="term-card t-freudian">
+          <div class="term-name">Transference</div>
+          <div class="term-origin">Freud · Clinical Term</div>
+          <p class="term-def">The displacement of feelings, wishes, and relational patterns from past figures (especially parents) onto the therapist. Freud called it the alpha and omega of the analytic method. Both Freud and Jung agreed it was the central vehicle of transformation in depth therapy.</p>
+        </div>
+        <div class="term-card t-freudian">
+          <div class="term-name">Countertransference</div>
+          <div class="term-origin">Freud / Jung · Clinical Term</div>
+          <p class="term-def">The therapist's own unconscious responses to the patient — initially seen as an obstacle to be eliminated, later reframed (especially in Jungian work) as a primary source of information about the patient's unconscious. The "psychic infection" between analyst and analysand.</p>
+        </div>
+        <div class="term-card t-freudian">
+          <div class="term-name">Defense Mechanisms</div>
+          <div class="term-origin">Freud / Anna Freud · Ego Psychology</div>
+          <p class="term-def">The ego's repertoire of strategies for managing the anxiety generated by unconscious conflict. Includes repression, projection, rationalization, reaction formation, displacement, splitting, denial, sublimation, and idealization — each a different way of not knowing what we know.</p>
+        </div>
+        <div class="term-card t-freudian">
+          <div class="term-name">Libido</div>
+          <div class="term-origin">Freud · Drive Theory</div>
+          <p class="term-def">Freud's term for psychosexual energy — the drive force behind all human motivation, ultimately rooted in sexuality and self-preservation. Jung radically redefined libido as <em>psychic energy</em> in general — not specifically sexual, but the life force as it moves through and between psychological systems.</p>
+        </div>
+        <div class="term-card t-jungian">
+          <div class="term-name">Collective Unconscious</div>
+          <div class="term-origin">Jung · Core Concept</div>
+          <p class="term-def">The deepest layer of the unconscious — not personal, but shared across all humanity and all time. It contains the archetypes: primordial patterns that structure universal human experience. Jung called it the "two-million-year-old human" in each of us. It is impersonal, transpersonal, and has no floor.</p>
+        </div>
+        <div class="term-card t-jungian">
+          <div class="term-name">Archetype</div>
+          <div class="term-origin">Jung · Core Concept</div>
+          <p class="term-def">A primordial pattern or predisposition in the collective unconscious — not a fixed image but a dynamic structure that can manifest in countless forms across cultures and epochs. Derived from the Greek arche (original) + typos (pattern). Archetypes are the organs of the psyche. Examples: the Mother, the Hero, the Trickster, the Self.</p>
+        </div>
+        <div class="term-card t-jungian">
+          <div class="term-name">Shadow</div>
+          <div class="term-origin">Jung · Archetype</div>
+          <p class="term-def">The unknown dark side of the personality — everything that was rejected, repressed, or denied in the course of development and adaptation to family and society. Contains not only negative qualities but disowned positive capacities ("golden shadow"). The first great encounter in individuation. Everything unlit about us.</p>
+        </div>
+        <div class="term-card t-jungian">
+          <div class="term-name">Anima / Animus</div>
+          <div class="term-origin">Jung · Archetype</div>
+          <p class="term-def">The contrasexual dimension of the psyche. The <em>anima</em> is the inner feminine in a man; the <em>animus</em> the inner masculine in a woman. These figures mediate between the ego and the deeper unconscious, appearing in dreams as figures of the opposite sex. Jung called working with the anima the "masterpiece" after the "apprentice-piece" of the shadow.</p>
+        </div>
+        <div class="term-card t-jungian">
+          <div class="term-name">The Self</div>
+          <div class="term-origin">Jung · Core Archetype</div>
+          <p class="term-def">The archetype of wholeness — the totality of the psyche, encompassing both conscious and unconscious. It is superior to the ego in the same way the whole is greater than any part. Symbolized by the mandala, the circle, the divine child, the philosopher's stone. It is both the goal and the ground of individuation. Jung equated it with the image of God in the psyche.</p>
+        </div>
+        <div class="term-card t-jungian">
+          <div class="term-name">Individuation</div>
+          <div class="term-origin">Jung · Core Process</div>
+          <p class="term-def">The lifelong psychological process of becoming who one truly is — distinct, undivided, whole. Not self-improvement or adaptation, but the emergence of the <em>ipseity</em>: the deep individual self beneath the social mask. Requires confronting the shadow, integrating the anima/animus, and establishing a living relationship with the Self.</p>
+        </div>
+        <div class="term-card t-jungian">
+          <div class="term-name">Persona</div>
+          <div class="term-origin">Jung · Archetype</div>
+          <p class="term-def">The social mask — the face presented to the world to facilitate social adaptation. Named after the masks of ancient Greek theater. Necessary but dangerous when over-identified with: the person who becomes only their role (the Doctor who cannot be anything but a Doctor) loses access to their inner life. Individuation often begins with a persona collapse.</p>
+        </div>
+        <div class="term-card t-jungian">
+          <div class="term-name">Complex</div>
+          <div class="term-origin">Jung · Early Theory</div>
+          <p class="term-def">An emotionally charged cluster of ideas and images in the personal unconscious, organized around a core archetype. Complexes behave like partial personalities — they can seize control of the ego ("being complexed"). Jung discovered them through word-association experiments. The mother complex, the father complex, the power complex are familiar examples.</p>
+        </div>
+        <div class="term-card t-jungian">
+          <div class="term-name">Synchronicity</div>
+          <div class="term-origin">Jung · Late Theory</div>
+          <p class="term-def">The acausal connecting principle: meaningful coincidences that have no causal relationship but carry unmistakable psychological resonance. Jung developed this concept in collaboration with physicist Wolfgang Pauli, suggesting that psyche and matter share an underlying ordering principle. Synchronicities often mark significant moments in individuation.</p>
+        </div>
+        <div class="term-card t-jungian">
+          <div class="term-name">Projection</div>
+          <div class="term-origin">Freud / Jung · Shared Concept</div>
+          <p class="term-def">The unconscious attribution of one's own inner contents — qualities, feelings, impulses — to another person or situation outside oneself. What we cannot accept in ourselves, we see in others. Shadow projection is the source of scapegoating, hatred, and war. "The world is my mirror." Withdrawal of projections is a primary task of depth work.</p>
+        </div>
+        <div class="term-card t-jungian">
+          <div class="term-name">Transcendent Function</div>
+          <div class="term-origin">Jung · Analytical Psychology</div>
+          <p class="term-def">The psyche's capacity to generate a third position between two seemingly irreconcilable opposites — conscious and unconscious, light and shadow, spirit and instinct. Named by analogy to mathematical transcendence. It emerges through the tension of the opposites and produces a symbol that carries the energy forward. The psychological engine of transformation.</p>
+        </div>
+        <div class="term-card t-jungian">
+          <div class="term-name">Active Imagination</div>
+          <div class="term-origin">Jung · Method</div>
+          <p class="term-def">Jung's primary method for direct engagement with the unconscious. The ego deliberately enters into dialogue with inner figures — shadow figures, anima/animus, dream characters — through writing, art, movement, or imagination. Not passive fantasy but a genuine encounter. The "waking dream" that can produce transformation unavailable through interpretation alone.</p>
+        </div>
+        <div class="term-card t-object">
+          <div class="term-name">Object Relations</div>
+          <div class="term-origin">Klein / Fairbairn / Winnicott · British School</div>
+          <p class="term-def">The study of how early relational experience with significant others (objects) creates internal representations that shape all subsequent relationships. The "object" is not a thing but a person as experienced psychically — their internalized image. Our inner world is populated by internalized objects, good and bad, whole and partial.</p>
+        </div>
+        <div class="term-card t-object">
+          <div class="term-name">Projective Identification</div>
+          <div class="term-origin">Klein · Object Relations</div>
+          <p class="term-def">An unconscious process in which one projects an aspect of oneself into another person, and then attempts to control that aspect through the other. More than mere projection — it involves interpersonal influence: the recipient actually begins to feel or behave in ways congruent with what was projected. Central to understanding intense relational dynamics.</p>
+        </div>
+        <div class="term-card t-object">
+          <div class="term-name">Holding Environment</div>
+          <div class="term-origin">Winnicott · Object Relations</div>
+          <p class="term-def">The physical and emotional milieu provided by "good enough" mothering — or, in therapy, by the analyst — that allows the nascent self to develop without being overwhelmed. When the holding environment fails, the true self retreats and the false self emerges as a compliance-based substitute. The concept extends to organizations, cultures, and therapeutic frames.</p>
+        </div>
+        <div class="term-card t-object">
+          <div class="term-name">True Self / False Self</div>
+          <div class="term-origin">Winnicott · Object Relations</div>
+          <p class="term-def">The true self is the spontaneous, creative, authentic core of the person. The false self is the compliance-based structure built to protect the true self from an environment that demands adaptation over authenticity. Many people in therapy have lived entirely from the false self and must re-find the true self beneath the performance.</p>
+        </div>
+        <div class="term-card t-adlerian">
+          <div class="term-name">Inferiority Complex</div>
+          <div class="term-origin">Adler · Individual Psychology</div>
+          <p class="term-def">Every human being begins life in a state of primal inferiority — small, dependent, incompetent relative to the adults in their world. The entire trajectory of psychological development is the movement from this felt inferiority toward a goal of completion and belonging. When this striving becomes distorted, it produces the inferiority complex: a chronic, often unconscious sense of inadequacy.</p>
+        </div>
+        <div class="term-card t-adlerian">
+          <div class="term-name">Social Interest</div>
+          <div class="term-origin">Adler · Individual Psychology</div>
+          <p class="term-def">Gemeinschaftsgefühl — the innate human capacity for connectedness, empathy, and cooperation. Adler saw this as the central criterion of psychological health. The neurotic individual is turned inward and self-concerned; the healthy individual has developed their capacity for genuine contribution to the human community.</p>
+        </div>
+        <div class="term-card t-archetypal">
+          <div class="term-name">Imaginal / Soul</div>
+          <div class="term-origin">Hillman · Archetypal Psychology</div>
+          <p class="term-def">Hillman's "imaginal" realm is not fantasy or mere imagination but a third territory between the literal and the purely abstract — the domain where psyche, image, and reality interpenetrate. "Soul" is Hillman's word for this depth: not the theological soul but the "unknown component" that makes meaning possible, the seat of imagination and suffering.</p>
+        </div>
+        <div class="term-card t-archetypal">
+          <div class="term-name">Numinosity</div>
+          <div class="term-origin">Jung / Rudolf Otto · Shared</div>
+          <p class="term-def">The quality of awe, dread, and fascination that accompanies encounter with the sacred — or with a living archetype. Jung borrowed the term from theologian Rudolf Otto (the <em>mysterium tremendum et fascinans</em>). Numinous experiences are charged, overwhelming, and leave a permanent mark. They are the psyche's equivalent of religious experience.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- V. ARCHETYPES -->
+    <section id="archetypes">
+      <div class="section-header">
+        <span class="section-number">V</span>
+        <h2 class="section-title">The Archetypal Bestiary</h2>
+        <div class="section-rule"></div>
+      </div>
+
+      <p class="lede">Archetypes are not images — they are the invisible attractors that generate images. The same archetype will appear as Athena in Greece, Sophia in Gnosticism, and the Wise Old Woman in a patient's dream.</p>
+
+      <div class="arch-wheel-container">
+        <div class="arch-wheel">
+          <div class="arch-cell" style="border: 1px solid rgba(184,146,42,0.15);">
+            <span class="arch-glyph">🌑</span>
+            <div class="arch-cell-name">The Shadow</div>
+            <p class="arch-cell-desc">Rejected, repressed aspects. Everything unlit about us. The source of projection. Also contains disowned gifts.</p>
+          </div>
+          <div class="arch-cell" style="border: 1px solid rgba(184,146,42,0.15);">
+            <span class="arch-glyph">🎭</span>
+            <div class="arch-cell-name">The Persona</div>
+            <p class="arch-cell-desc">Social mask. The role played in public. Necessary — but fatal when mistaken for the self.</p>
+          </div>
+          <div class="arch-cell" style="border: 1px solid rgba(184,146,42,0.15);">
+            <span class="arch-glyph">🌙</span>
+            <div class="arch-cell-name">Anima</div>
+            <p class="arch-cell-desc">The inner feminine in men. Soul figure. Mediates to the unconscious. Muse, guide, or tyrant.</p>
+          </div>
+          <div class="arch-cell" style="border: 1px solid rgba(184,146,42,0.15);">
+            <span class="arch-glyph">⚡</span>
+            <div class="arch-cell-name">Animus</div>
+            <p class="arch-cell-desc">The inner masculine in women. Spirit figure. Source of initiative and logos. Can tyrannize or liberate.</p>
+          </div>
+          <div class="arch-cell center-cell">
+            <span class="arch-glyph" style="color:var(--gold)">☀</span>
+            <div class="arch-cell-name" style="color:var(--gold-bright)">The Self</div>
+            <p class="arch-cell-desc" style="color:rgba(232,208,128,0.8)">The totality. Wholeness. The goal and ground of all. Mandala. God-image. Center.</p>
+          </div>
+          <div class="arch-cell" style="border: 1px solid rgba(184,146,42,0.15);">
+            <span class="arch-glyph">🧙</span>
+            <div class="arch-cell-name">Wise Old Man</div>
+            <p class="arch-cell-desc">The senex: wisdom, structure, order. Spirit in its highest form. Also: rigidity, tyranny.</p>
+          </div>
+          <div class="arch-cell" style="border: 1px solid rgba(184,146,42,0.15);">
+            <span class="arch-glyph">🌿</span>
+            <div class="arch-cell-name">Great Mother</div>
+            <p class="arch-cell-desc">Fertility, nourishment, containment, transformation. Also: devouring, engulfing, smothering.</p>
+          </div>
+          <div class="arch-cell" style="border: 1px solid rgba(184,146,42,0.15);">
+            <span class="arch-glyph">⚔</span>
+            <div class="arch-cell-name">The Hero</div>
+            <p class="arch-cell-desc">Ego development. The dragon-slayer. Wins treasure but must eventually die to the larger Self.</p>
+          </div>
+          <div class="arch-cell" style="border: 1px solid rgba(184,146,42,0.15);">
+            <span class="arch-glyph">🃏</span>
+            <div class="arch-cell-name">The Trickster</div>
+            <p class="arch-cell-desc">Sacred chaos. Disrupts ego's plans. Shapeshifter, fool, coyote. Breaks open what was fixed.</p>
+          </div>
+        </div>
+
+        <div class="arch-side-info">
+          <div class="arch-info-block">
+            <div class="arch-info-title">Additional Archetypes</div>
+            <ul class="arch-info-list">
+              <li>The Divine Child — new beginning, potential, the future self</li>
+              <li>The Orphan — abandonment, resilience, need for belonging</li>
+              <li>The Wounded Healer — suffering as qualification, depth from wound</li>
+              <li>The Seeker / Wanderer — eternal search, refusal of premature closure</li>
+              <li>The Lover — relationship to beauty, passion, and eros</li>
+              <li>The Magician — transformation, initiation, hidden knowledge</li>
+              <li>The Ruler / King / Queen — order, responsibility, structure</li>
+              <li>The Sage / Crone — accumulated wisdom, detachment, perspective</li>
+              <li>The Daimon — one's unique calling (Hillman's acorn theory)</li>
+            </ul>
+          </div>
+          <div class="arch-info-block">
+            <div class="arch-info-title">How Archetypes Manifest</div>
+            <ul class="arch-info-list">
+              <li>In dreams as autonomous figures with numinous power</li>
+              <li>In projection: we see the archetype in others first</li>
+              <li>In mythology, fairy tale, and world religion</li>
+              <li>In cultural figures, celebrities, and films</li>
+              <li>In physical symptoms and body patterns</li>
+              <li>In synchronicities and life-altering encounters</li>
+              <li>In fantasy, compulsion, and fascination</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <p>The archetypes cannot be exhaustively listed — they are, as Jung noted, potentially infinite, interpenetrating one another. What can be identified are the most prominent recurring patterns in the collective unconscious: those that show up again and again across all cultures, all historical periods, and all therapeutic encounters. Their power comes from being pre-individual: they carry the weight of the entire human inheritance.</p>
+    </section>
+
+    <!-- VI. INDIVIDUATION -->
+    <section id="individuation">
+      <div class="section-header">
+        <span class="section-number">VI</span>
+        <h2 class="section-title">The Path of Individuation</h2>
+        <div class="section-rule"></div>
+      </div>
+
+      <p class="lede">Individuation is not self-improvement. It is not becoming more successful, more likable, or more functional. It is the lifelong, often painful process of becoming undivided — of ceasing to be a fragment and learning to be whole.</p>
+
+      <p>Jung was careful to say individuation is not individualism. It is not isolation or self-absorption. Rather, it is the increasingly precise differentiation of the individual from the collective — knowing, with increasing clarity, what is genuinely yours versus what was put there by fear, conditioning, and social necessity. As one becomes more truly oneself, one paradoxically becomes more capable of genuine relationship.</p>
+
+      <div class="path-steps">
+        <div class="path-step">
+          <div class="path-step-num">01</div>
+          <div class="path-step-content">
+            <div class="path-step-title">The Unconscious Life — Before Individuation Begins</div>
+            <span class="path-step-archetype">Persona Dominance</span>
+            <p class="path-step-desc">Most people live primarily from the persona — the social mask — without awareness of its constructed nature. The unconscious is active but unacknowledged, influencing behavior through projections, moods, compulsions, and symptoms. Life may function adequately, but something feels missing or hollow. This is the existential condition that precedes the call.</p>
+          </div>
+        </div>
+        <div class="path-connector"></div>
+        <div class="path-step">
+          <div class="path-step-num">02</div>
+          <div class="path-step-content">
+            <div class="path-step-title">The Call — Crisis, Breakdown, or Encounter</div>
+            <span class="path-step-archetype">Threshold</span>
+            <p class="path-step-desc">Individuation often begins not by choice but by crisis. A relationship ends. A career collapses. Depression arrives. The old identity stops working. These are, in Jungian terms, the psyche's way of demanding that the ego stop identifying entirely with the persona and turn inward. The unconscious has grown too loud to ignore. The "night sea journey" begins.</p>
+          </div>
+        </div>
+        <div class="path-connector"></div>
+        <div class="path-step">
+          <div class="path-step-num">03</div>
+          <div class="path-step-content">
+            <div class="path-step-title">Confronting the Shadow — The Apprentice-Piece</div>
+            <span class="path-step-archetype">Shadow Integration</span>
+            <p class="path-step-desc">The first and most uncomfortable stage. One begins to recognize in oneself the qualities that were attributed to others — the hostility, the neediness, the grandiosity, the fear. Shadow work requires moral courage: "a considerable moral effort" as Jung put it. What one finds is not only darkness but disowned gifts and potentials. This stage is never complete — it is a lifelong practice.</p>
+          </div>
+        </div>
+        <div class="path-connector"></div>
+        <div class="path-step">
+          <div class="path-step-num">04</div>
+          <div class="path-step-content">
+            <div class="path-step-title">The Anima / Animus — The Masterpiece</div>
+            <span class="path-step-archetype">Soul Encounter</span>
+            <p class="path-step-desc">Once the shadow work is sufficiently established, the contrasexual soul figure becomes available — the anima in men, the animus in women. This figure mediates between the ego and the deeper collective unconscious. Its integration brings access to creativity, intuition, and the capacity for deep relatedness. Jung said confronting the anima was the most challenging work of a man's inner life.</p>
+          </div>
+        </div>
+        <div class="path-connector"></div>
+        <div class="path-step">
+          <div class="path-step-num">05</div>
+          <div class="path-step-content">
+            <div class="path-step-title">The Transcendent Function — Holding the Tension</div>
+            <span class="path-step-archetype">Coniunctio / Union of Opposites</span>
+            <p class="path-step-desc">The central alchemical operation of depth psychology. Rather than resolving the conflict between opposites by choosing one side, the individuating person learns to <em>hold</em> both simultaneously — to tolerate the tension until a third thing emerges. This is the transcendent function: the psyche's capacity to produce a symbol that carries the energy beyond the impasse. This is what Jung called the <em>coniunctio</em>.</p>
+          </div>
+        </div>
+        <div class="path-connector"></div>
+        <div class="path-step">
+          <div class="path-step-num">06</div>
+          <div class="path-step-content">
+            <div class="path-step-title">Encounter with the Self — The Numinous Dimension</div>
+            <span class="path-step-archetype">Self-Realization</span>
+            <p class="path-step-desc">As individuation deepens, the ego enters into relationship with the Self — the totality, the organizing center of the whole psyche. This is not ego-inflation (identifying with the Self as god-like) but a proper relationship: the ego as servant of something larger. Expressed symbolically through the mandala, the divine child, and numinous dreams. The fruit of a life's work.</p>
+          </div>
+        </div>
+        <div class="path-connector"></div>
+        <div class="path-step">
+          <div class="path-step-num">07</div>
+          <div class="path-step-content">
+            <div class="path-step-title">Return & Contribution — The Second Half of Life</div>
+            <span class="path-step-archetype">Sage / Elder</span>
+            <p class="path-step-desc">Individuation is not solitary completion — it returns to the world. The one who has done the inner work brings something back: not a finished product, but an increased capacity for presence, relatedness, and wisdom. Jung saw the second half of life as primarily oriented toward interiority and the religious question, not external achievement. Death becomes a legitimate horizon.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="pull-quote">
+        <p>The privilege of a lifetime is to become who you truly are.</p>
+        <cite>— C.G. Jung</cite>
+      </div>
+    </section>
+
+    <!-- VII. SCHOOLS -->
+    <section id="schools">
+      <div class="section-header">
+        <span class="section-number">VII</span>
+        <h2 class="section-title">Schools & Lineages</h2>
+        <div class="section-rule"></div>
+      </div>
+
+      <p class="lede">Depth psychology is not a monolith. It is a family of related orientations — sometimes in argument with each other, always in dialogue.</p>
+
+      <table class="schools-table">
+        <thead>
+          <tr>
+            <th>School</th>
+            <th>Founders</th>
+            <th>Core Emphasis</th>
+            <th>Key Concepts</th>
+            <th>Therapeutic Method</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="school-badge sb-psycho">Psychoanalysis</span></td>
+            <td>Freud, Breuer</td>
+            <td>Drive, repression, the Oedipus complex, childhood sexuality as the root of adult neurosis</td>
+            <td>Id/ego/superego, libido, Oedipus, dream interpretation, free association</td>
+            <td>Free association, dream analysis, transference resolution, lifting repression</td>
+          </tr>
+          <tr>
+            <td><span class="school-badge sb-jung">Analytical / Jungian</span></td>
+            <td>C.G. Jung</td>
+            <td>Individuation, wholeness, the collective unconscious, meaning-making, the symbol</td>
+            <td>Archetype, shadow, anima/animus, Self, synchronicity, transcendent function</td>
+            <td>Dream amplification, active imagination, sand tray, symbolic exploration</td>
+          </tr>
+          <tr>
+            <td><span class="school-badge sb-adler">Individual Psychology</span></td>
+            <td>Alfred Adler</td>
+            <td>Social context, striving for significance, the unity of personality, the teleological view</td>
+            <td>Inferiority complex, social interest, lifestyle, fictional finalism, birth order</td>
+            <td>Encouragement, identifying lifestyle, early recollections, social belonging</td>
+          </tr>
+          <tr>
+            <td><span class="school-badge sb-object">Object Relations</span></td>
+            <td>Klein, Winnicott, Fairbairn, Guntrip</td>
+            <td>Early relational matrix, internal objects, the self as born in relationship</td>
+            <td>Projective identification, holding environment, true/false self, positions, transitional object</td>
+            <td>Analysis of relational patterns, the therapeutic relationship as reparative container</td>
+          </tr>
+          <tr>
+            <td><span class="school-badge sb-object">Ego Psychology</span></td>
+            <td>Anna Freud, Hartmann, Erikson</td>
+            <td>Strengthening the ego's adaptive capacities, defense analysis, psychosocial development</td>
+            <td>Defense mechanisms, adaptation, psychosocial stages, ego strengths</td>
+            <td>Interpretation of defenses, building ego capacity, insight through alliance</td>
+          </tr>
+          <tr>
+            <td><span class="school-badge sb-arch">Archetypal Psychology</span></td>
+            <td>James Hillman</td>
+            <td>Soul, image, multiplicity of the psyche, the imaginal realm, pathology as depth</td>
+            <td>Soul, anima mundi, imaginal, pathologizing, the daimon, polytheistic psychology</td>
+            <td>Poetic, image-centered work; staying with symptoms as meaningful; myth and story</td>
+          </tr>
+          <tr>
+            <td><span class="school-badge sb-arch">Self Psychology</span></td>
+            <td>Heinz Kohut</td>
+            <td>The self's need for mirroring, idealization, and twinship; narcissism as developmental need</td>
+            <td>Selfobject, mirroring, idealization, twinship, transmuting internalization, empathic attunement</td>
+            <td>Empathic immersion, optimal frustration, tracking selfobject transferences</td>
+          </tr>
+          <tr>
+            <td><span class="school-badge sb-object">Relational Psychoanalysis</span></td>
+            <td>Mitchell, Aron, Benjamin</td>
+            <td>The intersubjective field; the therapist's subjectivity as central; mutuality</td>
+            <td>Intersubjectivity, co-construction, relational matrix, two-person psychology</td>
+            <td>Self-disclosure, working with the field between therapist and client, mutual recognition</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- VIII. METHODS -->
+    <section id="methods">
+      <div class="section-header">
+        <span class="section-number">VIII</span>
+        <h2 class="section-title">Methods & Practices</h2>
+        <div class="section-rule"></div>
+      </div>
+
+      <p class="lede">Depth psychology is not only theory — it is a set of somatic, imaginal, and relational practices for making the invisible visible.</p>
+
+      <div class="methods-grid">
+        <div class="method-card">
+          <span class="method-glyph">💭</span>
+          <div class="method-name">Free Association</div>
+          <p class="method-desc">Freud's foundational method: the patient says whatever comes to mind, without censorship. The gaps, resistances, and unexpected connections reveal the unconscious logic beneath. The "fundamental rule" of psychoanalysis.</p>
+        </div>
+        <div class="method-card">
+          <span class="method-glyph">🌙</span>
+          <div class="method-name">Dream Analysis</div>
+          <p class="method-desc">Both Freud and Jung worked with dreams, but differently. Freud sought the latent wish beneath the manifest content. Jung amplified the symbols — asking not what the dream means but what it says about the dreamer's current psychological situation.</p>
+        </div>
+        <div class="method-card">
+          <span class="method-glyph">✍️</span>
+          <div class="method-name">Active Imagination</div>
+          <p class="method-desc">Jung's signature method: deliberately entering into dialogue with inner figures through writing, drawing, movement, or clay. The ego and the unconscious exchange — and the product is a living symbol, not a symbol interpreted from the outside.</p>
+        </div>
+        <div class="method-card">
+          <span class="method-glyph">🏺</span>
+          <div class="method-name">Sandplay / Sand Tray</div>
+          <p class="method-desc">Developed by Dora Kalff, informed by Jungian psychology and Winnicott's "potential space." The client builds a world in a tray of sand using miniature figures. The three-dimensional image externalizes inner states that language cannot yet reach.</p>
+        </div>
+        <div class="method-card">
+          <span class="method-glyph">🎨</span>
+          <div class="method-name">Art & Expressive Work</div>
+          <p class="method-desc">Image-making as psychological practice. The unconscious thinks in images before it thinks in words. Spontaneous drawing, painting, collage, and sculpting bypass the ego's censorship and allow the symbolic to appear directly.</p>
+        </div>
+        <div class="method-card">
+          <span class="method-glyph">📖</span>
+          <div class="method-name">Amplification</div>
+          <p class="method-desc">The Jungian method of enriching a symbol by placing it within its wider mythological, historical, and cross-cultural context. A snake in a dream is not only a personal symbol — it is also Asclepius, the ouroboros, the serpent in Eden. Amplification reveals the archetypal layer.</p>
+        </div>
+        <div class="method-card">
+          <span class="method-glyph">🪞</span>
+          <div class="method-name">Transference Work</div>
+          <p class="method-desc">The therapeutic relationship becomes the primary arena. Past relational wounds are re-enacted in the present — and with a conscious, skilled presence, they can be reworked. Both the transference (what the patient projects) and countertransference (what the therapist feels) are data.</p>
+        </div>
+        <div class="method-card">
+          <span class="method-glyph">📜</span>
+          <div class="method-name">Autobiographical Work</div>
+          <p class="method-desc">The life story as a psychological document. Early recollections (Adler), life narrative, childhood patterns, and family systems all carry the encoded logic of the unconscious. Rewriting the story — finding a different frame — is itself therapeutic.</p>
+        </div>
+        <div class="method-card">
+          <span class="method-glyph">🌀</span>
+          <div class="method-name">Somatic Tracking</div>
+          <p class="method-desc">The body holds what the mind cannot yet know. Contemporary depth-somatic approaches (Levine, Ogden, Woodman) work with the body's sensations, gestures, and involuntary responses as direct expressions of unconscious content. The soma is the unconscious made flesh.</p>
+        </div>
+        <div class="method-card">
+          <span class="method-glyph">🔮</span>
+          <div class="method-name">Mythic & Symbolic Reading</div>
+          <p class="method-desc">Using mythology, fairy tale, alchemy, and religious symbolism as interpretive lenses. A patient's situation is illuminated when placed alongside the myth it unconsciously enacts — the Persephone-descent, the Jonah-swallowing, the Orpheus-turn. The patient is not inventing their drama; they are living an old one.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- IX. COMPARE -->
+    <section id="compare">
+      <div class="section-header">
+        <span class="section-number">IX</span>
+        <h2 class="section-title">Freud vs. Jung — The Great Divergence</h2>
+        <div class="section-rule"></div>
+      </div>
+
+      <p class="lede">The Freud–Jung break is the most consequential schism in the history of depth psychology. Understanding their divergence clarifies the entire field.</p>
+
+      <div class="compare-grid">
+        <div class="compare-col freud-col">
+          <div class="compare-name">Sigmund Freud</div>
+          <div class="compare-item">
+            <span class="compare-item-label">The Unconscious</span>
+            <span class="compare-item-val">A repository of repressed personal experiences, primarily sexual and aggressive drives. Biologically rooted. Causally determined.</span>
+          </div>
+          <div class="compare-item">
+            <span class="compare-item-label">Core Drive</span>
+            <span class="compare-item-val">Libido as psychosexual energy. Eros (life drive) and Thanatos (death drive). Pleasure principle vs. reality principle.</span>
+          </div>
+          <div class="compare-item">
+            <span class="compare-item-label">Dreams</span>
+            <span class="compare-item-val">Wish fulfillment. Manifest content conceals latent content. Dream-work distorts the repressed wish.</span>
+          </div>
+          <div class="compare-item">
+            <span class="compare-item-label">Goal of Therapy</span>
+            <span class="compare-item-val">"Where id was, there ego shall be." Making the unconscious conscious to relieve symptoms. Returning to "ordinary unhappiness."</span>
+          </div>
+          <div class="compare-item">
+            <span class="compare-item-label">Religion</span>
+            <span class="compare-item-val">An illusion — collective neurosis. A substitute for the father figure. The oceanic feeling is regression to infantile merger.</span>
+          </div>
+          <div class="compare-item">
+            <span class="compare-item-label">Method</span>
+            <span class="compare-item-val">Free association. Interpretation of resistance. Reductive: tracing forward from childhood cause.</span>
+          </div>
+          <div class="compare-item">
+            <span class="compare-item-label">Orientation</span>
+            <span class="compare-item-val">Retrospective / reductive. Why: tracing symptoms back to their traumatic origins.</span>
+          </div>
+        </div>
+
+        <div class="compare-col jung-col">
+          <div class="compare-name">Carl G. Jung</div>
+          <div class="compare-item">
+            <span class="compare-item-label">The Unconscious</span>
+            <span class="compare-item-val">Both personal AND collective. The unconscious is not merely a dump for repressed material but an autonomous, generative system with its own intelligence and purposiveness.</span>
+          </div>
+          <div class="compare-item">
+            <span class="compare-item-label">Core Drive</span>
+            <span class="compare-item-val">Psychic energy (libido as general life force). The fundamental drive is toward individuation — toward wholeness, not pleasure.</span>
+          </div>
+          <div class="compare-item">
+            <span class="compare-item-label">Dreams</span>
+            <span class="compare-item-val">Not disguised wish-fulfillment but direct expressions of the psyche's compensatory function — balancing the one-sidedness of the conscious attitude.</span>
+          </div>
+          <div class="compare-item">
+            <span class="compare-item-label">Goal of Therapy</span>
+            <span class="compare-item-val">Individuation: the integration of unconscious contents to achieve greater wholeness. Not symptom removal but the realization of the total personality.</span>
+          </div>
+          <div class="compare-item">
+            <span class="compare-item-label">Religion</span>
+            <span class="compare-item-val">A genuine psychological phenomenon. The God-image is the archetype of the Self. Religious experience is a direct encounter with the numinous dimension of the unconscious.</span>
+          </div>
+          <div class="compare-item">
+            <span class="compare-item-label">Method</span>
+            <span class="compare-item-val">Dream amplification, active imagination. Both reductive (understanding the past) and prospective (asking: where is this person going?).</span>
+          </div>
+          <div class="compare-item">
+            <span class="compare-item-label">Orientation</span>
+            <span class="compare-item-val">Prospective / teleological. What for: asking what the symptom or crisis is in service of — what growth it is demanding.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="pull-quote">
+        <p>Freud asked: What happened to you? Jung asked: Where are you going? Both questions are necessary. Neither alone is sufficient.</p>
+        <cite>— Synthesis, post-Jungian tradition</cite>
+      </div>
+    </section>
+
+    <!-- X. APPLICATIONS -->
+    <section id="applications">
+      <div class="section-header">
+        <span class="section-number">X</span>
+        <h2 class="section-title">Applications & Living Practice</h2>
+        <div class="section-rule"></div>
+      </div>
+
+      <p class="lede">Depth psychology is not only for clinicians. Its concepts pervade literature, culture, politics, spirituality, creativity, and the art of living with oneself.</p>
+
+      <div class="apply-grid">
+        <div class="apply-card">
+          <div class="apply-domain">Clinical</div>
+          <div class="apply-title">Psychotherapy & Analysis</div>
+          <p class="apply-desc">The foundational domain. Jungian analysis, psychodynamic therapy, psychoanalysis, and object relations therapy all offer multi-year explorations of the personal and collective unconscious. The therapeutic relationship itself becomes the field of transformation — transference and countertransference as primary instruments.</p>
+        </div>
+        <div class="apply-card">
+          <div class="apply-domain">Personal Practice</div>
+          <div class="apply-title">Dream Work & Inner Life</div>
+          <p class="apply-desc">Keeping a dream journal, working with active imagination, identifying projections, and cultivating a relationship with the inner figures are all available outside formal analysis. Many depth psychologists argue that regular engagement with dreams is the single most transformative self-practice available.</p>
+        </div>
+        <div class="apply-card">
+          <div class="apply-domain">Creative Life</div>
+          <div class="apply-title">Art, Writing & Music</div>
+          <p class="apply-desc">Depth psychology and the creative arts are natural companions. The artist's engagement with the unconscious — with image, symbol, and numinosity — is a form of depth work. Many artists have used Jungian concepts deliberately; many more enact them unknowingly. The shadow, the anima, the trickster live vividly in art.</p>
+        </div>
+        <div class="apply-card">
+          <div class="apply-domain">Spiritual</div>
+          <div class="apply-title">Alchemy, Mysticism & Ritual</div>
+          <p class="apply-desc">Jung found in alchemy the most complete symbolic system for individuation. The operations of alchemy — nigredo (blackening), albedo (whitening), rubedo (reddening) — map onto the stages of psychological transformation with uncanny precision. Depth psychology and contemplative traditions (Sufism, Kabbalah, Zen, Tantra) speak across centuries.</p>
+        </div>
+        <div class="apply-card">
+          <div class="apply-domain">Cultural</div>
+          <div class="apply-title">Myth, Literature & Film</div>
+          <p class="apply-desc">Hillman argued that every story is a psychological story. Films and novels enact archetypal patterns — we recognize them in the body before we understand them intellectually. Star Wars, The Matrix, Hamlet, King Lear, Moby-Dick: all are maps of the inner world, read without knowing it.</p>
+        </div>
+        <div class="apply-card">
+          <div class="apply-domain">Relational</div>
+          <div class="apply-title">Relationships & Projection</div>
+          <p class="apply-desc">The most immediate application of depth psychology is in relationships. Attraction, repulsion, idealization, and demonization — all are primarily projective. Understanding what one projects onto a partner, friend, or enemy is transformative work. Withdrawing projections does not reduce relationships — it deepens them.</p>
+        </div>
+        <div class="apply-card">
+          <div class="apply-domain">Somatic</div>
+          <div class="apply-title">Body & Symptom</div>
+          <p class="apply-desc">Psychosomatic medicine, somatic experiencing, and body-centered depth approaches all recognize that the body is not separate from the psyche — it is the psyche's densest expression. Chronic illness, unexplained pain, and bodily patterns often carry symbolic meaning when read through a depth lens. The body does not lie.</p>
+        </div>
+        <div class="apply-card">
+          <div class="apply-domain">Social / Political</div>
+          <div class="apply-title">Shadow in Culture & Politics</div>
+          <p class="apply-desc">The shadow is not only individual — it is collective. Nations, cultures, and organizations have shadows too: the disowned, projected, and scapegoated dimensions of collective life. Understanding the psychology of projection, scapegoating, and the enemy-image is arguably the most urgent application of depth psychology in the contemporary world.</p>
+        </div>
+        <div class="apply-card">
+          <div class="apply-domain">Ecological</div>
+          <div class="apply-title">Anima Mundi — Soul of the World</div>
+          <p class="apply-desc">Hillman's late work extended the psyche to the world itself. The ecological crisis is, in part, a depth-psychological crisis: a world from which soul has been withdrawn, in which nature has been treated as external rather than as a dimension of the inner life. Depth psychology points back toward participation, enchantment, and radical relatedness.</p>
+        </div>
+      </div>
+
+      <div class="ornament">✦ ✦ ✦</div>
+
+      <div class="pull-quote">
+        <p>As far as we can discern, the sole purpose of human existence is to kindle a light in the darkness of mere being.</p>
+        <cite>— C.G. Jung, Memories, Dreams, Reflections</cite>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="codex-footer">
+      <span class="footer-text">The Depth Atlas — A Living Reference</span>
+      <span class="footer-glyph">☿</span>
+      <span class="footer-text">Sources: Jung CW, Freud SE, Hillman, Klein, Winnicott, Adler</span>
+    </footer>
+
+  </div>
+</div>
+
+<script>
+  // Smooth active nav highlighting on scroll
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-strip a');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.getAttribute('id');
+        navLinks.forEach(link => {
+          link.style.color = link.getAttribute('href') === '#' + id
+            ? 'var(--gold-bright)'
+            : '';
+          link.style.background = link.getAttribute('href') === '#' + id
+            ? 'rgba(184,146,42,0.12)'
+            : '';
+        });
+      }
+    });
+  }, { threshold: 0.3 });
+
+  sections.forEach(section => observer.observe(section));
+
+  // Subtle entrance animation for timeline events
+  const tlObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateX(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.timeline-event').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateX(-12px)';
+    el.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+    tlObserver.observe(el);
+  });
+
+  // Card entrance animations
+  const cardObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }, 60 * (Array.from(entry.target.parentNode.children).indexOf(entry.target) % 4));
+      }
+    });
+  }, { threshold: 0.05 });
+
+  document.querySelectorAll('.figure-card, .term-card, .apply-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(14px)';
+    el.style.transition = 'opacity 0.4s ease, transform 0.4s ease, background 0.2s, box-shadow 0.25s, border-color 0.25s';
+    cardObserver.observe(el);
+  });
+</script>
+
+</body>
+</html>

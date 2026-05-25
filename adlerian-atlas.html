@@ -1,0 +1,2153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Adlerian Atlas — A Practitioner's Reference to Individual Psychology</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Work+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f4f0e8;
+    --paper-warm: #ede5d3;
+    --paper-deep: #e0d4ba;
+    --ink: #1c1815;
+    --ink-soft: #2e2820;
+    --rust: #b8482a;
+    --rust-deep: #8a3018;
+    --rust-pale: #e8a890;
+    --ochre: #c89030;
+    --ochre-pale: #e8c870;
+    --olive: #5a6028;
+    --olive-deep: #3a4020;
+    --teal: #2a5a5a;
+    --teal-deep: #1a3a3a;
+    --plum: #5a2848;
+    --plum-deep: #3a1830;
+    --rule: rgba(28,24,21,0.15);
+    --rule-strong: rgba(28,24,21,0.35);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: #1c1815;
+    color: var(--ink);
+    font-family: 'Work Sans', system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    font-weight: 400;
+  }
+
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: #1c1815; }
+  ::-webkit-scrollbar-thumb { background: var(--rust); }
+
+  /* ─── ATLAS CONTAINER ─── */
+  .atlas {
+    max-width: 1180px;
+    margin: 0 auto;
+    background: var(--paper);
+    position: relative;
+    box-shadow: 0 0 100px rgba(0,0,0,0.5);
+  }
+
+  /* ─── PAPER TEXTURE ─── */
+  .atlas::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(184,72,42,0.005) 2px, rgba(184,72,42,0.005) 4px),
+      radial-gradient(ellipse at 20% 0%, rgba(184,72,42,0.04) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 100%, rgba(90,40,72,0.03) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ─── NAV ─── */
+  .nav {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 14px 50px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    border-bottom: 4px solid var(--rust);
+    position: sticky; top: 0; z-index: 100;
+    align-items: center;
+  }
+  .nav-brand {
+    font-family: 'DM Serif Display', serif;
+    font-size: 14px;
+    font-style: italic;
+    color: var(--ochre-pale);
+    margin-right: auto;
+    letter-spacing: 0.02em;
+  }
+  .nav-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  .nav a {
+    color: var(--paper-deep);
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 6px 12px;
+    transition: all 0.2s;
+    border-bottom: 2px solid transparent;
+  }
+  .nav a:hover { color: var(--ochre-pale); border-bottom-color: var(--rust); }
+
+  /* ─── HEAD ─── */
+  .head {
+    padding: 80px 50px 60px;
+    background: var(--ink);
+    color: var(--paper);
+    position: relative;
+    overflow: hidden;
+    border-bottom: 8px double var(--rust);
+  }
+  .head::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(135deg, transparent 40%, rgba(184,72,42,0.15) 70%, transparent 100%),
+      radial-gradient(circle at 80% 30%, rgba(200,144,48,0.12) 0%, transparent 50%);
+  }
+  .head-grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 40px;
+    align-items: end;
+  }
+  .head-marker {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--ochre-pale);
+    letter-spacing: 0.2em;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .head-marker::before {
+    content: '';
+    width: 30px; height: 1px;
+    background: var(--ochre-pale);
+  }
+  .head h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(40px, 6vw, 78px);
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    color: var(--paper);
+  }
+  .head h1 em {
+    color: var(--rust-pale);
+    font-style: italic;
+  }
+  .head-sub {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 22px;
+    color: var(--paper-deep);
+    margin-top: 18px;
+    max-width: 580px;
+    line-height: 1.4;
+    opacity: 0.85;
+  }
+  .head-stamp {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--ochre-pale);
+    letter-spacing: 0.15em;
+    line-height: 1.8;
+    text-align: right;
+    border-left: 1px solid var(--rust);
+    padding-left: 20px;
+  }
+  .head-stamp strong {
+    display: block;
+    color: var(--rust-pale);
+    font-size: 12px;
+    margin-bottom: 4px;
+  }
+
+  /* ─── SECTION ─── */
+  section {
+    padding: 70px 50px 60px;
+    position: relative;
+    z-index: 1;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .section-id {
+    display: flex;
+    align-items: baseline;
+    gap: 18px;
+    margin-bottom: 28px;
+  }
+  .section-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--rust);
+    letter-spacing: 0.2em;
+    font-weight: 500;
+  }
+  .section-h {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(28px, 3.5vw, 42px);
+    font-weight: 400;
+    color: var(--ink);
+    line-height: 1.1;
+    letter-spacing: -0.005em;
+  }
+  .section-rule {
+    height: 1px;
+    background: var(--ink);
+    margin-bottom: 36px;
+    width: 100%;
+  }
+
+  .lead {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 22px;
+    color: var(--ink-soft);
+    line-height: 1.45;
+    margin-bottom: 28px;
+    max-width: 840px;
+  }
+
+  p { margin-bottom: 16px; color: var(--ink-soft); }
+  strong { color: var(--rust-deep); font-weight: 600; }
+
+  /* ─── PRINCIPLES BLOCK ─── */
+  .principles {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 0;
+    border: 1px solid var(--ink);
+    margin: 28px 0;
+  }
+  .principle {
+    padding: 24px 22px;
+    background: var(--paper-warm);
+    border-right: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    position: relative;
+    transition: background 0.2s;
+  }
+  .principle:hover { background: var(--paper-deep); }
+  .principle:nth-child(3n) { border-right: none; }
+  .principle-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--rust);
+    letter-spacing: 0.2em;
+    margin-bottom: 8px;
+  }
+  .principle-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    color: var(--ink);
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+  .principle-text {
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* ─── BIOGRAPHY TIMELINE ─── */
+  .bio-timeline {
+    margin: 28px 0;
+    border-left: 2px solid var(--ink);
+    padding-left: 0;
+  }
+  .bio-event {
+    display: grid;
+    grid-template-columns: 130px 1fr;
+    gap: 24px;
+    padding: 18px 0 18px 28px;
+    border-bottom: 1px solid var(--rule);
+    position: relative;
+    align-items: baseline;
+  }
+  .bio-event::before {
+    content: '';
+    position: absolute;
+    left: -7px; top: 26px;
+    width: 12px; height: 12px;
+    background: var(--paper);
+    border: 2px solid var(--rust);
+    transform: rotate(45deg);
+  }
+  .bio-event:hover::before { background: var(--rust); }
+  .bio-year {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--rust-deep);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+  }
+  .bio-content { padding-right: 20px; }
+  .bio-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 19px;
+    color: var(--ink);
+    margin-bottom: 5px;
+    line-height: 1.3;
+  }
+  .bio-desc {
+    font-size: 14.5px;
+    color: var(--ink-soft);
+    line-height: 1.65;
+    margin: 0;
+  }
+
+  /* ─── CONCEPT CARDS ─── */
+  .concept-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+    gap: 0;
+    border: 1px solid var(--ink);
+    margin: 28px 0;
+  }
+  .concept {
+    padding: 26px 24px;
+    background: var(--paper-warm);
+    border-right: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    transition: background 0.2s;
+    position: relative;
+  }
+  .concept:hover { background: var(--paper-deep); }
+  .concept-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.2em;
+    color: var(--paper);
+    background: var(--ink);
+    padding: 3px 8px;
+    margin-bottom: 14px;
+    display: inline-block;
+  }
+  .concept-tag.t-core { background: var(--rust-deep); }
+  .concept-tag.t-clinical { background: var(--olive-deep); }
+  .concept-tag.t-developmental { background: var(--teal-deep); }
+  .concept-tag.t-pathology { background: var(--plum-deep); }
+  .concept-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: var(--ink);
+    line-height: 1.15;
+    margin-bottom: 4px;
+  }
+  .concept-german {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--rust-deep);
+    margin-bottom: 12px;
+  }
+  .concept-def {
+    font-size: 14.5px;
+    color: var(--ink-soft);
+    line-height: 1.65;
+    margin: 0;
+  }
+  .concept-clinical {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--rule);
+    font-size: 13px;
+    color: var(--rust-deep);
+    line-height: 1.55;
+  }
+  .concept-clinical strong { color: var(--rust-deep); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; display: block; margin-bottom: 4px; font-family: 'JetBrains Mono', monospace; font-weight: 500; }
+
+  /* ─── DIAGRAM: MOTIVATIONAL ARC ─── */
+  .arc-diagram {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 50px 40px;
+    margin: 28px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .arc-diagram::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 50%, rgba(184,72,42,0.08) 0%, transparent 60%);
+  }
+  .arc-grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1fr;
+    gap: 0;
+    align-items: center;
+  }
+  .arc-pole {
+    text-align: center;
+    padding: 24px 16px;
+    border: 1px solid rgba(244,240,232,0.2);
+    background: rgba(244,240,232,0.04);
+  }
+  .arc-pole-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--ochre-pale);
+    letter-spacing: 0.2em;
+    margin-bottom: 8px;
+  }
+  .arc-pole-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: var(--paper);
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+  .arc-pole-desc {
+    font-size: 12.5px;
+    color: rgba(244,240,232,0.65);
+    line-height: 1.5;
+    margin: 0;
+  }
+  .arc-pole.start { border-color: var(--rust); }
+  .arc-pole.middle {
+    background: linear-gradient(135deg, rgba(184,72,42,0.15), rgba(200,144,48,0.1));
+    border-color: var(--ochre);
+  }
+  .arc-pole.end { border-color: var(--olive); }
+  .arc-arrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px;
+    color: var(--ochre-pale);
+    text-align: center;
+    padding: 0 12px;
+  }
+  .arc-caption {
+    text-align: center;
+    margin-top: 24px;
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: var(--ochre-pale);
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ─── PULLQUOTE ─── */
+  .quote {
+    margin: 36px 0;
+    padding: 28px 36px;
+    background: var(--paper-warm);
+    border-left: 6px solid var(--rust);
+    position: relative;
+  }
+  .quote::after {
+    content: '"';
+    position: absolute;
+    top: -12px; right: 24px;
+    font-family: 'DM Serif Display', serif;
+    font-size: 80px;
+    color: var(--rust);
+    opacity: 0.2;
+    line-height: 1;
+  }
+  .quote-text {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 20px;
+    color: var(--ink);
+    line-height: 1.45;
+    margin: 0 0 12px;
+  }
+  .quote-cite {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--rust-deep);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  /* ─── BIRTH ORDER ─── */
+  .birth-order {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0;
+    border: 1px solid var(--ink);
+    margin: 28px 0;
+  }
+  .bo-card {
+    padding: 22px 20px;
+    background: var(--paper-warm);
+    border-right: 1px solid var(--rule);
+    text-align: center;
+    transition: background 0.2s;
+  }
+  .bo-card:last-child { border-right: none; }
+  .bo-card:hover { background: var(--paper-deep); }
+  .bo-icon {
+    font-family: 'DM Serif Display', serif;
+    font-size: 36px;
+    color: var(--rust);
+    margin-bottom: 6px;
+    line-height: 1;
+  }
+  .bo-position {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    color: var(--ink);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .bo-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 17px;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+  .bo-traits {
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+    text-align: left;
+    margin: 0;
+  }
+
+  /* ─── LIFE TASKS ─── */
+  .tasks-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0;
+    border: 1px solid var(--ink);
+    margin: 28px 0;
+    background: var(--ink);
+  }
+  .task {
+    padding: 26px 22px;
+    background: var(--paper);
+    border-right: 1px solid var(--rule);
+    transition: all 0.2s;
+    position: relative;
+  }
+  .task:last-child { border-right: none; }
+  .task:hover { background: var(--paper-warm); }
+  .task::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: var(--rust);
+  }
+  .task.t-original::before { background: var(--ochre); }
+  .task.t-extended::before { background: var(--teal); }
+  .task-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--rust-deep);
+    letter-spacing: 0.15em;
+    margin-bottom: 8px;
+  }
+  .task-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: var(--ink);
+    margin-bottom: 10px;
+    line-height: 1.15;
+  }
+  .task-desc {
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+    margin: 0 0 8px;
+  }
+  .task-q {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--rust-deep);
+    line-height: 1.4;
+    border-top: 1px solid var(--rule);
+    padding-top: 8px;
+    margin-top: 8px;
+  }
+
+  /* ─── PHASES ─── */
+  .phases {
+    display: flex;
+    flex-direction: column;
+    margin: 28px 0;
+    border: 1px solid var(--ink);
+  }
+  .phase {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 28px;
+    padding: 26px 28px;
+    background: var(--paper-warm);
+    border-bottom: 1px solid var(--rule);
+    align-items: start;
+    transition: background 0.2s;
+  }
+  .phase:last-child { border-bottom: none; }
+  .phase:hover { background: var(--paper-deep); }
+  .phase-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 56px;
+    color: var(--rust);
+    line-height: 1;
+    font-style: italic;
+  }
+  .phase-content { padding-top: 8px; }
+  .phase-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 24px;
+    color: var(--ink);
+    line-height: 1.2;
+    margin-bottom: 6px;
+  }
+  .phase-aim {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--rust-deep);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: inline-block;
+    padding: 3px 8px;
+    border: 1px solid var(--rust);
+  }
+  .phase-desc {
+    font-size: 14.5px;
+    color: var(--ink-soft);
+    line-height: 1.65;
+    margin: 0 0 12px;
+  }
+  .phase-techniques {
+    font-size: 13px;
+    color: var(--ink-soft);
+    padding: 10px 14px;
+    background: rgba(184,72,42,0.06);
+    border-left: 3px solid var(--rust);
+  }
+  .phase-techniques strong {
+    display: block;
+    color: var(--rust-deep);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    font-weight: 500;
+  }
+
+  /* ─── METHODS ─── */
+  .methods {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 0;
+    border: 1px solid var(--ink);
+    margin: 28px 0;
+  }
+  .method {
+    padding: 24px 22px;
+    background: var(--paper-warm);
+    border-right: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    transition: all 0.2s;
+  }
+  .method:hover { background: var(--paper-deep); transform: translateY(-1px); }
+  .method-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.2em;
+    color: var(--rust);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+  .method-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 19px;
+    color: var(--ink);
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .method-desc {
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    line-height: 1.6;
+    margin: 0 0 10px;
+  }
+  .method-howto {
+    font-size: 12.5px;
+    color: var(--ink);
+    background: var(--paper);
+    padding: 10px 12px;
+    border-left: 3px solid var(--ochre);
+    line-height: 1.55;
+  }
+  .method-howto strong {
+    color: var(--rust-deep);
+    font-size: 9.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 500;
+  }
+
+  /* ─── MISBEHAVIOR GOALS ─── */
+  .goals {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0;
+    margin: 28px 0;
+    border: 1px solid var(--ink);
+  }
+  .goal {
+    padding: 24px 22px;
+    background: var(--paper-warm);
+    border-right: 1px solid var(--rule);
+    transition: background 0.2s;
+  }
+  .goal:last-child { border-right: none; }
+  .goal:hover { background: var(--paper-deep); }
+  .goal-level {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--rust);
+    letter-spacing: 0.2em;
+    margin-bottom: 6px;
+  }
+  .goal-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: var(--ink);
+    margin-bottom: 8px;
+    line-height: 1.15;
+  }
+  .goal-belief {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--rust-deep);
+    margin-bottom: 12px;
+    padding: 8px 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+  .goal-row {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: 8px;
+    font-size: 12.5px;
+    line-height: 1.5;
+    padding: 4px 0;
+  }
+  .goal-row-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    color: var(--rust-deep);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding-top: 2px;
+  }
+  .goal-row-val { color: var(--ink-soft); }
+
+  /* ─── COMPARE ─── */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid var(--ink);
+    margin: 28px 0;
+    background: var(--paper-warm);
+  }
+  .compare-table th {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 14px 18px;
+    text-align: left;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 500;
+    border-right: 1px solid var(--rust);
+  }
+  .compare-table th:last-child { border-right: none; }
+  .compare-table td {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--rule);
+    border-right: 1px solid var(--rule);
+    vertical-align: top;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+  }
+  .compare-table td:last-child { border-right: none; }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table td:first-child {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--rust-deep);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 500;
+    background: var(--paper);
+    width: 160px;
+  }
+  .compare-table tr:hover td:not(:first-child) { background: var(--paper-deep); }
+
+  /* ─── SAFEGUARDING ─── */
+  .safeguard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px;
+    margin: 28px 0;
+  }
+  .safeguard {
+    padding: 18px 18px;
+    background: var(--paper-warm);
+    border: 1px solid var(--rule-strong);
+    border-left: 4px solid var(--plum);
+    transition: all 0.2s;
+  }
+  .safeguard:hover {
+    background: var(--paper-deep);
+    border-left-color: var(--plum-deep);
+  }
+  .safeguard-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 17px;
+    color: var(--ink);
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+  .safeguard-desc {
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  /* ─── INFLUENCE TREE ─── */
+  .influence {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 40px 30px;
+    margin: 28px 0;
+    border-left: 6px solid var(--rust);
+  }
+  .influence-h {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: var(--ochre-pale);
+    margin-bottom: 18px;
+  }
+  .inf-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+  }
+  .inf-card {
+    padding: 14px 14px;
+    background: rgba(244,240,232,0.04);
+    border: 1px solid rgba(244,240,232,0.15);
+  }
+  .inf-card:hover { background: rgba(244,240,232,0.08); }
+  .inf-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 15px;
+    color: var(--paper);
+    margin-bottom: 4px;
+  }
+  .inf-school {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    color: var(--rust-pale);
+    letter-spacing: 0.15em;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+  .inf-desc {
+    font-size: 12px;
+    color: rgba(244,240,232,0.7);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  /* ─── PROMPTS ─── */
+  .prompts {
+    background: var(--paper-warm);
+    padding: 28px 30px;
+    border: 1px solid var(--ink);
+    margin: 28px 0;
+  }
+  .prompts-h {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--rust-deep);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .prompts ol {
+    list-style: none;
+    counter-reset: pq;
+    padding: 0;
+  }
+  .prompts li {
+    counter-increment: pq;
+    padding: 10px 0 10px 36px;
+    position: relative;
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 16.5px;
+    color: var(--ink);
+    line-height: 1.45;
+    border-bottom: 1px dashed var(--rule);
+  }
+  .prompts li:last-child { border-bottom: none; }
+  .prompts li::before {
+    content: counter(pq, decimal-leading-zero);
+    position: absolute;
+    left: 0; top: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--rust);
+    letter-spacing: 0.05em;
+    font-style: normal;
+  }
+
+  /* ─── FOOTER ─── */
+  .foot {
+    background: var(--ink);
+    color: var(--paper-deep);
+    padding: 36px 50px;
+    border-top: 8px double var(--rust);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .foot-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ochre-pale);
+    opacity: 0.8;
+  }
+  .foot-glyph {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 18px;
+    color: var(--rust-pale);
+  }
+
+  @media (max-width: 768px) {
+    section, .head, .foot, .nav { padding-left: 24px; padding-right: 24px; }
+    .head-grid { grid-template-columns: 1fr; }
+    .head-stamp { border-left: none; border-top: 1px solid var(--rust); padding: 16px 0 0; text-align: left; }
+    .arc-grid { grid-template-columns: 1fr; gap: 12px; }
+    .arc-arrow { transform: rotate(90deg); padding: 8px 0; }
+    .principle:nth-child(3n) { border-right: 1px solid var(--rule); }
+    .bio-event { grid-template-columns: 1fr; gap: 6px; }
+    .phase { grid-template-columns: 1fr; gap: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="atlas">
+
+  <!-- NAV -->
+  <nav class="nav">
+    <span class="nav-brand">The Adlerian Atlas</span>
+    <div class="nav-links">
+      <a href="#origins">Origins</a>
+      <a href="#principles">Principles</a>
+      <a href="#concepts">Concepts</a>
+      <a href="#development">Development</a>
+      <a href="#tasks">Life Tasks</a>
+      <a href="#birth-order">Birth Order</a>
+      <a href="#assessment">Assessment</a>
+      <a href="#methods">Methods</a>
+      <a href="#phases">Phases</a>
+      <a href="#pathology">Pathology</a>
+      <a href="#freud">vs Freud</a>
+      <a href="#influence">Legacy</a>
+    </div>
+  </nav>
+
+  <!-- HEAD -->
+  <header class="head">
+    <div class="head-grid">
+      <div>
+        <div class="head-marker">A Practitioner's Reference · Vienna 1911 — Present</div>
+        <h1>The <em>Adlerian</em><br>Atlas</h1>
+        <p class="head-sub">Individual Psychology — its principles, vocabulary, and clinical method, set out as a working reference for practitioners and inheritors of the school.</p>
+      </div>
+      <div class="head-stamp">
+        <strong>VOL. II</strong>
+        FOUNDED · 1911<br>
+        VIENNA · AUSTRIA<br>
+        FOUNDER · A. ADLER<br>
+        SUCCESSORS · DREIKURS,<br>
+        ANSBACHER, MOSAK,<br>
+        SHULMAN, SWEENEY
+      </div>
+    </div>
+  </header>
+
+  <!-- I. ORIGINS -->
+  <section id="origins">
+    <div class="section-id">
+      <span class="section-num">§ I</span>
+      <h2 class="section-h">Origins & Historical Arc</h2>
+    </div>
+    <div class="section-rule"></div>
+
+    <p class="lead">Adler did not split from Freud over a footnote. He split because he believed something different about what a human being actually <em>is</em>.</p>
+
+    <p>For Freud, the human being was driven — by libido, by repressed wish, by intrapsychic conflict. For Adler, the human being was a <strong>striving, social, goal-directed whole</strong> — situated in family and community, oriented forward rather than backward, capable of meaningful agency. Where Freud's psychology was reductive (tracing the symptom back to its cause), Adler's was teleological (asking what the symptom is in service of). Where Freud's was intrapsychic, Adler's was interpersonal. The split was not a quarrel — it was a different anthropology.</p>
+
+    <p>Adler chose the name <strong>Individual Psychology</strong> not to signal the isolated self, but the opposite. The Latin root <em>individuum</em> means <em>indivisible</em> — the person as a unified, irreducible whole. The personality, for Adler, could not be split into id, ego, and superego. It moved as one being, in one direction, toward one (often unconscious) goal. To understand a person, one had to grasp the unity of their movement.</p>
+
+    <div class="bio-timeline">
+      <div class="bio-event">
+        <div class="bio-year">1870 · Feb 7</div>
+        <div class="bio-content">
+          <h3 class="bio-title">Born in Rudolfsheim, near Vienna</h3>
+          <p class="bio-desc">Second of seven children in a Jewish merchant family. A sickly child — rickets, near-fatal pneumonia at age four — and witness to a younger brother's death in the bed beside him. These experiences would later inform his theories of organ inferiority, compensation, and the central role of subjective response to suffering.</p>
+        </div>
+      </div>
+      <div class="bio-event">
+        <div class="bio-year">1895</div>
+        <div class="bio-content">
+          <h3 class="bio-title">Medical Degree, University of Vienna</h3>
+          <p class="bio-desc">Trained as an ophthalmologist; soon shifted to general practice in a working-class district near the Prater. His patients included circus performers — a context in which physical inferiority and psychological compensation became visibly intertwined. This early observation seeded the entire theory.</p>
+        </div>
+      </div>
+      <div class="bio-event">
+        <div class="bio-year">1902</div>
+        <div class="bio-content">
+          <h3 class="bio-title">Joins Freud's Wednesday Society</h3>
+          <p class="bio-desc">Invited by Freud personally, after Adler defended psychoanalysis publicly against medical critics. Becomes one of the inner four. Throughout his time in the circle, Adler will agree on the existence of unconscious processes — but increasingly redirect attention from libido to <em>aggression, power, inferiority</em>, and the social field.</p>
+        </div>
+      </div>
+      <div class="bio-event">
+        <div class="bio-year">1907</div>
+        <div class="bio-content">
+          <h3 class="bio-title">Study of Organ Inferiority</h3>
+          <p class="bio-desc">Adler publishes his first major work: <em>Studie über Minderwertigkeit von Organen</em>. The thesis: physical weakness in any organ tends to provoke psychological compensation, often producing exceptional development. Demosthenes the stutterer becomes the orator. The framework that will define his life's work begins to crystallize.</p>
+        </div>
+      </div>
+      <div class="bio-event">
+        <div class="bio-year">1910</div>
+        <div class="bio-content">
+          <h3 class="bio-title">President, Vienna Psychoanalytic Society</h3>
+          <p class="bio-desc">Becomes president of the Society and co-editor (with Freud) of its journal. Tensions sharpen. Adler refuses to make sexuality the master key. He proposes instead the primacy of feelings of inferiority and the striving for significance — an open repudiation of libido theory.</p>
+        </div>
+      </div>
+      <div class="bio-event">
+        <div class="bio-year">1911 · Oct</div>
+        <div class="bio-content">
+          <h3 class="bio-title">The Break — Society for Free Psychoanalytic Research</h3>
+          <p class="bio-desc">A vote in the Society finds Adler's positions <em>not</em> mutually exclusive with Freud's, but Freud orchestrates Adler's departure. Adler resigns and forms his own group with several colleagues. Within months it is renamed the <strong>Society for Individual Psychology</strong>. The first major schism in depth psychology is complete.</p>
+        </div>
+      </div>
+      <div class="bio-event">
+        <div class="bio-year">1912</div>
+        <div class="bio-content">
+          <h3 class="bio-title">Über den nervösen Charakter (The Neurotic Character)</h3>
+          <p class="bio-desc">Adler's foundational theoretical work. Articulates inferiority feelings, compensation, fictional finalism, masculine protest, and the unity of personality. The book is dense, philosophical, and sets out the entire structural skeleton of Individual Psychology.</p>
+        </div>
+      </div>
+      <div class="bio-event">
+        <div class="bio-year">1914 – 1918</div>
+        <div class="bio-content">
+          <h3 class="bio-title">War Service & Pivot Toward the Social</h3>
+          <p class="bio-desc">Serves as a military physician in the Austro-Hungarian Army. The horror of WWI radicalizes his thinking toward the <em>social</em> dimension. After the war, <strong>Gemeinschaftsgefühl</strong> — community feeling, social interest — moves to the center of his theory. The mature Adler emerges: less aggressive striving, more cooperative belonging.</p>
+        </div>
+      </div>
+      <div class="bio-event">
+        <div class="bio-year">1920s</div>
+        <div class="bio-content">
+          <h3 class="bio-title">Child Guidance Clinics in Vienna</h3>
+          <p class="bio-desc">Adler establishes 32 child guidance clinics in Vienna's public schools — open consultation rooms where teachers, parents, and children meet with Adlerian counselors in front of audiences. This is one of the first systematic <strong>community mental health</strong> programs in history. Adler treats the clinic as an arm of public education and democratic life.</p>
+        </div>
+      </div>
+      <div class="bio-event">
+        <div class="bio-year">1927</div>
+        <div class="bio-content">
+          <h3 class="bio-title">Understanding Human Nature (Menschenkenntnis)</h3>
+          <p class="bio-desc">His most accessible book — written for a general audience, based on lectures at the People's Institute. It crystallizes Adler's vocation: psychology not as priestly mystery but as common knowledge for everyday life. A democratic, humanist gesture.</p>
+        </div>
+      </div>
+      <div class="bio-event">
+        <div class="bio-year">1932 – 1934</div>
+        <div class="bio-content">
+          <h3 class="bio-title">Emigration to the United States</h3>
+          <p class="bio-desc">As the Nazi tide rises in Austria, Adler's clinics are closed by the Dollfuss regime. He emigrates and accepts a chair at Long Island College of Medicine. Lectures across the United States and Europe at a punishing pace.</p>
+        </div>
+      </div>
+      <div class="bio-event">
+        <div class="bio-year">1937 · May 28</div>
+        <div class="bio-content">
+          <h3 class="bio-title">Dies in Aberdeen, Scotland</h3>
+          <p class="bio-desc">Collapses on a lecture tour at age 67. Cremated in Edinburgh; his ashes are lost for nearly 75 years before being rediscovered and returned to Vienna in 2011. He leaves behind a school that will be carried forward — through Dreikurs in Chicago, Ansbacher's compendium of his thought, and the silent saturation of his ideas across humanistic, cognitive, and family-systems psychology.</p>
+        </div>
+      </div>
+      <div class="bio-event">
+        <div class="bio-year">1956</div>
+        <div class="bio-content">
+          <h3 class="bio-title">The Ansbacher Compendium</h3>
+          <p class="bio-desc">Heinz and Rowena Ansbacher publish <em>The Individual Psychology of Alfred Adler</em> — a systematic editing of Adler's scattered writings into coherent doctrine. This becomes the standard reference for English-language Adlerian work for decades. Without it, Adler might have been lost.</p>
+        </div>
+      </div>
+      <div class="bio-event">
+        <div class="bio-year">1960s — Present</div>
+        <div class="bio-content">
+          <h3 class="bio-title">The Quiet Saturation</h3>
+          <p class="bio-desc">Albert Ellis would later say: "Alfred Adler, more than even Freud, is probably the true father of modern psychotherapy." His ideas pass — often unattributed — into Maslow, Rogers, Frankl, Beck, Ellis, May, Horney, Fromm, Sullivan, Seligman, and into family systems and cognitive-behavioral therapy. Harold Bloom: <em>"Adler was the first to argue that the neurotic is not suffering from his past, he is creating it."</em></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="quote">
+      <p class="quote-text">It is always easier to fight for one's principles than to live up to them.</p>
+      <p class="quote-cite">— Alfred Adler</p>
+    </div>
+  </section>
+
+  <!-- II. PRINCIPLES -->
+  <section id="principles">
+    <div class="section-id">
+      <span class="section-num">§ II</span>
+      <h2 class="section-h">The Six Foundational Principles</h2>
+    </div>
+    <div class="section-rule"></div>
+
+    <p class="lead">Adler's psychology rests on six load-bearing claims. Together they form the entire structure — pull one out, and the rest no longer holds.</p>
+
+    <div class="principles">
+      <div class="principle">
+        <div class="principle-num">PRINCIPLE 01</div>
+        <div class="principle-name">Holism — The Indivisible Person</div>
+        <p class="principle-text">The person is a unified whole. Personality cannot be carved into parts (id/ego/superego) without distortion. The same self thinks, feels, dreams, acts, sleeps, and falls ill — and all these expressions are coordinated by a single guiding line.</p>
+      </div>
+      <div class="principle">
+        <div class="principle-num">PRINCIPLE 02</div>
+        <div class="principle-name">Teleology — Goal-Directedness</div>
+        <p class="principle-text">All behavior is purposeful. The decisive question is never <em>why</em> in the causal sense, but <em>what for</em>. Symptoms, neuroses, and lifestyle patterns are not random or merely caused — they are aimed. Each life moves toward an unconscious goal.</p>
+      </div>
+      <div class="principle">
+        <div class="principle-num">PRINCIPLE 03</div>
+        <div class="principle-name">Social Embeddedness</div>
+        <p class="principle-text">The human being is a social being from birth. There is no "individual" prior to or apart from social context. All meaningful psychological questions are ultimately questions about how the person is situated within their family, group, and community.</p>
+      </div>
+      <div class="principle">
+        <div class="principle-num">PRINCIPLE 04</div>
+        <div class="principle-name">Subjective Phenomenology</div>
+        <p class="principle-text">What matters is not what happened, but how the person interpreted it. Two children born into the same family have not lived in the same family. Reality is mediated by private logic — the lens that turns event into meaning.</p>
+      </div>
+      <div class="principle">
+        <div class="principle-num">PRINCIPLE 05</div>
+        <div class="principle-name">Soft Determinism — The Creative Self</div>
+        <p class="principle-text">Heredity and environment are raw materials, not destiny. The individual is the artist who shapes them. Each person, by age four or five, has constructed a creative response to their circumstances. That response can be rebuilt — though never effortlessly.</p>
+      </div>
+      <div class="principle">
+        <div class="principle-num">PRINCIPLE 06</div>
+        <div class="principle-name">Optimism & Encouragement</div>
+        <p class="principle-text">Adler believed people can change. The work of therapy is fundamentally educational — to encourage, to illuminate, to remove obstacles to belonging. Discouragement is the soil of pathology; encouragement is the medicine.</p>
+      </div>
+    </div>
+
+    <div class="arc-diagram">
+      <div class="arc-grid">
+        <div class="arc-pole start">
+          <div class="arc-pole-label">ORIGIN</div>
+          <div class="arc-pole-name">Felt Inferiority</div>
+          <p class="arc-pole-desc">Every child enters life smaller, weaker, more dependent than the surrounding adults. The basic affective ground is felt inadequacy.</p>
+        </div>
+        <div class="arc-arrow">⟶</div>
+        <div class="arc-pole middle">
+          <div class="arc-pole-label">MOVEMENT</div>
+          <div class="arc-pole-name">Striving</div>
+          <p class="arc-pole-desc">The fundamental dynamic of life: the movement from felt minus to imagined plus. Every act is a stroke of this striving.</p>
+        </div>
+        <div class="arc-arrow">⟶</div>
+        <div class="arc-pole end">
+          <div class="arc-pole-label">DESTINATION</div>
+          <div class="arc-pole-name">Significance</div>
+          <p class="arc-pole-desc">Either toward useless self-elevation (neurotic), or toward useful contribution to the human community (healthy).</p>
+        </div>
+      </div>
+      <div class="arc-caption">— The fundamental motivational arc of Individual Psychology —</div>
+    </div>
+  </section>
+
+  <!-- III. CORE CONCEPTS -->
+  <section id="concepts">
+    <div class="section-id">
+      <span class="section-num">§ III</span>
+      <h2 class="section-h">Core Concepts & Vocabulary</h2>
+    </div>
+    <div class="section-rule"></div>
+
+    <p class="lead">Adler's vocabulary is unusually concrete. Each term names something a clinician can hear, see, and work with in the room.</p>
+
+    <div class="concept-grid">
+
+      <div class="concept">
+        <span class="concept-tag t-core">Foundational</span>
+        <div class="concept-name">Inferiority Feeling</div>
+        <div class="concept-german">Minderwertigkeitsgefühl</div>
+        <p class="concept-def">The universal, originating affect of human life. Every child is small, weak, dependent — and feels it. This is not pathology; it is the ground from which all striving springs. Adler distinguished this <em>healthy</em>, motivating feeling from the <strong>inferiority complex</strong>: a chronic, paralyzing conviction of inadequacy that has hardened into a worldview.</p>
+        <div class="concept-clinical">
+          <strong>In Practice</strong>
+          Listen for: "I'm not enough." "Everyone else has it figured out." Excessive humility, perfectionism, or its opposite — grandiose denial of any limitation. The complex hides as often in arrogance as in self-effacement.
+        </div>
+      </div>
+
+      <div class="concept">
+        <span class="concept-tag t-core">Foundational</span>
+        <div class="concept-name">Striving for Superiority</div>
+        <div class="concept-german">Streben nach Überlegenheit</div>
+        <p class="concept-def">The fundamental drive of personality — the movement from a felt minus toward an imagined plus. In his early period Adler called this "the striving for superiority"; in his mature work he reframed it as the <strong>striving for completion, perfection, or significance</strong>. The healthy form is socially useful; the neurotic form seeks elevation above others rather than alongside them.</p>
+        <div class="concept-clinical">
+          <strong>In Practice</strong>
+          Identify the direction of the striving. Up the social ladder? Toward acclaim? Away from a feared scenario? The striving is always specific.
+        </div>
+      </div>
+
+      <div class="concept">
+        <span class="concept-tag t-core">Foundational</span>
+        <div class="concept-name">Compensation</div>
+        <div class="concept-german">Kompensation</div>
+        <p class="concept-def">The mechanism by which felt inferiority becomes capacity. The stutterer becomes Demosthenes. The sickly child becomes the doctor. Compensation is, in itself, neither healthy nor pathological — what matters is its <em>direction</em>. Useful compensation contributes; <strong>overcompensation</strong> inflates.</p>
+        <div class="concept-clinical">
+          <strong>In Practice</strong>
+          Trace the line from a person's earliest sense of insufficiency to their later mastery. The connection is rarely random.
+        </div>
+      </div>
+
+      <div class="concept">
+        <span class="concept-tag t-core">Foundational</span>
+        <div class="concept-name">Fictional Finalism</div>
+        <div class="concept-german">Fiktiver Endzweck</div>
+        <p class="concept-def">The imagined future goal that organizes the entire personality. Borrowed from the philosopher Hans Vaihinger (<em>The Philosophy of "As If"</em>) — the idea that we live according to fictions: not lies, but useful guiding ideals. Each person's fictional final goal is a private answer to the question: "If I were to be safe and significant, what would that look like?" Most people cannot articulate it. The whole life is its expression.</p>
+        <div class="concept-clinical">
+          <strong>In Practice</strong>
+          Adler later softened the term to <em>guided self-ideal</em>. Ask: "If your life worked exactly the way you secretly hope, what would the picture look like?"
+        </div>
+      </div>
+
+      <div class="concept">
+        <span class="concept-tag t-core">Foundational</span>
+        <div class="concept-name">Lifestyle (Style of Life)</div>
+        <div class="concept-german">Lebensstil</div>
+        <p class="concept-def">The unique pattern of perception, evaluation, and movement through which a person navigates all of life. Set by approximately age four to five — not as the contents of experience, but as the child's <em>creative interpretation</em> of those experiences. The lifestyle answers, in unconscious form, three questions: <em>Who am I? What is the world like? What must I do?</em> Once formed, it tends to persist unless deliberately addressed.</p>
+        <div class="concept-clinical">
+          <strong>In Practice</strong>
+          The whole work of Adlerian therapy can be summarized as: bringing the lifestyle into awareness, identifying its basic mistakes, and supporting reorientation toward usefulness.
+        </div>
+      </div>
+
+      <div class="concept">
+        <span class="concept-tag t-core">Foundational</span>
+        <div class="concept-name">Social Interest / Community Feeling</div>
+        <div class="concept-german">Gemeinschaftsgefühl</div>
+        <p class="concept-def">The single most important construct in mature Adlerian thought. The innate human capacity — and developmental task — to feel oneself as part of the greater human community, to act for the common good, to recognize interdependence. <strong>The criterion of mental health.</strong> The healthy person has cultivated <em>Gemeinschaftsgefühl</em>; the neurotic has not yet developed it; the criminal has actively turned against it.</p>
+        <div class="concept-clinical">
+          <strong>In Practice</strong>
+          Therapy is partly the rehabilitation of social interest. Movement toward usefulness and connection is itself therapeutic.
+        </div>
+      </div>
+
+      <div class="concept">
+        <span class="concept-tag t-clinical">Clinical Term</span>
+        <div class="concept-name">Private Logic</div>
+        <div class="concept-german">Private Sinn</div>
+        <p class="concept-def">The idiosyncratic reasoning by which a person justifies their lifestyle to themselves. It contradicts <strong>common sense</strong> but is internally coherent — and the person is largely unaware of it. Private logic is what makes a chronically late person feel that punctuality is petty, or what makes an avoidant person feel they are being "realistic" rather than afraid.</p>
+        <div class="concept-clinical">
+          <strong>In Practice</strong>
+          Listen for: "Yes, but..." statements. The "yes-but" is private logic in action — the rationalization that protects the existing lifestyle.
+        </div>
+      </div>
+
+      <div class="concept">
+        <span class="concept-tag t-clinical">Clinical Term</span>
+        <div class="concept-name">Basic Mistakes</div>
+        <div class="concept-german">Grundfehler</div>
+        <p class="concept-def">The faulty conclusions a person drew, in childhood, about themselves, others, and life — and that continue to govern adult behavior. Common forms: overgeneralization ("People always..."); false or impossible goals of security ("If only I were perfect..."); misperception of life's demands ("Life is a battle"); minimization or denial of one's worth; faulty values ("Be first" or "Don't trust").</p>
+        <div class="concept-clinical">
+          <strong>In Practice</strong>
+          Identify the basic mistakes during lifestyle assessment. They are the leverage points for change. The reorientation phase of therapy directly addresses them.
+        </div>
+      </div>
+
+      <div class="concept">
+        <span class="concept-tag t-clinical">Clinical Term</span>
+        <div class="concept-name">Safeguarding Tendencies</div>
+        <div class="concept-german">Sicherungstendenzen</div>
+        <p class="concept-def">The cognitive and behavioral strategies by which a person protects fragile self-esteem from the perceived threat of failure. Adler's analogue to Freudian defense mechanisms — but oriented toward <em>maintaining the fiction of self-worth</em> rather than warding off drive. Includes excuses, distancing, hesitation, aggression, anxiety symptoms, and the famous <strong>hesitating attitude</strong>.</p>
+        <div class="concept-clinical">
+          <strong>In Practice</strong>
+          Identify what each safeguard accomplishes. A person who is "always too tired" is being protected from the test that exhaustion postpones.
+        </div>
+      </div>
+
+      <div class="concept">
+        <span class="concept-tag t-clinical">Clinical Term</span>
+        <div class="concept-name">Hesitating Attitude</div>
+        <div class="concept-german">"Yes-but"</div>
+        <p class="concept-def">A specific safeguarding pattern: the person engages with the life task partway, then pulls back. They reach for the goal, then sabotage it. The hesitation creates an alibi: <em>"I would have, but..."</em> The lifestyle is preserved without ever being tested against reality.</p>
+        <div class="concept-clinical">
+          <strong>In Practice</strong>
+          One of the clearest signatures of neurotic lifestyle. The "yes-but" must be made overt and gently challenged.
+        </div>
+      </div>
+
+      <div class="concept">
+        <span class="concept-tag t-clinical">Clinical Term</span>
+        <div class="concept-name">Encouragement</div>
+        <div class="concept-german">Ermutigung</div>
+        <p class="concept-def">Adler's signature therapeutic act, distinct from praise. <strong>Praise</strong> is contingent on outcome: "You did well." <strong>Encouragement</strong> is unconditional regard for the effort and being of the person: "I see you trying. I see you struggling. I see who you are." Praise reinforces the performer; encouragement reinforces the self. Discouragement is, for Adler, the soil from which all neurosis grows.</p>
+        <div class="concept-clinical">
+          <strong>In Practice</strong>
+          The encouraging stance is <em>continuous</em>, not technical. It is the felt atmosphere of Adlerian work.
+        </div>
+      </div>
+
+      <div class="concept">
+        <span class="concept-tag t-clinical">Clinical Term</span>
+        <div class="concept-name">Useful vs. Useless Side</div>
+        <div class="concept-german">Nützlich vs. unnützlich</div>
+        <p class="concept-def">Adler's pragmatic dichotomy. Behavior, striving, and lifestyle can be evaluated as movement either toward the <em>useful side</em> of life (cooperation, contribution, real-world engagement) or the <em>useless side</em> (private fantasy, evasion, hostile retreat, fictive superiority). Health is a vector, not a state.</p>
+        <div class="concept-clinical">
+          <strong>In Practice</strong>
+          Ask of every pattern: "Does this move toward usefulness, or away from it?" The criterion is unsentimental and instantly diagnostic.
+        </div>
+      </div>
+
+      <div class="concept">
+        <span class="concept-tag t-developmental">Developmental</span>
+        <div class="concept-name">Family Constellation</div>
+        <div class="concept-german">Familienkonstellation</div>
+        <p class="concept-def">The psychological field of the family — not just structure but atmosphere, alliances, rivalries, expectations, and the child's perceived position within it. Two siblings have never grown up in the same family. Each child has constructed their own constellation, in which they have a unique place.</p>
+        <div class="concept-clinical">
+          <strong>In Practice</strong>
+          Family constellation interview is a foundational assessment tool. Ask about each member's role, the child's perceived alliances, who fought, who didn't, who was favored.
+        </div>
+      </div>
+
+      <div class="concept">
+        <span class="concept-tag t-developmental">Developmental</span>
+        <div class="concept-name">Birth Order (Psychological)</div>
+        <div class="concept-german">Geburtenfolge</div>
+        <p class="concept-def">Not chronological position but <em>psychological</em> position within the family. Adler observed predictable lifestyle tendencies for the firstborn, second, middle, youngest, and only child — but emphasized that what matters is the child's <strong>interpretation</strong> of their position, not the position itself.</p>
+        <div class="concept-clinical">
+          <strong>In Practice</strong>
+          Use birth order as hypothesis, not diagnosis. A second-born raised as effectively the eldest will exhibit firstborn dynamics.
+        </div>
+      </div>
+
+      <div class="concept">
+        <span class="concept-tag t-developmental">Developmental</span>
+        <div class="concept-name">Pampered & Neglected Child</div>
+        <div class="concept-german">Verzärtelt / Vernachlässigt</div>
+        <p class="concept-def">Adler's two great developmental hazards. The <strong>pampered child</strong> is given everything without learning to give — they grow up expecting service, unable to face challenges, and demand attention as a birthright. The <strong>neglected child</strong> learns that the world is hostile and that they will get nothing — they grow up suspicious, withdrawn, and often vindictive. Both are failures in the development of social interest.</p>
+        <div class="concept-clinical">
+          <strong>In Practice</strong>
+          These are tendencies, not types. Many adults exhibit a layered pattern of both — pampered in one domain, neglected in another.
+        </div>
+      </div>
+
+      <div class="concept">
+        <span class="concept-tag t-developmental">Developmental</span>
+        <div class="concept-name">Organ Inferiority</div>
+        <div class="concept-german">Organminderwertigkeit</div>
+        <p class="concept-def">Adler's earliest theoretical contribution: a biological weakness in any organ tends to provoke psychological compensation — and often, in compensating, the person produces exceptional development in the very area of the original deficit. The model later generalized: <em>any</em> felt limitation can become the seed of creative response.</p>
+        <div class="concept-clinical">
+          <strong>In Practice</strong>
+          Look for "the wound at the root of the gift." It is often visible in a person's vocation.
+        </div>
+      </div>
+
+      <div class="concept">
+        <span class="concept-tag t-pathology">Pathology</span>
+        <div class="concept-name">Inferiority Complex</div>
+        <div class="concept-german">Minderwertigkeitskomplex</div>
+        <p class="concept-def">A persistent, maladaptive sense of inadequacy that has organized into an entire worldview. Distinct from healthy inferiority feeling. The inferiority complex paralyzes — the person retreats from life's tasks, citing their own incapacity. Adler coined this term, and it is one of his most permanent contributions to ordinary language.</p>
+        <div class="concept-clinical">
+          <strong>In Practice</strong>
+          The complex often hides behind its compensations. The chronically grandiose person frequently nurses an unspeakable inferiority beneath the show.
+        </div>
+      </div>
+
+      <div class="concept">
+        <span class="concept-tag t-pathology">Pathology</span>
+        <div class="concept-name">Superiority Complex</div>
+        <div class="concept-german">Überlegenheitskomplex</div>
+        <p class="concept-def">The flip side of the inferiority complex — overcompensation hardened into a lifestyle. The person elevates themselves by deflating others. Adler insisted the two complexes are <em>twins</em>: behind every superiority complex, an inferiority complex; behind every inferiority complex, an attempt at hidden superiority.</p>
+        <div class="concept-clinical">
+          <strong>In Practice</strong>
+          Listen for chronic devaluation of others, contempt, the need to be the smartest person in the room. The work is to find the wound the elevation is protecting.
+        </div>
+      </div>
+
+      <div class="concept">
+        <span class="concept-tag t-pathology">Pathology</span>
+        <div class="concept-name">Masculine Protest</div>
+        <div class="concept-german">Männlicher Protest</div>
+        <p class="concept-def">Adler's term for the rejection of culturally "feminine" qualities (perceived as weak, dependent, inferior) and the insistence on culturally "masculine" qualities (strength, dominance, control) — regardless of the person's biological sex. A culturally specific form of inferiority compensation. The term has aged unevenly, but the underlying observation remains live: people reject the qualities they have learned to associate with weakness, and overinvest in those they associate with power.</p>
+        <div class="concept-clinical">
+          <strong>In Practice</strong>
+          A useful frame for working with clients caught in rigid gender ideals — of any sex.
+        </div>
+      </div>
+
+      <div class="concept">
+        <span class="concept-tag t-pathology">Pathology</span>
+        <div class="concept-name">Discouragement</div>
+        <div class="concept-german">Entmutigung</div>
+        <p class="concept-def">For Adler, the universal soil of psychological dysfunction. Pathology is not, fundamentally, a disease — it is a discouraged person <em>retreating from life's tasks</em>, using symptoms as alibis. This single reframe changes everything about how the clinician sits with a patient.</p>
+        <div class="concept-clinical">
+          <strong>In Practice</strong>
+          Treat the discouragement, not just the symptom. The symptom resolves as the discouragement lifts.
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- IV. DEVELOPMENT -->
+  <section id="development">
+    <div class="section-id">
+      <span class="section-num">§ IV</span>
+      <h2 class="section-h">Developmental Architecture</h2>
+    </div>
+    <div class="section-rule"></div>
+
+    <p class="lead">For Adler, character is constructed — by the child, in conditions not of their choosing, in response to a situation they cannot yet name. By the time the child is five, the architecture is essentially complete.</p>
+
+    <p>This is one of Adler's hardest insights. The lifestyle is a <em>creative act</em>, but a creative act of the <em>child</em>. It is built with the materials at hand: a particular family, a particular position, a particular set of perceived demands and threats. The child's responses harden into character, and that character then shapes everything that follows. The adult who walks into the consulting room is, structurally, still a child — though one who has had decades to elaborate the original construction.</p>
+
+    <p>The implication for therapy is profound: <strong>change is not impossible, but it is not casual</strong>. To shift the lifestyle is to redo, in waking awareness, the work that the four-year-old did unconsciously. This is why Adlerian therapy is educational, encouragement-saturated, and patient.</p>
+  </section>
+
+  <!-- V. LIFE TASKS -->
+  <section id="tasks">
+    <div class="section-id">
+      <span class="section-num">§ V</span>
+      <h2 class="section-h">The Life Tasks</h2>
+    </div>
+    <div class="section-rule"></div>
+
+    <p class="lead">Adler held that life confronts every person with a small number of universal tasks. How a person responds to each is one of the clearest readouts of their lifestyle.</p>
+
+    <p>The original three tasks were articulated in Adler's mature period; later Adlerians (Mosak, Dreikurs, Sweeney) extended the schema to five. The classical three are non-negotiable — a life that evades any of them produces measurable dysfunction. The two extensions are widely accepted in contemporary practice.</p>
+
+    <div class="tasks-grid">
+      <div class="task t-original">
+        <div class="task-num">TASK 01 · ORIGINAL</div>
+        <h3 class="task-name">Work</h3>
+        <p class="task-desc">The task of vocation, occupation, contribution. To find a way to be useful to others through the labor of one's life. Includes the broader question of finding a place for one's gifts in the social fabric.</p>
+        <p class="task-q">"What do I do, that the community is the better for it?"</p>
+      </div>
+      <div class="task t-original">
+        <div class="task-num">TASK 02 · ORIGINAL</div>
+        <h3 class="task-name">Friendship</h3>
+        <p class="task-desc">The task of relating to other human beings as equals — neither above nor below them. Includes the broader question of fellowship: how does one belong to the human community as a peer, not as performer or supplicant?</p>
+        <p class="task-q">"How do I stand among others — beside them, not above or below?"</p>
+      </div>
+      <div class="task t-original">
+        <div class="task-num">TASK 03 · ORIGINAL</div>
+        <h3 class="task-name">Love & Intimacy</h3>
+        <p class="task-desc">The task of intimate union with another — the deepest test of cooperation, mutual regard, and the capacity to make a "we" without erasing either "I." For Adler, the most demanding of all the tasks because it requires the most thorough development of social interest.</p>
+        <p class="task-q">"Can I love another, fully, without diminishing myself or them?"</p>
+      </div>
+      <div class="task t-extended">
+        <div class="task-num">TASK 04 · EXTENDED</div>
+        <h3 class="task-name">Self</h3>
+        <p class="task-desc">Added by later Adlerians (notably Mosak and Dreikurs). The task of getting along with oneself — self-acceptance, self-understanding, being a fit companion to oneself across a long life. Without this, the other tasks become impossible.</p>
+        <p class="task-q">"Am I a friend to the person I am?"</p>
+      </div>
+      <div class="task t-extended">
+        <div class="task-num">TASK 05 · EXTENDED</div>
+        <h3 class="task-name">Spirituality / Meaning</h3>
+        <p class="task-desc">Added in mid-20th-century Adlerian theory. The task of relating to that which is larger than the self — meaning, ultimate values, the cosmos, religion, transcendence. Not a doctrinal matter; a structural one. Without an answer, the other tasks lose their orientation.</p>
+        <p class="task-q">"What gives my striving its direction?"</p>
+      </div>
+    </div>
+
+    <div class="quote">
+      <p class="quote-text">The chief danger in life is that you may take too many precautions.</p>
+      <p class="quote-cite">— Alfred Adler</p>
+    </div>
+  </section>
+
+  <!-- VI. BIRTH ORDER -->
+  <section id="birth-order">
+    <div class="section-id">
+      <span class="section-num">§ VI</span>
+      <h2 class="section-h">Birth Order — Psychological Position</h2>
+    </div>
+    <div class="section-rule"></div>
+
+    <p class="lead">Adler's birth-order theory has aged into popular culture; in clinical use, its rigorous form remains valuable as <em>hypothesis</em>. The position itself does not determine character — but the child's response to their position contributes to the lifestyle.</p>
+
+    <p>What Adler insists is that this is <strong>psychological</strong> birth order, not biological. A child's <em>functional</em> position depends on the dynamics of the household: a younger sibling who effectively raises an older one occupies a firstborn position; an only child raised among many cousins may exhibit middle-child dynamics. The clinical question is always: <em>what was this child's position, as they experienced it?</em></p>
+
+    <div class="birth-order">
+      <div class="bo-card">
+        <div class="bo-icon">I</div>
+        <div class="bo-position">Position 1</div>
+        <div class="bo-name">Firstborn</div>
+        <p class="bo-traits">Initially the center of parental attention; "dethroned" by the arrival of the second. Tends toward responsibility, authority, conservatism, achievement-orientation. Often identifies with the parents and parental order. Risk: rigidity, anxious overresponsibility, perfectionism.</p>
+      </div>
+      <div class="bo-card">
+        <div class="bo-icon">II</div>
+        <div class="bo-position">Position 2</div>
+        <div class="bo-name">Second / Middle</div>
+        <p class="bo-traits">Born into competition; never had the parents alone. Tends to be ambitious, rebellious, oriented toward overtaking the older sibling. Often more diplomatic and adaptable. Risk: chronic comparison, the sense of being squeezed, identity formed by opposition rather than choice.</p>
+      </div>
+      <div class="bo-card">
+        <div class="bo-icon">III</div>
+        <div class="bo-position">Position 3+</div>
+        <div class="bo-name">Youngest</div>
+        <p class="bo-traits">Often pampered. Tends toward charm, creativity, ambition (must "outdo" everyone above) — or toward dependency and helplessness. The "baby" position is psychologically distinctive whether held in a family of three or thirteen. Risk: difficulty with self-reliance; expectation of rescue.</p>
+      </div>
+      <div class="bo-card">
+        <div class="bo-icon">●</div>
+        <div class="bo-position">Position S</div>
+        <div class="bo-name">Only Child</div>
+        <p class="bo-traits">Permanent center of attention; never displaced. Tends toward maturity in adult company, individual achievement, and difficulty sharing the spotlight. Often pampered. Risk: deep difficulty with peer cooperation; expectation that the world will remain organized around oneself.</p>
+      </div>
+    </div>
+
+    <p style="margin-top:24px; font-style: italic; color: var(--ink-soft); font-size: 14px;"><strong>Clinical caveat:</strong> Twins, large age gaps, sibling deaths, blended families, and major family disruptions all alter the psychological field. Always elicit the position the client <em>experienced</em>, not the one their birth certificate would suggest.</p>
+  </section>
+
+  <!-- VII. ASSESSMENT -->
+  <section id="assessment">
+    <div class="section-id">
+      <span class="section-num">§ VII</span>
+      <h2 class="section-h">Assessment — The Lifestyle Investigation</h2>
+    </div>
+    <div class="section-rule"></div>
+
+    <p class="lead">Adlerian assessment is not diagnosis in the medical sense. It is an investigation of the unique lifestyle through which a particular person moves. The clinician is not classifying — they are reading.</p>
+
+    <p>The assessment proceeds through several converging instruments. None alone is sufficient; together they triangulate the lifestyle, the fictional final goal, and the basic mistakes that obstruct the client's movement toward usefulness.</p>
+
+    <div class="methods">
+
+      <div class="method">
+        <div class="method-label">Assessment Instrument 01</div>
+        <div class="method-name">Family Constellation Interview</div>
+        <p class="method-desc">A structured exploration of the client's family of origin: each member, their role, their relationships with one another, the alliances and rivalries, the family atmosphere, and the client's perceived position within it.</p>
+        <div class="method-howto">
+          <strong>Sample Prompts</strong>
+          • Describe each sibling in three words.<br>
+          • Who was most like your father? Mother?<br>
+          • Who fought with whom?<br>
+          • Who was the favorite — and who decided?<br>
+          • Who were you most like? Most different from?
+        </div>
+      </div>
+
+      <div class="method">
+        <div class="method-label">Assessment Instrument 02</div>
+        <div class="method-name">Early Recollections (ER)</div>
+        <p class="method-desc">The single most powerful Adlerian assessment tool. The client is asked to recall their earliest specific memories — at least three, ideally six to eight — from before age ten. The accuracy of the memory is irrelevant; the <em>selection</em> is everything.</p>
+        <div class="method-howto">
+          <strong>Method</strong>
+          Ask: "What is the farthest back your memory can go? Tell me a specific incident." For each: identify protagonist, others' roles, emotional tone, and the implicit conclusion ("Therefore, the world is ___; therefore, I am ___").
+        </div>
+      </div>
+
+      <div class="method">
+        <div class="method-label">Assessment Instrument 03</div>
+        <div class="method-name">The Question</div>
+        <p class="method-desc">Adler's deceptively simple diagnostic prompt: <em>"If your symptom were to disappear right now, what would you do that you cannot do now?"</em> The answer reveals the task the symptom is helping the client avoid — and therefore the goal the symptom is serving.</p>
+        <div class="method-howto">
+          <strong>Use</strong>
+          Especially powerful for somatic symptoms, anxiety, and chronic patterns whose function is unclear. The answer is often surprising — to client and clinician both.
+        </div>
+      </div>
+
+      <div class="method">
+        <div class="method-label">Assessment Instrument 04</div>
+        <div class="method-name">Dream Analysis (Adlerian)</div>
+        <p class="method-desc">For Adler, dreams are not disguised wish-fulfillment but <em>rehearsals for the next day's challenges</em> — the lifestyle preparing the dreamer for the situations ahead. The dream reveals the same lifestyle that operates in waking life, just with less censorship.</p>
+        <div class="method-howto">
+          <strong>Working With</strong>
+          Ask: "What problem in your current life is this dream trying to solve — and how is it solving it?" Note who is active, who is passive, and what mood the dream leaves behind.
+        </div>
+      </div>
+
+      <div class="method">
+        <div class="method-label">Assessment Instrument 05</div>
+        <div class="method-name">Life-Task Inventory</div>
+        <p class="method-desc">A systematic review of the client's functioning across the five life tasks: work, friendship, love, self, and spirituality. Where is the client engaged? Where avoidant? Where hesitating? The pattern of engagement is the lifestyle in cross-section.</p>
+        <div class="method-howto">
+          <strong>Use</strong>
+          A single life-task review will often reveal where the client's striving has gone wrong — not because of what they cannot do, but because of what they refuse to attempt.
+        </div>
+      </div>
+
+      <div class="method">
+        <div class="method-label">Assessment Instrument 06</div>
+        <div class="method-name">Identification of Basic Mistakes</div>
+        <p class="method-desc">After the lifestyle is provisionally mapped, the clinician identifies the faulty conclusions that organize it. Mosak's classic five categories: overgeneralization, false or impossible goals, misperception of life, denial of one's worth, faulty values.</p>
+        <div class="method-howto">
+          <strong>Articulate Aloud</strong>
+          The clinician names the basic mistakes back to the client in the client's own language. Insight is not a private event; it is co-constructed in conversation.
+        </div>
+      </div>
+
+    </div>
+
+    <div class="prompts">
+      <div class="prompts-h">— Sample Early Recollection Prompts —</div>
+      <ol>
+        <li>What is the earliest specific incident you can remember?</li>
+        <li>How old were you? Where were you? Who was with you?</li>
+        <li>What was the most vivid moment — the part that has stayed clearest?</li>
+        <li>What were you feeling in that moment?</li>
+        <li>If you could give the memory a title — like a chapter — what would it be?</li>
+        <li>What did you conclude, in that moment, about the world? About yourself? About other people?</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- VIII. METHODS -->
+  <section id="methods">
+    <div class="section-id">
+      <span class="section-num">§ VIII</span>
+      <h2 class="section-h">Therapeutic Methods & Techniques</h2>
+    </div>
+    <div class="section-rule"></div>
+
+    <p class="lead">Adlerian technique is varied, pragmatic, and unusually compatible with other modern modalities. Many practices that today appear in cognitive-behavioral, narrative, and family-systems work originated in Adler's clinic.</p>
+
+    <div class="methods">
+
+      <div class="method">
+        <div class="method-label">Technique</div>
+        <div class="method-name">Encouragement</div>
+        <p class="method-desc">The continuous, non-contingent therapeutic stance that recognizes effort and being, not outcome. Distinct from praise. Adler considered it the single most important therapeutic act.</p>
+        <div class="method-howto">
+          <strong>Practice</strong>
+          "I see how hard you've been trying" — not "you did well."
+        </div>
+      </div>
+
+      <div class="method">
+        <div class="method-label">Technique</div>
+        <div class="method-name">Socratic Questioning</div>
+        <p class="method-desc">Sustained, gentle questioning that invites the client into recognition of their own pattern. Never accusatory; always inviting. The clinician brings curiosity, not interpretation.</p>
+        <div class="method-howto">
+          <strong>Practice</strong>
+          "What would it mean if you did?" "What does this protect you from?"
+        </div>
+      </div>
+
+      <div class="method">
+        <div class="method-label">Technique</div>
+        <div class="method-name">Acting "As If"</div>
+        <p class="method-desc">A behavioral assignment: the client is asked to act, for a period, <em>as if</em> they were the kind of person they wish to be — confident, sociable, capable. The fiction creates new evidence which then re-shapes the lifestyle.</p>
+        <div class="method-howto">
+          <strong>Practice</strong>
+          "For the next week, when you walk into a meeting, act as if you belong there."
+        </div>
+      </div>
+
+      <div class="method">
+        <div class="method-label">Technique</div>
+        <div class="method-name">Paradoxical Intention</div>
+        <p class="method-desc">Originated by Adler, popularized by Frankl. The client is instructed to deliberately <em>do</em> the symptom — to try to faint, to try to lose sleep, to try to blush. The exaggeration breaks the symptom's grip by removing its avoidance function.</p>
+        <div class="method-howto">
+          <strong>Practice</strong>
+          "When you go to bed tonight, your job is to stay awake as long as possible."
+        </div>
+      </div>
+
+      <div class="method">
+        <div class="method-label">Technique</div>
+        <div class="method-name">Spitting in the Soup</div>
+        <p class="method-desc">A famous Adlerian phrase. The clinician names the hidden purpose of a symptom or behavior in such a way that the client can no longer enjoy it unconsciously. The "soup" of the unexamined pattern is "spit in" — it is harder to swallow with awareness.</p>
+        <div class="method-howto">
+          <strong>Practice</strong>
+          "I notice that whenever your wife asks something difficult, you become genuinely sick. It's quite useful, isn't it?"
+        </div>
+      </div>
+
+      <div class="method">
+        <div class="method-label">Technique</div>
+        <div class="method-name">The Push-Button Technique</div>
+        <p class="method-desc">A demonstration that the client has more agency over their emotional life than they assume. The client is asked to alternate, voluntarily, between recalling a pleasant memory and an unpleasant one — and to notice they can choose which "button" to press.</p>
+        <div class="method-howto">
+          <strong>Practice</strong>
+          Use to challenge the felt sense of being a passive victim of one's emotions.
+        </div>
+      </div>
+
+      <div class="method">
+        <div class="method-label">Technique</div>
+        <div class="method-name">Catching Oneself</div>
+        <p class="method-desc">The client is asked to notice — before, during, or just after — the moments when the lifestyle pattern activates. Awareness without immediate intervention. The recognition itself is the change agent.</p>
+        <div class="method-howto">
+          <strong>Practice</strong>
+          "When you catch yourself in the 'yes-but,' just notice. You don't have to fix it yet."
+        </div>
+      </div>
+
+      <div class="method">
+        <div class="method-label">Technique</div>
+        <div class="method-name">Future Autobiography</div>
+        <p class="method-desc">The client writes — in detail, in the past tense — the autobiography they wish would one day be written about them. The exercise concretizes the fictional final goal and makes it available for examination, modification, and conscious commitment.</p>
+        <div class="method-howto">
+          <strong>Practice</strong>
+          "Write the obituary you would want — the one that would feel earned."
+        </div>
+      </div>
+
+      <div class="method">
+        <div class="method-label">Technique</div>
+        <div class="method-name">Task Setting</div>
+        <p class="method-desc">Specific, graduated tasks assigned between sessions to test the lifestyle against reality. Modest at first, increasing in scope. The point is to generate new evidence about the self that the lifestyle cannot easily metabolize.</p>
+        <div class="method-howto">
+          <strong>Practice</strong>
+          "This week, ask one person for help, in any way, however small."
+        </div>
+      </div>
+
+      <div class="method">
+        <div class="method-label">Technique</div>
+        <div class="method-name">Cognitive Restructuring of Mistaken Beliefs</div>
+        <p class="method-desc">The direct successor of basic-mistakes work — and the unmistakable ancestor of cognitive-behavioral therapy. The faulty conclusions that govern the lifestyle are named, examined, tested against evidence, and replaced.</p>
+        <div class="method-howto">
+          <strong>Practice</strong>
+          A client who concluded "I must be perfect to be loved" is invited to investigate whether this is true, where the conclusion came from, and what it has cost.
+        </div>
+      </div>
+
+      <div class="method">
+        <div class="method-label">Technique</div>
+        <div class="method-name">Role Play & Behavioral Rehearsal</div>
+        <p class="method-desc">In-session practice of difficult conversations, encounters, or self-presentations. The clinic becomes a workshop where new patterns can be tried before being deployed in life.</p>
+        <div class="method-howto">
+          <strong>Practice</strong>
+          Especially effective with anxiety, conflict avoidance, and assertion difficulties.
+        </div>
+      </div>
+
+      <div class="method">
+        <div class="method-label">Technique</div>
+        <div class="method-name">Making the Covert Overt</div>
+        <p class="method-desc">A core Adlerian principle: hidden power-plays, manipulations, and unconscious goals lose their grip when named in the open. Much therapeutic work is the patient practice of making the covert visible — without judgment, but without illusion.</p>
+        <div class="method-howto">
+          <strong>Practice</strong>
+          "I notice that when I get close to challenging you on this, you change the subject. What's happening there?"
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- IX. PHASES -->
+  <section id="phases">
+    <div class="section-id">
+      <span class="section-num">§ IX</span>
+      <h2 class="section-h">The Four Phases of Adlerian Therapy</h2>
+    </div>
+    <div class="section-rule"></div>
+
+    <p class="lead">Classical Adlerian therapy moves through four overlapping phases. They are not strictly sequential — but a client cannot skip stages without weakening what comes after.</p>
+
+    <div class="phases">
+      <div class="phase">
+        <div class="phase-num">I</div>
+        <div class="phase-content">
+          <h3 class="phase-name">Engagement & Relationship</h3>
+          <span class="phase-aim">Building the working alliance</span>
+          <p class="phase-desc">The therapeutic relationship is established as a partnership of equals. Adlerian therapy is fundamentally egalitarian — the clinician is not the priest of an unconscious to which only they have access. They are a fellow human being with technical training in helping people see themselves more clearly. Trust, warmth, mutual respect, and active listening are the entire foundation.</p>
+          <div class="phase-techniques">
+            <strong>In This Phase</strong>
+            Active listening · Validation · Establishing therapeutic goals collaboratively · Demonstrating respect for the client's intelligence and agency · Setting the encouragement tone that will saturate everything else.
+          </div>
+        </div>
+      </div>
+      <div class="phase">
+        <div class="phase-num">II</div>
+        <div class="phase-content">
+          <h3 class="phase-name">Assessment & Investigation</h3>
+          <span class="phase-aim">Understanding the lifestyle</span>
+          <p class="phase-desc">A systematic exploration of the client's lifestyle: their family constellation, early recollections, current life-task functioning, and dreams. The clinician begins to formulate hypotheses about the fictional final goal, the basic mistakes, and the safeguarding tendencies. Nothing is yet interpreted to the client; the work is investigative.</p>
+          <div class="phase-techniques">
+            <strong>In This Phase</strong>
+            Family constellation interview · Early recollections · Life-task inventory · Dream collection · Identification of recurring patterns and themes.
+          </div>
+        </div>
+      </div>
+      <div class="phase">
+        <div class="phase-num">III</div>
+        <div class="phase-content">
+          <h3 class="phase-name">Insight & Interpretation</h3>
+          <span class="phase-aim">Bringing the lifestyle into awareness</span>
+          <p class="phase-desc">The clinician shares their formulation with the client — tentatively, in the client's own language, as a working hypothesis rather than a verdict. The basic mistakes are named. The fictional final goal is brought into view. The hidden purpose of symptoms is articulated. Insight, in Adler, is not arrival; it is the unlocking of the door that makes the next phase possible.</p>
+          <div class="phase-techniques">
+            <strong>In This Phase</strong>
+            Interpretation of basic mistakes · Spitting in the soup · Making the covert overt · Cognitive challenge of mistaken beliefs · Connecting present patterns to early conclusions.
+          </div>
+        </div>
+      </div>
+      <div class="phase">
+        <div class="phase-num">IV</div>
+        <div class="phase-content">
+          <h3 class="phase-name">Reorientation & Reeducation</h3>
+          <span class="phase-aim">Constructing a new lifestyle</span>
+          <p class="phase-desc">The phase where insight becomes change. The client begins to test alternatives, take the small risks the old lifestyle prevented, and gradually rewrite the basic conclusions. Encouragement is essential — the old lifestyle is comfortable, the new one is not yet. Behavioral assignments, task-setting, "acting as if," and continuous reflection on the social-interest direction of the work define this phase.</p>
+          <div class="phase-techniques">
+            <strong>In This Phase</strong>
+            Task setting · Acting "as if" · Behavioral rehearsal · Building social interest · Encouragement-saturated review of progress · Anchoring new patterns in the life tasks.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- X. PATHOLOGY & MISBEHAVIOR -->
+  <section id="pathology">
+    <div class="section-id">
+      <span class="section-num">§ X</span>
+      <h2 class="section-h">Pathology & The Four Goals of Misbehavior</h2>
+    </div>
+    <div class="section-rule"></div>
+
+    <p class="lead">For Adler, pathology is always a discouraged person retreating from the life tasks. The retreat takes specific, identifiable forms.</p>
+
+    <p>Rudolf Dreikurs — Adler's most important successor and the chief popularizer of his work in the United States — extended Adler's thinking into a clinically vivid framework: <strong>the four goals of misbehavior</strong>. Originally developed for understanding children, the framework applies as cleanly to adults. Each goal represents a discouraged child's escalating attempt to find a place when straightforward belonging seems unavailable.</p>
+
+    <div class="goals">
+      <div class="goal">
+        <div class="goal-level">LEVEL 01</div>
+        <h3 class="goal-name">Attention</h3>
+        <p class="goal-belief">"I only count when I am noticed."</p>
+        <div class="goal-row"><span class="goal-row-label">Behavior</span><span class="goal-row-val">Disruptive but mild. Showing off, clowning, asking endless questions, being charming or pestering. The child wants eyes on them at any cost.</span></div>
+        <div class="goal-row"><span class="goal-row-label">Adult Form</span><span class="goal-row-val">Workplace performativity, social-media compulsion, perpetual self-presentation, the inability to let a conversation pass without contribution.</span></div>
+        <div class="goal-row"><span class="goal-row-label">Response</span><span class="goal-row-val">Give attention generously when the person is not seeking it; minimize the reward when they are.</span></div>
+      </div>
+      <div class="goal">
+        <div class="goal-level">LEVEL 02</div>
+        <h3 class="goal-name">Power</h3>
+        <p class="goal-belief">"I only count when I am in control."</p>
+        <div class="goal-row"><span class="goal-row-label">Behavior</span><span class="goal-row-val">Defiance, argumentativeness, refusal, contests of will. The child has discovered that they cannot be made to do anything — and finds significance in proving it.</span></div>
+        <div class="goal-row"><span class="goal-row-label">Adult Form</span><span class="goal-row-val">Chronic argumentation, control struggles, micromanagement, the felt necessity of being right at any cost.</span></div>
+        <div class="goal-row"><span class="goal-row-label">Response</span><span class="goal-row-val">Refuse to enter the contest. Withdraw from the power struggle. Offer choice. Avoid both submission and counter-domination.</span></div>
+      </div>
+      <div class="goal">
+        <div class="goal-level">LEVEL 03</div>
+        <h3 class="goal-name">Revenge</h3>
+        <p class="goal-belief">"I only count when I can hurt as I have been hurt."</p>
+        <div class="goal-row"><span class="goal-row-label">Behavior</span><span class="goal-row-val">Cruelty, sabotage, deliberate wounding. The child has concluded that belonging is impossible and that the only available significance is to inflict the pain they themselves carry.</span></div>
+        <div class="goal-row"><span class="goal-row-label">Adult Form</span><span class="goal-row-val">Chronic resentment, vindictive relationships, sabotage of one's own success, the careful preservation of grievance.</span></div>
+        <div class="goal-row"><span class="goal-row-label">Response</span><span class="goal-row-val">Recognize the deep discouragement beneath the cruelty. Avoid retaliation. Slowly, patiently, build evidence that connection is possible.</span></div>
+      </div>
+      <div class="goal">
+        <div class="goal-level">LEVEL 04</div>
+        <h3 class="goal-name">Display of Inadequacy</h3>
+        <p class="goal-belief">"I only count if I prove I cannot."</p>
+        <div class="goal-row"><span class="goal-row-label">Behavior</span><span class="goal-row-val">Total withdrawal. The child has given up entirely on the possibility of significance and now performs incapacity — sometimes so convincingly that they themselves come to believe it.</span></div>
+        <div class="goal-row"><span class="goal-row-label">Adult Form</span><span class="goal-row-val">Severe depression, learned helplessness, "I can't" as a closed worldview, identity organized around incapacity.</span></div>
+        <div class="goal-row"><span class="goal-row-label">Response</span><span class="goal-row-val">The most demanding response. Tiny, tiny encouragements at the smallest visible competence. Refuse the verdict of incapacity without contesting it directly.</span></div>
+      </div>
+    </div>
+
+    <div class="section-id" style="margin-top: 50px;">
+      <span class="section-num">§ X.b</span>
+      <h2 class="section-h" style="font-size: 26px;">Safeguarding Tendencies</h2>
+    </div>
+
+    <p>The discouraged person protects fragile self-esteem through a repertoire of safeguarding strategies. These are Adler's analogue to Freudian defense mechanisms — but oriented toward maintaining the fictional self-ideal rather than warding off drive.</p>
+
+    <div class="safeguard-grid">
+      <div class="safeguard">
+        <div class="safeguard-name">Excuses</div>
+        <p class="safeguard-desc">"I would have, but..." — the perpetual reservation that prevents any task from being a real test of the self.</p>
+      </div>
+      <div class="safeguard">
+        <div class="safeguard-name">Aggression</div>
+        <p class="safeguard-desc">Depreciating others, accusing, attacking — elevating oneself by lowering them. Often hidden as humor or "just being honest."</p>
+      </div>
+      <div class="safeguard">
+        <div class="safeguard-name">Withdrawal</div>
+        <p class="safeguard-desc">Retreat from the life tasks into a private fantasy of superiority. The person is "really" gifted, "really" misunderstood — but never tested.</p>
+      </div>
+      <div class="safeguard">
+        <div class="safeguard-name">Symptoms</div>
+        <p class="safeguard-desc">Anxiety, depression, somatic complaints used as alibis. The symptom prevents what failure would otherwise reveal.</p>
+      </div>
+      <div class="safeguard">
+        <div class="safeguard-name">Distancing</div>
+        <p class="safeguard-desc">Avoiding situations that might test the self-ideal. Procrastination, vagueness, refusal to commit.</p>
+      </div>
+      <div class="safeguard">
+        <div class="safeguard-name">Hesitating Attitude</div>
+        <p class="safeguard-desc">The "yes-but." Approaching the task partway, then withdrawing — the alibi of the unfinished is always available.</p>
+      </div>
+      <div class="safeguard">
+        <div class="safeguard-name">Restriction of Sphere</div>
+        <p class="safeguard-desc">Narrowing the field of one's life so dramatically that few real challenges arise. The agoraphobic life as life-strategy.</p>
+      </div>
+      <div class="safeguard">
+        <div class="safeguard-name">Idealization of Suffering</div>
+        <p class="safeguard-desc">Identifying with one's wounds as a form of distinction. The pain becomes the credential.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- XI. FREUD vs ADLER -->
+  <section id="freud">
+    <div class="section-id">
+      <span class="section-num">§ XI</span>
+      <h2 class="section-h">Adler vs. Freud — A Field Comparison</h2>
+    </div>
+    <div class="section-rule"></div>
+
+    <p class="lead">Many of Adler's positions become clearer in contrast. The differences are not merely doctrinal — they reflect two genuinely different visions of what a human being is.</p>
+
+    <table class="compare-table">
+      <thead>
+        <tr><th>Dimension</th><th>Freud</th><th>Adler</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Anthropology</td>
+          <td>The human being as conflicted, drive-bound, fundamentally divided.</td>
+          <td>The human being as unified, goal-directed, fundamentally social.</td>
+        </tr>
+        <tr>
+          <td>Core Motive</td>
+          <td>Libido — the management of sexual and aggressive drives.</td>
+          <td>Striving from felt minus to felt plus; significance, completion, belonging.</td>
+        </tr>
+        <tr>
+          <td>Causality</td>
+          <td>Reductive. Symptoms are caused by past traumatic content.</td>
+          <td>Teleological. Symptoms are aimed; they serve a present purpose.</td>
+        </tr>
+        <tr>
+          <td>Site of Action</td>
+          <td>Intrapsychic. The arena is within the divided self.</td>
+          <td>Interpersonal. The arena is the social field.</td>
+        </tr>
+        <tr>
+          <td>Structure of Mind</td>
+          <td>Tripartite — id, ego, superego — in chronic conflict.</td>
+          <td>Indivisible. The personality moves as one.</td>
+        </tr>
+        <tr>
+          <td>Role of Sexuality</td>
+          <td>Central. The Oedipus complex is the fulcrum of development.</td>
+          <td>Peripheral. One domain of the life tasks among others.</td>
+        </tr>
+        <tr>
+          <td>Therapist Posture</td>
+          <td>Reserved, neutral, screen for projection.</td>
+          <td>Egalitarian, warm, encouraging, educational.</td>
+        </tr>
+        <tr>
+          <td>Goal of Therapy</td>
+          <td>Make the unconscious conscious; reduce suffering to "ordinary unhappiness."</td>
+          <td>Reorient the discouraged toward usefulness, cooperation, and life's tasks.</td>
+        </tr>
+        <tr>
+          <td>View of Religion</td>
+          <td>Illusion. Collective neurosis. A father-projection.</td>
+          <td>A potential vehicle of social interest, especially in mature life.</td>
+        </tr>
+        <tr>
+          <td>View of Will & Choice</td>
+          <td>Hard determinism. Choice is largely illusion.</td>
+          <td>Soft determinism. Conditions shape; the self creates.</td>
+        </tr>
+        <tr>
+          <td>Tone</td>
+          <td>Tragic, classical, pessimistic.</td>
+          <td>Pragmatic, democratic, cautiously optimistic.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="quote">
+      <p class="quote-text">The neurotic is not suffering from his past; he is creating it.</p>
+      <p class="quote-cite">— Harold Bloom, on Adler's central insight</p>
+    </div>
+  </section>
+
+  <!-- XII. INFLUENCE -->
+  <section id="influence">
+    <div class="section-id">
+      <span class="section-num">§ XII</span>
+      <h2 class="section-h">Legacy — The Quiet Saturation</h2>
+    </div>
+    <div class="section-rule"></div>
+
+    <p class="lead">Adler's name appears less often in textbooks than Freud's or Jung's — yet his ideas saturate twentieth-century psychology more thoroughly than either. His influence runs through almost every major school that came after him.</p>
+
+    <p>This pattern of borrowing-without-attribution is so consistent that Albert Ellis remarked: <em>"Alfred Adler, more than even Freud, is probably the true father of modern psychotherapy."</em> Many of the figures below acknowledged the debt; many did not. The transmission was both direct (through Adler's lectures, students, and clinics) and atmospheric (through ideas in the air).</p>
+
+    <div class="influence">
+      <h3 class="influence-h">Schools and Figures Carrying Adlerian Ideas Forward</h3>
+      <div class="inf-grid">
+        <div class="inf-card">
+          <div class="inf-name">Rudolf Dreikurs</div>
+          <div class="inf-school">Direct Lineage</div>
+          <p class="inf-desc">The chief popularizer of Adler's work in the United States. The four goals of misbehavior, parent education, and democratic family approaches all stem from his synthesis.</p>
+        </div>
+        <div class="inf-card">
+          <div class="inf-name">Heinz & Rowena Ansbacher</div>
+          <div class="inf-school">Direct Lineage</div>
+          <p class="inf-desc">Editors and systematizers. Without their compendium of Adler's writings, the doctrine might have been lost in the United States.</p>
+        </div>
+        <div class="inf-card">
+          <div class="inf-name">Viktor Frankl</div>
+          <div class="inf-school">Existential / Logotherapy</div>
+          <p class="inf-desc">Worked closely with Adler before founding logotherapy. The emphasis on meaning, will, and teleology is unmistakably Adlerian. Paradoxical intention came directly from Adler.</p>
+        </div>
+        <div class="inf-card">
+          <div class="inf-name">Carl Rogers</div>
+          <div class="inf-school">Person-Centered</div>
+          <p class="inf-desc">The unconditional positive regard, the egalitarian therapeutic stance, and the trust in the client's own movement toward growth all carry Adler's signature.</p>
+        </div>
+        <div class="inf-card">
+          <div class="inf-name">Abraham Maslow</div>
+          <div class="inf-school">Humanistic</div>
+          <p class="inf-desc">Self-actualization closely parallels Adler's striving for completion. Maslow listed Adlerians first among the groups in his "third force" of humanistic psychology.</p>
+        </div>
+        <div class="inf-card">
+          <div class="inf-name">Albert Ellis</div>
+          <div class="inf-school">Rational-Emotive (REBT)</div>
+          <p class="inf-desc">Adler's basic mistakes work is the direct ancestor of cognitive disputation. Ellis credited Adler explicitly as a primary influence.</p>
+        </div>
+        <div class="inf-card">
+          <div class="inf-name">Aaron Beck</div>
+          <div class="inf-school">Cognitive Therapy</div>
+          <p class="inf-desc">The cognitive triad and the work with automatic thoughts and core beliefs are continuous with Adler's basic mistakes and private logic.</p>
+        </div>
+        <div class="inf-card">
+          <div class="inf-name">Karen Horney</div>
+          <div class="inf-school">Neo-Freudian</div>
+          <p class="inf-desc">The emphasis on social factors, the idealized self, and basic anxiety is closer to Adler than to Freud. Often classified Neo-Freudian; arguably Neo-Adlerian.</p>
+        </div>
+        <div class="inf-card">
+          <div class="inf-name">Erich Fromm</div>
+          <div class="inf-school">Neo-Freudian / Social</div>
+          <p class="inf-desc">The focus on cultural conditions, the existential needs for connectedness and rootedness — Adlerian in all but name.</p>
+        </div>
+        <div class="inf-card">
+          <div class="inf-name">Harry Stack Sullivan</div>
+          <div class="inf-school">Interpersonal</div>
+          <p class="inf-desc">The interpersonal turn in psychoanalysis carries Adler's social emphasis forward. Personality as constituted in and through relationships.</p>
+        </div>
+        <div class="inf-card">
+          <div class="inf-name">Rollo May</div>
+          <div class="inf-school">Existential</div>
+          <p class="inf-desc">Existential psychology's emphasis on choice, will, and meaning all carries Adlerian elements transmitted via Adler's American lectures.</p>
+        </div>
+        <div class="inf-card">
+          <div class="inf-name">Martin Seligman</div>
+          <div class="inf-school">Positive Psychology</div>
+          <p class="inf-desc">Positive psychology's emphasis on flourishing, strengths, and meaningful contribution echoes Adler's century-old insistence that psychology is for the well, not only the sick.</p>
+        </div>
+        <div class="inf-card">
+          <div class="inf-name">Family Systems Therapists</div>
+          <div class="inf-school">Murray Bowen, et al.</div>
+          <p class="inf-desc">Family constellation, sibling position, and the family as system — Adler was teaching this in the 1920s. Family systems therapy formalized what he had already mapped.</p>
+        </div>
+        <div class="inf-card">
+          <div class="inf-name">Ichiro Kishimi</div>
+          <div class="inf-school">Contemporary Popular</div>
+          <p class="inf-desc">The Courage to Be Disliked (2013) brought Adler back into global popular consciousness via a Socratic dialogue between a young man and an Adlerian philosopher.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="quote">
+      <p class="quote-text">The only normal people are the ones you don't know very well.</p>
+      <p class="quote-cite">— Alfred Adler</p>
+    </div>
+
+    <p>Adler's gift to the field — and his curse — was that his ideas were too simple to be defended as a guild and too useful to remain attached to him. They became common sense. The price of that universality is that the man himself faded. The atlas you are reading is, in part, an attempt to reattach the ideas to the figure who first articulated them — and to do so in a way that a contemporary practitioner can immediately use.</p>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="foot">
+    <span class="foot-text">The Adlerian Atlas — Vol. II — A Practitioner's Reference</span>
+    <span class="foot-glyph">— Vienna · 1911 ⟶ —</span>
+    <span class="foot-text">Sources: Adler · Ansbacher · Dreikurs · Mosak · Sweeney</span>
+  </footer>
+
+</div>
+
+<script>
+  // Active nav link highlighting
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav a');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.getAttribute('id');
+        navLinks.forEach(link => {
+          const active = link.getAttribute('href') === '#' + id;
+          link.style.color = active ? 'var(--ochre-pale)' : '';
+          link.style.borderBottomColor = active ? 'var(--rust)' : 'transparent';
+        });
+      }
+    });
+  }, { threshold: 0.25 });
+  sections.forEach(s => observer.observe(s));
+
+  // Subtle entrance for cards
+  const cardObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.05 });
+  document.querySelectorAll('.concept, .principle, .method, .bo-card, .task, .goal, .inf-card, .safeguard, .bio-event').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(10px)';
+    el.style.transition = 'opacity 0.4s ease, transform 0.4s ease, background 0.2s';
+    cardObserver.observe(el);
+  });
+</script>
+
+</body>
+</html>

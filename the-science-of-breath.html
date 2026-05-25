@@ -1,0 +1,1671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THE SCIENCE OF BREATH // NODE_01</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;700&family=Outfit:wght@200;300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --nerv-bg: #0A0B0D;
+    --nerv-panel: #11131A;
+    --nerv-border: #1E2230;
+    --nerv-green: #C7FF43;
+    --nerv-green-dim: #7A9E29;
+    --nerv-amber: #FF6B1A;
+    --nerv-cyan: #43E5FF;
+    --nerv-purple: #C77DFF;
+    --nerv-text: #D4D7DD;
+    --nerv-text-dim: #6B6F78;
+    --nerv-warning: #FF3838;
+    --grid-line: rgba(199, 255, 67, 0.04);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--nerv-bg);
+    color: var(--nerv-text);
+    font-family: 'DM Sans', sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+    min-height: 100vh;
+    position: relative;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(transparent 50%, rgba(199, 255, 67, 0.015) 50%);
+    background-size: 100% 4px;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.5;
+  }
+
+  .status-bar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 32px;
+    background: var(--nerv-panel);
+    border-bottom: 1px solid var(--nerv-border);
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--nerv-green-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    z-index: 100;
+    gap: 24px;
+  }
+
+  .status-item { display: flex; align-items: center; gap: 8px; }
+  .status-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--nerv-green); box-shadow: 0 0 8px var(--nerv-green);
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+  @keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+  .status-bar .right { margin-left: auto; display: flex; gap: 24px; }
+  .status-bar a { color: var(--nerv-green-dim); text-decoration: none; transition: color 0.2s; }
+  .status-bar a:hover { color: var(--nerv-green); }
+
+  .container {
+    position: relative;
+    z-index: 2;
+    padding: 80px 5vw 60px;
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+
+  .header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 40px;
+    margin-bottom: 60px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--nerv-border);
+  }
+
+  .breadcrumb {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--nerv-text-dim);
+    letter-spacing: 0.2em;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+  .breadcrumb a { color: var(--nerv-green-dim); text-decoration: none; transition: color 0.2s; }
+  .breadcrumb a:hover { color: var(--nerv-green); }
+  .breadcrumb .sep { margin: 0 10px; color: var(--nerv-border); }
+  .breadcrumb .current { color: var(--nerv-green); }
+
+  .designation {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--nerv-green);
+    letter-spacing: 0.2em;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .designation::before { content: '> '; }
+
+  h1.title {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 200;
+    font-size: clamp(48px, 8vw, 112px);
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+  }
+  h1.title .accent { color: var(--nerv-green); font-weight: 700; display: block; }
+
+  .subtitle {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--nerv-text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-top: 24px;
+    max-width: 600px;
+  }
+
+  .header-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--nerv-text-dim);
+    text-align: right;
+    line-height: 2;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .header-meta .val { color: var(--nerv-green); }
+
+  .corner {
+    position: absolute;
+    width: 16px; height: 16px;
+    border: 1.5px solid var(--nerv-green);
+  }
+  .corner.tl { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+  .corner.tr { top: -1px; right: -1px; border-left: none; border-bottom: none; }
+  .corner.bl { bottom: -1px; left: -1px; border-right: none; border-top: none; }
+  .corner.br { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+
+  /* INTRO */
+  .intro {
+    background: var(--nerv-panel);
+    border: 1px solid var(--nerv-border);
+    padding: 40px 48px;
+    margin-bottom: 80px;
+    position: relative;
+  }
+
+  .intro-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--nerv-green);
+    letter-spacing: 0.25em;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+
+  .intro p {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 300;
+    font-size: clamp(18px, 1.8vw, 22px);
+    line-height: 1.55;
+    color: var(--nerv-text);
+    margin-bottom: 16px;
+    max-width: 1000px;
+  }
+
+  .intro p:last-child { margin-bottom: 0; }
+  .intro em { color: var(--nerv-green); font-style: normal; font-weight: 500; }
+
+  /* Index / TOC */
+  .mechanism-index {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+    margin-bottom: 100px;
+  }
+
+  .index-item {
+    background: var(--nerv-panel);
+    border: 1px solid var(--nerv-border);
+    padding: 20px;
+    text-decoration: none;
+    color: var(--nerv-text);
+    transition: all 0.25s ease;
+    position: relative;
+    display: block;
+  }
+
+  .index-item:hover {
+    border-color: var(--nerv-green);
+    background: linear-gradient(135deg, rgba(199, 255, 67, 0.04) 0%, var(--nerv-panel) 60%);
+    transform: translateY(-2px);
+  }
+
+  .index-item .idx-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--nerv-green);
+    letter-spacing: 0.2em;
+    margin-bottom: 8px;
+  }
+
+  .index-item .idx-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.15;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+  }
+
+  /* MECHANISM SECTIONS */
+  .mechanism {
+    margin-bottom: 120px;
+    position: relative;
+  }
+
+  .mech-header {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 24px;
+    align-items: end;
+    padding-bottom: 24px;
+    border-bottom: 1px dashed var(--nerv-border);
+    margin-bottom: 48px;
+  }
+
+  .mech-id {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--nerv-text-dim);
+    letter-spacing: 0.2em;
+    line-height: 1.6;
+    text-transform: uppercase;
+  }
+  .mech-id .num {
+    font-family: 'Outfit', sans-serif;
+    font-size: 64px;
+    font-weight: 200;
+    color: var(--nerv-green);
+    display: block;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    margin-bottom: 4px;
+  }
+
+  .mech-title-block h2 {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 300;
+    font-size: clamp(32px, 4vw, 52px);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+  .mech-title-block h2 strong { color: var(--nerv-green); font-weight: 700; }
+
+  .mech-subtitle {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--nerv-cyan);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .mech-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--nerv-text-dim);
+    text-align: right;
+    letter-spacing: 0.15em;
+    line-height: 1.8;
+    text-transform: uppercase;
+  }
+  .mech-meta .val { color: var(--nerv-green); }
+
+  .mech-body {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+
+  .mech-prose p {
+    margin-bottom: 18px;
+    font-size: 15.5px;
+    line-height: 1.75;
+    color: var(--nerv-text);
+  }
+
+  .mech-prose p:last-child { margin-bottom: 0; }
+
+  .mech-prose strong {
+    color: var(--nerv-green);
+    font-weight: 500;
+  }
+
+  .mech-prose em {
+    color: var(--nerv-cyan);
+    font-style: italic;
+    font-weight: 400;
+  }
+
+  .mech-callout {
+    background: var(--nerv-panel);
+    border-left: 3px solid var(--nerv-green);
+    padding: 18px 24px;
+    margin: 24px 0;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--nerv-text);
+    letter-spacing: 0.03em;
+    line-height: 1.7;
+  }
+
+  .mech-callout::before {
+    content: '// KEY';
+    display: block;
+    color: var(--nerv-green);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    margin-bottom: 8px;
+  }
+
+  .mech-figure {
+    background: var(--nerv-panel);
+    border: 1px solid var(--nerv-border);
+    padding: 32px;
+    position: relative;
+    position: sticky;
+    top: 60px;
+  }
+
+  .mech-figure-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--nerv-text-dim);
+    letter-spacing: 0.2em;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+
+  .mech-figure-label .id { color: var(--nerv-green); }
+
+  .mech-figure svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .mech-readout {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px dashed var(--nerv-border);
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px 20px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .mech-readout .k { color: var(--nerv-text-dim); }
+  .mech-readout .v { color: var(--nerv-green); font-size: 12px; }
+
+  /* DATA STRIP - facts panel */
+  .data-strip {
+    background:
+      repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 80px,
+        var(--nerv-border) 80px,
+        var(--nerv-border) 81px
+      ),
+      var(--nerv-panel);
+    border: 1px solid var(--nerv-border);
+    padding: 32px 40px;
+    margin: 48px 0;
+    position: relative;
+  }
+
+  .data-strip-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--nerv-amber);
+    letter-spacing: 0.25em;
+    margin-bottom: 24px;
+    text-transform: uppercase;
+  }
+
+  .data-strip-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 32px;
+  }
+
+  .data-stat {
+    font-family: 'DM Mono', monospace;
+  }
+
+  .data-stat .stat-val {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 200;
+    font-size: 42px;
+    line-height: 1;
+    color: var(--nerv-green);
+    letter-spacing: -0.02em;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .data-stat .stat-label {
+    font-size: 10px;
+    color: var(--nerv-text-dim);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    line-height: 1.5;
+  }
+
+  /* SYNTHESIS */
+  .synthesis {
+    background:
+      radial-gradient(ellipse at center, rgba(199, 255, 67, 0.05) 0%, transparent 70%),
+      var(--nerv-panel);
+    border: 1px solid var(--nerv-green);
+    padding: 60px;
+    position: relative;
+    margin-bottom: 80px;
+  }
+
+  .synthesis-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--nerv-green);
+    letter-spacing: 0.25em;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+
+  .synthesis h3 {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 300;
+    font-size: clamp(28px, 3.5vw, 44px);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 32px;
+    text-transform: uppercase;
+  }
+  .synthesis h3 strong { color: var(--nerv-green); font-weight: 700; }
+
+  .synthesis-body {
+    font-size: 16px;
+    line-height: 1.75;
+    color: var(--nerv-text);
+    max-width: 950px;
+  }
+
+  .synthesis-body p { margin-bottom: 16px; }
+  .synthesis-body em { color: var(--nerv-green); font-style: normal; font-weight: 500; }
+
+  /* TELEOLOGY */
+  .teleology {
+    background:
+      repeating-linear-gradient(
+        45deg,
+        rgba(255, 107, 26, 0.02),
+        rgba(255, 107, 26, 0.02) 10px,
+        transparent 10px,
+        transparent 20px
+      ),
+      var(--nerv-panel);
+    border: 1px solid var(--nerv-amber);
+    padding: 40px 48px;
+    margin-bottom: 80px;
+    position: relative;
+  }
+
+  .teleology .corner { border-color: var(--nerv-amber); }
+
+  .teleology-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--nerv-amber);
+    letter-spacing: 0.25em;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+
+  .teleology-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 28px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    margin-bottom: 20px;
+  }
+
+  .teleology-title strong { color: var(--nerv-amber); font-weight: 700; }
+
+  .teleology-body {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--nerv-text);
+    max-width: 900px;
+  }
+  .teleology-body p { margin-bottom: 12px; }
+  .teleology-body em { color: var(--nerv-amber); font-style: normal; }
+
+  /* Nav */
+  .nav-back {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 32px 0;
+    border-top: 1px solid var(--nerv-border);
+    margin-bottom: 40px;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .nav-link {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--nerv-green);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.2s;
+    padding: 12px 20px;
+    border: 1px solid var(--nerv-border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .nav-link:hover {
+    border-color: var(--nerv-green);
+    background: rgba(199, 255, 67, 0.05);
+  }
+
+  .footer {
+    border-top: 1px solid var(--nerv-border);
+    padding-top: 32px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 24px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--nerv-text-dim);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  .footer .athanor { color: var(--nerv-green); }
+
+  /* SVG animations */
+  @keyframes pulse-soft {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+  }
+
+  @keyframes flow-dash {
+    from { stroke-dashoffset: 0; }
+    to { stroke-dashoffset: -16; }
+  }
+
+  .signal-flow {
+    stroke-dasharray: 4 4;
+    animation: flow-dash 2s linear infinite;
+  }
+
+  .neuron-pulse {
+    animation: pulse-soft 3s ease-in-out infinite;
+  }
+
+  /* Interactive CO2 toggle */
+  .co2-toggle {
+    display: flex;
+    gap: 0;
+    margin: 24px 0;
+    border: 1px solid var(--nerv-border);
+  }
+
+  .co2-toggle button {
+    flex: 1;
+    background: transparent;
+    border: none;
+    border-right: 1px solid var(--nerv-border);
+    color: var(--nerv-text-dim);
+    padding: 14px 16px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .co2-toggle button:last-child { border-right: none; }
+
+  .co2-toggle button:hover { color: var(--nerv-text); }
+  .co2-toggle button.active {
+    background: rgba(199, 255, 67, 0.06);
+    color: var(--nerv-green);
+  }
+
+  .co2-state {
+    background: var(--nerv-bg);
+    border: 1px dashed var(--nerv-border);
+    padding: 20px 24px;
+    margin-top: 16px;
+  }
+
+  .co2-state-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--nerv-green);
+    letter-spacing: 0.2em;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+
+  .co2-state-body {
+    font-size: 13px;
+    color: var(--nerv-text);
+    line-height: 1.6;
+  }
+
+  /* Mobile */
+  @media (max-width: 1000px) {
+    .mech-body { grid-template-columns: 1fr; }
+    .mech-figure { position: relative; top: auto; }
+  }
+
+  @media (max-width: 900px) {
+    .container { padding: 60px 5vw 40px; }
+    .header { grid-template-columns: 1fr; }
+    .header-meta { text-align: left; }
+    .intro { padding: 28px 24px; }
+    .mech-header { grid-template-columns: 1fr; gap: 12px; }
+    .mech-id .num { font-size: 48px; }
+    .mech-meta { text-align: left; }
+    .mech-figure { padding: 20px; }
+    .data-strip { padding: 24px; }
+    .synthesis { padding: 32px 24px; }
+    .teleology { padding: 28px 24px; }
+    .status-bar { font-size: 9px; padding: 0 12px; gap: 12px; }
+    .status-bar .right { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="status-bar">
+  <div class="status-item"><span class="status-dot"></span>NODE_01 // NEUROSCIENCE</div>
+  <div class="status-item">SCIENCE.BREATH</div>
+  <div class="status-item">SYNC.READY</div>
+  <div class="right">
+    <div class="status-item"><a href="./the-bridge-between-worlds.html">← RETURN TO HUB</a></div>
+    <div class="status-item">ATHANOR.ARCHIVE</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <header class="header">
+    <div>
+      <div class="breadcrumb">
+        <a href="./the-bridge-between-worlds.html">THE BRIDGE</a>
+        <span class="sep">/</span>
+        <span class="current">NODE_01 / SCIENCE_OF_BREATH</span>
+      </div>
+      <div class="designation">FILE_01 // NEUROSCIENCE_OF_RESPIRATION // MECHANISMS</div>
+      <h1 class="title">
+        The Science<br>
+        Of <span class="accent">Breath</span>
+      </h1>
+      <p class="subtitle">Six mechanisms describe why voluntary breath modulation works on involuntary state. These are not metaphors. Each is a measurable physiological lever the pilot can pull from the chair.</p>
+    </div>
+    <div class="header-meta">
+      Class.................<span class="val">TECHNICAL_DOC</span><br>
+      Mechanisms.Mapped.....<span class="val">06</span><br>
+      Resolution............<span class="val">MOLECULAR</span><br>
+      Convergence.Verified..<span class="val">YES</span><br>
+      Interactive...........<span class="val">PARTIAL</span>
+    </div>
+  </header>
+
+  <!-- INTRO -->
+  <section class="intro">
+    <span class="corner tl"></span><span class="corner tr"></span>
+    <span class="corner bl"></span><span class="corner br"></span>
+    <div class="intro-label">// PREMISE</div>
+    <p>If the yogis described breath as a bridge, the question that remains is the structural one: <em>what is the bridge made of?</em> What concrete mechanisms allow a voluntary act — choosing to lengthen an exhale, hold a retention, hum through the nose — to reach into systems the conscious mind cannot directly command?</p>
+    <p>The answer is no longer speculative. In the last two decades, neuroscience has identified the specific neural circuits, receptor populations, and biochemical signals that translate intentional breath into autonomic state. Six mechanisms do most of the work. <em>Each is the bridge, in a different cross-section.</em></p>
+  </section>
+
+  <!-- MECHANISM INDEX -->
+  <nav class="mechanism-index">
+    <a href="#m01" class="index-item">
+      <div class="idx-num">[ MECH_01 ]</div>
+      <div class="idx-title">The preBötzinger Complex</div>
+    </a>
+    <a href="#m02" class="index-item">
+      <div class="idx-num">[ MECH_02 ]</div>
+      <div class="idx-title">Vagal Afferents</div>
+    </a>
+    <a href="#m03" class="index-item">
+      <div class="idx-num">[ MECH_03 ]</div>
+      <div class="idx-title">CO₂ & the Bohr Effect</div>
+    </a>
+    <a href="#m04" class="index-item">
+      <div class="idx-num">[ MECH_04 ]</div>
+      <div class="idx-title">Nasal Nitric Oxide</div>
+    </a>
+    <a href="#m05" class="index-item">
+      <div class="idx-num">[ MECH_05 ]</div>
+      <div class="idx-title">Interoception & Insula</div>
+    </a>
+    <a href="#m06" class="index-item">
+      <div class="idx-num">[ MECH_06 ]</div>
+      <div class="idx-title">The Diaphragm</div>
+    </a>
+  </nav>
+
+  <!-- ================================================
+       MECHANISM 01: preBÖTZINGER COMPLEX
+       ================================================ -->
+  <section class="mechanism" id="m01">
+    <div class="mech-header">
+      <div class="mech-id">
+        <span class="num">01</span>
+        MECHANISM
+      </div>
+      <div class="mech-title-block">
+        <h2>The <strong>preBötzinger</strong> Complex</h2>
+        <div class="mech-subtitle">// THE BRAINSTEM PACEMAKER — AND ITS SECRET CHANNEL TO AROUSAL</div>
+      </div>
+      <div class="mech-meta">
+        Loc...<span class="val">VENTROLATERAL MEDULLA</span><br>
+        Disc...<span class="val">1991 / 2017</span><br>
+        Class...<span class="val">CIRCUIT</span>
+      </div>
+    </div>
+
+    <div class="mech-body">
+      <div class="mech-prose">
+        <p>A small cluster of roughly 3,000 neurons in the ventrolateral medulla generates the rhythm of every breath you have ever taken. Identified by Jack Feldman's lab in 1991, the <strong>preBötzinger complex</strong> is the brainstem's respiratory pacemaker — autonomous, oscillatory, the metronome beneath consciousness.</p>
+
+        <p>For two decades it was understood as a purely respiratory generator. Then, in 2017, a subset of preBötC neurons was identified that does something else entirely. Yackle, Schwarz, Kam and colleagues, working in Mark Krasnow's lab, found a small subpopulation — about 175 neurons — that projects directly to the <em>locus coeruleus</em>, the brainstem's master regulator of arousal and vigilance.</p>
+
+        <p>When this subpopulation was genetically silenced in mice, breathing remained intact. <em>But the mice became calm.</em> They sat still, groomed peacefully, showed reduced arousal responses to novelty. The circuit had been cutting one specific wire: the line that tells the brain to scale alertness to breath rate.</p>
+
+        <div class="mech-callout">
+          This is the structural reason slow breathing calms you. It is not relaxation by association. It is not metaphor. A small bundle of neurons reports your breath rate upward to the arousal system, and when breath slows, that report shifts. The pilot reaches the Eva through this exact wire.
+        </div>
+
+        <p>Fast, shallow breathing — the kind that spontaneously arises in fear or hyperventilation — sends an "arouse" signal up this line. Slow, deep, lengthened breathing sends "stand down." The locus coeruleus responds by adjusting noradrenaline release across the entire cortex. <strong>Your breath rate is, mechanically, an input to your arousal level.</strong></p>
+
+        <p>This is the most important finding in the modern neuroscience of breath. It is the mechanism the yogis were pointing at when they prescribed slow nostril breathing for meditative states. <em>They could feel the circuit. We can now name it.</em></p>
+      </div>
+
+      <div class="mech-figure">
+        <span class="corner tl"></span><span class="corner br"></span>
+        <div class="mech-figure-label">[ FIG.01 ] <span class="id">// preBötC → LC PROJECTION</span></div>
+
+        <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="preBotcGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#C7FF43" stop-opacity="0.5"/>
+              <stop offset="100%" stop-color="#C7FF43" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="lcGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#FF6B1A" stop-opacity="0.5"/>
+              <stop offset="100%" stop-color="#FF6B1A" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+
+          <!-- Brainstem silhouette -->
+          <g stroke="#2A2F3A" stroke-width="1" fill="none">
+            <path d="M 130 60
+                     Q 120 100 120 140
+                     Q 115 200 130 260
+                     Q 145 320 180 360
+                     L 220 360
+                     Q 255 320 270 260
+                     Q 285 200 280 140
+                     Q 280 100 270 60 Z" opacity="0.6"/>
+            <!-- Internal divisions -->
+            <path d="M 125 140 Q 200 145 275 140" opacity="0.4"/>
+            <path d="M 125 220 Q 200 225 275 220" opacity="0.4"/>
+            <path d="M 130 290 Q 200 295 270 290" opacity="0.4"/>
+          </g>
+
+          <!-- Labels -->
+          <text x="200" y="50" font-family="DM Mono" font-size="9" fill="#6B6F78" text-anchor="middle" letter-spacing="2">[ BRAINSTEM // SAGITTAL ]</text>
+
+          <text x="80" y="120" font-family="DM Mono" font-size="8" fill="#6B6F78" letter-spacing="1">PONS</text>
+          <text x="80" y="220" font-family="DM Mono" font-size="8" fill="#6B6F78" letter-spacing="1">MEDULLA</text>
+
+          <!-- Locus Coeruleus (upper, amber) -->
+          <g class="neuron-pulse">
+            <circle cx="200" cy="155" r="22" fill="url(#lcGlow)"/>
+            <ellipse cx="200" cy="155" rx="14" ry="8" fill="none" stroke="#FF6B1A" stroke-width="1.5"/>
+            <circle cx="195" cy="153" r="2" fill="#FF6B1A"/>
+            <circle cx="203" cy="156" r="2" fill="#FF6B1A"/>
+            <circle cx="199" cy="159" r="2" fill="#FF6B1A"/>
+          </g>
+          <line x1="240" y1="155" x2="290" y2="155" stroke="#FF6B1A" stroke-width="0.8" opacity="0.6"/>
+          <text x="295" y="152" font-family="DM Mono" font-size="10" fill="#FF6B1A" letter-spacing="1.5">LOCUS</text>
+          <text x="295" y="164" font-family="DM Mono" font-size="10" fill="#FF6B1A" letter-spacing="1.5">COERULEUS</text>
+
+          <!-- preBötC (lower, green) -->
+          <g class="neuron-pulse" style="animation-delay: -1.5s">
+            <circle cx="200" cy="270" r="26" fill="url(#preBotcGlow)"/>
+            <ellipse cx="200" cy="270" rx="16" ry="10" fill="none" stroke="#C7FF43" stroke-width="1.5"/>
+            <circle cx="193" cy="267" r="1.8" fill="#C7FF43"/>
+            <circle cx="200" cy="271" r="1.8" fill="#C7FF43"/>
+            <circle cx="207" cy="268" r="1.8" fill="#C7FF43"/>
+            <circle cx="196" cy="273" r="1.8" fill="#C7FF43"/>
+            <circle cx="204" cy="274" r="1.8" fill="#C7FF43"/>
+          </g>
+          <line x1="160" y1="270" x2="110" y2="270" stroke="#C7FF43" stroke-width="0.8" opacity="0.6"/>
+          <text x="105" y="267" font-family="DM Mono" font-size="10" fill="#C7FF43" text-anchor="end" letter-spacing="1.5">preBötC</text>
+          <text x="105" y="279" font-family="DM Mono" font-size="8" fill="#6B6F78" text-anchor="end" letter-spacing="1">(~3000 NEURONS)</text>
+
+          <!-- The connecting signal -->
+          <path d="M 200 244 Q 215 200 200 177"
+                stroke="#C7FF43" stroke-width="1.5" fill="none"
+                class="signal-flow" opacity="0.9"/>
+          <!-- Arrow -->
+          <path d="M 196 184 L 200 177 L 204 184" stroke="#C7FF43" stroke-width="1.5" fill="none"/>
+
+          <!-- The label for the projection -->
+          <g transform="translate(225, 215)">
+            <rect x="-5" y="-12" width="80" height="24" fill="#0A0B0D" stroke="#C7FF43" stroke-width="1" stroke-dasharray="2 2"/>
+            <text x="35" y="-1" font-family="DM Mono" font-size="8" fill="#C7FF43" text-anchor="middle" letter-spacing="1">~175 CELLS</text>
+            <text x="35" y="9" font-family="DM Mono" font-size="7" fill="#6B6F78" text-anchor="middle" letter-spacing="1">YACKLE 2017</text>
+          </g>
+
+          <!-- Output to cortex -->
+          <g opacity="0.5">
+            <path d="M 200 138 L 200 100" stroke="#FF6B1A" stroke-width="1" class="signal-flow"/>
+            <path d="M 196 105 L 200 100 L 204 105" stroke="#FF6B1A" stroke-width="1" fill="none"/>
+            <text x="200" y="90" font-family="DM Mono" font-size="8" fill="#FF6B1A" text-anchor="middle" letter-spacing="1">→ CORTICAL AROUSAL</text>
+          </g>
+
+          <!-- Output to body -->
+          <g opacity="0.5">
+            <path d="M 200 295 L 200 340" stroke="#C7FF43" stroke-width="1" class="signal-flow"/>
+            <path d="M 196 335 L 200 340 L 204 335" stroke="#C7FF43" stroke-width="1" fill="none"/>
+            <text x="200" y="358" font-family="DM Mono" font-size="8" fill="#C7FF43" text-anchor="middle" letter-spacing="1">→ DIAPHRAGM</text>
+            <text x="200" y="370" font-family="DM Mono" font-size="7" fill="#6B6F78" text-anchor="middle" letter-spacing="1">(BREATH RHYTHM)</text>
+          </g>
+
+          <!-- bottom data strip -->
+          <line x1="40" y1="385" x2="360" y2="385" stroke="#1E2230"/>
+          <text x="40" y="396" font-family="DM Mono" font-size="8" fill="#6B6F78" letter-spacing="1.5">// FIG.01 — BREATH→AROUSAL CIRCUIT</text>
+        </svg>
+
+        <div class="mech-readout">
+          <div><span class="k">// pacemaker.cells:</span> <span class="v">~3000</span></div>
+          <div><span class="k">// arousal.projection:</span> <span class="v">~175</span></div>
+          <div><span class="k">// signal.direction:</span> <span class="v">BREATH→AROUSAL</span></div>
+          <div><span class="k">// pilot.access:</span> <span class="v">VOLUNTARY</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================
+       MECHANISM 02: VAGAL AFFERENTS
+       ================================================ -->
+  <section class="mechanism" id="m02">
+    <div class="mech-header">
+      <div class="mech-id">
+        <span class="num">02</span>
+        MECHANISM
+      </div>
+      <div class="mech-title-block">
+        <h2>The <strong>Vagal</strong> Afferents</h2>
+        <div class="mech-subtitle">// THE NERVE THAT MOSTLY LISTENS</div>
+      </div>
+      <div class="mech-meta">
+        Loc...<span class="val">CN X — BIDIRECTIONAL</span><br>
+        Fibers...<span class="val">~80% AFFERENT</span><br>
+        Class...<span class="val">PARASYMPATHETIC</span>
+      </div>
+    </div>
+
+    <div class="mech-body">
+      <div class="mech-prose">
+        <p>The vagus nerve is the longest cranial nerve, wandering — <em>vagus</em>, "wandering" — from the brainstem through the throat, lungs, heart, gut. Standard teaching says it is the body's parasympathetic relay: brain sends signals down, organs respond, rest-and-digest engages.</p>
+
+        <p>This is the small half of the story. The vagus is approximately <strong>80% afferent</strong>. Four out of every five fibers carry signals <em>upward</em>, from body to brain. The vagus is not primarily an output channel. It is the primary sensory channel through which the brain knows what the body is doing.</p>
+
+        <p>Among the loudest inputs to the vagus are <strong>pulmonary stretch receptors</strong> and <strong>baroreceptors</strong> in the carotid sinus and aortic arch. These fire in response to lung expansion and arterial pressure changes — both of which the breath directly modulates.</p>
+
+        <div class="mech-callout">
+          When you exhale slowly and fully, baroreceptor firing rises, pulmonary stretch receptors discharge, and afferent vagal traffic surges. The brain reads this as: <em>the body is safe enough to fully release breath</em>. Top-down vagal output to the heart follows. Heart rate drops. HRV rises.
+        </div>
+
+        <p>This is why lengthened exhale — not deep breathing in general, not retention, but specifically <em>longer exhale than inhale</em> — is the single most reliable lever in the breath toolkit. Every measured pranayama practice that reliably increases parasympathetic tone shares this feature. The mechanism is not mysterious: you are giving the afferent vagus the input it interprets as safety.</p>
+
+        <p>Stephen Porges's <em>polyvagal theory</em> adds another layer: the vagus is not one nerve but a complex with at least two distinct branches. The newer myelinated ventral branch coordinates the face, voice, and heart — the "social engagement system." Breath practices that include humming, chanting, or vocal toning recruit this branch through the laryngeal vagal pathway.</p>
+      </div>
+
+      <div class="mech-figure">
+        <span class="corner tl"></span><span class="corner br"></span>
+        <div class="mech-figure-label">[ FIG.02 ] <span class="id">// VAGAL AFFERENT TRAFFIC</span></div>
+
+        <svg viewBox="0 0 400 480" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="vagusGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#43E5FF" stop-opacity="0.9"/>
+              <stop offset="100%" stop-color="#43E5FF" stop-opacity="0.3"/>
+            </linearGradient>
+          </defs>
+
+          <!-- Body silhouette -->
+          <g stroke="#2A2F3A" stroke-width="1" fill="none" opacity="0.6">
+            <circle cx="200" cy="60" r="32"/>
+            <line x1="200" y1="92" x2="200" y2="115"/>
+            <path d="M 165 125 L 235 125"/>
+            <path d="M 170 125 Q 165 200 170 280"/>
+            <path d="M 230 125 Q 235 200 230 280"/>
+            <line x1="170" y1="280" x2="230" y2="280"/>
+          </g>
+
+          <text x="200" y="30" font-family="DM Mono" font-size="9" fill="#6B6F78" text-anchor="middle" letter-spacing="2">[ VAGUS NERVE // CN X ]</text>
+
+          <!-- Brain origin (nucleus tractus solitarius) -->
+          <circle cx="200" cy="60" r="6" fill="#43E5FF" opacity="0.8"/>
+          <text x="240" y="58" font-family="DM Mono" font-size="9" fill="#43E5FF" letter-spacing="1">NTS</text>
+          <text x="240" y="70" font-family="DM Mono" font-size="7" fill="#6B6F78" letter-spacing="1">brainstem</text>
+
+          <!-- Main vagal trunks (both sides) -->
+          <path d="M 195 90 Q 180 130 185 180 Q 192 230 188 280" stroke="url(#vagusGrad)" stroke-width="2.5" fill="none" opacity="0.85"/>
+          <path d="M 205 90 Q 220 130 215 180 Q 208 230 212 280" stroke="url(#vagusGrad)" stroke-width="2.5" fill="none" opacity="0.85"/>
+
+          <!-- Larynx branch -->
+          <g>
+            <circle cx="200" cy="115" r="5" fill="#43E5FF" opacity="0.7"/>
+            <line x1="208" y1="115" x2="240" y2="115" stroke="#43E5FF" stroke-width="0.8" opacity="0.6"/>
+            <text x="245" y="113" font-family="DM Mono" font-size="9" fill="#43E5FF" letter-spacing="1">LARYNX</text>
+            <text x="245" y="125" font-family="DM Mono" font-size="7" fill="#6B6F78" letter-spacing="1">→ humming, voice</text>
+          </g>
+
+          <!-- Lungs / pulmonary stretch -->
+          <g>
+            <ellipse cx="175" cy="170" rx="20" ry="32" fill="none" stroke="#43E5FF" stroke-width="1" opacity="0.5"/>
+            <ellipse cx="225" cy="170" rx="20" ry="32" fill="none" stroke="#43E5FF" stroke-width="1" opacity="0.5"/>
+            <text x="200" y="195" font-family="DM Mono" font-size="9" fill="#43E5FF" text-anchor="middle" letter-spacing="1">LUNGS</text>
+            <line x1="240" y1="170" x2="285" y2="170" stroke="#43E5FF" stroke-width="0.8" opacity="0.6" stroke-dasharray="2 2"/>
+            <text x="290" y="167" font-family="DM Mono" font-size="9" fill="#43E5FF" letter-spacing="1">STRETCH</text>
+            <text x="290" y="178" font-family="DM Mono" font-size="7" fill="#6B6F78" letter-spacing="1">RECEPTORS</text>
+          </g>
+
+          <!-- Heart / baroreceptors -->
+          <g>
+            <path d="M 192 220 Q 185 215 190 225 Q 195 235 200 240 Q 205 235 210 225 Q 215 215 208 220 Q 200 210 192 220 Z"
+                  fill="none" stroke="#43E5FF" stroke-width="1" opacity="0.6"/>
+            <text x="200" y="252" font-family="DM Mono" font-size="9" fill="#43E5FF" text-anchor="middle" letter-spacing="1">HEART</text>
+            <line x1="220" y1="225" x2="285" y2="225" stroke="#43E5FF" stroke-width="0.8" opacity="0.6" stroke-dasharray="2 2"/>
+            <text x="290" y="222" font-family="DM Mono" font-size="9" fill="#43E5FF" letter-spacing="1">BARO-</text>
+            <text x="290" y="233" font-family="DM Mono" font-size="7" fill="#6B6F78" letter-spacing="1">RECEPTORS</text>
+          </g>
+
+          <!-- Gut -->
+          <g>
+            <path d="M 180 280 Q 200 290 220 280 Q 218 300 200 310 Q 182 300 180 280 Z" fill="none" stroke="#43E5FF" stroke-width="1" opacity="0.5"/>
+            <text x="200" y="328" font-family="DM Mono" font-size="9" fill="#43E5FF" text-anchor="middle" letter-spacing="1">GUT</text>
+          </g>
+
+          <!-- Afferent traffic indicators (upward arrows) -->
+          <g class="signal-flow" opacity="0.7">
+            <line x1="145" y1="270" x2="145" y2="100" stroke="#43E5FF" stroke-width="1.2" fill="none"/>
+            <path d="M 141 110 L 145 100 L 149 110" stroke="#43E5FF" stroke-width="1.2" fill="none"/>
+            <line x1="255" y1="270" x2="255" y2="100" stroke="#43E5FF" stroke-width="1.2" fill="none"/>
+            <path d="M 251 110 L 255 100 L 259 110" stroke="#43E5FF" stroke-width="1.2" fill="none"/>
+          </g>
+
+          <!-- Bottom: the afferent:efferent ratio -->
+          <g transform="translate(50, 380)">
+            <text x="0" y="0" font-family="DM Mono" font-size="10" fill="#6B6F78" letter-spacing="1.5">FIBER COMPOSITION</text>
+            <rect x="0" y="12" width="300" height="20" fill="#11131A" stroke="#1E2230"/>
+            <rect x="0" y="12" width="240" height="20" fill="#43E5FF" opacity="0.6"/>
+            <rect x="240" y="12" width="60" height="20" fill="#FF6B1A" opacity="0.6"/>
+            <text x="120" y="26" font-family="DM Mono" font-size="11" fill="#0A0B0D" text-anchor="middle" font-weight="700" letter-spacing="1">AFFERENT 80%</text>
+            <text x="270" y="26" font-family="DM Mono" font-size="9" fill="#0A0B0D" text-anchor="middle" font-weight="700">20%</text>
+            <text x="0" y="48" font-family="DM Mono" font-size="8" fill="#6B6F78" letter-spacing="1">BODY → BRAIN</text>
+            <text x="300" y="48" font-family="DM Mono" font-size="8" fill="#6B6F78" text-anchor="end" letter-spacing="1">BRAIN → BODY</text>
+          </g>
+
+          <line x1="40" y1="465" x2="360" y2="465" stroke="#1E2230"/>
+          <text x="40" y="476" font-family="DM Mono" font-size="8" fill="#6B6F78" letter-spacing="1.5">// FIG.02 — THE VAGUS MOSTLY LISTENS</text>
+        </svg>
+
+        <div class="mech-readout">
+          <div><span class="k">// total.length:</span> <span class="v">~LONGEST CN</span></div>
+          <div><span class="k">// afferent.fibers:</span> <span class="v">~80%</span></div>
+          <div><span class="k">// key.lever:</span> <span class="v">LONG EXHALE</span></div>
+          <div><span class="k">// vocal.access:</span> <span class="v">LARYNGEAL BRANCH</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================
+       MECHANISM 03: CO2 & THE BOHR EFFECT
+       ================================================ -->
+  <section class="mechanism" id="m03">
+    <div class="mech-header">
+      <div class="mech-id">
+        <span class="num">03</span>
+        MECHANISM
+      </div>
+      <div class="mech-title-block">
+        <h2>CO₂ <strong>Tolerance</strong> & the Bohr Effect</h2>
+        <div class="mech-subtitle">// WHY HYPERVENTILATING REDUCES OXYGEN DELIVERY</div>
+      </div>
+      <div class="mech-meta">
+        Discovery...<span class="val">CHRISTIAN BOHR, 1904</span><br>
+        Counterintuit...<span class="val">YES</span><br>
+        Class...<span class="val">BIOCHEMICAL</span>
+      </div>
+    </div>
+
+    <div class="mech-body">
+      <div class="mech-prose">
+        <p>Ask most people what triggers the urge to breathe and they will say: <em>not enough oxygen</em>. This is incorrect, and the misunderstanding sits beneath most poor breathing habits.</p>
+
+        <p>The primary driver of breath is not low oxygen. It is <strong>rising carbon dioxide</strong>. Chemoreceptors in the medulla and carotid bodies monitor blood CO₂ partial pressure; when it rises, breath rate increases to expel it. You do not feel the need to breathe because you are running low on O₂. You feel it because CO₂ is accumulating.</p>
+
+        <p>And here is the inversion that most popular breathwork misses: <em>oxygen is not the limiting reagent.</em> Arterial blood is normally 97-99% saturated. You cannot meaningfully oversaturate hemoglobin by breathing more. What you <em>can</em> do is blow off CO₂ — which is precisely what changes when you hyperventilate.</p>
+
+        <div class="mech-callout">
+          The Bohr effect, identified by Christian Bohr in 1904: hemoglobin's affinity for oxygen <em>decreases</em> as CO₂ rises. When CO₂ is high, hemoglobin <em>releases</em> oxygen to tissues. When CO₂ drops — as in hyperventilation — hemoglobin clings to oxygen and <em>fails to release it</em>. You can be 99% saturated and still oxygen-starve your tissues.
+        </div>
+
+        <p>This is why people hyperventilate themselves into lightheadedness and tingling. The blood is full of oxygen. The tissues are not getting it. The brain, particularly, becomes hypoxic — leading to the dizziness, derealization, and altered states that some breathwork traditions interpret as "spiritual breakthrough" when they are, in physiological terms, cerebral hypoxia from CO₂ depletion.</p>
+
+        <p>Sustained healthy breath patterns do the opposite. <em>CO₂ tolerance training</em> — slow nasal breathing, mild air hunger, breath holds (kumbhaka) — raises the threshold at which the body panics about CO₂. The result: lower resting respiratory rate, better tissue oxygenation, calmer baseline state.</p>
+
+        <p>The yogis prescribed retention practices for entirely different reasons. The biochemistry vindicates the practice.</p>
+
+        <!-- INTERACTIVE CO2 TOGGLE -->
+        <div class="co2-toggle">
+          <button class="active" data-state="resting">RESTING</button>
+          <button data-state="hyperventilation">HYPERVENTILATION</button>
+          <button data-state="trained">CO₂ TRAINED</button>
+        </div>
+        <div class="co2-state" id="co2State">
+          <div class="co2-state-title">// STATE: RESTING (NORMAL)</div>
+          <div class="co2-state-body">
+            CO₂ ~40 mmHg. Hemoglobin saturation ~98%. Bohr effect normal — oxygen releases to tissues efficiently as blood encounters CO₂-rich cellular environments. The system is in homeostasis. Breath rate ~12-16 per minute.
+          </div>
+        </div>
+      </div>
+
+      <div class="mech-figure">
+        <span class="corner tl"></span><span class="corner br"></span>
+        <div class="mech-figure-label">[ FIG.03 ] <span class="id">// O₂ DELIVERY vs CO₂ LEVEL</span></div>
+
+        <svg viewBox="0 0 400 480" xmlns="http://www.w3.org/2000/svg">
+          <text x="200" y="30" font-family="DM Mono" font-size="9" fill="#6B6F78" text-anchor="middle" letter-spacing="2">[ THE BOHR CURVE ]</text>
+
+          <!-- Graph axes -->
+          <line x1="60" y1="380" x2="360" y2="380" stroke="#2A2F3A" stroke-width="1"/>
+          <line x1="60" y1="60" x2="60" y2="380" stroke="#2A2F3A" stroke-width="1"/>
+
+          <!-- Axis labels -->
+          <text x="210" y="410" font-family="DM Mono" font-size="9" fill="#6B6F78" text-anchor="middle" letter-spacing="1.5">→ O₂ PARTIAL PRESSURE</text>
+          <text x="30" y="220" font-family="DM Mono" font-size="9" fill="#6B6F78" letter-spacing="1.5" transform="rotate(-90 30 220)">HEMOGLOBIN SATURATION</text>
+
+          <!-- Y-axis ticks -->
+          <g font-family="DM Mono" font-size="8" fill="#6B6F78">
+            <text x="50" y="65" text-anchor="end">100%</text>
+            <text x="50" y="145" text-anchor="end">75%</text>
+            <text x="50" y="225" text-anchor="end">50%</text>
+            <text x="50" y="305" text-anchor="end">25%</text>
+            <text x="50" y="384" text-anchor="end">0%</text>
+          </g>
+          <g stroke="#1E2230" stroke-width="0.5" stroke-dasharray="2 4">
+            <line x1="60" y1="60" x2="360" y2="60"/>
+            <line x1="60" y1="140" x2="360" y2="140"/>
+            <line x1="60" y1="220" x2="360" y2="220"/>
+            <line x1="60" y1="300" x2="360" y2="300"/>
+          </g>
+
+          <!-- Bohr curves -->
+          <!-- High CO2 curve (right shift — easier O2 release) -->
+          <path d="M 60 380 Q 130 370 180 320 Q 220 240 280 100 Q 320 70 360 65"
+                stroke="#C7FF43" stroke-width="2" fill="none" opacity="0.9"/>
+          <!-- Normal -->
+          <path d="M 60 380 Q 110 370 160 320 Q 200 240 250 130 Q 300 80 360 67"
+                stroke="#43E5FF" stroke-width="2" fill="none" opacity="0.9"/>
+          <!-- Low CO2 (left shift — O2 held tightly, won't release) -->
+          <path d="M 60 380 Q 90 365 130 295 Q 170 180 220 95 Q 280 70 360 65"
+                stroke="#FF6B1A" stroke-width="2" fill="none" opacity="0.9"/>
+
+          <!-- Curve labels -->
+          <g font-family="DM Mono" font-size="8" letter-spacing="1">
+            <text x="290" y="55" fill="#FF6B1A">↑ LOW CO₂</text>
+            <text x="290" y="67" fill="#6B6F78">(hyperventilation)</text>
+            <text x="290" y="115" fill="#43E5FF">NORMAL</text>
+            <text x="290" y="160" fill="#C7FF43">↓ HIGH CO₂</text>
+            <text x="290" y="172" fill="#6B6F78">(trained / loaded)</text>
+          </g>
+
+          <!-- Tissue marker -->
+          <g>
+            <line x1="180" y1="50" x2="180" y2="380" stroke="#FFFFFF" stroke-width="0.5" stroke-dasharray="2 2" opacity="0.4"/>
+            <text x="180" y="48" font-family="DM Mono" font-size="8" fill="#6B6F78" text-anchor="middle" letter-spacing="1">tissue pO₂</text>
+          </g>
+
+          <!-- Annotation box -->
+          <g transform="translate(60, 420)">
+            <rect width="300" height="40" fill="#11131A" stroke="#1E2230"/>
+            <text x="12" y="16" font-family="DM Mono" font-size="9" fill="#C7FF43" letter-spacing="1">// HIGHER CO₂ → CURVE SHIFTS RIGHT</text>
+            <text x="12" y="30" font-family="DM Mono" font-size="9" fill="#6B6F78" letter-spacing="1">→ HEMOGLOBIN RELEASES MORE O₂ TO TISSUES</text>
+          </g>
+        </svg>
+
+        <div class="mech-readout">
+          <div><span class="k">// breath.driver:</span> <span class="v">CO₂ ↑ NOT O₂ ↓</span></div>
+          <div><span class="k">// normal.sat:</span> <span class="v">97-99%</span></div>
+          <div><span class="k">// hyperv.result:</span> <span class="v">↓ O₂ TO TISSUE</span></div>
+          <div><span class="k">// training.goal:</span> <span class="v">CO₂ TOLERANCE</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Data strip - key numbers -->
+    <div class="data-strip">
+      <span class="corner tl" style="border-color: var(--nerv-amber);"></span>
+      <span class="corner tr" style="border-color: var(--nerv-amber);"></span>
+      <span class="corner bl" style="border-color: var(--nerv-amber);"></span>
+      <span class="corner br" style="border-color: var(--nerv-amber);"></span>
+      <div class="data-strip-label">// CRITICAL VALUES</div>
+      <div class="data-strip-grid">
+        <div class="data-stat">
+          <span class="stat-val">40</span>
+          <span class="stat-label">mmHg<br>NORMAL ARTERIAL CO₂</span>
+        </div>
+        <div class="data-stat">
+          <span class="stat-val">98%</span>
+          <span class="stat-label">RESTING O₂<br>HEMOGLOBIN SATURATION</span>
+        </div>
+        <div class="data-stat">
+          <span class="stat-val">~6</span>
+          <span class="stat-label">BREATHS/MIN<br>OPTIMAL RESONANCE RATE</span>
+        </div>
+        <div class="data-stat">
+          <span class="stat-val">5.5s</span>
+          <span class="stat-label">INHALE / EXHALE<br>FOR ~6 BR/MIN COHERENCE</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================
+       MECHANISM 04: NASAL NITRIC OXIDE
+       ================================================ -->
+  <section class="mechanism" id="m04">
+    <div class="mech-header">
+      <div class="mech-id">
+        <span class="num">04</span>
+        MECHANISM
+      </div>
+      <div class="mech-title-block">
+        <h2>Nasal <strong>Nitric Oxide</strong></h2>
+        <div class="mech-subtitle">// THE GAS THE SINUSES MAKE, AND WHY HUMMING MATTERS</div>
+      </div>
+      <div class="mech-meta">
+        Source...<span class="val">PARANASAL SINUSES</span><br>
+        Humming.Boost...<span class="val">~15×</span><br>
+        Class...<span class="val">VASOACTIVE GAS</span>
+      </div>
+    </div>
+
+    <div class="mech-body">
+      <div class="mech-prose">
+        <p>The paranasal sinuses — the air-filled cavities surrounding the nose — continuously produce <strong>nitric oxide</strong>, a small signaling molecule with outsized physiological effects. It is a vasodilator, an antimicrobial, and a regulator of pulmonary blood flow.</p>
+
+        <p>Nitric oxide is only delivered to the lungs <em>through nasal breathing</em>. Mouth breathing bypasses the sinuses entirely. The molecule travels with the airstream from the sinuses through the nasopharynx into the lower airways, where it relaxes pulmonary vasculature, improves ventilation-perfusion matching, and increases oxygen uptake.</p>
+
+        <p>People who chronically mouth-breathe are not just developing facial structure differently — they are losing the daily delivery of a molecule the body produces for exactly this purpose. Nasal breathing is not a yogic preference. It is the route the system was designed for.</p>
+
+        <div class="mech-callout">
+          Weitzberg and Lundberg (2002) showed that humming during nasal exhalation increases nasal nitric oxide output by roughly <em>15-fold</em>. The bee-breath of the Upanishads — bhramari pranayama — is, in current physiological terms, a precise intervention for boosting NO production. The yogis did not need to know about NO. They could feel what the practice did.
+        </div>
+
+        <p>This connects to the larger pattern: many yogic prescriptions converge on practices that <em>maximize nasal involvement and vocal vibration</em>. Ujjayi creates turbulent airflow in the upper airway. Bhramari adds vibration. Mantra recitation engages the laryngeal vagus. All of these recruit pathways that science has now linked to NO production, vagal tone, and parasympathetic activation.</p>
+
+        <p>The simplest pranayama instruction in any tradition — <em>breathe through your nose</em> — is the densest physiological recommendation in the entire archive.</p>
+      </div>
+
+      <div class="mech-figure">
+        <span class="corner tl"></span><span class="corner br"></span>
+        <div class="mech-figure-label">[ FIG.04 ] <span class="id">// NO PRODUCTION PATHWAY</span></div>
+
+        <svg viewBox="0 0 400 480" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="sinusGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#C77DFF" stop-opacity="0.6"/>
+              <stop offset="100%" stop-color="#C77DFF" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+
+          <text x="200" y="30" font-family="DM Mono" font-size="9" fill="#6B6F78" text-anchor="middle" letter-spacing="2">[ NASAL-PULMONARY AXIS ]</text>
+
+          <!-- Head profile -->
+          <g stroke="#2A2F3A" stroke-width="1.2" fill="none">
+            <path d="M 200 60
+                     Q 260 70 270 130
+                     Q 275 170 260 200
+                     L 220 210
+                     L 210 230
+                     L 215 245
+                     L 200 245"/>
+          </g>
+
+          <!-- Sinus cavities with glow -->
+          <g class="neuron-pulse">
+            <ellipse cx="240" cy="115" rx="14" ry="10" fill="url(#sinusGlow)"/>
+            <ellipse cx="240" cy="115" rx="10" ry="7" fill="none" stroke="#C77DFF" stroke-width="1" opacity="0.8"/>
+            <ellipse cx="245" cy="160" rx="13" ry="11" fill="url(#sinusGlow)"/>
+            <ellipse cx="245" cy="160" rx="9" ry="8" fill="none" stroke="#C77DFF" stroke-width="1" opacity="0.8"/>
+          </g>
+
+          <text x="285" y="115" font-family="DM Mono" font-size="9" fill="#C77DFF" letter-spacing="1">FRONTAL</text>
+          <text x="285" y="125" font-family="DM Mono" font-size="9" fill="#C77DFF" letter-spacing="1">SINUS</text>
+          <text x="285" y="160" font-family="DM Mono" font-size="9" fill="#C77DFF" letter-spacing="1">MAXILLARY</text>
+          <text x="285" y="170" font-family="DM Mono" font-size="9" fill="#C77DFF" letter-spacing="1">SINUS</text>
+
+          <!-- NO molecule indicators -->
+          <g opacity="0.7">
+            <text x="222" y="98" font-family="DM Mono" font-size="11" fill="#C77DFF" font-weight="700">NO</text>
+            <text x="262" y="142" font-family="DM Mono" font-size="11" fill="#C77DFF" font-weight="700">NO</text>
+            <text x="225" y="180" font-family="DM Mono" font-size="11" fill="#C77DFF" font-weight="700">NO</text>
+          </g>
+
+          <!-- Trachea -->
+          <line x1="210" y1="245" x2="210" y2="295" stroke="#43E5FF" stroke-width="1.5" opacity="0.6"/>
+
+          <!-- Lungs -->
+          <g>
+            <path d="M 210 295 Q 160 305 145 365 Q 140 410 155 425 Q 175 420 195 410 Z"
+                  fill="none" stroke="#2A2F3A" stroke-width="1.2"/>
+            <path d="M 210 295 Q 260 305 275 365 Q 280 410 265 425 Q 245 420 225 410 Z"
+                  fill="none" stroke="#2A2F3A" stroke-width="1.2"/>
+
+            <!-- NO indicator in lungs -->
+            <g class="neuron-pulse" style="animation-delay: -1s">
+              <circle cx="170" cy="370" r="3" fill="#C77DFF" opacity="0.8"/>
+              <circle cx="185" cy="380" r="3" fill="#C77DFF" opacity="0.8"/>
+              <circle cx="240" cy="375" r="3" fill="#C77DFF" opacity="0.8"/>
+              <circle cx="225" cy="385" r="3" fill="#C77DFF" opacity="0.8"/>
+              <circle cx="180" cy="400" r="3" fill="#C77DFF" opacity="0.8"/>
+              <circle cx="235" cy="400" r="3" fill="#C77DFF" opacity="0.8"/>
+            </g>
+          </g>
+
+          <!-- Flow arrows showing NO transport -->
+          <g class="signal-flow" opacity="0.6">
+            <path d="M 230 195 Q 215 215 210 250" stroke="#C77DFF" stroke-width="1.5" fill="none"/>
+            <path d="M 210 280 L 210 295" stroke="#C77DFF" stroke-width="1.5" fill="none"/>
+          </g>
+
+          <!-- Effects panel -->
+          <g transform="translate(40, 440)">
+            <text x="0" y="0" font-family="DM Mono" font-size="9" fill="#C77DFF" letter-spacing="1.5">// PULMONARY EFFECTS:</text>
+            <text x="0" y="12" font-family="DM Mono" font-size="8" fill="#6B6F78" letter-spacing="1">VASODILATION · O₂ UPTAKE↑ · ANTIMICROBIAL</text>
+          </g>
+
+          <!-- Humming indicator -->
+          <g transform="translate(60, 70)">
+            <rect width="100" height="22" fill="#0A0B0D" stroke="#C77DFF" stroke-width="1" stroke-dasharray="3 3"/>
+            <text x="50" y="14" font-family="DM Mono" font-size="9" fill="#C77DFF" text-anchor="middle" letter-spacing="1">HUMMING: ×15</text>
+          </g>
+        </svg>
+
+        <div class="mech-readout">
+          <div><span class="k">// NO.source:</span> <span class="v">SINUSES</span></div>
+          <div><span class="k">// route:</span> <span class="v">NASAL ONLY</span></div>
+          <div><span class="k">// humming.boost:</span> <span class="v">15×</span></div>
+          <div><span class="k">// action:</span> <span class="v">VASODILATOR</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================
+       MECHANISM 05: INTEROCEPTION & INSULA
+       ================================================ -->
+  <section class="mechanism" id="m05">
+    <div class="mech-header">
+      <div class="mech-id">
+        <span class="num">05</span>
+        MECHANISM
+      </div>
+      <div class="mech-title-block">
+        <h2><strong>Interoception</strong> & The Insula</h2>
+        <div class="mech-subtitle">// HOW THE BRAIN KNOWS THE BODY EXISTS</div>
+      </div>
+      <div class="mech-meta">
+        Region...<span class="val">INSULAR CORTEX</span><br>
+        Function...<span class="val">VISCERAL MAPPING</span><br>
+        Class...<span class="val">CORTICAL HUB</span>
+      </div>
+    </div>
+
+    <div class="mech-body">
+      <div class="mech-prose">
+        <p><strong>Interoception</strong> is the sensory channel that tells you what your body is doing from the inside. Heart rate. Breath. Hunger. Temperature. The pull in the chest, the tightness in the jaw, the warmth in the belly. It is the felt sense of being a living body — the substrate beneath every emotion you have ever named.</p>
+
+        <p>The cortical hub of interoception is the <em>insula</em>, a region tucked into the lateral sulcus of each hemisphere. Signals from every visceral organ — heart, lungs, gut, vessels — converge here via the vagus, the spinal cord, and the thalamus. The insula integrates them into a coherent body-state, which then informs the cortex's emotional and decision-making computations.</p>
+
+        <p>Antonio Damasio's somatic marker hypothesis, Bud Craig's mapping of interoceptive pathways, Sahib Khalsa's work on the cardiac and respiratory interoceptive signals — converge on one finding: <em>your emotional experience is, in significant part, your insula reading your body.</em></p>
+
+        <div class="mech-callout">
+          Breath is the most accessible interoceptive anchor. It is the one visceral signal that is simultaneously voluntary (you can choose to attend to it, modulate it) and continuously available (it never stops). When meditation traditions instruct "follow the breath," they are prescribing direct insular training. Studies show experienced meditators have measurably thicker insular cortex.
+        </div>
+
+        <p>This matters operationally for two reasons. <strong>First:</strong> bringing attention to breath sensation increases interoceptive accuracy — your ability to detect what is happening in your body. Higher interoceptive accuracy correlates with better emotion regulation, lower anxiety, and more stable identity coherence over time.</p>
+
+        <p>Second: dysfunctional interoception — where the insula reads body signals inaccurately or fails to integrate them — appears in anxiety, depression, alexithymia (the inability to name feelings), eating disorders, and dissociative conditions. Many of these involve patterns where the body's signals are <em>too loud</em> (anxiety) or <em>too muted</em> (dissociation). Breath attention is one of the few interventions shown to recalibrate this signal.</p>
+
+        <p>The pilot, in the Eva metaphor, is the seat of consciousness. Interoception is the dashboard. <em>Breath attention is what lights the dashboard up.</em></p>
+      </div>
+
+      <div class="mech-figure">
+        <span class="corner tl"></span><span class="corner br"></span>
+        <div class="mech-figure-label">[ FIG.05 ] <span class="id">// INSULAR INTEGRATION</span></div>
+
+        <svg viewBox="0 0 400 480" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="insulaGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#C7FF43" stop-opacity="0.4"/>
+              <stop offset="100%" stop-color="#C7FF43" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+
+          <text x="200" y="30" font-family="DM Mono" font-size="9" fill="#6B6F78" text-anchor="middle" letter-spacing="2">[ INTEROCEPTIVE CONVERGENCE ]</text>
+
+          <!-- Brain outline -->
+          <g stroke="#2A2F3A" stroke-width="1.2" fill="none">
+            <path d="M 130 100
+                     Q 100 110 95 160
+                     Q 95 210 110 240
+                     Q 130 270 200 275
+                     Q 270 270 290 240
+                     Q 305 210 305 160
+                     Q 300 110 270 100
+                     Q 240 85 200 90
+                     Q 160 85 130 100 Z"/>
+            <!-- Hemisphere line -->
+            <line x1="200" y1="95" x2="200" y2="270" stroke="#2A2F3A" stroke-width="0.5" stroke-dasharray="2 4"/>
+            <!-- Lateral sulcus suggestion -->
+            <path d="M 130 165 Q 160 175 175 175" stroke="#2A2F3A" stroke-width="0.5" opacity="0.6"/>
+            <path d="M 270 165 Q 240 175 225 175" stroke="#2A2F3A" stroke-width="0.5" opacity="0.6"/>
+          </g>
+
+          <!-- Insula highlight -->
+          <g class="neuron-pulse">
+            <ellipse cx="165" cy="180" rx="22" ry="14" fill="url(#insulaGlow)"/>
+            <ellipse cx="235" cy="180" rx="22" ry="14" fill="url(#insulaGlow)"/>
+            <ellipse cx="165" cy="180" rx="14" ry="8" fill="none" stroke="#C7FF43" stroke-width="1.2" opacity="0.9"/>
+            <ellipse cx="235" cy="180" rx="14" ry="8" fill="none" stroke="#C7FF43" stroke-width="1.2" opacity="0.9"/>
+          </g>
+
+          <text x="200" y="155" font-family="DM Mono" font-size="11" fill="#C7FF43" text-anchor="middle" letter-spacing="2">INSULA</text>
+          <text x="200" y="205" font-family="DM Mono" font-size="8" fill="#6B6F78" text-anchor="middle" letter-spacing="1">(BILATERAL)</text>
+
+          <!-- Inputs from below -->
+          <g class="signal-flow">
+            <!-- Heart -->
+            <line x1="135" y1="370" x2="160" y2="220" stroke="#43E5FF" stroke-width="1.2" opacity="0.7"/>
+            <!-- Lungs -->
+            <line x1="200" y1="370" x2="200" y2="240" stroke="#43E5FF" stroke-width="1.2" opacity="0.7"/>
+            <!-- Gut -->
+            <line x1="265" y1="370" x2="240" y2="220" stroke="#43E5FF" stroke-width="1.2" opacity="0.7"/>
+          </g>
+
+          <!-- Visceral sources -->
+          <g transform="translate(105, 370)">
+            <circle cx="30" cy="0" r="14" fill="none" stroke="#43E5FF" stroke-width="1" opacity="0.7"/>
+            <text x="30" y="3" font-family="DM Mono" font-size="9" fill="#43E5FF" text-anchor="middle" letter-spacing="1">♡</text>
+            <text x="30" y="32" font-family="DM Mono" font-size="8" fill="#43E5FF" text-anchor="middle" letter-spacing="1">HEART</text>
+          </g>
+
+          <g transform="translate(170, 370)">
+            <ellipse cx="30" cy="0" rx="16" ry="12" fill="none" stroke="#43E5FF" stroke-width="1" opacity="0.7"/>
+            <text x="30" y="3" font-family="DM Mono" font-size="9" fill="#43E5FF" text-anchor="middle" letter-spacing="1">∽</text>
+            <text x="30" y="28" font-family="DM Mono" font-size="8" fill="#43E5FF" text-anchor="middle" letter-spacing="1">LUNGS</text>
+          </g>
+
+          <g transform="translate(235, 370)">
+            <path d="M 15 0 Q 30 -8 45 0 Q 40 12 30 16 Q 20 12 15 0 Z" fill="none" stroke="#43E5FF" stroke-width="1" opacity="0.7"/>
+            <text x="30" y="32" font-family="DM Mono" font-size="8" fill="#43E5FF" text-anchor="middle" letter-spacing="1">GUT</text>
+          </g>
+
+          <!-- Output upward (to emotional/cognitive) -->
+          <g opacity="0.6">
+            <line x1="200" y1="100" x2="200" y2="65" stroke="#FF6B1A" stroke-width="1" class="signal-flow"/>
+            <path d="M 196 70 L 200 65 L 204 70" stroke="#FF6B1A" stroke-width="1" fill="none"/>
+            <text x="200" y="55" font-family="DM Mono" font-size="8" fill="#FF6B1A" text-anchor="middle" letter-spacing="1">→ EMOTION / COGNITION</text>
+          </g>
+
+          <!-- Bottom: breath as access point -->
+          <g transform="translate(50, 440)">
+            <rect width="300" height="32" fill="#11131A" stroke="#C7FF43" stroke-width="1" stroke-dasharray="3 3"/>
+            <text x="150" y="14" font-family="DM Mono" font-size="9" fill="#C7FF43" text-anchor="middle" letter-spacing="1">// BREATH = ACCESSIBLE INTEROCEPTIVE ANCHOR</text>
+            <text x="150" y="26" font-family="DM Mono" font-size="8" fill="#6B6F78" text-anchor="middle" letter-spacing="1">VOLUNTARY · CONTINUOUS · ALWAYS PRESENT</text>
+          </g>
+        </svg>
+
+        <div class="mech-readout">
+          <div><span class="k">// hub:</span> <span class="v">INSULAR CORTEX</span></div>
+          <div><span class="k">// inputs:</span> <span class="v">ALL VISCERA</span></div>
+          <div><span class="k">// trainable:</span> <span class="v">YES (MEDITATION)</span></div>
+          <div><span class="k">// access:</span> <span class="v">VIA BREATH</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================
+       MECHANISM 06: THE DIAPHRAGM
+       ================================================ -->
+  <section class="mechanism" id="m06">
+    <div class="mech-header">
+      <div class="mech-id">
+        <span class="num">06</span>
+        MECHANISM
+      </div>
+      <div class="mech-title-block">
+        <h2>The <strong>Diaphragm</strong> As Dual Organ</h2>
+        <div class="mech-subtitle">// RESPIRATORY, POSTURAL, EMOTIONAL — ALL AT ONCE</div>
+      </div>
+      <div class="mech-meta">
+        Type...<span class="val">SKELETAL MUSCLE</span><br>
+        Function...<span class="val">DUAL ROLE</span><br>
+        Class...<span class="val">INTEGRATIVE</span>
+      </div>
+    </div>
+
+    <div class="mech-body">
+      <div class="mech-prose">
+        <p>Anatomy textbooks describe the diaphragm as the primary muscle of respiration: a domed sheet of skeletal muscle separating thoracic and abdominal cavities, contracting on inhale to create the pressure gradient that draws air in.</p>
+
+        <p>This is true. It is also incomplete. The diaphragm is simultaneously the body's central <strong>postural</strong> organ. It stabilizes the spine through intra-abdominal pressure regulation. It coordinates with the pelvic floor and the deep transverse abdominis in a four-part core mechanism that maintains trunk integrity. When breathing is dysfunctional, posture is dysfunctional. The relationship is mechanical, not metaphorical.</p>
+
+        <p>And it does not stop there. The diaphragm is <em>fascially continuous</em> with the psoas muscles below (the deep hip flexors, often called the "muscles of soul" in somatic traditions), with the pericardium above (the connective tissue sheath around the heart), and with the deep cervical fascia continuing to the base of the skull. When the diaphragm contracts, every one of these structures moves with it.</p>
+
+        <div class="mech-callout">
+          This is why "I am holding my breath" so often coincides with "I am holding my body." Chronic diaphragmatic restriction — held in by anxiety, vigilance, trauma — propagates through the fascial chain into the psoas (creating chronic hip tension), into the pericardium (creating felt chest constriction), and into the cervical fascia (creating jaw and neck tension). One organ. Multiple symptoms.
+        </div>
+
+        <p>The diaphragm is also extensively innervated by the <em>phrenic nerve</em> (motor) and by visceral afferents that report back to the brainstem and ultimately to the insula. It is one of the body's richest sources of interoceptive data. The felt sense of "deep breathing" reaching low into the belly is not metaphorical — it is the diaphragm fully descending into the abdominal cavity, and the corresponding cascade of afferent signals reporting that descent upward.</p>
+
+        <p>This is why <em>diaphragmatic breathing</em> — sometimes called belly breathing, despite the belly itself not breathing — is the foundational technique in essentially every breath tradition. Hatha yoga, qigong, Buteyko, modern clinical respiratory therapy, Wim Hof, Holotropic. They differ on what to do <em>after</em> the diaphragm is engaged. They agree on engaging it first.</p>
+
+        <p>The diaphragm is the Eva's largest single mechanism the pilot can directly move. It is the most direct lever the system has. The first practice in every tradition is to find it, free it, and learn to move it cleanly.</p>
+      </div>
+
+      <div class="mech-figure">
+        <span class="corner tl"></span><span class="corner br"></span>
+        <div class="mech-figure-label">[ FIG.06 ] <span class="id">// FASCIAL CONTINUITY</span></div>
+
+        <svg viewBox="0 0 400 520" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="diaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#C7FF43" stop-opacity="0.7"/>
+              <stop offset="100%" stop-color="#C7FF43" stop-opacity="0.3"/>
+            </linearGradient>
+          </defs>
+
+          <text x="200" y="30" font-family="DM Mono" font-size="9" fill="#6B6F78" text-anchor="middle" letter-spacing="2">[ DIAPHRAGM // SAGITTAL ]</text>
+
+          <!-- Body silhouette -->
+          <g stroke="#2A2F3A" stroke-width="1" fill="none" opacity="0.6">
+            <circle cx="200" cy="60" r="22"/>
+            <line x1="200" y1="82" x2="200" y2="105"/>
+            <line x1="170" y1="115" x2="230" y2="115"/>
+            <path d="M 175 115 Q 170 250 175 380"/>
+            <path d="M 225 115 Q 230 250 225 380"/>
+            <line x1="175" y1="380" x2="225" y2="380"/>
+            <path d="M 180 380 Q 180 440 195 470"/>
+            <path d="M 220 380 Q 220 440 205 470"/>
+            <line x1="195" y1="470" x2="205" y2="470"/>
+          </g>
+
+          <!-- Pericardium / heart -->
+          <g>
+            <path d="M 192 175 Q 185 170 188 180 Q 195 195 200 200 Q 205 195 212 180 Q 215 170 208 175 Q 200 165 192 175 Z"
+                  fill="none" stroke="#FF6B1A" stroke-width="1" opacity="0.6"/>
+            <ellipse cx="200" cy="183" rx="22" ry="22" fill="none" stroke="#FF6B1A" stroke-width="0.6" stroke-dasharray="2 3" opacity="0.5"/>
+            <text x="240" y="180" font-family="DM Mono" font-size="9" fill="#FF6B1A" letter-spacing="1">PERICARDIUM</text>
+          </g>
+
+          <!-- Diaphragm (dome) -->
+          <g>
+            <path d="M 175 235 Q 200 215 225 235 Q 222 245 200 250 Q 178 245 175 235 Z"
+                  fill="url(#diaGrad)" stroke="#C7FF43" stroke-width="1.5"/>
+            <text x="240" y="235" font-family="DM Mono" font-size="11" fill="#C7FF43" letter-spacing="1.5">DIAPHRAGM</text>
+            <text x="240" y="248" font-family="DM Mono" font-size="8" fill="#6B6F78" letter-spacing="1">primary engine</text>
+          </g>
+
+          <!-- Crus of diaphragm (descending fibers) -->
+          <g opacity="0.5">
+            <path d="M 185 250 Q 188 290 192 320" stroke="#C7FF43" stroke-width="1" fill="none"/>
+            <path d="M 215 250 Q 212 290 208 320" stroke="#C7FF43" stroke-width="1" fill="none"/>
+            <text x="160" y="295" font-family="DM Mono" font-size="8" fill="#C7FF43" text-anchor="end" letter-spacing="1">crus →</text>
+          </g>
+
+          <!-- Psoas -->
+          <g>
+            <path d="M 188 320 Q 185 380 195 450" stroke="#43E5FF" stroke-width="1.5" fill="none" opacity="0.7"/>
+            <path d="M 212 320 Q 215 380 205 450" stroke="#43E5FF" stroke-width="1.5" fill="none" opacity="0.7"/>
+            <text x="240" y="380" font-family="DM Mono" font-size="9" fill="#43E5FF" letter-spacing="1">PSOAS</text>
+            <text x="240" y="392" font-family="DM Mono" font-size="8" fill="#6B6F78" letter-spacing="1">→ hip / spine</text>
+          </g>
+
+          <!-- Pelvic floor -->
+          <g>
+            <path d="M 180 470 Q 200 478 220 470" stroke="#FF6B1A" stroke-width="1.5" fill="none" opacity="0.7"/>
+            <text x="240" y="475" font-family="DM Mono" font-size="9" fill="#FF6B1A" letter-spacing="1">PELVIC FLOOR</text>
+          </g>
+
+          <!-- Cervical fascia upward -->
+          <g opacity="0.5">
+            <line x1="200" y1="215" x2="200" y2="100" stroke="#C77DFF" stroke-width="0.8" stroke-dasharray="3 3"/>
+            <text x="155" y="130" font-family="DM Mono" font-size="8" fill="#C77DFF" text-anchor="end" letter-spacing="1">cervical fascia</text>
+            <text x="155" y="142" font-family="DM Mono" font-size="8" fill="#6B6F78" text-anchor="end" letter-spacing="1">→ skull base</text>
+          </g>
+
+          <!-- Phrenic nerve -->
+          <g opacity="0.6">
+            <line x1="200" y1="115" x2="200" y2="225" stroke="#C7FF43" stroke-width="0.6" stroke-dasharray="1 3"/>
+            <text x="160" y="160" font-family="DM Mono" font-size="7" fill="#C7FF43" text-anchor="end" letter-spacing="1">phrenic n.</text>
+          </g>
+
+          <!-- Annotation strip -->
+          <g transform="translate(50, 490)">
+            <text x="0" y="0" font-family="DM Mono" font-size="9" fill="#C7FF43" letter-spacing="1.5">// ONE ORGAN — FOUR SYSTEMS</text>
+            <text x="0" y="12" font-family="DM Mono" font-size="8" fill="#6B6F78" letter-spacing="1">RESPIRATION · POSTURE · CIRCULATION · INTEROCEPTION</text>
+          </g>
+        </svg>
+
+        <div class="mech-readout">
+          <div><span class="k">// roles:</span> <span class="v">RESP + POSTURAL</span></div>
+          <div><span class="k">// continuity:</span> <span class="v">PSOAS / PERICARDIUM</span></div>
+          <div><span class="k">// innervation:</span> <span class="v">PHRENIC + AFFERENTS</span></div>
+          <div><span class="k">// first.practice:</span> <span class="v">UNIVERSAL</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================
+       SYNTHESIS
+       ================================================ -->
+  <section class="synthesis">
+    <span class="corner tl"></span><span class="corner tr"></span>
+    <span class="corner bl"></span><span class="corner br"></span>
+    <div class="synthesis-label">// SYNTHESIS // INTEGRATED VIEW</div>
+    <h3>The Bridge, <strong>Disassembled</strong></h3>
+    <div class="synthesis-body">
+      <p>Six mechanisms, one bridge. Slow nasal breathing engages the <em>preBötC arousal-coupling circuit</em>, which dials the locus coeruleus down. The lengthened exhale raises <em>baroreceptor and pulmonary stretch firing</em>, surging afferent vagal traffic upward and pulling the system toward parasympathetic dominance. Sustained mild air hunger raises <em>CO₂ tolerance</em>, which through the Bohr effect delivers more oxygen to the tissues that need it. Nasal involvement supplies <em>nitric oxide</em> to the lungs, improving vascular and perfusion dynamics. Attention to the felt sense of breath trains the <em>insula</em>, building the interoceptive accuracy that underlies emotional regulation. And all of this is mediated by the <em>diaphragm</em> — the one large skeletal muscle the conscious mind can directly command, fascially continuous with the psoas, the pericardium, the pelvic floor, the cervical fascia.</p>
+
+      <p>This is the structure of the bridge. The yogis described it in terms of currents and channels and fires. The neuroscience describes it in terms of circuits and receptors and partial pressures. Both maps converge on the same operational truth: <em>breath is the lever the pilot can reach. The Eva responds to nothing else with such precision.</em></p>
+    </div>
+  </section>
+
+  <!-- TELEOLOGY -->
+  <section class="teleology">
+    <span class="corner tl"></span><span class="corner tr"></span>
+    <span class="corner bl"></span><span class="corner br"></span>
+    <div class="teleology-label">// ADVISORY // TELEOLOGY_PROTOCOL</div>
+    <h3 class="teleology-title">On <strong>Knowing</strong> the Mechanism</h3>
+    <div class="teleology-body">
+      <p>The risk of knowing the mechanism is the risk of every map: mistaking the map for the territory. The pilot who has memorized the preBötC, the Bohr curve, and the insular pathways can still breathe shallowly through every meeting of every day, oxygen-starving the same tissues these mechanisms were prescribed to help.</p>
+      <p>The Adlerian question persists at the mechanism layer. Knowing the science can serve <em>genuine inquiry</em> — a way to verify what the body reports, to deepen practice through understanding. Or it can serve <em>intellectual bypass</em> — collecting concepts as a substitute for actually breathing, knowing about regulation in place of being regulated.</p>
+      <p>The mechanism is real. The lever is real. <em>The lever does not pull itself.</em></p>
+    </div>
+  </section>
+
+  <!-- Nav -->
+  <div class="nav-back">
+    <a href="./the-bridge-between-worlds.html" class="nav-link">← RETURN TO BRIDGE</a>
+    <a href="./the-map-of-prana.html" class="nav-link">NODE_02: MAP OF PRANA →</a>
+  </div>
+
+  <footer class="footer">
+    <div>// THE ATHANOR / OPERATIONS_MANUAL / <span class="athanor">SCIENCE_OF_BREATH</span></div>
+    <div>FILE_01 // END_OF_TRANSMISSION</div>
+  </footer>
+
+</div>
+
+<script>
+  // CO2 toggle interactivity
+  const co2States = {
+    resting: {
+      title: '// STATE: RESTING (NORMAL)',
+      body: 'CO₂ ~40 mmHg. Hemoglobin saturation ~98%. Bohr effect normal — oxygen releases to tissues efficiently as blood encounters CO₂-rich cellular environments. The system is in homeostasis. Breath rate ~12-16 per minute.'
+    },
+    hyperventilation: {
+      title: '// STATE: HYPERVENTILATION (OVER-BREATHING)',
+      body: 'CO₂ drops below 35 mmHg. Hemoglobin saturation remains high — but the curve shifts left. Hemoglobin clings to oxygen. Tissues, including the brain, receive LESS O₂ despite the blood being full of it. Result: lightheadedness, tingling, derealization. The altered state is cerebral hypoxia, not transcendence.'
+    },
+    trained: {
+      title: '// STATE: CO₂ TRAINED (TOLERANT)',
+      body: 'Baseline CO₂ elevated through sustained practice (slow nasal breathing, retentions, mild air hunger). The Bohr curve sits favorably right-shifted. Tissues receive more O₂ per breath. Resting breath rate drops to 6-10 per minute. The system has been recalibrated toward efficiency.'
+    }
+  };
+
+  document.querySelectorAll('.co2-toggle button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.co2-toggle button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const state = co2States[btn.dataset.state];
+      document.getElementById('co2State').innerHTML = `
+        <div class="co2-state-title">${state.title}</div>
+        <div class="co2-state-body">${state.body}</div>
+      `;
+    });
+  });
+
+  // Smooth-scroll already handled via CSS
+</script>
+
+</body>
+</html>

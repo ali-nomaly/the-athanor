@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Family Sourdough — A Rich, Hearty Loaf</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #f5ede0;
+    --warm-white: #fdf8f2;
+    --crust: #8b4513;
+    --dark-crust: #5c2e00;
+    --golden: #c8860a;
+    --amber: #e6a020;
+    --char: #1a1008;
+    --mid: #5a3e28;
+    --soft: #a07850;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background-color: var(--cream);
+    color: var(--char);
+    font-family: 'Crimson Text', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.7;
+    background-image:
+      radial-gradient(ellipse at 20% 10%, rgba(200,134,10,0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 90%, rgba(139,69,19,0.07) 0%, transparent 50%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  }
+
+  .page {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 60px 30px 100px;
+  }
+
+  /* HEADER */
+  header {
+    text-align: center;
+    margin-bottom: 70px;
+    position: relative;
+  }
+
+  .header-ornament {
+    font-size: 28px;
+    color: var(--golden);
+    letter-spacing: 12px;
+    margin-bottom: 20px;
+    opacity: 0.7;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(42px, 8vw, 72px);
+    font-weight: 700;
+    color: var(--dark-crust);
+    line-height: 1.05;
+    margin-bottom: 12px;
+    letter-spacing: -1px;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--crust);
+  }
+
+  .subtitle {
+    font-family: 'Crimson Text', serif;
+    font-style: italic;
+    font-size: 20px;
+    color: var(--soft);
+    margin-bottom: 30px;
+  }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    justify-content: center;
+    margin: 24px 0;
+  }
+
+  .divider-line {
+    height: 1px;
+    width: 80px;
+    background: linear-gradient(90deg, transparent, var(--golden), transparent);
+  }
+
+  .divider-icon { color: var(--golden); font-size: 18px; }
+
+  /* INTRO */
+  .intro-block {
+    background: linear-gradient(135deg, rgba(139,69,19,0.06), rgba(200,134,10,0.04));
+    border-left: 3px solid var(--golden);
+    padding: 24px 28px;
+    border-radius: 0 12px 12px 0;
+    margin-bottom: 60px;
+    font-style: italic;
+    font-size: 19px;
+    color: var(--mid);
+  }
+
+  /* INGREDIENTS */
+  .section-label {
+    font-family: 'Playfair Display', serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--golden);
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 34px;
+    color: var(--dark-crust);
+    margin-bottom: 28px;
+    font-style: italic;
+  }
+
+  .ingredients-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 60px;
+  }
+
+  @media(max-width: 540px) {
+    .ingredients-grid { grid-template-columns: 1fr; }
+  }
+
+  .ingredient-card {
+    background: var(--warm-white);
+    border: 1px solid rgba(139,69,19,0.12);
+    border-radius: 12px;
+    padding: 18px 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: box-shadow 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ingredient-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, var(--amber), var(--crust));
+    border-radius: 12px 0 0 12px;
+  }
+
+  .ingredient-name {
+    font-size: 17px;
+    color: var(--char);
+    font-weight: 600;
+  }
+
+  .ingredient-note {
+    font-size: 13px;
+    font-style: italic;
+    color: var(--soft);
+    margin-top: 2px;
+  }
+
+  .ingredient-amount {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--crust);
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .ingredient-unit {
+    font-size: 13px;
+    font-style: italic;
+    color: var(--soft);
+    display: block;
+    text-align: right;
+  }
+
+  .starter-note {
+    background: rgba(200,134,10,0.08);
+    border: 1px dashed var(--amber);
+    border-radius: 10px;
+    padding: 16px 20px;
+    font-size: 16px;
+    color: var(--mid);
+    font-style: italic;
+    margin-bottom: 60px;
+  }
+
+  /* STEPS */
+  .steps-section { margin-bottom: 60px; }
+
+  .step {
+    display: grid;
+    grid-template-columns: 72px 1fr;
+    gap: 24px;
+    margin-bottom: 48px;
+    position: relative;
+  }
+
+  .step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 35px;
+    top: 72px;
+    bottom: -24px;
+    width: 2px;
+    background: linear-gradient(180deg, var(--golden), transparent);
+  }
+
+  .step-number {
+    width: 72px;
+    height: 72px;
+    background: linear-gradient(135deg, var(--crust), var(--dark-crust));
+    color: var(--cream);
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 4px 16px rgba(139,69,19,0.3);
+    font-family: 'Playfair Display', serif;
+  }
+
+  .step-num-text {
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .step-num-label {
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+
+  .step-content { padding-top: 6px; }
+
+  .step-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--dark-crust);
+    margin-bottom: 8px;
+  }
+
+  .step-time {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(200,134,10,0.1);
+    color: var(--golden);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+  }
+
+  .step-body {
+    color: var(--mid);
+    font-size: 17px;
+    line-height: 1.75;
+  }
+
+  .step-tip {
+    display: flex;
+    gap: 10px;
+    background: rgba(139,69,19,0.06);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-top: 12px;
+    font-size: 15px;
+    color: var(--soft);
+    font-style: italic;
+  }
+
+  .step-tip::before {
+    content: '✦';
+    color: var(--amber);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* VISUAL TIMELINE */
+  .timeline {
+    background: var(--dark-crust);
+    border-radius: 16px;
+    padding: 36px 32px;
+    margin-bottom: 60px;
+    color: var(--cream);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 80% 20%, rgba(200,134,10,0.15), transparent 60%);
+    pointer-events: none;
+  }
+
+  .timeline-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    margin-bottom: 28px;
+    color: var(--amber);
+    font-style: italic;
+  }
+
+  .timeline-row {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    margin-bottom: 8px;
+  }
+
+  .tl-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    padding: 10px 8px;
+    font-size: 12px;
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    line-height: 1.3;
+    color: var(--dark-crust);
+  }
+
+  .tl-block strong { font-size: 10px; font-family: 'Crimson Text', serif; font-style: normal; letter-spacing: 1px; display: block; margin-bottom: 2px; opacity: 0.8; }
+
+  .tl-feed     { background: #e8c87a; flex: 1; }
+  .tl-mix      { background: #d4a843; flex: 0.8; }
+  .tl-fold     { background: #c8860a; color: var(--cream); flex: 1.5; }
+  .tl-bulk     { background: #8b5e1a; color: var(--cream); flex: 2.5; }
+  .tl-shape    { background: #c8860a; color: var(--cream); flex: 0.5; }
+  .tl-proof    { background: #5c3010; color: var(--cream); flex: 3; }
+  .tl-bake     { background: #e63a00; color: var(--cream); flex: 1.2; }
+  .tl-cool     { background: #a07850; color: var(--cream); flex: 1; }
+
+  .tl-gap { width: 4px; flex-shrink: 0; }
+
+  .tl-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    font-size: 12px;
+    color: rgba(245,237,224,0.5);
+    font-style: italic;
+  }
+
+  /* TROUBLESHOOT */
+  .trouble-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 60px;
+  }
+
+  @media(max-width: 540px) {
+    .trouble-grid { grid-template-columns: 1fr; }
+  }
+
+  .trouble-card {
+    background: var(--warm-white);
+    border: 1px solid rgba(139,69,19,0.1);
+    border-radius: 12px;
+    padding: 18px 20px;
+  }
+
+  .trouble-problem {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    color: var(--crust);
+    font-style: italic;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .trouble-fix {
+    font-size: 15px;
+    color: var(--mid);
+    line-height: 1.6;
+  }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    color: var(--soft);
+    font-style: italic;
+    font-size: 16px;
+    padding-top: 40px;
+    border-top: 1px solid rgba(139,69,19,0.15);
+  }
+
+  .footer-ornament {
+    font-size: 32px;
+    display: block;
+    margin-bottom: 12px;
+  }
+
+  /* BREAD ILLUSTRATION (CSS only) */
+  .bread-illustration {
+    display: flex;
+    justify-content: center;
+    margin: 40px 0 60px;
+  }
+
+  .bread-svg-wrap {
+    position: relative;
+    width: 260px;
+    height: 160px;
+  }
+
+  .loaf {
+    position: absolute;
+    bottom: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 220px; height: 130px;
+    background: linear-gradient(160deg, #c8860a 0%, #8b4513 40%, #5c2e00 100%);
+    border-radius: 110px 110px 30px 30px;
+    box-shadow: 0 8px 32px rgba(92,46,0,0.4), inset 0 -8px 20px rgba(0,0,0,0.2);
+  }
+
+  .loaf::before {
+    content: '';
+    position: absolute;
+    top: 18px; left: 50%;
+    transform: translateX(-50%) rotate(-8deg);
+    width: 140px; height: 18px;
+    background: rgba(0,0,0,0.18);
+    border-radius: 50%;
+    filter: blur(3px);
+  }
+
+  .score {
+    position: absolute;
+    top: 28px; left: 50%;
+    transform: translateX(-50%) rotate(-5deg);
+    width: 120px; height: 3px;
+    background: rgba(0,0,0,0.25);
+    border-radius: 2px;
+    box-shadow: 0 10px 0 rgba(0,0,0,0.15), 0 -10px 0 rgba(0,0,0,0.1);
+  }
+
+  .steam {
+    position: absolute;
+    bottom: 130px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 20px;
+  }
+
+  .steam-line {
+    width: 3px;
+    height: 30px;
+    background: linear-gradient(to top, rgba(200,134,10,0.4), transparent);
+    border-radius: 2px;
+    animation: steam-rise 2s ease-in-out infinite;
+  }
+
+  .steam-line:nth-child(2) { animation-delay: 0.4s; height: 22px; }
+  .steam-line:nth-child(3) { animation-delay: 0.8s; height: 26px; }
+
+  @keyframes steam-rise {
+    0% { transform: scaleY(0); opacity: 0; }
+    40% { opacity: 1; }
+    100% { transform: scaleY(1) translateY(-10px); opacity: 0; }
+  }
+
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-ornament">✦ ✦ ✦</div>
+    <h1>Family<br><em>Sourdough</em></h1>
+    <div class="subtitle">A rich, hearty loaf — the way it's meant to be</div>
+    <div class="divider">
+      <div class="divider-line"></div>
+      <div class="divider-icon">🌾</div>
+      <div class="divider-line"></div>
+    </div>
+    <p style="color:var(--soft); font-style:italic; font-size:16px;">Yields 1 large loaf &nbsp;·&nbsp; About 24 hours total &nbsp;·&nbsp; Feeds 6–8</p>
+  </header>
+
+  <!-- BREAD ILLUSTRATION -->
+  <div class="bread-illustration">
+    <div class="bread-svg-wrap">
+      <div class="steam">
+        <div class="steam-line"></div>
+        <div class="steam-line"></div>
+        <div class="steam-line"></div>
+      </div>
+      <div class="loaf">
+        <div class="score"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INTRO -->
+  <div class="intro-block">
+    This is the kind of bread that fills a kitchen with warmth and takes over the whole day in the best way. No shortcuts — just flour, water, salt, and a living starter doing what they've done for thousands of years. Dark crust. Chewy crumb. The real thing.
+  </div>
+
+  <!-- INGREDIENTS -->
+  <div class="section-label">What You'll Need</div>
+  <div class="section-title">Ingredients</div>
+
+  <div class="ingredients-grid">
+    <div class="ingredient-card">
+      <div>
+        <div class="ingredient-name">Bread Flour</div>
+        <div class="ingredient-note">or all-purpose, unbleached</div>
+      </div>
+      <div>
+        <div class="ingredient-amount">450g</div>
+        <div class="ingredient-unit">~3½ cups</div>
+      </div>
+    </div>
+    <div class="ingredient-card">
+      <div>
+        <div class="ingredient-name">Warm Water</div>
+        <div class="ingredient-note">80–85°F / lukewarm</div>
+      </div>
+      <div>
+        <div class="ingredient-amount">325g</div>
+        <div class="ingredient-unit">~1⅓ cups</div>
+      </div>
+    </div>
+    <div class="ingredient-card">
+      <div>
+        <div class="ingredient-name">Active Starter</div>
+        <div class="ingredient-note">bubbly &amp; at peak</div>
+      </div>
+      <div>
+        <div class="ingredient-amount">90g</div>
+        <div class="ingredient-unit">~⅓ cup</div>
+      </div>
+    </div>
+    <div class="ingredient-card">
+      <div>
+        <div class="ingredient-name">Fine Sea Salt</div>
+        <div class="ingredient-note">not table salt</div>
+      </div>
+      <div>
+        <div class="ingredient-amount">10g</div>
+        <div class="ingredient-unit">~1¾ tsp</div>
+      </div>
+    </div>
+    <div class="ingredient-card" style="grid-column: 1/-1;">
+      <div>
+        <div class="ingredient-name">Olive Oil <span style="font-weight:400; color:var(--soft);">or melted butter</span></div>
+        <div class="ingredient-note">for richness — the family secret</div>
+      </div>
+      <div>
+        <div class="ingredient-amount">20g</div>
+        <div class="ingredient-unit">~1½ tbsp</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="starter-note">
+    🌱 <strong>Starter tip:</strong> Feed your starter 8–12 hours before you plan to mix the dough. It should be bubbly, doubled in size, and smell pleasantly tangy — like yogurt or beer, not sharp or alcoholic.
+  </div>
+
+  <!-- VISUAL TIMELINE -->
+  <div class="timeline">
+    <div class="timeline-title">Your Day at a Glance</div>
+    <div class="timeline-row">
+      <div class="tl-block tl-feed"><strong>Evening</strong>Feed starter</div>
+      <div class="tl-gap"></div>
+      <div class="tl-block tl-mix"><strong>Morning</strong>Mix dough</div>
+      <div class="tl-gap"></div>
+      <div class="tl-block tl-fold"><strong>+30 min</strong>Stretch &amp; fold</div>
+      <div class="tl-gap"></div>
+      <div class="tl-block tl-bulk"><strong>4–6 hrs</strong>Bulk ferment</div>
+      <div class="tl-gap"></div>
+      <div class="tl-block tl-shape"><strong>15 min</strong>Shape</div>
+      <div class="tl-gap"></div>
+      <div class="tl-block tl-proof"><strong>8–12 hrs</strong>Cold proof</div>
+      <div class="tl-gap"></div>
+      <div class="tl-block tl-bake"><strong>50 min</strong>Bake</div>
+      <div class="tl-gap"></div>
+      <div class="tl-block tl-cool"><strong>1+ hr</strong>Cool</div>
+    </div>
+    <div class="tl-labels">
+      <span>Night before</span>
+      <span>Next morning</span>
+      <span>Afternoon</span>
+      <span>Evening — bread! 🍞</span>
+    </div>
+  </div>
+
+  <!-- STEPS -->
+  <div class="section-label">The Method</div>
+  <div class="section-title">Step by Step</div>
+
+  <div class="steps-section">
+
+    <div class="step">
+      <div class="step-number">
+        <div class="step-num-text">01</div>
+        <div class="step-num-label">Mix</div>
+      </div>
+      <div class="step-content">
+        <div class="step-title">Autolyse — Let the flour wake up</div>
+        <div class="step-time">⏱ 30–60 minutes</div>
+        <div class="step-body">
+          In a large bowl, combine the flour and <strong>300g of the water</strong> (hold back 25g). Mix with your hands until no dry flour remains — it'll be shaggy and rough, that's perfect. Cover and rest for 30–60 minutes. This rest hydrates the flour and starts building gluten with zero effort.
+        </div>
+        <div class="step-tip">Don't skip this rest. It makes the dough dramatically easier to work and the crumb more open.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-number">
+        <div class="step-num-text">02</div>
+        <div class="step-num-label">Build</div>
+      </div>
+      <div class="step-content">
+        <div class="step-title">Add starter, salt &amp; oil</div>
+        <div class="step-time">⏱ 10 minutes</div>
+        <div class="step-body">
+          Pour the active starter over the dough. Dissolve the salt in the remaining 25g water and add it too. Add the olive oil. Squeeze and fold everything together with your hands — it'll feel slippery and messy for a minute, then it'll come together. Work it until fully incorporated.
+        </div>
+        <div class="step-tip">Adding salt and starter separately gives you more control over fermentation timing. Salt after starter is the classic method.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-number">
+        <div class="step-num-text">03</div>
+        <div class="step-num-label">Fold</div>
+      </div>
+      <div class="step-content">
+        <div class="step-title">Stretch &amp; fold — build the structure</div>
+        <div class="step-time">⏱ 4 sets over 2 hours</div>
+        <div class="step-body">
+          Every 30 minutes for the first 2 hours, do one set of stretch &amp; folds: wet your hand, grab one side of the dough, stretch it up as high as it'll go without tearing, and fold it over the center. Rotate the bowl 90° and repeat — four stretches total per set. 4 sets, then leave it alone.
+        </div>
+        <div class="step-tip">This is your workout and the dough's workout. Each set you'll feel it getting stronger, smoother, and more elastic.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-number">
+        <div class="step-num-text">04</div>
+        <div class="step-num-label">Rise</div>
+      </div>
+      <div class="step-content">
+        <div class="step-title">Bulk fermentation — let it live</div>
+        <div class="step-time">⏱ 4–6 hours at room temp</div>
+        <div class="step-body">
+          Cover the bowl and leave it at room temperature (ideally 75–78°F). The dough is done with bulk when it's grown 50–75%, looks domed and jiggly, and you can see bubbles on the sides. In a warm kitchen this takes 4 hours. In a cool one, up to 6 or more. Trust the dough, not the clock.
+        </div>
+        <div class="step-tip">Warmer kitchen = faster ferment. Cooler = slower and usually more flavor. Both work. Watch the dough, not the clock.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-number">
+        <div class="step-num-text">05</div>
+        <div class="step-num-label">Shape</div>
+      </div>
+      <div class="step-content">
+        <div class="step-title">Shape into a boule</div>
+        <div class="step-time">⏱ 10–15 minutes</div>
+        <div class="step-body">
+          Flour your counter lightly. Gently turn the dough out — don't punch it down. Using a bench scraper, fold the edges toward the center all around, then flip it seam-side down. Cup your hands around the back and drag it toward you to build surface tension. It should feel taut and round. Let it rest 20 minutes uncovered (bench rest), then do a final shape: fold edges to center again, flip seam-down into a floured banneton (or a bowl lined with a well-floured kitchen towel).
+        </div>
+        <div class="step-tip">Semolina or rice flour in the banneton prevents sticking far better than bread flour.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-number">
+        <div class="step-num-text">06</div>
+        <div class="step-num-label">Proof</div>
+      </div>
+      <div class="step-content">
+        <div class="step-title">Cold proof overnight</div>
+        <div class="step-time">⏱ 8–16 hours in the fridge</div>
+        <div class="step-body">
+          Cover the banneton with plastic wrap or a shower cap and refrigerate overnight — or up to 16 hours. The cold slows fermentation way down and develops deep, complex flavor. This is also what makes the dough easier to score cleanly. You can bake it straight from the fridge.
+        </div>
+        <div class="step-tip">This is where patience pays you back in flavor. Longer cold proof = more tang and complexity.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-number">
+        <div class="step-num-text">07</div>
+        <div class="step-num-label">Bake</div>
+      </div>
+      <div class="step-content">
+        <div class="step-title">Bake in a hot Dutch oven</div>
+        <div class="step-time">⏱ 20 min covered + 25–30 min uncovered</div>
+        <div class="step-body">
+          Place your Dutch oven in the oven and preheat to <strong>500°F (260°C)</strong> for at least 45 minutes — it must be scorching hot. Turn the cold dough out onto parchment, score the top with a razor or sharp knife at a 45° angle (one confident slash, ½ inch deep). Lift by the parchment into the Dutch oven. Cover and bake 20 minutes. Remove lid, reduce to 450°F, bake another 25–30 minutes until the crust is deeply dark — don't be shy. Dark crust = deep flavor.
+        </div>
+        <div class="step-tip">The covered phase traps steam so the bread springs up. The uncovered phase builds the crust. Both matter equally.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-number">
+        <div class="step-num-text">08</div>
+        <div class="step-num-label">Rest</div>
+      </div>
+      <div class="step-content">
+        <div class="step-title">The hardest step: wait</div>
+        <div class="step-time">⏱ At least 1 hour, ideally 2</div>
+        <div class="step-body">
+          Pull the loaf from the Dutch oven and set it on a wire rack. Do not cut it. The crumb is still setting — cutting it hot makes it gummy and ruins everything you've built. Let it cool fully. You'll hear it crackle and sing as the crust settles. That sound is the reward.
+        </div>
+        <div class="step-tip">Waiting is genuinely the hardest part of this whole process. It's also non-negotiable. The bread needs this.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TROUBLESHOOT -->
+  <div class="section-label">When Things Go Sideways</div>
+  <div class="section-title">Troubleshooting</div>
+  <div class="trouble-grid">
+    <div class="trouble-card">
+      <div class="trouble-problem">🧱 Dense, heavy crumb</div>
+      <div class="trouble-fix">Starter wasn't active enough, or bulk ferment was too short. Your starter should float in water when it's ready.</div>
+    </div>
+    <div class="trouble-card">
+      <div class="trouble-problem">🫓 Flat loaf, no oven spring</div>
+      <div class="trouble-fix">Over-fermented — the dough went past its peak. In warm weather, reduce bulk time or use less starter.</div>
+    </div>
+    <div class="trouble-card">
+      <div class="trouble-problem">😶 No sour flavor</div>
+      <div class="trouble-fix">Longer cold proof = more tang. Try 16 hours instead of 8. A cooler room during bulk also builds more acid.</div>
+    </div>
+    <div class="trouble-card">
+      <div class="trouble-problem">🔪 Score blew out weird</div>
+      <div class="trouble-fix">Score quickly and confidently at 45°. Dull blade drags and tears. Use a lame or a brand-new razor blade.</div>
+    </div>
+    <div class="trouble-card">
+      <div class="trouble-problem">💧 Dough too sticky to work</div>
+      <div class="trouble-fix">Wet hands always — never add more flour. Sticky is normal. The stretch &amp; folds will tighten it up as gluten builds.</div>
+    </div>
+    <div class="trouble-card">
+      <div class="trouble-problem">🌑 Crust too pale</div>
+      <div class="trouble-fix">Bake longer uncovered, or push oven temp higher. A pale crust almost always means underbaked. Go darker than you think.</div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <span class="footer-ornament">🍞</span>
+    Every loaf teaches you something. Even the failures are edible.<br>
+    <span style="font-size:14px; opacity:0.6; margin-top:8px; display:block;">Write the date on your loaf photo. You'll want to remember your first perfect one.</span>
+  </footer>
+
+</div>
+</body>
+</html>
