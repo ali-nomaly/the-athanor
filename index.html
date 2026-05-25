@@ -431,7 +431,7 @@ document.getElementById('panel-close').addEventListener('click', () => {
 
 panelBtn.addEventListener('click', () => {
   if (currentNode) {
-    sendPrompt('Open the Athanor entry: ' + currentNode.label + ' at ' + currentNode.path);
+    window.location.href = currentNode.path;
   }
 });
 
