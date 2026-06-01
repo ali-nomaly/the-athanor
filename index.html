@@ -53,7 +53,7 @@
     color: rgba(199,255,67,0.45);
     letter-spacing: 0.15em;
   }
-
+  
   #detail-panel {
     position: absolute;
     bottom: 0; right: 0;
@@ -166,6 +166,18 @@
   #corner-tr { top: 40px; right: 8px; border-width: 1px 1px 0 0; }
   #corner-bl { bottom: 8px; left: 8px; border-width: 0 0 1px 1px; }
   #corner-br { bottom: 8px; right: 8px; border-width: 0 1px 1px 0; }
+
+  #log-link {
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: rgba(199,255,67,0.45);
+  text-decoration: none;
+  text-transform: uppercase;
+  font-family: 'IBM Plex Mono', monospace;
+  transition: color 0.2s;
+}
+#log-link:hover { color: #C7FF43; }
+
 </style>
 
 <div id="athanor-root">
@@ -174,10 +186,11 @@
   <div id="corner-bl"></div>
   <div id="corner-br"></div>
 
-  <div id="header-bar">
-    <div id="header-title">THE ATHANOR</div>
-    <div id="header-meta">ARCHIVE // alinomali.com // MAGI:ACTIVE</div>
-  </div>
+<div id="header-bar">
+  <div id="header-title">THE ATHANOR</div>
+  <a href="/log/" id="log-link">THE LOG →</a>
+  <div id="header-meta">ARCHIVE // alinomali.com // MAGI:ACTIVE</div>
+</div>
 
   <canvas id="athanor-canvas"></canvas>
 
