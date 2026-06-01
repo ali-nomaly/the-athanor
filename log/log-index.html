@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THE LOG // ALI·VERSE</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  width: 100%; height: 100%;
+  background: #080808;
+  color: #C7FF43;
+  font-family: 'IBM Plex Mono', monospace;
+  overflow: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.12) 2px, rgba(0,0,0,0.12) 4px);
+  pointer-events: none;
+  z-index: 100;
+}
+
+#corner-tl, #corner-tr, #corner-bl, #corner-br {
+  position: fixed;
+  width: 16px; height: 16px;
+  border-color: rgba(199,255,67,0.35);
+  border-style: solid;
+  z-index: 200;
+}
+#corner-tl { top: 48px; left: 8px; border-width: 1px 0 0 1px; }
+#corner-tr { top: 48px; right: 8px; border-width: 1px 1px 0 0; }
+#corner-bl { bottom: 36px; left: 8px; border-width: 0 0 1px 1px; }
+#corner-br { bottom: 36px; right: 8px; border-width: 0 1px 1px 0; }
+
+#header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  border-bottom: 1px solid rgba(199,255,67,0.2);
+  background: rgba(8,8,8,0.95);
+  z-index: 150;
+}
+
+#header-left {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+}
+
+#header-right {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.nav-link {
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: rgba(199,255,67,0.45);
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+.nav-link:hover { color: #C7FF43; }
+
+#status-bar {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  border-top: 1px solid rgba(199,255,67,0.15);
+  background: rgba(8,8,8,0.95);
+  font-size: 8px;
+  letter-spacing: 0.18em;
+  color: rgba(199,255,67,0.3);
+  z-index: 150;
+}
+
+#filter-bar {
+  position: fixed;
+  top: 44px; left: 0; right: 0;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  gap: 16px;
+  border-bottom: 1px solid rgba(199,255,67,0.1);
+  background: rgba(8,8,8,0.9);
+  z-index: 140;
+}
+
+.filter-label {
+  font-size: 8px;
+  letter-spacing: 0.2em;
+  color: rgba(199,255,67,0.3);
+  text-transform: uppercase;
+}
+
+.tag-filter {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.15em;
+  background: transparent;
+  border: 1px solid rgba(199,255,67,0.2);
+  color: rgba(199,255,67,0.4);
+  padding: 3px 10px;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.2s;
+}
+.tag-filter:hover, .tag-filter.active {
+  border-color: #C7FF43;
+  color: #C7FF43;
+  background: rgba(199,255,67,0.07);
+}
+
+#scroll-container {
+  position: fixed;
+  top: 80px; bottom: 32px;
+  left: 0; right: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  display: flex;
+  align-items: center;
+  padding: 0 40px;
+  gap: 0;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(199,255,67,0.3) transparent;
+}
+
+#scroll-container::-webkit-scrollbar { height: 3px; }
+#scroll-container::-webkit-scrollbar-track { background: transparent; }
+#scroll-container::-webkit-scrollbar-thumb { background: rgba(199,255,67,0.3); }
+
+#entries-track {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 100%;
+  padding: 20px 0;
+}
+
+.entry-card {
+  flex-shrink: 0;
+  width: 300px;
+  height: calc(100% - 40px);
+  border: 1px solid rgba(199,255,67,0.2);
+  background: rgba(199,255,67,0.02);
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.entry-card:hover {
+  border-color: rgba(199,255,67,0.6);
+  background: rgba(199,255,67,0.05);
+}
+
+.entry-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: rgba(199,255,67,0.0);
+  transition: background 0.2s;
+}
+.entry-card:hover::before { background: #C7FF43; }
+
+.card-header {
+  padding: 16px 16px 12px;
+  border-bottom: 1px solid rgba(199,255,67,0.1);
+}
+
+.card-date {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  margin-bottom: 8px;
+}
+
+.card-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(199,255,67,0.9);
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
+.card-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  font-size: 7px;
+  letter-spacing: 0.2em;
+  padding: 2px 7px;
+  border: 1px solid rgba(199,255,67,0.3);
+  color: rgba(199,255,67,0.5);
+  text-transform: uppercase;
+}
+
+.tag.WRITING { border-color: rgba(199,255,67,0.4); color: rgba(199,255,67,0.7); }
+.tag.IMAGE { border-color: rgba(100,200,255,0.4); color: rgba(100,200,255,0.7); }
+.tag.ILLUSTRATION { border-color: rgba(255,150,100,0.4); color: rgba(255,150,100,0.7); }
+.tag.CHANGELOG { border-color: rgba(200,100,255,0.4); color: rgba(200,100,255,0.7); }
+
+.card-gloss {
+  padding: 14px 16px;
+  font-size: 10px;
+  color: rgba(199,255,67,0.4);
+  line-height: 1.8;
+  flex: 1;
+}
+
+.card-footer {
+  padding: 10px 16px;
+  border-top: 1px solid rgba(199,255,67,0.08);
+  font-size: 8px;
+  letter-spacing: 0.15em;
+  color: rgba(199,255,67,0.25);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.enter-arrow {
+  font-size: 10px;
+  color: rgba(199,255,67,0.3);
+  transition: color 0.2s, transform 0.2s;
+}
+.entry-card:hover .enter-arrow {
+  color: #C7FF43;
+  transform: translateX(4px);
+}
+
+#loading {
+  color: rgba(199,255,67,0.4);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+}
+
+.timeline-line {
+  flex-shrink: 0;
+  width: 40px;
+  height: 1px;
+  background: rgba(199,255,67,0.1);
+  position: relative;
+}
+.timeline-line::after {
+  content: '';
+  position: absolute;
+  right: 0; top: -3px;
+  width: 6px; height: 6px;
+  border-right: 1px solid rgba(199,255,67,0.3);
+  border-top: 1px solid rgba(199,255,67,0.3);
+  transform: rotate(45deg);
+}
+</style>
+</head>
+<body>
+
+<div id="corner-tl"></div>
+<div id="corner-tr"></div>
+<div id="corner-bl"></div>
+<div id="corner-br"></div>
+
+<header id="header">
+  <div id="header-left">THE LOG // ALI·VERSE</div>
+  <div id="header-right">
+    <a class="nav-link" href="https://alinomali.com">← ATHANOR</a>
+    <a class="nav-link" href="/">← INDEX</a>
+    <span class="nav-link" id="entry-count">LOADING...</span>
+  </div>
+</header>
+
+<div id="filter-bar">
+  <span class="filter-label">FILTER //</span>
+  <button class="tag-filter active" data-tag="ALL">ALL</button>
+  <button class="tag-filter" data-tag="WRITING">WRITING</button>
+  <button class="tag-filter" data-tag="IMAGE">IMAGE</button>
+  <button class="tag-filter" data-tag="ILLUSTRATION">ILLUSTRATION</button>
+  <button class="tag-filter" data-tag="CHANGELOG">CHANGELOG</button>
+</div>
+
+<div id="scroll-container">
+  <div id="entries-track">
+    <div id="loading">LOADING ENTRIES...</div>
+  </div>
+</div>
+
+<div id="status-bar">
+  <span>MAGI:ACTIVE // LOG:ONLINE</span>
+  <span id="status-date"></span>
+  <span>alinomali.neocities.org/log</span>
+</div>
+
+<script>
+document.getElementById('status-date').textContent = new Date().toISOString().slice(0,10).replace(/-/g,'.');
+
+let allEntries = [];
+let activeFilter = 'ALL';
+
+async function loadEntries() {
+  try {
+    const res = await fetch('/log/log.json');
+    const data = await res.json();
+    allEntries = data.entries.sort((a, b) => b.id.localeCompare(a.id));
+    renderEntries(allEntries);
+    document.getElementById('entry-count').textContent = allEntries.length + ' ENTRIES';
+  } catch(e) {
+    document.getElementById('loading').textContent = 'NO ENTRIES FOUND // LOG AWAITING FIRST TRANSMISSION';
+  }
+}
+
+function renderEntries(entries) {
+  const track = document.getElementById('entries-track');
+  track.innerHTML = '';
+
+  if (entries.length === 0) {
+    track.innerHTML = '<div id="loading">NO ENTRIES MATCH THIS FILTER</div>';
+    return;
+  }
+
+  entries.forEach((entry, i) => {
+    if (i > 0) {
+      const line = document.createElement('div');
+      line.className = 'timeline-line';
+      track.appendChild(line);
+    }
+
+    const card = document.createElement('div');
+    card.className = 'entry-card';
+    card.innerHTML = `
+      <div class="card-header">
+        <div class="card-date">${entry.date}</div>
+        <div class="card-title">${entry.title}</div>
+        <div class="card-tags">${entry.tags.map(t => `<span class="tag ${t}">${t}</span>`).join('')}</div>
+      </div>
+      <div class="card-gloss">${entry.gloss}</div>
+      <div class="card-footer">
+        <span>ENTRY // ${entry.id}</span>
+        <span class="enter-arrow">→</span>
+      </div>
+    `;
+    card.addEventListener('click', () => { window.location.href = entry.path; });
+    track.appendChild(card);
+  });
+}
+
+document.querySelectorAll('.tag-filter').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tag-filter').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeFilter = btn.dataset.tag;
+    const filtered = activeFilter === 'ALL'
+      ? allEntries
+      : allEntries.filter(e => e.tags.includes(activeFilter));
+    renderEntries(filtered);
+  });
+});
+
+loadEntries();
+</script>
+</body>
+</html>

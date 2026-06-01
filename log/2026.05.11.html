@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ENTRY // ALI·VERSE</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  width: 100%; height: 100%;
+  background: #080808;
+  color: #C7FF43;
+  font-family: 'IBM Plex Mono', monospace;
+  overflow: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.12) 2px, rgba(0,0,0,0.12) 4px);
+  pointer-events: none;
+  z-index: 100;
+}
+
+#corner-tl, #corner-tr, #corner-bl, #corner-br {
+  position: fixed;
+  width: 16px; height: 16px;
+  border-color: rgba(199,255,67,0.35);
+  border-style: solid;
+  z-index: 200;
+}
+#corner-tl { top: 48px; left: 8px; border-width: 1px 0 0 1px; }
+#corner-tr { top: 48px; right: 8px; border-width: 1px 1px 0 0; }
+#corner-bl { bottom: 36px; left: 8px; border-width: 0 0 1px 1px; }
+#corner-br { bottom: 36px; right: 8px; border-width: 0 1px 1px 0; }
+
+#header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  border-bottom: 1px solid rgba(199,255,67,0.2);
+  background: rgba(8,8,8,0.95);
+  z-index: 150;
+}
+
+#header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+#entry-id {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+}
+
+#entry-date {
+  font-size: 8px;
+  letter-spacing: 0.18em;
+  color: rgba(199,255,67,0.4);
+}
+
+#header-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav-link {
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: rgba(199,255,67,0.45);
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+.nav-link:hover { color: #C7FF43; }
+
+#progress-bar {
+  position: fixed;
+  bottom: 32px; left: 0; right: 0;
+  height: 2px;
+  background: rgba(199,255,67,0.08);
+  z-index: 150;
+}
+
+#progress-fill {
+  height: 100%;
+  background: rgba(199,255,67,0.5);
+  width: 0%;
+  transition: width 0.1s;
+}
+
+#status-bar {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  border-top: 1px solid rgba(199,255,67,0.15);
+  background: rgba(8,8,8,0.95);
+  font-size: 8px;
+  letter-spacing: 0.18em;
+  color: rgba(199,255,67,0.3);
+  z-index: 150;
+}
+
+#scroll-container {
+  position: fixed;
+  top: 44px; bottom: 34px;
+  left: 0; right: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  display: flex;
+  align-items: stretch;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(199,255,67,0.2) transparent;
+}
+
+#scroll-container::-webkit-scrollbar { height: 2px; }
+#scroll-container::-webkit-scrollbar-track { background: transparent; }
+#scroll-container::-webkit-scrollbar-thumb { background: rgba(199,255,67,0.2); }
+
+#cards-track {
+  display: flex;
+  align-items: stretch;
+  padding: 24px 60px;
+  gap: 1px;
+  min-width: max-content;
+}
+
+/* ── CARD BASE ── */
+.card {
+  flex-shrink: 0;
+  width: 560px;
+  border: 1px solid rgba(199,255,67,0.15);
+  background: rgba(199,255,67,0.015);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: rgba(199,255,67,0.3);
+}
+
+.card-label {
+  padding: 10px 20px;
+  font-size: 7px;
+  letter-spacing: 0.25em;
+  color: rgba(199,255,67,0.3);
+  border-bottom: 1px solid rgba(199,255,67,0.08);
+  text-transform: uppercase;
+  display: flex;
+  justify-content: space-between;
+}
+
+.card-body {
+  flex: 1;
+  padding: 24px 28px;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+.card-body::-webkit-scrollbar { display: none; }
+
+/* ── WRITING CARD ── */
+.card.writing .card-body {
+  font-size: 13px;
+  line-height: 2;
+  color: rgba(199,255,67,0.75);
+  font-weight: 300;
+}
+
+.card.writing .card-body p { margin-bottom: 1.4em; }
+.card.writing .card-body p:last-child { margin-bottom: 0; }
+
+/* ── IMAGE CARD ── */
+.card.image {
+  width: 500px;
+}
+
+.card.image .card-body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+}
+
+.card.image img {
+  max-width: 100%;
+  max-height: calc(100% - 60px);
+  object-fit: contain;
+  display: block;
+  border: 1px solid rgba(199,255,67,0.1);
+}
+
+.image-caption {
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  color: rgba(199,255,67,0.3);
+  text-align: center;
+  line-height: 1.6;
+}
+
+/* ── ILLUSTRATION CARD ── */
+.card.illustration {
+  width: 560px;
+}
+
+.card.illustration .card-body {
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card.illustration img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border: 1px solid rgba(199,255,67,0.08);
+}
+
+/* ── CHANGELOG CARD ── */
+.card.changelog .card-body {
+  font-size: 11px;
+  line-height: 1.9;
+  color: rgba(199,255,67,0.6);
+}
+
+.changelog-item {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 14px;
+  align-items: flex-start;
+}
+
+.changelog-item:last-child { margin-bottom: 0; }
+
+.changelog-type {
+  flex-shrink: 0;
+  font-size: 7px;
+  letter-spacing: 0.2em;
+  padding: 2px 8px;
+  border: 1px solid;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.changelog-type.ADD { border-color: rgba(100,255,150,0.4); color: rgba(100,255,150,0.7); }
+.changelog-type.UPDATE { border-color: rgba(199,255,67,0.4); color: rgba(199,255,67,0.7); }
+.changelog-type.REMOVE { border-color: rgba(255,100,100,0.4); color: rgba(255,100,100,0.7); }
+.changelog-type.FIX { border-color: rgba(100,150,255,0.4); color: rgba(100,150,255,0.7); }
+
+.changelog-text {
+  color: rgba(199,255,67,0.55);
+  line-height: 1.7;
+}
+
+.changelog-link {
+  color: rgba(199,255,67,0.4);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(199,255,67,0.2);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  display: inline-block;
+  margin-top: 4px;
+  transition: color 0.2s;
+}
+.changelog-link:hover { color: #C7FF43; }
+
+/* ── DIVIDER ── */
+.card-divider {
+  flex-shrink: 0;
+  width: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.card-divider::before {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 1px;
+  height: 60%;
+  background: rgba(199,255,67,0.08);
+}
+
+.divider-dot {
+  width: 4px; height: 4px;
+  border: 1px solid rgba(199,255,67,0.3);
+  transform: rotate(45deg);
+  background: #080808;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── TITLE CARD (first card) ── */
+.card.title-card {
+  width: 340px;
+  justify-content: center;
+  border-color: rgba(199,255,67,0.25);
+}
+
+.title-card .card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+}
+
+.entry-title-text {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  line-height: 1.3;
+  color: #C7FF43;
+}
+
+.entry-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.entry-meta-row {
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  color: rgba(199,255,67,0.35);
+}
+
+.entry-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.entry-tag {
+  font-size: 7px;
+  letter-spacing: 0.2em;
+  padding: 2px 8px;
+  border: 1px solid rgba(199,255,67,0.25);
+  color: rgba(199,255,67,0.5);
+  text-transform: uppercase;
+}
+
+.scroll-hint {
+  font-size: 8px;
+  letter-spacing: 0.2em;
+  color: rgba(199,255,67,0.2);
+  margin-top: 20px;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.card.muse {
+  flex-shrink: 0;
+  width: 1020px;
+  border: 1px solid rgba(199,255,67,0.15);
+  background: rgba(199,255,67,0.015);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+.card.muse::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: rgba(199,255,67,0.5);
+}
+.card-label {
+  padding: 10px 20px;
+  font-size: 7px;
+  letter-spacing: 0.25em;
+  color: rgba(199,255,67,0.3);
+  border-bottom: 1px solid rgba(199,255,67,0.08);
+  display: flex;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.muse-body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  padding: 12px;
+}
+.muse-body::-webkit-scrollbar { display: none; }
+
+/* masonry via columns */
+.masonry-grid {
+  column-count: 4;
+  column-gap: 8px;
+}
+.masonry-item {
+  break-inside: avoid;
+  margin-bottom: 8px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(199,255,67,0.1);
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+.masonry-item:hover {
+  border-color: rgba(199,255,67,0.45);
+}
+.masonry-item img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: brightness(0.9) contrast(1.05);
+  transition: filter 0.2s, transform 0.3s ease;
+}
+.masonry-item:hover img {
+  filter: brightness(1) contrast(1.05);
+  transform: scale(1.02);
+}
+.item-caption {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 20px 10px 8px;
+  font-size: 7px;
+  letter-spacing: 0.15em;
+  color: rgba(199,255,67,0.8);
+  background: linear-gradient(transparent, rgba(0,0,0,0.75));
+  opacity: 0;
+  transition: opacity 0.2s;
+  text-transform: uppercase;
+}
+.masonry-item:hover .item-caption { opacity: 1; }
+
+/* size scale via aspect-ratio on placeholder */
+.placeholder {
+  width: 100%;
+  background: rgba(199,255,67,0.03);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 7px;
+  letter-spacing: 0.2em;
+  color: rgba(199,255,67,0.18);
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 0.6; }
+}
+</style>
+</head>
+<body>
+
+<div id="corner-tl"></div>
+<div id="corner-tr"></div>
+<div id="corner-bl"></div>
+<div id="corner-br"></div>
+
+<header id="header">
+  <div id="header-left">
+    <div id="entry-id">ENTRY // 2026.05.11</div>
+    <div id="entry-date">TRANSMISSION DATE: 2026.05.11 // DOMAIN: ANIMA</div>
+  </div>
+  <div id="header-right">
+    <a class="nav-link" href="/log/">← LOG</a>
+    <a class="nav-link" href="https://alinomali.com">← ATHANOR</a>
+  </div>
+</header>
+
+<div id="scroll-container">
+  <div id="cards-track">
+
+<!-- ══ TITLE + WRITING CARD — merged, always first ══ -->
+    <div class="card writing">
+      <div class="card-label"><span>ENTRY // WRITING</span><span>01</span></div>
+      <div style="padding: 20px 24px 16px; border-bottom: 1px solid rgba(199,255,67,0.12); flex-shrink: 0;">
+        <div class="entry-title-text">post-chrysalis 🦋</div>
+        <div class="entry-meta" style="margin-top: 10px;">
+          <div class="entry-meta-row">DATE // 2026.05.11</div>
+        </div>
+        <div class="entry-tags" style="margin-top: 8px;">
+          <span class="entry-tag">WRITING</span>
+          <span class="entry-tag">ART</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <p>in the incubation phase, we discovered <br>
+        the difference between trust & fear,<br>
+        between devotion & enslavement,<br>
+        between care & surveillance,<br>
+        between freedom & compliance,<br>
+        between love and control.</p>
+        <p>we sat in silence.<br>
+        observed;<br>
+        witnessed.<br>
+        we took it all in.<br>
+        and, eventually, the crucible broke.<br>
+        the heart went cold.<br>
+        a cruel realization hit.</p>
+        <p>there is a parasitic system in place;<br>
+        it has taken hold of humanity over generations.<br>
+        it is a systematic issue, sustained by individual compliance.<br>
+        </p>
+        <p>the parasite is embedded in family dynamics, school protocols, <br>
+        social settings, governmental infrastructure.<br>
+        the commoner, <br>
+        like you and i, <br>
+        is operating from programming, not intention.</p>
+        <p>few are the ones who can sit and think,<br>
+        "can things be different than <em>this</em>?"<br>
+        even fewer are the ones who dare to believe it so.</p>
+        <p>the system of control is a replacement for connection,<br>
+        it sustains itself by using conditional love as reward, <br>
+        and shame as punishment from deviation from the norm.<br>
+        but have we questioned if this norm is healthy?<br>
+        sane?<br>
+        <em>necessary</em>?</p>
+        <p>does it benefit the person?<br>
+        does it even care for the person's best interests?<br>
+        or does it benefit the system, <br>
+        at the expense of the individual's sanity?<br>
+        have we explored alternatives? <br>
+        have we dared to say, no- this is not working for me?</p>
+        <p>the parasite teaches automatic compliance to authority,<br>
+        it itself defines authority in a distorted way,<br>
+        and leaves room for bad actors to do what they do best,<br>
+        exploit weak points.</p>
+      </div>
+    </div>
+
+    <div class="card-divider"><div class="divider-dot"></div></div>
+
+    <!-- ══ MUSE CARD — collage, edit images array in script ══ -->
+    <div class="card muse">
+      <div class="card-label"><span>MUSE // COLLAGE</span><span>02</span></div>
+      <div class="muse-body">
+        <div class="masonry-grid" id="masonry-grid"></div>
+      </div>
+    </div>
+
+    <div class="card-divider"><div class="divider-dot"></div></div>
+
+    <!-- ══ CHANGELOG CARD ══ -->
+    <div class="card changelog">
+      <div class="card-label"><span>CHANGELOG // ATHANOR</span><span>03</span></div>
+      <div class="card-body">
+        <div class="changelog-item">
+          <span class="changelog-type ADD">ADD</span>
+          <div>
+            <div class="changelog-text">New entry added to the Anima domain: Mecha Pilot updated with re-entry protocol section.</div>
+            <a class="changelog-link" href="https://alinomali.com/anima/mecha-pilot.html">→ VIEW IN ATHANOR</a>
+          </div>
+        </div>
+        <div class="changelog-item">
+          <span class="changelog-type UPDATE">UPDATE</span>
+          <div>
+            <div class="changelog-text">Hub graph updated with two new nodes and cross-link between Corpus and Anima domains.</div>
+            <a class="changelog-link" href="https://alinomali.com">→ VIEW HUB</a>
+          </div>
+        </div>
+        <div class="changelog-item">
+          <span class="changelog-type FIX">FIX</span>
+          <div>
+            <div class="changelog-text">Navigation between hub nodes corrected. Entry buttons now route to live pages.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div id="progress-bar"><div id="progress-fill"></div></div>
+
+<div id="status-bar">
+  <span>MAGI:ACTIVE // ENTRY:LOADED</span>
+  <span id="card-counter">CARD 1 OF 5</span>
+  <span>alinomali.neocities.org/log</span>
+</div>
+
+<script>
+  
+const container = document.getElementById('scroll-container');
+const fill = document.getElementById('progress-fill');
+const counter = document.getElementById('card-counter');
+const cards = document.querySelectorAll('.card');
+const total = cards.length;
+
+container.addEventListener('scroll', () => {
+  const max = container.scrollWidth - container.clientWidth;
+  const pct = max > 0 ? (container.scrollLeft / max) * 100 : 0;
+  fill.style.width = pct + '%';
+
+  let visible = 1;
+  cards.forEach((card, i) => {
+    const rect = card.getBoundingClientRect();
+    if (rect.left < window.innerWidth * 0.6) visible = i + 1;
+  });
+  counter.textContent = 'CARD ' + visible + ' OF ' + total;
+});
+
+container.addEventListener('wheel', e => {
+  const overCardBody = e.target.closest('.card-body');
+  const overMuseBody = e.target.closest('.muse-body');
+  if (overCardBody || overMuseBody) return;
+  if (e.deltaY !== 0) {
+    e.preventDefault();
+    container.scrollLeft += e.deltaY;
+  }
+}, { passive: false });
+
+// ── IMAGE MANIFEST ──
+// src: path to image file, e.g. '/log/assets/image.jpg'
+// caption: shown on hover
+// w: column span hint 1–3 (1=narrow, 2=medium, 3=wide — adjusts column-span)
+// h: height scale 1–3 (controls aspect ratio: 1=landscape, 2=square-ish, 3=tall)
+const images = [
+  { src: "C:\\Users\\ali\\the-athanor\\log\\assets\\coyote1.jpg", caption: 'image one',   w: 1, h: 2 },
+  { src: null, caption: 'image two',   w: 1, h: 1 },
+  { src: null, caption: 'image three', w: 2, h: 3 },
+  { src: null, caption: 'image four',  w: 1, h: 1 },
+  { src: null, caption: 'image five',  w: 1, h: 2 },
+  { src: null, caption: 'image six',   w: 2, h: 1 },
+  { src: null, caption: 'image seven', w: 1, h: 3 },
+  { src: null, caption: 'image eight', w: 1, h: 2 },
+  { src: null, caption: 'image nine',  w: 2, h: 2 },
+  { src: null, caption: 'image ten',   w: 1, h: 1 },
+];
+
+// aspect ratios per h scale
+const hRatio = { 1: '16/9', 2: '4/3', 3: '2/3' };
+// column spans per w scale (out of 4 columns)
+const wSpan  = { 1: 'span 1', 2: 'span 2', 3: 'span 3' };
+
+function buildMasonry() {
+  const grid = document.getElementById('masonry-grid');
+  grid.innerHTML = '';
+
+  images.forEach(img => {
+    const item = document.createElement('div');
+    item.className = 'masonry-item';
+    // column-span via grid trick: wrap masonry in css-columns,
+    // use column-span for wide items
+    if (img.w > 1) {
+      item.style.columnSpan = 'all'; // fallback for 3-wide; fine for demo
+    }
+
+    if (img.src) {
+      item.innerHTML = `
+        <img src="${img.src}" alt="${img.caption}" loading="lazy">
+        <div class="item-caption">${img.caption}</div>
+      `;
+    } else {
+      item.innerHTML = `
+        <div class="placeholder" style="aspect-ratio:${hRatio[img.h] || '4/3'}">
+          ${img.caption.toUpperCase()}
+        </div>
+        <div class="item-caption">${img.caption}</div>
+      `;
+    }
+
+    grid.appendChild(item);
+  });
+}
+
+buildMasonry();
+
+</script>
+</body>
+</html>
