@@ -188,7 +188,7 @@
 
 <div id="header-bar">
   <div id="header-title">THE ATHANOR</div>
-  <a href="/log/" id="log-link">THE LOG →</a>
+  <a href="/log/log-index" id="log-link">THE LOG →</a>
   <div id="header-meta">ARCHIVE // alinomali.com // MAGI:ACTIVE</div>
 </div>
 
@@ -222,33 +222,23 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
 <script>
 const nodes = [
-  { id: 'hub', label: 'ATHANOR', domain: 'hub', gloss: 'The living archive. A digital mandala of one lifetime.', path: '/', date: '2025' },
-  { id: 'corpus-1', label: 'BREATH', domain: 'corpus', gloss: 'Pranayama as somatic anchor. Five interconnected maps of the breath cycle with a live pacer.', path: '/corpus/breath.html', date: '2025' },
-  { id: 'corpus-2', label: 'NERVOUS SYSTEM', domain: 'corpus', gloss: 'Polyvagal theory as lived cartography. The states, the ladder, the window of tolerance.', path: '/corpus/nervous-system.html', date: '2025' },
-  { id: 'corpus-3', label: 'HERBALISM', domain: 'corpus', gloss: 'Adaptogens, plant allies, morning rituals. Rhodiola, Sea Moss, liver detox.', path: '/corpus/herbalism.html', date: '2025' },
-  { id: 'anima-1', label: 'MECHA PILOT', domain: 'anima', gloss: 'Identity stabilization through the Eva frame. Pilot vs vessel. Inner self vs outer environment.', path: '/anima/mecha-pilot.html', date: '2025' },
-  { id: 'anima-2', label: 'INDIVIDUATION', domain: 'anima', gloss: 'The Jungian arc. Shadow, transcendent function, Self/ego distinction as operative practice.', path: '/anima/individuation.html', date: '2025' },
-  { id: 'anima-3', label: 'SELF LOSING', domain: 'anima', gloss: 'The self you are losing was never yours. Foundational essay for the depth practitioner practice.', path: '/anima/self-losing.html', date: '2025' },
-  { id: 'spiritus-1', label: 'HERMETIC MAP', domain: 'spiritus', gloss: 'Synthesis across Kabbalah, Vedanta, Gnostic, and Hermetic traditions. Manly P. Hall as entry.', path: '/spiritus/hermetic-map.html', date: '2025' },
-  { id: 'spiritus-2', label: 'LA GRANDE TRAVERSÉE', domain: 'spiritus', gloss: 'France relocation as rite of passage. Structured immersion plan. The long arc.', path: '/spiritus/traversee.html', date: '2025' },
-  { id: 'spiritus-3', label: 'QUINTA ESSENTIA', domain: 'spiritus', gloss: 'The fifth element. The synthesis that emerges when Corpus, Anima, and Spiritus are held together.', path: '/spiritus/quinta.html', date: '2025' },
+  { id: 'hub',       label: 'ATHANOR',   domain: 'hub',      gloss: 'The living archive. A digital record of one lifetime examined.', path: '/', date: '2026' },
+  { id: 'craft',     label: 'CRAFT',     domain: 'corpus',   gloss: 'Visual guides for making things. Crochet, music production, coding, art software.', path: '/corpus/craft/', date: '2026' },
+  { id: 'analysis',  label: 'ANALYSIS',  domain: 'corpus',   gloss: 'Visual breakdowns of film, television, and music.', path: '/corpus/analysis/', date: '2026' },
+  { id: 'thinkers',  label: 'THINKERS',  domain: 'anima',    gloss: 'Philosopher and thinker depictions. Ideas given visual form.', path: '/anima/thinkers/', date: '2026' },
+  { id: 'esoterica', label: 'ESOTERICA', domain: 'anima',    gloss: 'Visual guides to esoteric subjects. Hermetic, alchemical, symbolic.', path: '/anima/esoterica/', date: '2026' },
+  { id: 'codex',     label: 'CODEX',     domain: 'spiritus', gloss: 'Nonfiction book summaries and visual notes. The read archive.', path: '/spiritus/codex/', date: '2026' },
 ];
 
 const links = [
-  { source: 'hub', target: 'corpus-1' },
-  { source: 'hub', target: 'corpus-2' },
-  { source: 'hub', target: 'corpus-3' },
-  { source: 'hub', target: 'anima-1' },
-  { source: 'hub', target: 'anima-2' },
-  { source: 'hub', target: 'anima-3' },
-  { source: 'hub', target: 'spiritus-1' },
-  { source: 'hub', target: 'spiritus-2' },
-  { source: 'hub', target: 'spiritus-3' },
-  { source: 'corpus-2', target: 'anima-1' },
-  { source: 'anima-2', target: 'anima-3' },
-  { source: 'anima-1', target: 'spiritus-3' },
-  { source: 'corpus-1', target: 'corpus-2' },
-  { source: 'spiritus-1', target: 'spiritus-3' },
+  { source: 'hub', target: 'craft' },
+  { source: 'hub', target: 'analysis' },
+  { source: 'hub', target: 'thinkers' },
+  { source: 'hub', target: 'esoterica' },
+  { source: 'hub', target: 'codex' },
+  { source: 'craft',     target: 'analysis' },
+  { source: 'thinkers',  target: 'esoterica' },
+  { source: 'esoterica', target: 'codex' },
 ];
 
 const domainColors = {
