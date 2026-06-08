@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AIR // THE ATHANOR</title>
+<title>SUBHUB // ALI·VERSE</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html, body {
-  width: 100%; min-height: 100vh;
+  width: 100%; min-height: 100%;
   background: #080808;
   color: #C7FF43;
   font-family: 'IBM Plex Mono', monospace;
@@ -52,14 +52,14 @@ body::before {
   gap: 12px;
 }
 
-#element-label {
+#hub-domain {
   font-size: 8px;
   letter-spacing: 0.25em;
   color: rgba(199,255,67,0.35);
   text-transform: uppercase;
 }
 
-#element-title {
+#hub-title {
   font-family: 'Orbitron', sans-serif;
   font-size: 13px;
   font-weight: 700;
@@ -83,83 +83,49 @@ body::before {
 }
 .nav-link:hover { color: #C7FF43; }
 
-#hero {
+#subheader {
   margin-top: 44px;
-  padding: 60px 40px 40px;
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  padding: 14px 28px;
   border-bottom: 1px solid rgba(199,255,67,0.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-#element-glyph {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 48px;
-  font-weight: 900;
-  color: rgba(199,255,67,0.08);
+#hub-gloss {
+  font-size: 10px;
+  color: rgba(199,255,67,0.35);
   letter-spacing: 0.1em;
-  position: absolute;
-  right: 40px;
-  top: 50%;
-  transform: translateY(-50%);
-  user-select: none;
+  line-height: 1.6;
+  max-width: 600px;
 }
 
-#element-name {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 32px;
-  font-weight: 900;
-  letter-spacing: 0.15em;
-  color: #C7FF43;
-  margin-bottom: 12px;
-  text-transform: uppercase;
-}
-
-#element-gloss {
-  font-size: 11px;
-  color: rgba(199,255,67,0.4);
-  letter-spacing: 0.1em;
-  line-height: 1.8;
-  max-width: 520px;
-  border-left: 2px solid rgba(199,255,67,0.2);
-  padding-left: 14px;
-}
-
-#grid-section {
-  position: relative;
-  z-index: 1;
-  padding: 40px;
-}
-
-#grid-label {
-  font-size: 8px;
-  letter-spacing: 0.3em;
+#entry-count {
+  font-size: 9px;
+  letter-spacing: 0.2em;
   color: rgba(199,255,67,0.25);
-  text-transform: uppercase;
-  margin-bottom: 20px;
 }
 
-#subhub-grid {
+#grid-container {
+  padding: 28px;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 1px;
 }
 
-.subhub-card {
+.entry-card {
   border: 1px solid rgba(199,255,67,0.12);
   background: rgba(199,255,67,0.015);
-  padding: 28px 24px;
-  text-decoration: none;
-  color: inherit;
-  display: block;
+  padding: 20px;
+  cursor: pointer;
   position: relative;
-  overflow: hidden;
   transition: border-color 0.2s, background 0.2s;
+  text-decoration: none;
+  display: block;
+  overflow: hidden;
 }
 
-.subhub-card::before {
+.entry-card::before {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0;
@@ -168,36 +134,39 @@ body::before {
   transition: background 0.2s;
 }
 
-.subhub-card:hover {
+.entry-card:hover {
   border-color: rgba(199,255,67,0.4);
   background: rgba(199,255,67,0.04);
 }
 
-.subhub-card:hover::before { background: #C7FF43; }
+.entry-card:hover::before { background: #C7FF43; }
 
-.card-tag {
-  font-size: 7px;
-  letter-spacing: 0.25em;
+.card-date {
+  font-size: 8px;
+  letter-spacing: 0.2em;
   color: rgba(199,255,67,0.3);
+  margin-bottom: 10px;
   text-transform: uppercase;
-  margin-bottom: 12px;
 }
 
 .card-title {
   font-family: 'Orbitron', sans-serif;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   color: #C7FF43;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
+  line-height: 1.4;
   text-transform: uppercase;
 }
 
 .card-gloss {
   font-size: 10px;
   color: rgba(199,255,67,0.45);
-  line-height: 1.9;
-  margin-bottom: 20px;
+  line-height: 1.8;
+  margin-bottom: 14px;
+  border-left: 2px solid rgba(199,255,67,0.15);
+  padding-left: 10px;
 }
 
 .card-footer {
@@ -206,19 +175,21 @@ body::before {
   align-items: center;
 }
 
-.card-count {
-  font-size: 8px;
-  letter-spacing: 0.15em;
-  color: rgba(199,255,67,0.2);
+.card-tag {
+  font-size: 7px;
+  letter-spacing: 0.2em;
+  padding: 2px 8px;
+  border: 1px solid rgba(199,255,67,0.2);
+  color: rgba(199,255,67,0.4);
+  text-transform: uppercase;
 }
 
 .card-arrow {
-  font-size: 11px;
+  font-size: 10px;
   color: rgba(199,255,67,0.25);
   transition: color 0.2s, transform 0.2s;
 }
-
-.subhub-card:hover .card-arrow {
+.entry-card:hover .card-arrow {
   color: #C7FF43;
   transform: translateX(4px);
 }
@@ -239,7 +210,17 @@ body::before {
   z-index: 150;
 }
 
-body { padding-bottom: 48px; }
+#grid-container { padding-bottom: 48px; }
+
+#empty-state {
+  grid-column: 1 / -1;
+  padding: 60px 20px;
+  text-align: center;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: rgba(199,255,67,0.2);
+  text-transform: uppercase;
+}
 </style>
 </head>
 <body>
@@ -249,54 +230,82 @@ body { padding-bottom: 48px; }
 
 <header id="header">
   <div id="header-left">
-    <span id="element-label">ELEMENT</span>
-    <span id="element-title">AIR</span>
+    <span id="hub-domain">CORPUS</span>
+    <span id="hub-title">CRAFT</span>
   </div>
   <div id="header-right">
     <a class="nav-link" href="/">← ATHANOR</a>
     <a class="nav-link" href="/log/">LOG</a>
+    <span class="nav-link" id="entry-count">—</span>
   </div>
 </header>
 
-<div id="hero">
-  <div id="element-glyph">AIR</div>
-  <div id="element-name">AIR</div>
-  <div id="element-gloss">Invisible structures, hidden orders, esoteric systems. What operates beneath the visible.</div>
+<div id="subheader">
+  <div id="hub-gloss">Visual guides for making things. Crochet, music production, coding, art software.</div>
 </div>
 
-<div id="grid-section">
-  <div id="grid-label">DOMAINS //</div>
-  <div id="subhub-grid">
-    <a class="subhub-card" href="/air/systems-thinking/">
-      <div class="card-tag">AIR // DOMAIN</div>
-      <div class="card-title">SYSTEMS THINKING</div>
-      <div class="card-gloss">Recursive structures, feedback loops, emergent patterns. How systems organize, self-replicate, and fail.</div>
-      <div class="card-footer">
-        <span class="card-count">ENTER DOMAIN</span>
-        <span class="card-arrow">→</span>
-      </div>
-    </a>
-    <a class="subhub-card" href="/air/esoterica/">
-      <div class="card-tag">AIR // DOMAIN</div>
-      <div class="card-title">ESOTERICA</div>
-      <div class="card-gloss">Visual guides to esoteric subjects. Hermetic, alchemical, symbolic traditions.</div>
-      <div class="card-footer">
-        <span class="card-count">ENTER DOMAIN</span>
-        <span class="card-arrow">→</span>
-      </div>
-    </a>
-
-  </div>
+<div id="grid-container">
+  <div id="empty-state">NO ENTRIES YET // ARCHIVE AWAITING FIRST TRANSMISSION</div>
 </div>
 
 <div id="status-bar">
-  <span>MAGI:ACTIVE // ELEMENT:AIR</span>
+  <span id="status-domain">MAGI:ACTIVE // CORPUS:CRAFT</span>
   <span id="status-date"></span>
   <span>alinomali.com</span>
 </div>
 
 <script>
+// ── CONFIGURATION — edit these per sub-hub ──
+const HUB_CONFIG = {
+  domain: 'AIR',
+  title:  'SYSTEMS THINKING',
+  gloss:  'Recursive structures, feedback loops, emergent patterns. How systems organize, self-replicate, and fail.',
+  manifestPath: '/air/systems-thinking/manifest.json',
+  statusLabel: 'AIR:SYSTEMS'
+};
+
+document.getElementById('hub-domain').textContent  = HUB_CONFIG.domain;
+document.getElementById('hub-title').textContent   = HUB_CONFIG.title;
+document.getElementById('hub-gloss').textContent   = HUB_CONFIG.gloss;
+document.getElementById('status-domain').textContent = 'MAGI:ACTIVE // ' + HUB_CONFIG.statusLabel;
 document.getElementById('status-date').textContent = new Date().toISOString().slice(0,10).replace(/-/g,'.');
+document.title = HUB_CONFIG.title + ' // ALI·VERSE';
+
+async function loadEntries() {
+  try {
+    const res  = await fetch(HUB_CONFIG.manifestPath);
+    const data = await res.json();
+    const entries = data.entries.sort((a, b) => b.date.localeCompare(a.date));
+    renderGrid(entries);
+    document.getElementById('entry-count').textContent = entries.length + ' ENTRIES';
+  } catch(e) {
+    document.getElementById('entry-count').textContent = '0 ENTRIES';
+  }
+}
+
+function renderGrid(entries) {
+  const grid = document.getElementById('grid-container');
+  if (!entries.length) return;
+  grid.innerHTML = '';
+
+  entries.forEach(entry => {
+    const card = document.createElement('a');
+    card.className = 'entry-card';
+    card.href = entry.path;
+    card.innerHTML = `
+      <div class="card-date">${entry.date}</div>
+      <div class="card-title">${entry.title}</div>
+      <div class="card-gloss">${entry.gloss}</div>
+      <div class="card-footer">
+        <span class="card-tag">${entry.tag || HUB_CONFIG.title}</span>
+        <span class="card-arrow">→</span>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+loadEntries();
 </script>
 </body>
 </html>

@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PARASITE FRACTAL // MAGI ANALYSIS</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<style>
+  :root {
+    --acid: #C7FF43;
+    --acid-dim: rgba(199,255,67,0.15);
+    --acid-glow: rgba(199,255,67,0.6);
+    --void: #000000;
+    --surface: #060608;
+    --panel: #0a0b0d;
+    --border: rgba(199,255,67,0.25);
+    --red: #FF3B3B;
+    --red-dim: rgba(255,59,59,0.15);
+    --amber: #FFB830;
+    --amber-dim: rgba(255,184,48,0.15);
+    --muted: rgba(199,255,67,0.45);
+    --text: rgba(255,255,255,0.85);
+    --text-dim: rgba(255,255,255,0.45);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--void);
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+    cursor: crosshair;
+  }
+
+  /* SCANLINES */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.18) 2px,
+      rgba(0,0,0,0.18) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* CORNER BRACKETS */
+  .corner {
+    position: fixed;
+    width: 28px;
+    height: 28px;
+    z-index: 100;
+    opacity: 0.6;
+  }
+  .corner::before, .corner::after {
+    content: '';
+    position: absolute;
+    background: var(--acid);
+  }
+  .corner::before { width: 100%; height: 2px; }
+  .corner::after { width: 2px; height: 100%; }
+  .corner.tl { top: 12px; left: 12px; }
+  .corner.tr { top: 12px; right: 12px; transform: scaleX(-1); }
+  .corner.bl { bottom: 12px; left: 12px; transform: scaleY(-1); }
+  .corner.br { bottom: 12px; right: 12px; transform: scale(-1); }
+
+  /* HEADER */
+  #header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 50;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, rgba(0,0,0,0.95) 0%, transparent 100%);
+  }
+
+  #header .title {
+    font-family: 'Orbitron', monospace;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 0.2em;
+    color: var(--acid);
+    text-shadow: 0 0 12px var(--acid-glow);
+  }
+
+  #header .subtitle {
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  #header .status {
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    color: var(--text-dim);
+    text-align: right;
+  }
+
+  #header .status span {
+    color: var(--acid);
+  }
+
+  /* LEGEND */
+  #legend {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 50;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 8px;
+    letter-spacing: 0.12em;
+    color: var(--text-dim);
+  }
+
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* INSTRUCTION */
+  #instruction {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 50;
+    font-size: 8px;
+    letter-spacing: 0.12em;
+    color: var(--text-dim);
+    text-align: right;
+    line-height: 1.7;
+  }
+
+  /* SVG CANVAS */
+  #canvas {
+    width: 100vw;
+    height: 100vh;
+  }
+
+  /* NODE LABELS */
+  .node-label {
+    font-family: 'Orbitron', monospace;
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    fill: var(--acid);
+    pointer-events: none;
+    text-anchor: middle;
+  }
+
+  .node-sublabel {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7px;
+    fill: rgba(199,255,67,0.5);
+    pointer-events: none;
+    text-anchor: middle;
+  }
+
+  /* DETAIL PANEL */
+  #detail-panel {
+    position: fixed;
+    top: 70px;
+    right: 20px;
+    width: 340px;
+    max-height: calc(100vh - 120px);
+    background: var(--panel);
+    border: 1px solid var(--border);
+    z-index: 200;
+    display: none;
+    overflow: hidden;
+    animation: panelIn 0.2s ease-out;
+  }
+
+  @keyframes panelIn {
+    from { opacity: 0; transform: translateX(10px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  #detail-panel::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--acid);
+    box-shadow: 0 0 10px var(--acid-glow);
+  }
+
+  #panel-header {
+    padding: 16px 16px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  #panel-domain {
+    font-size: 8px;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+    margin-bottom: 5px;
+  }
+
+  #panel-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 13px;
+    font-weight: 900;
+    color: var(--acid);
+    line-height: 1.3;
+    text-shadow: 0 0 8px var(--acid-glow);
+  }
+
+  #panel-body {
+    overflow-y: auto;
+    max-height: calc(100vh - 240px);
+    padding: 14px 16px;
+  }
+
+  #panel-body::-webkit-scrollbar { width: 3px; }
+  #panel-body::-webkit-scrollbar-track { background: transparent; }
+  #panel-body::-webkit-scrollbar-thumb { background: var(--border); }
+
+  .panel-section {
+    margin-bottom: 16px;
+  }
+
+  .section-tag {
+    font-size: 7px;
+    letter-spacing: 0.18em;
+    font-weight: 700;
+    padding: 3px 7px;
+    display: inline-block;
+    margin-bottom: 8px;
+  }
+
+  .tag-claim {
+    background: var(--acid-dim);
+    color: var(--acid);
+    border: 1px solid rgba(199,255,67,0.3);
+  }
+
+  .tag-holds {
+    background: rgba(67,255,136,0.1);
+    color: #43FF88;
+    border: 1px solid rgba(67,255,136,0.3);
+  }
+
+  .tag-fails {
+    background: var(--red-dim);
+    color: var(--red);
+    border: 1px solid rgba(255,59,59,0.3);
+  }
+
+  .tag-source {
+    background: var(--amber-dim);
+    color: var(--amber);
+    border: 1px solid rgba(255,184,48,0.3);
+  }
+
+  .section-text {
+    font-size: 10px;
+    line-height: 1.7;
+    color: var(--text);
+  }
+
+  .section-text.dim {
+    color: var(--text-dim);
+  }
+
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 14px 0;
+  }
+
+  #panel-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 22px;
+    height: 22px;
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 11px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'IBM Plex Mono', monospace;
+    transition: all 0.15s;
+  }
+
+  #panel-close:hover {
+    border-color: var(--acid);
+    color: var(--acid);
+  }
+
+  /* LINK TOOLTIP */
+  #link-label {
+    position: fixed;
+    background: rgba(0,0,0,0.9);
+    border: 1px solid var(--border);
+    padding: 4px 8px;
+    font-size: 8px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    pointer-events: none;
+    z-index: 300;
+    display: none;
+  }
+
+  /* NODE PULSE ANIMATION */
+  @keyframes pulse {
+    0%, 100% { opacity: 0.4; transform: scale(1); }
+    50% { opacity: 0.8; transform: scale(1.15); }
+  }
+
+  .node-ring {
+    animation: pulse 3s ease-in-out infinite;
+  }
+
+  #video-btn {
+  position: fixed;
+  top: 60px;
+  left: 20px;
+  z-index: 50;
+  border: 1px solid var(--border);
+  padding: 8px 12px;
+  background: rgba(0,0,0,0.7);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+#video-btn:hover {
+  border-color: var(--acid);
+  background: var(--acid-dim);
+}
+.vbtn-label {
+  font-size: 7px;
+  letter-spacing: 0.18em;
+  color: var(--muted);
+  margin-bottom: 3px;
+}
+.vbtn-title {
+  font-family: 'Orbitron', monospace;
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--acid);
+}
+</style>
+</head>
+<body>
+
+<div class="corner tl"></div>
+<div class="corner tr"></div>
+<div class="corner bl"></div>
+<div class="corner br"></div>
+
+<a href="https://youtu.be/G64L419oC6s?si=abSxQr_0SUb9dvEQ" target="_blank" style="text-decoration:none">
+  <div id="video-btn">
+    <div class="vbtn-label">SOURCE MATERIAL</div>
+    <div class="vbtn-title">▶ WATCH ORIGINAL</div>
+  </div>
+</a>
+
+<div id="header">
+  <div>
+    <div class="title">PARASITE FRACTAL // MAGI ANALYSIS</div>
+    <div class="subtitle">PATTERN REPLICATION ACROSS SCALES — EPISTEMIC AUDIT</div>
+  </div>
+  <div class="status">
+    <div>SYSTEM: <span>ONLINE</span></div>
+    <div>NODES: <span id="node-count">—</span> // LINKS: <span id="link-count">—</span></div>
+  </div>
+</div>
+
+<svg id="canvas"></svg>
+
+<div id="legend">
+  <div class="legend-item">
+    <div class="legend-dot" style="background:#C7FF43;box-shadow:0 0 6px #C7FF43"></div>
+    CORE LOGIC
+  </div>
+  <div class="legend-item">
+    <div class="legend-dot" style="background:#43CFFF;box-shadow:0 0 6px #43CFFF"></div>
+    BIOLOGICAL
+  </div>
+  <div class="legend-item">
+    <div class="legend-dot" style="background:#FF7043;box-shadow:0 0 6px #FF7043"></div>
+    PSYCHOLOGICAL
+  </div>
+  <div class="legend-item">
+    <div class="legend-dot" style="background:#B043FF;box-shadow:0 0 6px #B043FF"></div>
+    SOCIAL/SYSTEMIC
+  </div>
+  <div class="legend-item">
+    <div class="legend-dot" style="background:#FFB830;box-shadow:0 0 6px #FFB830"></div>
+    MYTHOLOGICAL
+  </div>
+  <div class="legend-item">
+    <div class="legend-dot" style="background:#FF3B3B;box-shadow:0 0 6px #FF3B3B"></div>
+    EPISTEMIC BREACH
+  </div>
+</div>
+
+<div id="instruction">
+  CLICK NODE — OPEN ANALYSIS<br>
+  DRAG — REPOSITION<br>
+  SCROLL — ZOOM
+</div>
+
+<div id="detail-panel">
+  <div id="panel-header">
+    <div id="panel-domain"></div>
+    <div id="panel-title"></div>
+    <button id="panel-close">×</button>
+  </div>
+  <div id="panel-body"></div>
+</div>
+
+<div id="link-label"></div>
+
+<script>
+const nodes = [
+  // CORE LOGIC (center)
+  {
+    id: "core",
+    label: "PARASITE\nLOGIC",
+    sub: "universal pattern",
+    category: "core",
+    color: "#C7FF43",
+    r: 50,
+    domain: "CORE AXIOM",
+    title: "The Universal Parasite Logic",
+    claim: "All parasitic phenomena — biological, psychological, social, cosmic — obey the same four behavioral laws: covert entry, host dependency, immune suppression, suicidal retaliation when threatened. The fractal repeats at every scale.",
+    holds: "As a structural metaphor, this has genuine descriptive power. Systems that extract value without contributing to host survival do cluster around these behaviors. The pattern is observable across biological, economic, and social scales.",
+    fails: "Structural similarity is not causal identity. The fact that advertising and intestinal worms share behavioral traits does not mean they share mechanism, origin, or solution. Metaphor is not mechanism. The fractal claim is illuminating as a lens — it breaks down as a truth claim.",
+    source: "Presenter's central organizing thesis. No single source; synthesized across biology, Gnosticism, Jungian psychology, and systems theory."
+  },
+
+  // BIOLOGICAL NODES
+  {
+    id: "bio-gut",
+    label: "GUT\nPARASITE",
+    sub: "desire hijack",
+    category: "biological",
+    color: "#43CFFF",
+    r: 32,
+    domain: "BIOLOGICAL",
+    title: "Gut Parasites & Desire Hijack",
+    claim: "Parasites in the gut don't passively feed — they express their own behavioral drives through the host, generating cravings (sugar, specific foods) that serve parasite reproduction, not host health. The host experiences these as their own desires.",
+    holds: "Partially accurate. The gut-brain axis via the vagus nerve is well-documented. Microbiome composition does influence mood and cravings. Specific parasites do alter host behavior to serve parasite goals (Toxoplasma is the clearest case). The general principle of parasitic influence on desire is scientifically grounded.",
+    fails: "The mechanism is overstated. Most gut parasites do not 'express desires through you' with that level of directed control. The Toxoplasma case is the exception, not the rule. Sugar cravings are multiply-determined — blaming them primarily on parasites is a reductive overreach.",
+    source: "Gut-brain axis: established neuroscience. Vagus nerve communication: documented. Toxoplasma behavioral effects: peer-reviewed. General parasite desire-control: extrapolated."
+  },
+  {
+    id: "bio-toxo",
+    label: "TOXOPLASMA\nGONDII",
+    sub: "cat-to-human vector",
+    category: "biological",
+    color: "#43CFFF",
+    r: 28,
+    domain: "BIOLOGICAL",
+    title: "Toxoplasma Gondii — Behavioral Modification",
+    claim: "Toxoplasma causes infected rodents to lose fear of cat odor — a suicidal behavior that serves the parasite's need to complete its life cycle in a feline gut. In humans it correlates with increased risk-taking behavior. The worm uses the host's nervous system as a vehicle for its own reproduction.",
+    holds: "This is among the best-documented examples of parasite-mediated behavioral manipulation. The rodent-cat mechanism is experimentally verified. The human behavioral correlation (risk-taking, reaction time) is real, though modest in effect size and not universally replicated.",
+    fails: "The human effects are correlational, not causal, and the effect sizes are small. Extrapolating from 'Toxoplasma slightly correlates with risk-taking in humans' to 'parasites control human behavior' is a scale error. The dramatic framing exceeds what the data supports.",
+    source: "Berdoy et al. (2000) — rodent behavior. Flegr et al. — human behavioral correlates. Both legitimate peer-reviewed research."
+  },
+  {
+    id: "bio-tick",
+    label: "TICK\nMECHANISM",
+    sub: "anesthetic → cement → anticoagulant",
+    category: "biological",
+    color: "#43CFFF",
+    r: 28,
+    domain: "BIOLOGICAL",
+    title: "Tick Attachment — Phased Infiltration",
+    claim: "Ticks use a three-phase chemical strategy: anesthetic saliva for painless entry, cement-like compounds for anchoring, anticoagulants to maintain blood flow. This is presented as structurally identical to social/demonic infiltration — soft entry, then permanent anchoring, then extraction.",
+    holds: "The tick biology is accurate. Tick saliva does contain analgesic, cement, and anticoagulant compounds. This is documented entomology. The behavioral analogy to gradual social infiltration has descriptive merit as a pattern.",
+    fails: "The analogical leap from tick chemistry to 'demonic entry requiring permission' is not a discovery — it's a poetic mapping. Ticks do not require consent. The comparison is evocative, not explanatory.",
+    source: "Tick salivary biology: well-documented in parasitology literature. The social analogy: presenter's own synthesis."
+  },
+  {
+    id: "bio-ophio",
+    label: "OPHIOCORDYCEPS\nFUNGUS",
+    sub: "zombie ant mechanism",
+    category: "biological",
+    color: "#43CFFF",
+    r: 28,
+    domain: "BIOLOGICAL",
+    title: "Ophiocordyceps — The Zombie Ant",
+    claim: "The parasitic fungus penetrates an ant's exoskeleton, syncs with its nervous system, and drives it to climb high vegetation before sprouting from its head to spread spores. The ant's will is fully replaced. The colony cannot detect the infected individual. The non-infected become isolated outcasts.",
+    holds: "Accurate biology. Ophiocordyceps unilateralis is one of the most studied examples of behavioral manipulation by a parasite. The mechanism of neural chemical interference is real. The social isolation dynamic in ant colonies is documented.",
+    fails: "The extension to 'corporate culture does the same thing to humans' is an analogy, not a finding. Analogies can generate hypotheses. They cannot confirm them.",
+    source: "Hughes et al. (2011) — Ophiocordyceps mechanism. Well-documented in mycology and behavioral ecology."
+  },
+  {
+    id: "bio-lyme",
+    label: "LYME DISEASE\nAS BIOWEAPON",
+    sub: "Plum Island hypothesis",
+    category: "breach",
+    color: "#FF3B3B",
+    r: 28,
+    domain: "EPISTEMIC BREACH — BIOLOGICAL",
+    title: "Lyme Disease as Deliberate Bioweapon",
+    claim: "Lyme disease is a man-made illness, an experiment aimed at creating a quiet bioweapon delivered via ticks. The Plum Island Animal Disease Center proximity to the initial Lyme, Connecticut outbreak is cited as evidence.",
+    holds: "The Plum Island proximity is real. Investigative journalist Kris Newby's book 'Bitten' (2019) documents declassified research suggesting tick weaponization programs existed. A Congressional inquiry was opened. These are legitimate data points deserving scrutiny.",
+    fails: "The video presents this as established fact. It is an active hypothesis with suggestive but non-conclusive evidence. The geographic proximity argument alone does not establish causation. Presenting unresolved investigative journalism as confirmed history is a factual misrepresentation.",
+    source: "Kris Newby, 'Bitten' (2019). Congressional review initiated. Still contested — not confirmed."
+  },
+
+  // PSYCHOLOGICAL NODES
+  {
+    id: "psych-shadow",
+    label: "SHADOW\nPOSSESSION",
+    sub: "Jung / individuation",
+    category: "psychological",
+    color: "#FF7043",
+    r: 32,
+    domain: "PSYCHOLOGICAL",
+    title: "Shadow Possession — Jungian Framework",
+    claim: "Personality traits hidden from conscious awareness operate like parasites — they run behavior covertly, the host believes the desires are their own, and confrontation (individuation) is the only cure. The denied shadow keeps the self in 'amnesia' and 'ignorance.'",
+    holds: "This is among the most epistemically solid claims in the video. Ego-alien drives — patterns that operate below conscious awareness and express themselves through behavior — are a core finding of depth psychology and have clinical support. The 'it feels like you but it isn't fully you' phenomenon is real and well-described.",
+    fails: "Framing shadow elements as literally parasitic conflates metaphor with mechanism. The shadow is not an external entity — it is a structural feature of the psyche. The distinction matters because the solution is different: integration, not eradication.",
+    source: "C.G. Jung — Collected Works, particularly Vol. 9ii (Aion) and Vol. 14 (Mysterium Coniunctionis). Clinically grounded."
+  },
+  {
+    id: "psych-amygdala",
+    label: "REPTILIAN\nBRAIN CAPTURE",
+    sub: "higher function → fight/flight",
+    category: "psychological",
+    color: "#FF7043",
+    r: 26,
+    domain: "PSYCHOLOGICAL",
+    title: "Parasitic Reduction to Reptilian Function",
+    claim: "Parasites reduce higher cognitive function by shifting behavioral control toward the amygdala / reptilian brain, producing pure fight-or-flight reactivity. Social parasites (advertising, egregores) do the same thing through different means.",
+    holds: "Chronic stress, trauma, and certain toxins do demonstrably compromise prefrontal cortical function and increase amygdala reactivity. This is established neuroscience. The behavioral profile that results — impulsivity, reactivity, reduced long-term planning — is real.",
+    fails: "'Reptilian brain' is a neuroscience myth. The triune brain model (MacLean) is not supported by modern neuroscience. There is no discrete 'reptilian' layer that activates under stress. The amygdala is not 'older' in a controlling sense. The framework is evocative but neurologically inaccurate.",
+    source: "Triune brain model: Paul MacLean (1960s) — now considered outdated. Amygdala-prefrontal dynamics: current neuroscience. Lisa Feldman Barrett's work is the relevant modern framework."
+  },
+  {
+    id: "psych-loosh",
+    label: "LOOSH\nHARVESTING",
+    sub: "Monroe / emotional energy",
+    category: "breach",
+    color: "#FF3B3B",
+    r: 26,
+    domain: "EPISTEMIC BREACH — PSYCHOLOGICAL",
+    title: "Loosh — Robert Monroe's Energy Harvesting",
+    claim: "Robert Monroe's out-of-body research participants independently reported reptilian entities harvesting emotional energy (loosh) from humans during trance states. These reports parallel Gnostic Archon descriptions without the participants having been exposed to Gnostic literature.",
+    holds: "Monroe was a real researcher. The Monroe Institute produced documented accounts. The structural parallel to Gnostic frameworks is genuinely interesting as a cultural-psychological phenomenon.",
+    fails: "Self-reported OBE experiences are not independent data. Participants in an institutional trance-research context share a cultural surround that shapes their phenomenology. 'None of them knew Gnostic literature' is an unverifiable claim. Calling this 'scientific findings' is a category error. It is phenomenological data — valuable, but not evidence of external entities.",
+    source: "Robert Monroe, 'Far Journeys' (1985). First-person accounts compiled institutionally. Not peer-reviewed experimental science."
+  },
+  {
+    id: "psych-stoic",
+    label: "STOIC\nANTIDOTE",
+    sub: "sacrifice before it finds you",
+    category: "psychological",
+    color: "#FF7043",
+    r: 30,
+    domain: "PSYCHOLOGICAL",
+    title: "Stoic Discipline as Parasite Immunity",
+    claim: "The stoic resolves internal egoic preferences and personal desires in advance, leaving no 'crack' for parasitic forces to exploit. Sacrifice made consciously beats sacrifice extracted later. Self-discipline is both the psychological and metaphysical prophylactic.",
+    holds: "This is the most practically sound claim in the video. Stoic philosophy — particularly the voluntary discomfort practices of Epictetus and Marcus Aurelius — does demonstrably reduce impulsive reactivity, increase tolerance for ambiguity, and decrease manipulability by external reward/threat systems.",
+    fails: "The mechanism proposed (closing a 'crack' that demons require for entry) is metaphysical assertion, not psychological claim. The practical utility of stoic practice does not confirm the cosmological framework used to explain it.",
+    source: "Stoic philosophy: Epictetus, Marcus Aurelius. Psychological efficacy: Stoicism's relationship to CBT and ACT is documented. Ryan Holiday as modern synthesis."
+  },
+
+  // SOCIAL / SYSTEMIC NODES
+  {
+    id: "social-egregore",
+    label: "ADVERTISING\nEGREGORE",
+    sub: "self-replicating intent-entity",
+    category: "social",
+    color: "#B043FF",
+    r: 34,
+    domain: "SOCIAL / SYSTEMIC",
+    title: "The Advertising Egregore",
+    claim: "Advertising is a living entity that uses humans as vehicles for its own propagation. It has no anatomy but is functionally alive — it selects weak hosts (those hungry for external validation), spreads through them, and sustains itself by keeping the host in a state of perpetual insufficiency.",
+    holds: "As a systems-theory description, this is structurally coherent. Advertising-as-institution does exhibit self-perpetuating dynamics independent of any individual actor's intent. The mechanism of manufactured insufficiency is documented in consumer psychology and critical marketing theory.",
+    fails: "Calling advertising 'alive' and an 'egregore' with agency imports metaphysical claims into what is better described as emergent institutional behavior. Emergent properties do not require literal sentience. The personification is rhetorically powerful and analytically imprecise.",
+    source: "Emergent institutional behavior: systems theory. Manufactured desire: Vance Packard 'The Hidden Persuaders' (1957). Egregore as occult term: Hermetic tradition."
+  },
+  {
+    id: "social-psychopath",
+    label: "PSYCHOPATHIC\nPOWER STRUCTURE",
+    sub: "parasite class built the system",
+    category: "social",
+    color: "#B043FF",
+    r: 30,
+    domain: "SOCIAL / SYSTEMIC",
+    title: "The Psychopathic Parasite Class",
+    claim: "Society was not taken over by a psychopathic parasite class — it was built by them from the ground up. The system works exactly as designed for a select few. The Maxwells, pharmaceutical industrialists, and prison-industrial complexes are examples of humans acting as conscious parasite vehicles.",
+    holds: "The structural critique — that institutions optimize for their founders' interests, not the ostensible public interest — is well-supported by institutional analysis. The prison-industrial complex funding violent rap music to increase incarceration is a documented claim (though contested in specifics).",
+    fails: "Conflating 'systems produce bad outcomes' with 'a unified parasite class consciously designed the system' introduces unfalsifiable conspiracy logic. Structural dysfunction does not require a unified controlling intelligence. The named examples vary widely in evidentiary quality — mixing solid critique with speculation.",
+    source: "Prison-industrial complex: documented academic literature. Maxwell/peer-review claim: circulated but not rigorously sourced in the video. Systemic critique: Chomsky, Herman 'Manufacturing Consent' as stronger version."
+  },
+  {
+    id: "social-media",
+    label: "SCREEN / SCROLL\nADDICTION",
+    sub: "dopamine as extraction vector",
+    category: "social",
+    color: "#B043FF",
+    r: 26,
+    domain: "SOCIAL / SYSTEMIC",
+    title: "Doom Scrolling as Parasitic Feeding",
+    claim: "Screens and social media platforms parasitize human attention and dopamine systems. The compulsive scroll is not a free choice — it is engineered behavior serving the platform's monetization, not the user's wellbeing. Reading a physical book is the antidote.",
+    holds: "Behavioral design and variable-reward mechanics in social media platforms are documented and intentional. Tristan Harris's work, Sean Parker's own statements, and the academic literature on attention extraction are substantial. The dopamine dysregulation mechanism is real.",
+    fails: "The framing implies the user has no agency, which is both overstated and practically counterproductive. The solution ('just read books') is socioeconomically naive about who has the conditions for that choice.",
+    source: "Tristan Harris / Center for Humane Technology. Sean Parker interview (2017). B.J. Fogg's persuasive technology framework."
+  },
+
+  // MYTHOLOGICAL / ESOTERIC NODES
+  {
+    id: "myth-archon",
+    label: "GNOSTIC\nARCHONS",
+    sub: "rulers of this realm",
+    category: "mythological",
+    color: "#FFB830",
+    r: 34,
+    domain: "MYTHOLOGICAL / ESOTERIC",
+    title: "Gnostic Archons — Cosmic Parasites",
+    claim: "Archons are parasitic entities born from a glitch in divine emanation — copies of source without the divine spark. They have no free will, only imitation. They feed on human emotional energy (suffering, fear) and sustain themselves by keeping humans mentally weak. They are the cosmic-scale version of biological parasites.",
+    holds: "The Archon cosmology is accurately described from Nag Hammadi literature. The Nag Hammadi texts are real and were found in 1945. Carl Jung's engagement with them as psychological phenomena is documented and legitimate. As a psychological metaphor for ego-alien destructive forces, the Archon framework has interpretive utility.",
+    fails: "The Nag Hammadi texts are ancient mythology, not empirical cosmology. Describing Archons as existing entities requires a metaphysical commitment the video treats as obvious. The psychological reading (Jung's) is defensible; the literal reading is not supported by anything other than the texts themselves.",
+    source: "Nag Hammadi Codices, 1945. Gospel of Philip, Apocryphon of John. Jung, 'Aion' (1951). Elaine Pagels, 'The Gnostic Gospels' (1979)."
+  },
+  {
+    id: "myth-essene",
+    label: "ESSENE GOSPEL\nOF PEACE",
+    sub: "contested authenticity",
+    category: "breach",
+    color: "#FF3B3B",
+    r: 26,
+    domain: "EPISTEMIC BREACH — MYTHOLOGICAL",
+    title: "Essene Gospel of Peace — Probable Forgery",
+    claim: "Jesus used milk vapor to bait a parasite worm out of a sick man's body, calling it Satan. The ancient Essenes knew that literal parasites were the mechanism of demonic possession. The text is presented as an ancient document suppressed by Constantine.",
+    holds: "The passage is internally coherent as allegory. The interpretation that ancient writers did not separate literal from symbolic is plausible and supported by scholars of ancient mythology.",
+    fails: "The Essene Gospel of Peace was translated and published by Edmond Bordeaux Székely in the 1920s-1930s. Scholarly consensus is that it is a modern fabrication with no verifiable ancient manuscript source. Székely claimed access to Vatican archives; no independent scholar has located the originals. Presenting this as ancient suppressed truth is factually dishonest.",
+    source: "Edmond Bordeaux Székely — 'The Essene Gospel of Peace' (1928). Scholarly assessment: likely modern composition. Not in Dead Sea Scrolls or any verified ancient collection."
+  },
+  {
+    id: "myth-vampire",
+    label: "VAMPIRE /\nFAIRY LORE",
+    sub: "permission as entry requirement",
+    category: "mythological",
+    color: "#FFB830",
+    r: 26,
+    domain: "MYTHOLOGICAL",
+    title: "Vampire / Fairy Mythology — The Permission Principle",
+    claim: "Vampires cannot enter a house without invitation. Fairies cannot take a child without tricking the parent into granting permission. Both mythologies encode the principle that parasitic forces require a 'crack' — a moment of weakness or deception — before entry. This parallels literal parasite transmission.",
+    holds: "The structural observation is accurate: these mythologies do encode a permission or vulnerability requirement. As a cultural encoding of the insight that psychological possession begins with a compromise or deception, this is a valid interpretive reading.",
+    fails: "Mythology reflects human psychological concerns — it is not a data source for the mechanics of literal entities. The convergence of these myths is interesting anthropology, not evidence that vampiric entities exist or that their behavioral rules are real constraints.",
+    source: "European folklore scholarship. The permission trope is documented across vampire and fairy traditions. Anthropological literature on protective mythology."
+  },
+  {
+    id: "myth-book-jeu",
+    label: "BOOK OF JEU\nPOST-DEATH NAVIGATION",
+    sub: "seals / ciphers against Archons",
+    category: "mythological",
+    color: "#FFB830",
+    r: 28,
+    domain: "MYTHOLOGICAL / ESOTERIC",
+    title: "Book of Jeu — Navigating Archons After Death",
+    claim: "Jesus gives his disciples specific seals, ciphers, and names to deploy against Archonic gatekeepers encountered after death. The soul that possesses this gnosis can pass through ascending aeons without being seized. Parallel to Tibetan Book of the Dead and Egyptian Book of the Dead.",
+    holds: "The Book of Jeu is a real Coptic Gnostic text (Codex Brucianus). The cross-cultural parallel between post-death navigation manuals is a legitimate observation — Bardo Thodol, Book of Coming Forth by Day, and Gnostic literature do share structural features. This is genuine comparative religion.",
+    fails: "Shared structure does not confirm shared cosmological reality. Multiple cultures independently encoding 'navigate obstacles after death' is evidence of a universal human concern, not evidence that Archonic gatekeepers exist. The presenter elides this distinction.",
+    source: "Codex Brucianus — real Coptic manuscript. Comparative religion: Campbell, Eliade. The cross-cultural parallel is academically noted."
+  },
+  {
+    id: "myth-sync-1945",
+    label: "1945\nSYNCHRONICITY",
+    sub: "Nag Hammadi + ENIAC + nuclear",
+    category: "mythological",
+    color: "#FFB830",
+    r: 28,
+    domain: "MYTHOLOGICAL",
+    title: "The 1945 Convergence",
+    claim: "In 1945: Nag Hammadi texts discovered, ENIAC (first computer) built, nuclear weapons deployed at Hiroshima, UN formed, Bretton Woods World Bank created, first major UFO wave. This convergence is described as synchronicity — a meaningful cosmic event, not coincidence.",
+    holds: "The factual convergence is real — these events did cluster in 1945. Carl Jung did receive Nag Hammadi fragments and coin the term synchronicity. The historical moment was genuinely pivotal. As a poetic observation about a hinge-point in history, it has rhetorical force.",
+    fails: "Synchronicity as defined by Jung is a subjective experience of meaningful coincidence — it is a psychological phenomenon, not a causal mechanism. The year 1945 is meaningful because of selection bias: we notice the convergence because it was an extraordinary year, not because an invisible intelligence arranged it. This is textbook apophenia elevated to cosmology.",
+    source: "Jung, 'Synchronicity' (1952). The historical events are documented. The interpretation is metaphysical assertion."
+  }
+];
+
+const links = [
+  // Core to all major nodes
+  { source: "core", target: "bio-gut", label: "DESIRE HIJACK" },
+  { source: "core", target: "bio-ophio", label: "WILL REPLACEMENT" },
+  { source: "core", target: "psych-shadow", label: "COVERT OPERATION" },
+  { source: "core", target: "social-egregore", label: "HOST DEPENDENCY" },
+  { source: "core", target: "myth-archon", label: "COSMIC SCALE" },
+  { source: "core", target: "psych-stoic", label: "IMMUNITY MECHANISM" },
+
+  // Biological cluster
+  { source: "bio-gut", target: "bio-toxo", label: "MECHANISM EXAMPLE" },
+  { source: "bio-gut", target: "psych-amygdala", label: "BRAIN CAPTURE" },
+  { source: "bio-toxo", target: "bio-ophio", label: "BEHAVIOR OVERRIDE" },
+  { source: "bio-tick", target: "bio-lyme", label: "WEAPONIZED VECTOR" },
+  { source: "bio-tick", target: "core", label: "PHASED ENTRY" },
+
+  // Psych cluster
+  { source: "psych-shadow", target: "psych-amygdala", label: "REGRESSION" },
+  { source: "psych-shadow", target: "myth-archon", label: "INTERIOR ARCHON" },
+  { source: "psych-loosh", target: "myth-archon", label: "FOOD SOURCE" },
+  { source: "psych-stoic", target: "psych-shadow", label: "INTEGRATION" },
+  { source: "psych-stoic", target: "social-egregore", label: "STARVATION TACTIC" },
+
+  // Social cluster
+  { source: "social-egregore", target: "social-media", label: "DELIVERY SYSTEM" },
+  { source: "social-egregore", target: "social-psychopath", label: "HUMAN VEHICLE" },
+  { source: "social-psychopath", target: "bio-lyme", label: "WEAPONIZATION" },
+  { source: "social-media", target: "psych-amygdala", label: "REACTIVITY FEED" },
+
+  // Mythological cluster
+  { source: "myth-archon", target: "myth-book-jeu", label: "NAVIGATION MAP" },
+  { source: "myth-archon", target: "myth-vampire", label: "PERMISSION LAW" },
+  { source: "myth-archon", target: "myth-essene", label: "SATANIC WORM" },
+  { source: "myth-book-jeu", target: "myth-sync-1945", label: "REDISCOVERY" },
+  { source: "myth-sync-1945", target: "psych-shadow", label: "JUNG BRIDGE" },
+  { source: "myth-vampire", target: "bio-tick", label: "ANESTHETIC ENTRY" },
+  { source: "myth-essene", target: "bio-gut", label: "LITERAL READING" },
+
+  // Cross-domain
+  { source: "psych-loosh", target: "social-egregore", label: "ENERGY EXTRACTION" },
+  { source: "bio-ophio", target: "social-egregore", label: "COLONY CAPTURE" },
+  { source: "myth-vampire", target: "social-psychopath", label: "NO REFLECTION" },
+  { source: "psych-stoic", target: "myth-book-jeu", label: "GNOSIS AS ARMOR" },
+];
+
+// Update counts
+document.getElementById('node-count').textContent = nodes.length;
+document.getElementById('link-count').textContent = links.length;
+
+const width = window.innerWidth;
+const height = window.innerHeight;
+
+const svg = d3.select("#canvas")
+  .attr("width", width)
+  .attr("height", height);
+
+// Glow filters
+const defs = svg.append("defs");
+
+nodes.forEach(n => {
+  const filter = defs.append("filter").attr("id", `glow-${n.id}`);
+  filter.append("feGaussianBlur").attr("stdDeviation", "4").attr("result", "coloredBlur");
+  const feMerge = filter.append("feMerge");
+  feMerge.append("feMergeNode").attr("in", "coloredBlur");
+  feMerge.append("feMergeNode").attr("in", "SourceGraphic");
+});
+
+// Ring filter
+const ringFilter = defs.append("filter").attr("id", "ring-glow");
+ringFilter.append("feGaussianBlur").attr("stdDeviation", "6").attr("result", "coloredBlur");
+const ringMerge = ringFilter.append("feMerge");
+ringMerge.append("feMergeNode").attr("in", "coloredBlur");
+ringMerge.append("feMergeNode").attr("in", "SourceGraphic");
+
+// Zoom
+const zoom = d3.zoom()
+  .scaleExtent([0.3, 3])
+  .on("zoom", (event) => {
+    g.attr("transform", event.transform);
+  });
+
+svg.call(zoom);
+
+const g = svg.append("g");
+
+// Simulation
+const simulation = d3.forceSimulation(nodes)
+  .force("link", d3.forceLink(links).id(d => d.id).distance(d => {
+    if (d.source.id === "core" || d.target.id === "core") return 160;
+    return 120;
+  }).strength(0.4))
+  .force("charge", d3.forceManyBody().strength(-400))
+  .force("center", d3.forceCenter(width / 2, height / 2))
+  .force("collision", d3.forceCollide().radius(d => d.r + 20));
+
+// Links
+const link = g.append("g").selectAll("line")
+  .data(links)
+  .enter().append("line")
+  .attr("stroke", "rgba(199,255,67,0.12)")
+  .attr("stroke-width", 1)
+  .attr("stroke-dasharray", "3,4");
+
+// Node groups
+const node = g.append("g").selectAll("g")
+  .data(nodes)
+  .enter().append("g")
+  .attr("cursor", "pointer")
+  .call(d3.drag()
+    .on("start", dragstarted)
+    .on("drag", dragged)
+    .on("end", dragended))
+  .on("click", (event, d) => {
+    event.stopPropagation();
+    openPanel(d);
+  })
+  .on("mouseover", function(event, d) {
+    d3.select(this).select(".node-circle")
+      .transition().duration(150)
+      .attr("r", d.r + 4);
+    // Highlight connected links
+    link.transition().duration(150)
+      .attr("stroke", l => {
+        const sid = typeof l.source === 'object' ? l.source.id : l.source;
+        const tid = typeof l.target === 'object' ? l.target.id : l.target;
+        return (sid === d.id || tid === d.id)
+          ? d.color
+          : "rgba(199,255,67,0.08)";
+      })
+      .attr("stroke-width", l => {
+        const sid = typeof l.source === 'object' ? l.source.id : l.source;
+        const tid = typeof l.target === 'object' ? l.target.id : l.target;
+        return (sid === d.id || tid === d.id) ? 1.5 : 1;
+      });
+  })
+  .on("mouseout", function(event, d) {
+    d3.select(this).select(".node-circle")
+      .transition().duration(150)
+      .attr("r", d.r);
+    link.transition().duration(150)
+      .attr("stroke", "rgba(199,255,67,0.12)")
+      .attr("stroke-width", 1);
+  });
+
+// Outer ring (pulse)
+node.append("circle")
+  .attr("class", "node-ring")
+  .attr("r", d => d.r + 10)
+  .attr("fill", "none")
+  .attr("stroke", d => d.color)
+  .attr("stroke-width", 0.5)
+  .attr("opacity", 0.3)
+  .attr("filter", "url(#ring-glow)")
+  .style("animation-delay", (d, i) => `${i * 0.3}s`);
+
+// Main circle
+node.append("circle")
+  .attr("class", "node-circle")
+  .attr("r", d => d.r)
+  .attr("fill", d => d.id === "core" ? "rgba(199,255,67,0.12)" : `${d.color}18`)
+  .attr("stroke", d => d.color)
+  .attr("stroke-width", d => d.id === "core" ? 2 : 1.5)
+  .attr("filter", d => `url(#glow-${d.id})`);
+
+// Inner circle for core
+node.filter(d => d.id === "core")
+  .append("circle")
+  .attr("r", 8)
+  .attr("fill", "#C7FF43")
+  .attr("opacity", 0.6);
+
+// Labels
+node.each(function(d) {
+  const g = d3.select(this);
+  const lines = d.label.split('\n');
+  const yStart = lines.length > 1 ? -6 : 0;
+  lines.forEach((line, i) => {
+    g.append("text")
+      .attr("class", "node-label")
+      .attr("y", yStart + i * 10)
+      .attr("fill", d.color)
+      .style("font-size", d.r > 30 ? "9px" : "8px")
+      .text(line);
+  });
+  g.append("text")
+    .attr("class", "node-sublabel")
+    .attr("y", lines.length > 1 ? 22 : 16)
+    .text(d.sub);
+});
+
+// Simulation tick
+simulation.on("tick", () => {
+  link
+    .attr("x1", d => d.source.x)
+    .attr("y1", d => d.source.y)
+    .attr("x2", d => d.target.x)
+    .attr("y2", d => d.target.y);
+  node.attr("transform", d => `translate(${d.x},${d.y})`);
+});
+
+// Drag handlers
+function dragstarted(event, d) {
+  if (!event.active) simulation.alphaTarget(0.3).restart();
+  d.fx = d.x; d.fy = d.y;
+}
+function dragged(event, d) {
+  d.fx = event.x; d.fy = event.y;
+}
+function dragended(event, d) {
+  if (!event.active) simulation.alphaTarget(0);
+  d.fx = null; d.fy = null;
+}
+
+// Click on SVG background to close panel
+svg.on("click", () => {
+  document.getElementById('detail-panel').style.display = 'none';
+});
+
+// Panel
+function openPanel(d) {
+  const panel = document.getElementById('detail-panel');
+  document.getElementById('panel-domain').textContent = d.domain;
+  document.getElementById('panel-title').textContent = d.title;
+
+  const body = document.getElementById('panel-body');
+  body.innerHTML = `
+    <div class="panel-section">
+      <span class="section-tag tag-claim">CLAIM</span>
+      <div class="section-text">${d.claim}</div>
+    </div>
+    <div class="divider"></div>
+    <div class="panel-section">
+      <span class="section-tag tag-holds">HOLDS</span>
+      <div class="section-text">${d.holds}</div>
+    </div>
+    <div class="divider"></div>
+    <div class="panel-section">
+      <span class="section-tag tag-fails">FAILS</span>
+      <div class="section-text">${d.fails}</div>
+    </div>
+    <div class="divider"></div>
+    <div class="panel-section">
+      <span class="section-tag tag-source">SOURCE</span>
+      <div class="section-text dim">${d.source}</div>
+    </div>
+  `;
+
+  panel.style.display = 'block';
+  body.scrollTop = 0;
+}
+
+document.getElementById('panel-close').addEventListener('click', () => {
+  document.getElementById('detail-panel').style.display = 'none';
+});
+
+// Resize
+window.addEventListener('resize', () => {
+  const w = window.innerWidth, h = window.innerHeight;
+  svg.attr("width", w).attr("height", h);
+  simulation.force("center", d3.forceCenter(w / 2, h / 2));
+  simulation.alpha(0.1).restart();
+});
+</script>
+</body>
+</html>
