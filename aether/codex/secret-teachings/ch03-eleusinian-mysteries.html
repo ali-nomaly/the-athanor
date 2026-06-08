@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Eleusinian Mysteries — Secret Teachings of All Ages</title>
+<link href="https://fonts.googleapis.com/css2?family=Philosopher:ital,wght@0,400;0,700;1,400&family=Uncial+Antiqua&family=GFS+Didot:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void:       #020703;
+    --forest:     #061208;
+    --moss:       #0d2010;
+    --vine:       #1a3d1a;
+    --leaf:       #2a6640;
+    --leaf-bright:#3d9960;
+    --flame:      #e8751a;
+    --flame-dim:  #7a3a08;
+    --ember:      #f0a030;
+    --ember-dim:  #6a4010;
+    --wheat:      #c8a84c;
+    --wheat-dim:  #5a4820;
+    --marble:     #d8cfc0;
+    --marble-dim: #8a8070;
+    --text:       #c0b898;
+    --text-dim:   #706858;
+    --persephone: #7a40a0;
+    --persephone-bright: #b060e0;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--void);
+    color: var(--text);
+    font-family: 'Philosopher', serif;
+    overflow-x: hidden;
+  }
+
+  /* ── CURSOR ── */
+  .cursor {
+    position:fixed; width:10px; height:10px;
+    background: var(--flame);
+    border-radius:50%; pointer-events:none; z-index:9999;
+    transform:translate(-50%,-50%);
+    mix-blend-mode:screen;
+    box-shadow: 0 0 12px var(--flame), 0 0 24px rgba(232,117,26,0.4);
+    transition: transform 0.08s;
+  }
+  .cursor-ring {
+    position:fixed; width:38px; height:38px;
+    border:1px solid rgba(232,117,26,0.35);
+    border-radius:50%; pointer-events:none; z-index:9998;
+    transform:translate(-50%,-50%);
+    transition: all 0.18s ease;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position:relative; min-height:100vh;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    text-align:center; padding:3rem 2rem;
+    overflow:hidden; z-index:1;
+  }
+
+  #torchCanvas {
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    pointer-events:none; z-index:0;
+  }
+
+  .hero-content { position:relative; z-index:2; }
+
+  /* Demeter / wheat sigil */
+  .demeter-sigil {
+    width:200px; height:200px;
+    margin:0 auto 2.5rem;
+    opacity:0;
+    animation: sigilRise 2s cubic-bezier(0.34,1.56,0.64,1) 0.4s forwards;
+    filter: drop-shadow(0 0 25px rgba(232,117,26,0.5)) drop-shadow(0 0 60px rgba(200,168,76,0.25));
+  }
+  @keyframes sigilRise {
+    from { opacity:0; transform:translateY(40px) scale(0.85); }
+    to   { opacity:1; transform:translateY(0)    scale(1); }
+  }
+
+  .chapter-label {
+    font-family:'Philosopher', serif;
+    font-size:0.65rem; letter-spacing:0.55em;
+    color:var(--flame-dim); text-transform:uppercase;
+    margin-bottom:1rem;
+    opacity:0; animation:fadeUp 1s ease 1.3s forwards;
+  }
+  .hero-title {
+    font-family:'Uncial Antiqua', serif;
+    font-size:clamp(1.8rem,5vw,3.8rem);
+    color:var(--ember);
+    text-shadow: 0 0 40px rgba(240,160,48,0.5), 0 0 100px rgba(232,117,26,0.25);
+    line-height:1.2; max-width:780px;
+    opacity:0; animation:fadeUp 1.2s ease 1.6s forwards;
+  }
+  .hero-sub {
+    font-size:clamp(0.85rem,1.8vw,1.05rem);
+    font-style:italic; color:var(--text-dim);
+    margin-top:1rem; letter-spacing:0.1em;
+    opacity:0; animation:fadeUp 1s ease 2s forwards;
+  }
+  .greek-epigraph {
+    font-family:'GFS Didot', serif;
+    font-size:clamp(1rem,2vw,1.3rem);
+    color:var(--leaf-bright);
+    margin-top:1.8rem; letter-spacing:0.08em;
+    opacity:0; animation:fadeUp 1s ease 2.4s forwards;
+    text-shadow: 0 0 20px rgba(61,153,96,0.4);
+  }
+
+  .scroll-cue {
+    position:absolute; bottom:2rem; left:50%; transform:translateX(-50%);
+    display:flex; flex-direction:column; align-items:center; gap:0.5rem;
+    font-family:'Philosopher', serif; font-size:0.55rem; letter-spacing:0.5em;
+    color:var(--flame-dim);
+    opacity:0; animation:fadeIn 1s ease 3s forwards;
+  }
+  .scroll-cue .vline {
+    width:1px; height:50px;
+    background:linear-gradient(to bottom, transparent, var(--flame-dim));
+    animation:flicker 2s ease-in-out 3.5s infinite;
+  }
+  @keyframes flicker {
+    0%,100%{ opacity:0.5; transform:scaleY(1); }
+    50%{ opacity:1; transform:scaleY(1.2); }
+  }
+  @keyframes fadeUp {
+    from{opacity:0;transform:translateY(24px)}
+    to{opacity:1;transform:translateY(0)}
+  }
+  @keyframes fadeIn{ to{opacity:1} }
+
+  /* ── THREE RITES INTRO STRIP ── */
+  .rites-strip {
+    position:relative; z-index:1;
+    display:grid; grid-template-columns:repeat(3,1fr);
+    border-top:1px solid rgba(232,117,26,0.12);
+    border-bottom:1px solid rgba(232,117,26,0.12);
+  }
+  .rite-cell {
+    padding:2.5rem 1.8rem; text-align:center;
+    border-right:1px solid rgba(232,117,26,0.1);
+    transition:background 0.4s;
+    cursor:default;
+  }
+  .rite-cell:last-child{ border-right:none; }
+  .rite-cell:hover { background:rgba(232,117,26,0.05); }
+  .rite-icon { font-size:2.2rem; margin-bottom:1rem; display:block; }
+  .rite-name {
+    font-family:'Uncial Antiqua', serif;
+    font-size:0.85rem; color:var(--ember);
+    letter-spacing:0.08em; margin-bottom:0.6rem;
+  }
+  .rite-desc { font-size:0.88rem; line-height:1.7; color:var(--text-dim); }
+
+  /* ── SECTION ── */
+  .section {
+    position:relative; z-index:1;
+    max-width:860px; margin:0 auto; padding:4rem 2rem;
+  }
+  .section-heading {
+    font-family:'Uncial Antiqua', serif;
+    font-size:clamp(1.1rem,2.5vw,1.7rem);
+    color:var(--ember); letter-spacing:0.06em; margin-bottom:1.8rem;
+  }
+  .section-heading.green { color:var(--leaf-bright); }
+  .section-heading.purple { color:var(--persephone-bright); }
+  .section-heading.marble { color:var(--marble); }
+
+  .body-text {
+    font-size:1.08rem; line-height:2; color:var(--text); margin:1.5rem 0;
+  }
+  .drop-cap::first-letter {
+    font-family:'Uncial Antiqua', serif;
+    font-size:4.5rem; float:left;
+    line-height:0.78; margin:0.1em 0.12em 0 0;
+    color:var(--ember);
+    text-shadow:0 0 30px rgba(232,117,26,0.7);
+  }
+
+  /* ── ORNAMENT ── */
+  .ornament {
+    display:flex; align-items:center; gap:1.2rem;
+    margin:2.5rem auto; max-width:500px; padding:0 2rem;
+  }
+  .ornament-line {
+    flex:1; height:1px;
+    background:linear-gradient(to right, transparent, var(--flame-dim), transparent);
+  }
+  .ornament-glyph { font-size:1.1rem; color:var(--flame); }
+
+  /* ── QUOTE ── */
+  .quote-block {
+    border-left:2px solid var(--flame-dim);
+    padding:1.5rem 2rem; margin:3rem 0;
+    background:rgba(232,117,26,0.04); position:relative;
+  }
+  .quote-block.green { border-left-color:var(--vine); background:rgba(26,61,26,0.08); }
+  .quote-block.purple { border-left-color:var(--persephone); background:rgba(122,64,160,0.06); }
+  .quote-block::before {
+    content:'"'; font-family:'Uncial Antiqua', serif;
+    font-size:4.5rem; color:var(--flame-dim); opacity:0.25;
+    position:absolute; top:-0.8rem; left:0.8rem; line-height:1;
+  }
+  .quote-text { font-size:1.1rem; font-style:italic; line-height:1.95; color:var(--text); }
+  .quote-attr {
+    font-family:'Philosopher', serif; font-size:0.68rem;
+    letter-spacing:0.22em; color:var(--flame-dim); margin-top:1rem;
+  }
+
+  /* ── TORCH PROCESSION INTERACTIVE ── */
+  .torch-section {
+    position:relative; z-index:1;
+    background:linear-gradient(180deg,transparent,rgba(26,61,26,0.08),transparent);
+    padding:5rem 2rem; text-align:center;
+  }
+  #procCanvas {
+    width:100%; max-width:800px; height:280px;
+    margin:2rem auto; display:block; cursor:crosshair;
+  }
+  .proc-note {
+    font-family:'Philosopher', serif; font-size:0.65rem;
+    letter-spacing:0.3em; color:var(--flame-dim); margin-top:0.5rem;
+  }
+
+  /* ── TWO RITES: LESSER & GREATER ── */
+  .rites-comparison {
+    display:grid; grid-template-columns:1fr 1fr; gap:1px;
+    margin:2.5rem 0; background:rgba(232,117,26,0.08);
+    border:1px solid rgba(232,117,26,0.12);
+  }
+  .rite-panel {
+    background:var(--void); padding:2.5rem 2rem;
+  }
+  .rite-panel-title {
+    font-family:'Uncial Antiqua', serif; font-size:1rem;
+    margin-bottom:1.2rem; letter-spacing:0.06em;
+  }
+  .rite-panel.lesser .rite-panel-title { color:var(--wheat); }
+  .rite-panel.greater .rite-panel-title { color:var(--ember); }
+  .rite-panel ul { list-style:none; }
+  .rite-panel ul li {
+    font-size:0.93rem; line-height:1.8; color:var(--text-dim);
+    padding:0.4rem 0; border-bottom:1px solid rgba(255,255,255,0.04);
+    padding-left:1.2rem; position:relative;
+  }
+  .rite-panel ul li::before {
+    content:'·'; position:absolute; left:0; color:var(--flame-dim);
+  }
+
+  /* ── PERSEPHONE MYTH SCROLL ── */
+  .myth-scroll {
+    position:relative; overflow:hidden;
+    margin:3rem 0; padding:2.5rem 2rem 1rem;
+    background:linear-gradient(135deg,rgba(122,64,160,0.06),rgba(26,61,26,0.08));
+    border:1px solid rgba(122,64,160,0.15);
+  }
+  .myth-scroll-title {
+    font-family:'Uncial Antiqua', serif; font-size:1rem;
+    color:var(--persephone-bright); margin-bottom:1.5rem;
+  }
+  .myth-steps {
+    display:flex; flex-direction:column; gap:0;
+  }
+  .myth-step {
+    display:grid; grid-template-columns:50px 1fr;
+    gap:1rem; padding:1.2rem 0;
+    border-bottom:1px solid rgba(122,64,160,0.08);
+    opacity:0; transform:translateX(-20px);
+    transition:all 0.7s ease;
+  }
+  .myth-step.visible { opacity:1; transform:translateX(0); }
+  .myth-step:last-child { border-bottom:none; }
+  .myth-num {
+    font-family:'GFS Didot', serif; font-size:1.6rem;
+    color:var(--persephone-bright); opacity:0.4;
+    text-align:right; padding-top:0.1rem;
+  }
+  .myth-text { font-size:0.97rem; line-height:1.8; color:var(--text-dim); }
+  .myth-text strong { color:var(--persephone-bright); font-weight:400; }
+
+  /* ── ORPHIC EGG INTERACTIVE ── */
+  .orphic-section {
+    padding:5rem 2rem; text-align:center;
+    position:relative; z-index:1;
+  }
+  #orphicCanvas {
+    width:100%; max-width:480px; height:520px;
+    margin:2rem auto; display:block; cursor:pointer;
+  }
+  .orphic-info {
+    max-width:540px; margin:0 auto;
+    font-size:1rem; line-height:1.8; color:var(--text-dim);
+    font-style:italic; min-height:3.5rem;
+    transition:color 0.4s;
+  }
+
+  /* ── DIONYSUS CARD GRID ── */
+  .dionysus-grid {
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:1.5rem; margin:2.5rem 0;
+  }
+  .dionysus-card {
+    border:1px solid rgba(61,153,96,0.15);
+    background:rgba(26,61,26,0.15);
+    padding:1.8rem 1.5rem;
+    transition:all 0.4s ease; cursor:default;
+    position:relative; overflow:hidden;
+  }
+  .dionysus-card::before {
+    content:''; position:absolute;
+    inset:0; background:linear-gradient(135deg,rgba(61,153,96,0.1),transparent);
+    opacity:0; transition:opacity 0.4s;
+  }
+  .dionysus-card:hover {
+    border-color:var(--leaf-bright);
+    transform:translateY(-5px);
+    box-shadow:0 20px 50px rgba(0,0,0,0.6), 0 0 30px rgba(61,153,96,0.1);
+  }
+  .dionysus-card:hover::before { opacity:1; }
+  .card-icon { font-size:2rem; margin-bottom:1rem; display:block; }
+  .card-title {
+    font-family:'Uncial Antiqua', serif; font-size:0.85rem;
+    color:var(--leaf-bright); letter-spacing:0.08em; margin-bottom:0.7rem;
+  }
+  .card-body { font-size:0.9rem; line-height:1.7; color:var(--text-dim); }
+
+  /* ── VINE DIVIDER ── */
+  .vine-div {
+    text-align:center; padding:2rem 0; font-size:1.3rem;
+    color:var(--vine); letter-spacing:0.5rem;
+    opacity:0.6;
+  }
+
+  /* ── FOOTER NAV ── */
+  .book-nav {
+    position:relative; z-index:1;
+    padding:4rem 2rem; text-align:center;
+    border-top:1px solid rgba(232,117,26,0.1);
+  }
+  .book-nav-series {
+    font-family:'Philosopher', serif; font-size:0.6rem;
+    letter-spacing:0.4em; color:var(--flame-dim); margin-bottom:0.8rem;
+  }
+  .book-nav-title {
+    font-family:'Uncial Antiqua', serif; font-size:0.9rem;
+    color:var(--marble); margin-bottom:2rem;
+  }
+  .nav-row { display:flex; justify-content:center; gap:1.5rem; flex-wrap:wrap; }
+  .nav-btn {
+    font-family:'Philosopher', serif; font-size:0.72rem;
+    letter-spacing:0.18em; color:var(--marble);
+    border:1px solid rgba(216,207,192,0.2);
+    padding:0.8rem 2rem; background:none;
+    transition:all 0.3s; text-decoration:none; cursor:pointer;
+  }
+  .nav-btn:hover {
+    border-color:var(--marble); background:rgba(216,207,192,0.06);
+    box-shadow:0 0 20px rgba(216,207,192,0.1);
+  }
+  .nav-btn.prev { color:var(--text-dim); border-color:rgba(112,104,88,0.3); }
+
+  /* ── BG ORBS ── */
+  .orb {
+    position:fixed; border-radius:50%;
+    filter:blur(90px); pointer-events:none; z-index:0;
+  }
+  .orb-1 { width:600px; height:600px; background:var(--forest); top:-100px; right:-200px; opacity:0.8; }
+  .orb-2 { width:400px; height:400px; background:var(--persephone); bottom:0; left:-100px; opacity:0.04; }
+  .orb-3 { width:500px; height:500px; background:var(--flame); top:40%; left:50%; opacity:0.03; }
+
+  /* ── SCROLL REVEAL ── */
+  .reveal {
+    opacity:0; transform:translateY(35px);
+    transition:all 0.85s ease;
+  }
+  .reveal.visible { opacity:1; transform:translateY(0); }
+
+  @media(max-width:620px){
+    .rites-strip{ grid-template-columns:1fr; }
+    .rites-comparison{ grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <canvas id="torchCanvas"></canvas>
+  <div class="hero-content">
+
+    <!-- Demeter SVG Sigil -->
+    <svg class="demeter-sigil" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" fill="none">
+      <!-- Outer wheat circle -->
+      <circle cx="100" cy="100" r="90" stroke="#c8a84c" stroke-width="0.5" stroke-dasharray="6 4" opacity="0.5"/>
+      <circle cx="100" cy="100" r="72" stroke="#e8751a" stroke-width="0.4" opacity="0.3"/>
+      <!-- Wheat stalks radiating -->
+      <g opacity="0.65" stroke="#c8a84c" stroke-width="1">
+        <line x1="100" y1="100" x2="100" y2="20"/>
+        <ellipse cx="100" cy="14" rx="5" ry="8" fill="#c8a84c" opacity="0.8"/>
+        <line x1="100" y1="100" x2="155" y2="45"/>
+        <ellipse cx="159" cy="41" rx="5" ry="8" transform="rotate(45 159 41)" fill="#c8a84c" opacity="0.8"/>
+        <line x1="100" y1="100" x2="180" y2="100"/>
+        <ellipse cx="186" cy="100" rx="5" ry="8" transform="rotate(90 186 100)" fill="#c8a84c" opacity="0.8"/>
+        <line x1="100" y1="100" x2="155" y2="155"/>
+        <ellipse cx="159" cy="159" rx="5" ry="8" transform="rotate(135 159 159)" fill="#c8a84c" opacity="0.8"/>
+        <line x1="100" y1="100" x2="100" y2="180"/>
+        <ellipse cx="100" cy="186" rx="5" ry="8" transform="rotate(180 100 186)" fill="#c8a84c" opacity="0.8"/>
+        <line x1="100" y1="100" x2="45" y2="155"/>
+        <ellipse cx="41" cy="159" rx="5" ry="8" transform="rotate(225 41 159)" fill="#c8a84c" opacity="0.8"/>
+        <line x1="100" y1="100" x2="20" y2="100"/>
+        <ellipse cx="14" cy="100" rx="5" ry="8" transform="rotate(270 14 100)" fill="#c8a84c" opacity="0.8"/>
+        <line x1="100" y1="100" x2="45" y2="45"/>
+        <ellipse cx="41" cy="41" rx="5" ry="8" transform="rotate(315 41 41)" fill="#c8a84c" opacity="0.8"/>
+      </g>
+      <!-- Torch at center -->
+      <rect x="96" y="68" width="8" height="30" rx="1" fill="#7a3a08" opacity="0.9"/>
+      <ellipse cx="100" cy="65" rx="10" ry="14" fill="#e8751a" opacity="0.85"/>
+      <ellipse cx="100" cy="60" rx="6" ry="10" fill="#f0a030" opacity="0.7"/>
+      <ellipse cx="100" cy="56" rx="3" ry="6" fill="#ffe0a0" opacity="0.6"/>
+      <!-- Poppy flower hints -->
+      <circle cx="58" cy="58" r="6" stroke="#e8751a" stroke-width="0.8" opacity="0.5"/>
+      <circle cx="142" cy="58" r="6" stroke="#e8751a" stroke-width="0.8" opacity="0.5"/>
+      <circle cx="58" cy="142" r="6" stroke="#e8751a" stroke-width="0.8" opacity="0.5"/>
+      <circle cx="142" cy="142" r="6" stroke="#e8751a" stroke-width="0.8" opacity="0.5"/>
+    </svg>
+
+    <p class="chapter-label">Chapter III · Secret Teachings of All Ages</p>
+    <h1 class="hero-title">The Eleusinian<br>Mysteries</h1>
+    <p class="hero-sub">The Lesser & Greater Rites · The Orphic Mysteries · Bacchic & Dionysiac Rites</p>
+    <p class="greek-epigraph">εὐδαίμων ὅστις ἰδὼν κεῖν᾽ εἶσ᾽ ὑπὸ χθόν᾽</p>
+    <p class="hero-sub" style="font-size:0.75rem;margin-top:0.4rem;opacity:0.7">"Blessed is he who has seen these things before going beneath the earth" — Pindar</p>
+  </div>
+  <div class="scroll-cue">
+    <div class="vline"></div>
+    <span>DESCEND</span>
+  </div>
+</section>
+
+<!-- ═══ THREE RITES STRIP ═══ -->
+<div class="rites-strip reveal">
+  <div class="rite-cell">
+    <span class="rite-icon">🌾</span>
+    <p class="rite-name">Eleusinian</p>
+    <p class="rite-desc">The greatest of all Greek mysteries, held for 2,000 years at Eleusis — initiating Plato, Cicero, Marcus Aurelius into the secret of death and rebirth.</p>
+  </div>
+  <div class="rite-cell">
+    <span class="rite-icon">🎵</span>
+    <p class="rite-name">Orphic</p>
+    <p class="rite-desc">Born of Orpheus's descent into Hades — a mystery of the soul's celestial origin, its fall into matter, and the musical path of its return.</p>
+  </div>
+  <div class="rite-cell">
+    <span class="rite-icon">🍇</span>
+    <p class="rite-name">Dionysiac</p>
+    <p class="rite-desc">The wildest of the mysteries — through ritual ecstasy, the Bacchant dissolved the ego and experienced identity with the god himself.</p>
+  </div>
+</div>
+
+<!-- ═══ INTRO ═══ -->
+<div class="section">
+  <div class="ornament reveal">
+    <div class="ornament-line"></div>
+    <div class="ornament-glyph">🔥</div>
+    <div class="ornament-line"></div>
+  </div>
+  <p class="body-text drop-cap reveal">
+    For two thousand unbroken years, in the sacred precincts of Eleusis nine miles from Athens, something happened to the initiates of the Greater Mysteries that no initiate ever described — and yet its effect was universally attested. Pindar called the uninitiated "wretched." Cicero wrote that among all the institutions of Athens, none was more divine. Plato structured his entire philosophy around the experience. What did they see?
+  </p>
+  <p class="body-text reveal">
+    Hall approaches the Eleusinian rites not as primitive superstition but as the most sophisticated psychology of transformation the ancient world produced. The Mysteries did not offer information about the afterlife — they <em>enacted</em> it. The candidate died symbolically and was reborn. Whatever neurological or spiritual event this produced, its fruits were indistinguishable from the highest states described in every contemplative tradition.
+  </p>
+  <div class="quote-block reveal">
+    <p class="quote-text">Beautiful indeed is the Mystery given us by the blessed gods: death is for mortals no longer an evil, but a blessing.</p>
+    <p class="quote-attr">— Inscription from an Eleusinian tablet</p>
+  </div>
+</div>
+
+<!-- ═══ TORCH PROCESSION INTERACTIVE ═══ -->
+<div class="torch-section">
+  <h2 class="section-heading reveal">The Sacred Procession</h2>
+  <p class="body-text reveal" style="max-width:640px;margin:0 auto;">
+    Each September, ten thousand initiates walked the Sacred Way from Athens to Eleusis — a fourteen-mile torch-lit procession. Move your cursor across the canvas to carry a torch through the ancient night.
+  </p>
+  <canvas id="procCanvas"></canvas>
+  <p class="proc-note" id="procNote">Move your cursor across the Sacred Way</p>
+</div>
+
+<!-- ═══ LESSER vs GREATER RITES ═══ -->
+<div class="section">
+  <h2 class="section-heading reveal">The Two Degrees of Eleusis</h2>
+  <div class="rites-comparison reveal">
+    <div class="rite-panel lesser">
+      <p class="rite-panel-title">⚜️ The Lesser Mysteries</p>
+      <ul>
+        <li>Held each spring at Agrae, on the Ilissus river</li>
+        <li>Preliminary purification — ritual bathing, fasting</li>
+        <li>Myth of Persephone enacted in symbolic drama</li>
+        <li>Sacrifice of a pig — the animal sacred to Demeter</li>
+        <li>Candidates become <em>mystai</em> — the veiled ones</li>
+        <li>Preparation for, not completion of, initiation</li>
+        <li>Heracles and Dionysus were said to need these rites</li>
+      </ul>
+    </div>
+    <div class="rite-panel greater">
+      <p class="rite-panel-title">🔥 The Greater Mysteries</p>
+      <ul>
+        <li>Nine days in September, drawing tens of thousands</li>
+        <li>The <em>hiera</em> — sacred objects — carried in a chest</li>
+        <li>Fasting, procession, torchlit vigil at the sea</li>
+        <li>The <em>Telesterion</em> — the Hall of Initiation — held 3,000</li>
+        <li>The vision: <em>epopteia</em> — the highest grade, "the beholding"</li>
+        <li>Death of the ego enacted; rebirth as divine child</li>
+        <li>The hierophant's secret word — never recorded</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PERSEPHONE MYTH SCROLL ═══ -->
+<div class="section">
+  <div class="myth-scroll reveal">
+    <p class="myth-scroll-title">The Myth at the Heart of Eleusis</p>
+    <div class="myth-steps" id="mythSteps">
+      <div class="myth-step">
+        <div class="myth-num">Ι</div>
+        <div class="myth-text"><strong>Kore</strong> gathers flowers in the meadow of Nysa — the soul in its primal innocence, unaware of the abyss beneath.</div>
+      </div>
+      <div class="myth-step">
+        <div class="myth-num">ΙΙ</div>
+        <div class="myth-text"><strong>Hades</strong> rises from the underworld and seizes Kore, dragging her beneath the earth — the soul's fall into matter and incarnation.</div>
+      </div>
+      <div class="myth-step">
+        <div class="myth-num">ΙΙΙ</div>
+        <div class="myth-text"><strong>Demeter</strong> searches the earth with torches for nine days, refusing all food — the divine mother mourning, the world growing barren in her grief.</div>
+      </div>
+      <div class="myth-step">
+        <div class="myth-num">ΙV</div>
+        <div class="myth-text"><strong>Persephone</strong> eats six pomegranate seeds in the underworld — binding herself to two worlds, neither fully above nor below.</div>
+      </div>
+      <div class="myth-step">
+        <div class="myth-num">V</div>
+        <div class="myth-text"><strong>The Compromise</strong>: six months above with Demeter (spring, summer), six months below with Hades (autumn, winter) — the soul learning to inhabit both realms consciously.</div>
+      </div>
+      <div class="myth-step">
+        <div class="myth-num">VΙ</div>
+        <div class="myth-text"><strong>The Initiate</strong> who completes the rites becomes <em>Kore</em> — the soul that has descended, endured, and returned, now knowing both death and immortality from within.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ ORPHIC EGG INTERACTIVE ═══ -->
+<div class="orphic-section">
+  <h2 class="section-heading purple reveal">The Orphic Egg</h2>
+  <p class="body-text reveal" style="max-width:580px;margin:0 auto;">
+    At the center of Orphic cosmology lay a cosmic egg — the Orphic Egg — from which Phanes, the first god of light, burst forth at the beginning of time. Hover each layer to explore the Orphic cosmos.
+  </p>
+  <canvas id="orphicCanvas" width="480" height="520"></canvas>
+  <p class="orphic-info" id="orphicInfo">Hover a layer of the cosmic egg</p>
+</div>
+
+<!-- ═══ DIONYSIAC CARDS ═══ -->
+<div class="section">
+  <h2 class="section-heading green reveal">The Dionysiac & Bacchic Rites</h2>
+  <p class="body-text reveal">
+    If Eleusis initiated through solemn drama, Dionysus initiated through <em>ekstasis</em> — literally "standing outside oneself." The Maenads ran to the mountains, tore animals apart with their hands, and returned transformed. Hall sees in this wildness not depravity but the most direct of all initiations: the complete dissolution of the constructed self.
+  </p>
+  <div class="dionysus-grid">
+    <div class="dionysus-card reveal">
+      <span class="card-icon">🌿</span>
+      <p class="card-title">The Thyrsus</p>
+      <p class="card-body">The fennel staff topped with a pine cone — Dionysus's scepter. The pine cone represents the pineal gland; the staff is the spine. The Bacchant carries their own nervous system as their sacred weapon.</p>
+    </div>
+    <div class="dionysus-card reveal">
+      <span class="card-icon">🐆</span>
+      <p class="card-title">Sparagmos</p>
+      <p class="card-body">The ritual tearing-apart of an animal — and in myth, of Dionysus himself by the Titans. Hall reads this as the dismemberment of ego-consciousness, prerequisite for divine rebirth.</p>
+    </div>
+    <div class="dionysus-card reveal">
+      <span class="card-icon">🍷</span>
+      <p class="card-title">The Sacred Wine</p>
+      <p class="card-body">Wine was not mere intoxicant — it was the blood of the god. The Bacchic communicant who drank ritually drank Dionysus himself, achieving temporary identity with divine nature.</p>
+    </div>
+    <div class="dionysus-card reveal">
+      <span class="card-icon">🎭</span>
+      <p class="card-title">Origin of Theatre</p>
+      <p class="card-body">Greek tragedy and comedy both emerged from Dionysiac ritual. The mask (persona) was originally the god's face worn by the initiate. All drama begins as mystery religion.</p>
+    </div>
+    <div class="dionysus-card reveal">
+      <span class="card-icon">🌕</span>
+      <p class="card-title">The Midnight Rites</p>
+      <p class="card-body">The Dionysiac rites were performed at night on mountains under the full moon — the light of Selene replacing the sun, feminine and unconscious forces ruling supreme.</p>
+    </div>
+    <div class="dionysus-card reveal">
+      <span class="card-icon">♾️</span>
+      <p class="card-title">The Twice-Born</p>
+      <p class="card-body">Dionysus was born twice — from Semele and then from Zeus's thigh. The initiate who completed the Bacchic rites was likewise "twice-born," having died to ordinary life and emerged divine.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CLOSING QUOTE ═══ -->
+<div class="section">
+  <div class="ornament reveal">
+    <div class="ornament-line"></div>
+    <div class="ornament-glyph">🌾</div>
+    <div class="ornament-line"></div>
+  </div>
+  <div class="quote-block green reveal">
+    <p class="quote-text">The initiated do not merely learn truths — they become them. The Eleusinian rites did not teach the doctrine of immortality; they produced the experience of it, so convincingly that death lost its sting in a single night.</p>
+    <p class="quote-attr">— Hall's summation, Chapter III</p>
+  </div>
+</div>
+
+<!-- ═══ FOOTER NAV ═══ -->
+<nav class="book-nav">
+  <p class="book-nav-series">The Secret Teachings of All Ages · Manly P. Hall · 1928</p>
+  <p class="book-nav-title">Chapter IV: Atlantis and the Gods of Antiquity →</p>
+  <div class="nav-row">
+    <a class="nav-btn prev" href="ch02-gnostic-mysteries.html">← Chapter II</a>
+    <a class="nav-btn" href="#">Chapter IV →</a>
+  </div>
+</nav>
+
+<script>
+// ── CURSOR ──
+const cursor = document.getElementById('cursor');
+const ring   = document.getElementById('cursorRing');
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top  = e.clientY + 'px';
+  setTimeout(() => {
+    ring.style.left = e.clientX + 'px';
+    ring.style.top  = e.clientY + 'px';
+  }, 90);
+});
+
+// ── SCROLL REVEAL ──
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+  });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+// ── MYTH STEPS ──
+const mythObs = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.querySelectorAll('.myth-step').forEach((step, i) => {
+        setTimeout(() => step.classList.add('visible'), i * 180);
+      });
+      mythObs.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+const mythEl = document.getElementById('mythSteps');
+if (mythEl) mythObs.observe(mythEl.parentElement);
+
+// ── HERO TORCH CANVAS (firefly/torch particles) ──
+(function() {
+  const c = document.getElementById('torchCanvas');
+  const ctx = c.getContext('2d');
+  function resize() { c.width = window.innerWidth; c.height = window.innerHeight; }
+  resize(); window.addEventListener('resize', resize);
+
+  // Torches along a path
+  const torches = Array.from({length: 60}, (_, i) => ({
+    x: Math.random() * c.width,
+    y: Math.random() * c.height,
+    vx: (Math.random() - 0.5) * 0.3,
+    vy: -Math.random() * 0.5 - 0.1,
+    life: Math.random(),
+    size: Math.random() * 3 + 1,
+    phase: Math.random() * Math.PI * 2,
+  }));
+
+  function draw(t) {
+    ctx.clearRect(0, 0, c.width, c.height);
+    torches.forEach(p => {
+      p.x += p.vx + Math.sin(t * 0.001 + p.phase) * 0.3;
+      p.y += p.vy;
+      p.life -= 0.003;
+      if (p.life <= 0) {
+        p.x = Math.random() * c.width;
+        p.y = c.height + 10;
+        p.life = 1;
+        p.vx = (Math.random() - 0.5) * 0.3;
+        p.vy = -Math.random() * 0.6 - 0.1;
+      }
+      const a = p.life * 0.6;
+      const flicker = 0.7 + 0.3 * Math.sin(t * 0.005 + p.phase);
+      // Core
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size * flicker, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(240,160,48,${a * flicker})`;
+      ctx.fill();
+      // Glow
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size * 3 * flicker, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(232,117,26,${a * 0.15 * flicker})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+})();
+
+// ── TORCH PROCESSION CANVAS ──
+(function() {
+  const canvas = document.getElementById('procCanvas');
+  const ctx = canvas.getContext('2d');
+  const W = 800, H = 280;
+  canvas.width = W; canvas.height = H;
+
+  let mouseX = -1, mouseY = H / 2;
+  const figures = Array.from({length: 18}, (_, i) => ({
+    x: (i / 17) * (W - 80) + 40,
+    baseY: H * 0.65,
+    phase: i * 0.4,
+    lit: false,
+  }));
+
+  canvas.addEventListener('mousemove', e => {
+    const rect = canvas.getBoundingClientRect();
+    mouseX = (e.clientX - rect.left) * (W / rect.width);
+    mouseY = (e.clientY - rect.top) * (H / rect.height);
+  });
+  canvas.addEventListener('mouseleave', () => { mouseX = -1; });
+
+  function drawFigure(ctx, x, y, lit, phase, t) {
+    const sway = Math.sin(t * 0.02 + phase) * 1.5;
+    // Body
+    ctx.strokeStyle = lit ? 'rgba(200,168,76,0.7)' : 'rgba(90,72,32,0.5)';
+    ctx.lineWidth = 1.5;
+    // Head
+    ctx.beginPath();
+    ctx.arc(x + sway, y - 28, 5, 0, Math.PI * 2);
+    ctx.stroke();
+    // Torso
+    ctx.beginPath();
+    ctx.moveTo(x + sway, y - 23);
+    ctx.lineTo(x + sway, y);
+    ctx.stroke();
+    // Legs
+    ctx.beginPath();
+    ctx.moveTo(x + sway, y);
+    ctx.lineTo(x + sway - 4, y + 14);
+    ctx.moveTo(x + sway, y);
+    ctx.lineTo(x + sway + 4, y + 14);
+    ctx.stroke();
+    // Torch arm
+    ctx.beginPath();
+    ctx.moveTo(x + sway - 4, y - 16);
+    ctx.lineTo(x + sway - 14, y - 28);
+    ctx.stroke();
+
+    if (lit) {
+      const flicker = 0.8 + 0.2 * Math.sin(t * 0.08 + phase * 3);
+      // Torch flame
+      const grad = ctx.createRadialGradient(x + sway - 14, y - 32, 1, x + sway - 14, y - 32, 10 * flicker);
+      grad.addColorStop(0, `rgba(255,230,150,${0.9 * flicker})`);
+      grad.addColorStop(0.4, `rgba(240,160,48,${0.6 * flicker})`);
+      grad.addColorStop(1, 'rgba(232,117,26,0)');
+      ctx.beginPath();
+      ctx.arc(x + sway - 14, y - 32, 10 * flicker, 0, Math.PI * 2);
+      ctx.fillStyle = grad;
+      ctx.fill();
+    }
+  }
+
+  let t = 0;
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+
+    // Night sky gradient
+    const sky = ctx.createLinearGradient(0, 0, 0, H);
+    sky.addColorStop(0, '#020703');
+    sky.addColorStop(0.7, '#061208');
+    sky.addColorStop(1, '#0d2010');
+    ctx.fillStyle = sky;
+    ctx.fillRect(0, 0, W, H);
+
+    // Stars
+    if (t % 3 < 1) {
+      for (let i = 0; i < 4; i++) {
+        const sx = Math.random() * W, sy = Math.random() * H * 0.6;
+        ctx.beginPath();
+        ctx.arc(sx, sy, 0.8, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(200,184,150,0.5)';
+        ctx.fill();
+      }
+    }
+
+    // Ground
+    ctx.fillStyle = 'rgba(13,32,16,0.8)';
+    ctx.fillRect(0, H * 0.72, W, H * 0.28);
+    // Path
+    ctx.fillStyle = 'rgba(90,72,32,0.3)';
+    ctx.beginPath();
+    ctx.moveTo(0, H * 0.75); ctx.lineTo(W, H * 0.75);
+    ctx.lineTo(W, H * 0.72); ctx.lineTo(0, H * 0.72);
+    ctx.fill();
+
+    // Figures
+    figures.forEach(fig => {
+      const dx = mouseX - fig.x, dy = mouseY - fig.baseY;
+      fig.lit = mouseX >= 0 && Math.sqrt(dx*dx + dy*dy) < 70;
+      drawFigure(ctx, fig.x, fig.baseY, fig.lit, fig.phase, t);
+    });
+
+    // Cursor torch if on canvas
+    if (mouseX >= 0) {
+      const flicker = 0.8 + 0.2 * Math.sin(t * 0.1);
+      const grad = ctx.createRadialGradient(mouseX, mouseY - 20, 2, mouseX, mouseY - 20, 50 * flicker);
+      grad.addColorStop(0, `rgba(255,220,120,${0.5 * flicker})`);
+      grad.addColorStop(0.5, `rgba(232,117,26,${0.2 * flicker})`);
+      grad.addColorStop(1, 'rgba(232,117,26,0)');
+      ctx.beginPath();
+      ctx.arc(mouseX, mouseY - 20, 50 * flicker, 0, Math.PI * 2);
+      ctx.fillStyle = grad;
+      ctx.fill();
+    }
+
+    t++;
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ── ORPHIC EGG ──
+(function() {
+  const canvas = document.getElementById('orphicCanvas');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const cx = W / 2, cy = H / 2 + 10;
+  const info = document.getElementById('orphicInfo');
+
+  const layers = [
+    {
+      rx: 40, ry: 55,
+      label: 'Phanes',
+      color: '#fff8d0',
+      desc: 'The first-born god of light, emerging from the egg. Hermaphroditic, winged, golden — carrying the seeds of all future creation within its radiant body.',
+    },
+    {
+      rx: 72, ry: 95,
+      label: 'Pneuma',
+      color: '#f0a030',
+      desc: 'The divine breath surrounding Phanes — cosmic wind, life-force, the animating intelligence that will breathe into all living things.',
+    },
+    {
+      rx: 104, ry: 135,
+      label: 'Ether',
+      color: '#e8751a',
+      desc: 'The fiery fifth element — the substance of the divine world. Not the air we breathe but the luminous medium through which gods move.',
+    },
+    {
+      rx: 138, ry: 175,
+      label: 'Chaos',
+      color: '#7a40a0',
+      desc: 'Not disorder but primordial formlessness — the infinite potential from which all form will eventually emerge through the will of Phanes.',
+    },
+    {
+      rx: 175, ry: 220,
+      label: 'The Serpent',
+      color: '#2a6640',
+      desc: 'The world-serpent Chronos coiled around the egg — time itself wrapping eternity, the precondition of all manifestation in a changing universe.',
+    },
+  ];
+
+  let hovered = null;
+  let t = 0;
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    t += 0.5;
+
+    // Serpent coils (decorative background)
+    for (let i = 0; i < 6; i++) {
+      const angle = (i / 6) * Math.PI * 2 + t * 0.005;
+      const coilR = 210;
+      const x1 = cx + Math.cos(angle) * coilR;
+      const y1 = cy + Math.sin(angle) * (coilR * 0.6);
+      const x2 = cx + Math.cos(angle + 0.5) * (coilR - 20);
+      const y2 = cy + Math.sin(angle + 0.5) * ((coilR - 20) * 0.6);
+      ctx.beginPath();
+      ctx.moveTo(x1, y1); ctx.quadraticCurveTo(cx, cy, x2, y2);
+      ctx.strokeStyle = 'rgba(42,102,64,0.15)';
+      ctx.lineWidth = 8;
+      ctx.stroke();
+    }
+
+    // Draw layers outer → inner
+    [...layers].reverse().forEach((layer, ri) => {
+      const i = layers.length - 1 - ri;
+      const isHov = hovered === layer;
+      const pulse = isHov ? Math.sin(t * 0.1) * 3 : 0;
+
+      // Egg shape (ellipse)
+      ctx.beginPath();
+      ctx.ellipse(cx, cy, layer.rx + pulse, layer.ry + pulse, 0, 0, Math.PI * 2);
+
+      // Fill
+      const alpha = isHov ? 0.25 : 0.12;
+      ctx.fillStyle = layer.color + Math.round(alpha * 255).toString(16).padStart(2, '0');
+      ctx.fill();
+
+      // Stroke
+      ctx.strokeStyle = isHov ? layer.color : layer.color + '55';
+      ctx.lineWidth = isHov ? 1.5 : 0.7;
+      ctx.stroke();
+
+      // Label
+      const lx = cx + layer.rx + pulse + 8;
+      const ly = cy;
+      ctx.font = `${isHov ? 13 : 11}px 'Philosopher', serif`;
+      ctx.fillStyle = isHov ? layer.color : layer.color + 'aa';
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'middle';
+      ctx.shadowBlur = isHov ? 8 : 0;
+      ctx.shadowColor = layer.color;
+      ctx.fillText(layer.label, lx, ly);
+      ctx.shadowBlur = 0;
+
+      // Tick mark
+      ctx.beginPath();
+      ctx.moveTo(cx + layer.rx + pulse, cy);
+      ctx.lineTo(cx + layer.rx + pulse + 6, cy);
+      ctx.strokeStyle = isHov ? layer.color : layer.color + '55';
+      ctx.lineWidth = 0.8;
+      ctx.stroke();
+    });
+
+    // Center glow (Phanes)
+    const glowR = 30 + 5 * Math.sin(t * 0.08);
+    const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, glowR);
+    grad.addColorStop(0, 'rgba(255,248,200,0.7)');
+    grad.addColorStop(0.5, 'rgba(240,160,48,0.3)');
+    grad.addColorStop(1, 'rgba(240,160,48,0)');
+    ctx.beginPath();
+    ctx.ellipse(cx, cy, glowR, glowR * 1.1, 0, 0, Math.PI * 2);
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    requestAnimationFrame(draw);
+  }
+
+  canvas.addEventListener('mousemove', e => {
+    const rect = canvas.getBoundingClientRect();
+    const mx = (e.clientX - rect.left) * (W / rect.width);
+    const my = (e.clientY - rect.top)  * (H / rect.height);
+
+    hovered = null;
+    // Check from outermost inward, stop at first match
+    for (let i = layers.length - 1; i >= 0; i--) {
+      const l = layers[i];
+      const dx = (mx - cx) / l.rx, dy = (my - cy) / l.ry;
+      if (dx*dx + dy*dy <= 1.05) {
+        // Check not inside next inner layer
+        if (i === 0 || (() => {
+          const ni = layers[i-1];
+          const dx2 = (mx-cx)/ni.rx, dy2 = (my-cy)/ni.ry;
+          return dx2*dx2 + dy2*dy2 > 1;
+        })()) {
+          hovered = l; break;
+        }
+      }
+    }
+
+    if (hovered) {
+      info.textContent = `${hovered.label} — ${hovered.desc}`;
+      info.style.color = hovered.color;
+    } else {
+      info.textContent = 'Hover a layer of the cosmic egg';
+      info.style.color = '';
+    }
+  });
+  canvas.addEventListener('mouseleave', () => {
+    hovered = null;
+    info.textContent = 'Hover a layer of the cosmic egg';
+    info.style.color = '';
+  });
+
+  draw();
+})();
+</script>
+</body>
+</html>

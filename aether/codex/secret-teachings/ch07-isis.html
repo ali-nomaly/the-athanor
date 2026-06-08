@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Isis, the Virgin of the World — Secret Teachings of All Ages</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Cinzel:wght@400;600&family=Sorts+Mill+Goudy:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void:         #03020a;
+    --indigo-deep:  #07051a;
+    --indigo:       #0e0a2e;
+    --indigo-mid:   #160e42;
+    --violet:       #2a1660;
+    --violet-bright:#5530b0;
+    --moonsilver:   #c8d8f0;
+    --moonsilver-dim:#4a5878;
+    --silver:       #e8eef8;
+    --silver-dim:   #6a7890;
+    --lotus-pink:   #d87090;
+    --lotus-pale:   #f0a8b8;
+    --lotus-dim:    #703050;
+    --nile:         #1a4060;
+    --nile-bright:  #2870a8;
+    --nile-glow:    #60b8e8;
+    --gold:         #c8a030;
+    --gold-dim:     #4a3a10;
+    --gold-light:   #f0d070;
+    --linen:        #d8c8a8;
+    --linen-dim:    #605040;
+    --text:         #b8c8e0;
+    --text-dim:     #5868a0;
+    --isis-white:   #f0ece4;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body {
+    background: var(--void);
+    color: var(--text);
+    font-family: 'Sorts Mill Goudy', serif;
+    overflow-x: hidden;
+  }
+
+  /* ── CURSOR ── */
+  .cursor {
+    position:fixed; width:8px; height:8px;
+    background: var(--lotus-pale);
+    border-radius:50%; pointer-events:none; z-index:9999;
+    transform:translate(-50%,-50%);
+    mix-blend-mode:screen;
+    box-shadow:0 0 12px var(--lotus-pink), 0 0 24px rgba(216,112,144,0.3);
+  }
+  .cursor-ring {
+    position:fixed; width:32px; height:32px;
+    border:1px solid rgba(200,168,240,0.3); border-radius:50%;
+    pointer-events:none; z-index:9998;
+    transform:translate(-50%,-50%);
+    transition:all 0.2s ease;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position:relative; min-height:100vh;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    text-align:center; overflow:hidden; z-index:1;
+  }
+  #nightCanvas {
+    position:absolute; inset:0; width:100%; height:100%;
+    pointer-events:none; z-index:0;
+  }
+  .hero-content { position:relative; z-index:2; padding:2rem; }
+
+  /* Isis sigil SVG */
+  .isis-sigil {
+    width:200px; height:200px;
+    margin:0 auto 2.5rem;
+    opacity:0;
+    animation:veilLift 2.5s cubic-bezier(0.22,1,0.36,1) 0.3s forwards;
+    filter:drop-shadow(0 0 20px rgba(200,168,240,0.5)) drop-shadow(0 0 50px rgba(200,168,240,0.2));
+  }
+  @keyframes veilLift {
+    from { opacity:0; transform:translateY(30px) scale(0.88); filter:blur(8px) drop-shadow(0 0 30px rgba(200,168,240,0.2)); }
+    to   { opacity:1; transform:translateY(0)    scale(1);    filter:blur(0) drop-shadow(0 0 20px rgba(200,168,240,0.5)); }
+  }
+
+  .chapter-label {
+    font-family:'Cinzel', serif; font-size:0.65rem;
+    letter-spacing:0.55em; color:var(--moonsilver-dim);
+    text-transform:uppercase; margin-bottom:1rem;
+    opacity:0; animation:fadeUp 1s ease 1.2s forwards;
+  }
+  .hero-title {
+    font-family:'Playfair Display', serif; font-weight:700;
+    font-size:clamp(2rem,6vw,4.5rem);
+    color:var(--moonsilver);
+    line-height:1.1; max-width:800px;
+    text-shadow:0 0 60px rgba(200,216,240,0.4), 0 0 120px rgba(200,216,240,0.15);
+    opacity:0; animation:fadeUp 1.3s ease 1.5s forwards;
+  }
+  .hero-title em {
+    display:block; font-style:italic;
+    color:var(--lotus-pale); font-size:0.65em;
+    letter-spacing:0.08em; margin-top:0.3em;
+    text-shadow:0 0 30px rgba(240,168,184,0.5);
+  }
+  .hero-sub {
+    font-size:clamp(0.8rem,1.6vw,1rem);
+    font-style:italic; color:var(--text-dim);
+    margin-top:1.2rem; letter-spacing:0.08em;
+    opacity:0; animation:fadeUp 1s ease 2s forwards;
+  }
+  .isis-inscription {
+    font-family:'Playfair Display', serif; font-style:italic;
+    font-size:clamp(0.9rem,1.8vw,1.15rem);
+    color:var(--violet-bright); margin-top:2rem;
+    letter-spacing:0.04em; line-height:1.7;
+    opacity:0; animation:fadeUp 1s ease 2.4s forwards;
+    max-width:560px;
+    text-shadow:0 0 20px rgba(85,48,176,0.5);
+  }
+
+  .scroll-cue {
+    position:absolute; bottom:2rem; left:50%;
+    transform:translateX(-50%);
+    display:flex; flex-direction:column; align-items:center; gap:0.5rem;
+    font-family:'Cinzel', serif; font-size:0.55rem;
+    letter-spacing:0.5em; color:var(--moonsilver-dim);
+    opacity:0; animation:fadeIn 1s ease 3s forwards;
+  }
+  .scroll-cue .vline {
+    width:1px; height:50px;
+    background:linear-gradient(to bottom,transparent,var(--moonsilver-dim));
+    animation:moonBreath 2.5s ease-in-out 3.5s infinite;
+  }
+  @keyframes moonBreath { 0%,100%{opacity:0.3} 50%{opacity:1} }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes fadeIn { to{opacity:1} }
+
+  /* ── VEIL BANNER ── */
+  .veil-banner {
+    position:relative; z-index:1;
+    padding:3rem 2rem; text-align:center;
+    background:linear-gradient(135deg, rgba(14,10,46,0.9), rgba(42,22,96,0.4), rgba(14,10,46,0.9));
+    border-top:1px solid rgba(200,168,240,0.08);
+    border-bottom:1px solid rgba(200,168,240,0.08);
+    overflow:hidden;
+  }
+  .veil-banner::before {
+    content:'';
+    position:absolute; inset:0;
+    background:radial-gradient(ellipse at 50% 0%, rgba(200,168,240,0.06) 0%, transparent 70%);
+    pointer-events:none;
+  }
+  .veil-quote {
+    font-family:'Playfair Display', serif; font-style:italic;
+    font-size:clamp(1rem,2.2vw,1.4rem);
+    color:var(--isis-white); letter-spacing:0.04em; line-height:1.7;
+    max-width:700px; margin:0 auto;
+    text-shadow:0 0 30px rgba(232,238,248,0.2);
+  }
+  .veil-source {
+    font-family:'Cinzel', serif; font-size:0.65rem;
+    letter-spacing:0.3em; color:var(--moonsilver-dim);
+    margin-top:1.2rem; display:block;
+  }
+
+  /* ── SECTION ── */
+  .section {
+    position:relative; z-index:1;
+    max-width:860px; margin:0 auto; padding:4.5rem 2rem;
+  }
+  .section-heading {
+    font-family:'Playfair Display', serif; font-weight:700;
+    font-size:clamp(1.1rem,2.5vw,1.8rem);
+    color:var(--moonsilver); letter-spacing:0.03em;
+    margin-bottom:1.8rem;
+  }
+  .section-heading.lotus { color:var(--lotus-pale); }
+  .section-heading.gold  { color:var(--gold); }
+  .section-heading.nile  { color:var(--nile-glow); }
+
+  .body-text {
+    font-size:1.1rem; line-height:2.05; color:var(--text); margin:1.5rem 0;
+  }
+  .drop-cap::first-letter {
+    font-family:'Playfair Display', serif; font-weight:700;
+    font-size:4.8rem; float:left;
+    line-height:0.75; margin:0.08em 0.1em 0 0;
+    color:var(--lotus-pale);
+    text-shadow:0 0 25px rgba(240,168,184,0.6);
+  }
+
+  .ornament {
+    display:flex; align-items:center; gap:1.2rem;
+    margin:2.5rem auto; max-width:500px; padding:0 2rem;
+  }
+  .ornament-line { flex:1; height:1px; background:linear-gradient(to right,transparent,var(--moonsilver-dim),transparent); }
+  .ornament-glyph { font-size:1.1rem; color:var(--lotus-pink); filter:drop-shadow(0 0 6px rgba(216,112,144,0.5)); }
+
+  .quote-block {
+    border-left:2px solid var(--moonsilver-dim);
+    padding:1.5rem 2rem; margin:3rem 0;
+    background:rgba(200,168,240,0.03); position:relative;
+  }
+  .quote-block.lotus { border-left-color:var(--lotus-dim); background:rgba(216,112,144,0.04); }
+  .quote-block.gold  { border-left-color:var(--gold-dim); background:rgba(200,160,48,0.04); }
+  .quote-block::before {
+    content:'"'; font-family:'Playfair Display', serif; font-weight:700;
+    font-size:4.5rem; color:var(--moonsilver-dim); opacity:0.2;
+    position:absolute; top:-0.8rem; left:0.8rem; line-height:1;
+  }
+  .quote-text { font-size:1.12rem; font-style:italic; line-height:1.95; color:var(--text); }
+  .quote-attr {
+    font-family:'Cinzel', serif; font-size:0.65rem;
+    letter-spacing:0.22em; color:var(--moonsilver-dim); margin-top:1rem;
+  }
+
+  /* ── OSIRIS MYTH INTERACTIVE ── */
+  .osiris-section {
+    position:relative; z-index:1;
+    padding:5rem 2rem;
+    background:linear-gradient(180deg, transparent, rgba(14,10,46,0.4), transparent);
+  }
+  .osiris-inner { max-width:860px; margin:0 auto; }
+  #osirisCanvas {
+    width:100%; max-width:720px; height:460px;
+    margin:2rem auto; display:block; cursor:pointer;
+  }
+  .osiris-info {
+    max-width:720px; margin:0.8rem auto 0;
+    min-height:4rem; font-size:1rem; line-height:1.85;
+    color:var(--text-dim); font-style:italic;
+    padding:1.2rem 1.5rem;
+    border:1px solid rgba(200,168,240,0.08);
+    background:rgba(200,168,240,0.02);
+    transition:all 0.4s;
+  }
+
+  /* ── ISIS SYMBOLS CONSTELLATION ── */
+  .symbols-section {
+    position:relative; z-index:1;
+    padding:5rem 2rem; text-align:center;
+    overflow:hidden;
+  }
+  .symbols-section::before {
+    content:'';
+    position:absolute; inset:0;
+    background:radial-gradient(ellipse at 50% 50%, rgba(42,22,96,0.15) 0%, transparent 70%);
+    pointer-events:none;
+  }
+  #symbolsCanvas {
+    width:100%; max-width:640px; height:480px;
+    margin:2rem auto; display:block; cursor:crosshair;
+    position:relative; z-index:1;
+  }
+  .symbols-info {
+    max-width:600px; margin:0 auto;
+    min-height:3.5rem; font-size:1rem; line-height:1.8;
+    color:var(--text-dim); font-style:italic; transition:color 0.4s;
+    position:relative; z-index:1;
+  }
+
+  /* ── TROUBADOUR SECTION ── */
+  .troubadour-section {
+    position:relative; z-index:1;
+    padding:5rem 2rem;
+    background:linear-gradient(135deg, rgba(7,5,26,0.95), rgba(22,14,66,0.5), rgba(7,5,26,0.95));
+  }
+  .troubadour-inner { max-width:860px; margin:0 auto; }
+  .troubadour-grid {
+    display:grid; grid-template-columns:1fr 1fr; gap:3rem;
+    align-items:start; margin-top:2.5rem;
+  }
+
+  /* ── MUMMIFICATION STEPS ── */
+  .mummy-section {
+    position:relative; z-index:1; padding:5rem 2rem;
+    background:var(--void);
+  }
+  .mummy-inner { max-width:860px; margin:0 auto; }
+  .mummy-steps {
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:1px; background:rgba(200,168,240,0.06);
+    border:1px solid rgba(200,168,240,0.06);
+    margin:2.5rem 0;
+  }
+  .mummy-card {
+    background:var(--void); padding:2rem 1.6rem;
+    position:relative; overflow:hidden;
+    transition:background 0.4s; cursor:default;
+  }
+  .mummy-card::after {
+    content:''; position:absolute; bottom:0; left:0; right:0; height:1px;
+    background:linear-gradient(to right, transparent, var(--lotus-dim), transparent);
+    transform:scaleX(0); transform-origin:center;
+    transition:transform 0.5s ease;
+  }
+  .mummy-card:hover { background:rgba(216,112,144,0.04); }
+  .mummy-card:hover::after { transform:scaleX(1); }
+  .mummy-step-num {
+    font-family:'Cinzel', serif; font-size:0.6rem;
+    letter-spacing:0.4em; color:var(--lotus-dim); margin-bottom:0.5rem;
+  }
+  .mummy-icon { font-size:1.6rem; margin-bottom:0.8rem; display:block; }
+  .mummy-title {
+    font-family:'Playfair Display', serif; font-weight:700;
+    font-size:1rem; color:var(--lotus-pale);
+    margin-bottom:0.6rem; letter-spacing:0.03em;
+  }
+  .mummy-desc { font-size:0.9rem; line-height:1.75; color:var(--text-dim); }
+
+  /* ── NILE CANVAS ── */
+  .nile-section {
+    position:relative; z-index:1; height:160px; overflow:hidden;
+  }
+  #nileCanvas { width:100%; height:100%; display:block; }
+
+  /* ── HERMETIC ISIS ACCORDION ── */
+  .herm-section {
+    position:relative; z-index:1; padding:5rem 2rem;
+    background:linear-gradient(180deg, var(--void), rgba(14,10,46,0.3), var(--void));
+  }
+  .herm-inner { max-width:860px; margin:0 auto; }
+  .accordion { margin:2rem 0; }
+  .acc-item { border-bottom:1px solid rgba(200,168,240,0.1); }
+  .acc-btn {
+    width:100%; background:none; border:none;
+    padding:1.3rem 1.5rem;
+    display:flex; justify-content:space-between; align-items:center;
+    cursor:pointer; transition:background 0.3s;
+    font-family:'Cinzel', serif; font-size:0.78rem;
+    letter-spacing:0.12em; color:var(--moonsilver); text-align:left;
+  }
+  .acc-btn:hover { background:rgba(200,168,240,0.04); }
+  .acc-arr { transition:transform 0.4s; color:var(--moonsilver-dim); }
+  .acc-btn.open .acc-arr { transform:rotate(180deg); }
+  .acc-body {
+    max-height:0; overflow:hidden;
+    transition:max-height 0.5s ease, padding 0.3s;
+    padding:0 1.5rem; font-size:0.98rem;
+    line-height:1.9; color:var(--text-dim);
+  }
+  .acc-body.open { max-height:500px; padding:1rem 1.5rem 1.6rem; }
+
+  /* ── CLOSING ── */
+  .closing-section {
+    position:relative; z-index:1;
+    padding:6rem 2rem; text-align:center;
+    overflow:hidden;
+  }
+  #closingCanvas { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:0; }
+  .closing-inner { position:relative; z-index:1; max-width:700px; margin:0 auto; }
+  .closing-title {
+    font-family:'Playfair Display', serif; font-style:italic; font-weight:400;
+    font-size:clamp(1.4rem,3.5vw,2.5rem);
+    color:var(--moonsilver);
+    text-shadow:0 0 40px rgba(200,216,240,0.4);
+    opacity:0; transition:all 1.2s ease;
+    line-height:1.4;
+  }
+  .closing-title.visible { opacity:1; }
+  .closing-sub {
+    font-size:1rem; font-style:italic; color:var(--text-dim);
+    margin-top:1.5rem; line-height:1.9;
+    opacity:0; transition:all 1.2s ease 0.4s;
+  }
+  .closing-sub.visible { opacity:1; }
+
+  /* ── FOOTER NAV ── */
+  .book-nav {
+    position:relative; z-index:1;
+    padding:4rem 2rem; text-align:center;
+    border-top:1px solid rgba(200,168,240,0.08);
+    background:var(--indigo-deep);
+  }
+  .book-nav-series {
+    font-family:'Cinzel', serif; font-size:0.6rem;
+    letter-spacing:0.4em; color:var(--moonsilver-dim); margin-bottom:0.8rem;
+  }
+  .book-nav-title {
+    font-family:'Playfair Display', serif; font-weight:700;
+    font-size:0.95rem; color:var(--moonsilver); margin-bottom:2rem;
+  }
+  .nav-row { display:flex; justify-content:center; gap:1.5rem; flex-wrap:wrap; }
+  .nav-btn {
+    font-family:'Cinzel', serif; font-size:0.7rem;
+    letter-spacing:0.18em; color:var(--moonsilver);
+    border:1px solid rgba(200,216,240,0.15);
+    padding:0.8rem 2rem; background:none;
+    transition:all 0.3s; text-decoration:none; cursor:pointer;
+  }
+  .nav-btn:hover {
+    border-color:var(--moonsilver);
+    background:rgba(200,216,240,0.05);
+    box-shadow:0 0 20px rgba(200,216,240,0.08);
+  }
+  .nav-btn.prev { color:var(--text-dim); border-color:rgba(90,104,160,0.3); }
+
+  /* ── BG ORBS ── */
+  .orb { position:fixed; border-radius:50%; filter:blur(100px); pointer-events:none; z-index:0; }
+  .orb-1 { width:600px; height:600px; background:var(--indigo); top:-150px; left:-150px; opacity:0.8; }
+  .orb-2 { width:500px; height:500px; background:var(--violet); bottom:-100px; right:-100px; opacity:0.06; }
+  .orb-3 { width:400px; height:400px; background:var(--lotus-dim); top:40%; left:30%; opacity:0.04; }
+
+  /* ── REVEAL ── */
+  .reveal { opacity:0; transform:translateY(35px); transition:all 0.9s ease; }
+  .reveal.visible { opacity:1; transform:translateY(0); }
+
+  @media(max-width:640px){
+    .troubadour-grid { grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <canvas id="nightCanvas"></canvas>
+  <div class="hero-content">
+
+    <!-- Isis SVG Sigil -->
+    <svg class="isis-sigil" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" fill="none">
+      <!-- Outer ring of stars -->
+      <circle cx="100" cy="100" r="92" stroke="#c8d8f0" stroke-width="0.4" stroke-dasharray="2 6" opacity="0.4"/>
+      <!-- Isis throne hieroglyph hint (simplified) -->
+      <rect x="84" y="70" width="32" height="8" fill="rgba(200,168,240,0.2)" stroke="#c8d8f0" stroke-width="0.7" opacity="0.8"/>
+      <line x1="100" y1="70" x2="100" y2="78" stroke="#c8d8f0" stroke-width="0.6" opacity="0.6"/>
+      <!-- Cow horns with solar disk (Hathor/Isis crown) -->
+      <path d="M 68 80 Q 60 55 75 50 Q 85 48 88 60" stroke="#c8a030" stroke-width="1.2" fill="none" opacity="0.8"/>
+      <path d="M 132 80 Q 140 55 125 50 Q 115 48 112 60" stroke="#c8a030" stroke-width="1.2" fill="none" opacity="0.8"/>
+      <circle cx="100" cy="55" r="10" stroke="#c8a030" stroke-width="1" fill="rgba(200,160,48,0.15)" opacity="0.9"/>
+      <!-- Solar disk inner -->
+      <circle cx="100" cy="55" r="5" fill="rgba(200,160,48,0.4)" opacity="0.9"/>
+      <!-- Isis body (simplified) -->
+      <path d="M 88 88 Q 78 100 80 130 L 85 145 L 95 145 L 95 120 L 100 115 L 105 120 L 105 145 L 115 145 L 120 130 Q 122 100 112 88 Z" fill="rgba(200,168,240,0.12)" stroke="#c8d8f0" stroke-width="0.7" opacity="0.7"/>
+      <!-- Wings -->
+      <path d="M 88 105 Q 60 90 30 100 Q 50 108 70 118 Q 82 118 88 110 Z" fill="rgba(200,168,240,0.1)" stroke="#c8d8f0" stroke-width="0.6" opacity="0.6"/>
+      <path d="M 112 105 Q 140 90 170 100 Q 150 108 130 118 Q 118 118 112 110 Z" fill="rgba(200,168,240,0.1)" stroke="#c8d8f0" stroke-width="0.6" opacity="0.6"/>
+      <!-- Wing feather details -->
+      <path d="M 50 100 Q 55 110 65 115" stroke="#c8d8f0" stroke-width="0.4" opacity="0.3"/>
+      <path d="M 58 97 Q 62 108 72 114" stroke="#c8d8f0" stroke-width="0.4" opacity="0.3"/>
+      <path d="M 150 100 Q 145 110 135 115" stroke="#c8d8f0" stroke-width="0.4" opacity="0.3"/>
+      <path d="M 142 97 Q 138 108 128 114" stroke="#c8d8f0" stroke-width="0.4" opacity="0.3"/>
+      <!-- Ankh below -->
+      <circle cx="100" cy="158" r="7" stroke="#c8a030" stroke-width="0.9" fill="none" opacity="0.7"/>
+      <line x1="100" y1="165" x2="100" y2="182" stroke="#c8a030" stroke-width="0.9" opacity="0.7"/>
+      <line x1="93" y1="170" x2="107" y2="170" stroke="#c8a030" stroke-width="0.9" opacity="0.7"/>
+      <!-- Crescent moons -->
+      <path d="M 20 100 Q 12 90 20 80 Q 15 88 15 100 Q 15 112 20 120 Q 12 110 20 100 Z" fill="rgba(200,216,240,0.5)" opacity="0.6"/>
+      <path d="M 180 100 Q 188 90 180 80 Q 185 88 185 100 Q 185 112 180 120 Q 188 110 180 100 Z" fill="rgba(200,216,240,0.5)" opacity="0.6"/>
+    </svg>
+
+    <p class="chapter-label">Chapter VII · Secret Teachings of All Ages</p>
+    <h1 class="hero-title">
+      Isis
+      <em>The Virgin of the World</em>
+    </h1>
+    <p class="hero-sub">The Birthdays of the Gods · The Murder of Osiris · The Hermetic Isis · The Troubadours · The Mummification of the Dead</p>
+    <p class="isis-inscription">"I am all that has been, that is, and that will be —<br>and no mortal has yet lifted my veil."</p>
+  </div>
+  <div class="scroll-cue">
+    <div class="vline"></div>
+    <span>Enter</span>
+  </div>
+</section>
+
+<!-- ═══ VEIL BANNER ═══ -->
+<div class="veil-banner reveal">
+  <p class="veil-quote">"Nature, as the Great Mother, seeks unceasingly to reveal herself to her children — while simultaneously veiling herself from those unworthy of the vision. Isis is not a goddess who hides. She is the mystery that becomes transparent only when the seeker has been purified enough to see."</p>
+  <span class="veil-source">— Hall's characterisation of Isis, Chapter VII</span>
+</div>
+
+<!-- ═══ INTRO ═══ -->
+<div class="section">
+  <div class="ornament reveal">
+    <div class="ornament-line"></div>
+    <div class="ornament-glyph">☽</div>
+    <div class="ornament-line"></div>
+  </div>
+  <p class="body-text drop-cap reveal">
+    Of all the divine feminine figures in the ancient world, none achieved a more complete synthesis of maternal love, magical power, and cosmic wisdom than Isis. Her cult spread from the Nile to the Thames, from Mesopotamia to the Spanish coast. Roman legionaries kept small Isis figurines beside their Mithras altars. Alexandria's greatest temple was hers. The early Church absorbed her iconography so completely that the Madonna-and-Child image is, in its visual structure, indistinguishable from Isis nursing Horus.
+  </p>
+  <p class="body-text reveal">
+    Hall approaches Isis not as a historical deity whose cult rose and fell, but as a perennial philosophical principle — the feminine aspect of the divine intelligence, the receptive capacity through which the abstract becomes concrete, the invisible becomes visible. She is Nature herself: the great womb that brings all things forth, the tomb that receives them back, and the transformative power that makes death the prerequisite of rebirth.
+  </p>
+  <div class="quote-block reveal">
+    <p class="quote-text">Isis is not a woman. She is a cosmic principle wearing the face of a woman, so that the human mind — which cannot comprehend the infinite directly — can relate to it through love.</p>
+    <p class="quote-attr">— Hall's reading of the Hermetic Isis, Chapter VII</p>
+  </div>
+</div>
+
+<!-- ═══ OSIRIS MYTH INTERACTIVE ═══ -->
+<div class="osiris-section">
+  <div class="osiris-inner">
+    <h2 class="section-heading reveal">The Murder of Osiris — The Sacred Drama</h2>
+    <p class="body-text reveal" style="max-width:680px;">
+      At the heart of the Isis chapter is the myth of Osiris — the murdered god, the scattered body, and the loving resurrection worked by Isis. Hall shows how this drama maps precisely onto the initiatic death-and-rebirth enacted in every mystery school. Hover each scene of the sacred drama below.
+    </p>
+    <canvas id="osirisCanvas" width="720" height="460"></canvas>
+    <div class="osiris-info" id="osirisInfo">Hover a scene to enter the sacred drama</div>
+  </div>
+</div>
+
+<!-- ═══ ISIS SYMBOLS CONSTELLATION ═══ -->
+<div class="symbols-section">
+  <h2 class="section-heading lotus reveal">The Symbols Peculiar to Isis</h2>
+  <p class="body-text reveal" style="max-width:600px;margin:0 auto;">
+    Isis accumulated more sacred symbols than almost any other deity. Each encodes a distinct facet of her nature. Hover the constellation below to receive each symbol's teaching.
+  </p>
+  <canvas id="symbolsCanvas" width="640" height="480"></canvas>
+  <p class="symbols-info" id="symbolsInfo">Hover a symbol to receive its teaching</p>
+</div>
+
+<!-- ═══ NILE DIVIDER ═══ -->
+<div class="nile-section">
+  <canvas id="nileCanvas"></canvas>
+</div>
+
+<!-- ═══ TROUBADOURS ═══ -->
+<div class="troubadour-section">
+  <div class="troubadour-inner">
+    <h2 class="section-heading reveal">The Troubadours & the Hidden Isis</h2>
+    <div class="troubadour-grid">
+      <div class="reveal">
+        <p class="body-text">
+          One of Hall's most surprising connections: the medieval troubadour poets of southern France — Guilhem de Peitieu, Bernart de Ventadorn, the Courts of Love — were, he argues, crypto-initiates transmitting Hermetic and Cathar philosophy under the cover of courtly love poetry. Their <em>domna</em> — the idealized, unattainable Lady — was not a human woman but a symbol of the Divine Sophia, the feminine wisdom principle.
+        </p>
+        <p class="body-text">
+          The troubadour's quest for his Lady — serving her from afar, suffering for love of the unreachable — mirrors the initiate's relationship to Isis: the Great Mother who is always veiled, always just beyond full comprehension, drawing the soul forward through longing rather than possession. The Courts of Love were, in Hall's reading, mystery schools in disguise — the last flowering of the Isiac feminine tradition in medieval Europe before the Inquisition extinguished it.
+        </p>
+      </div>
+      <div class="reveal">
+        <div class="quote-block lotus" style="margin-top:0">
+          <p class="quote-text">The troubadour sang to his Lady precisely because she could not be possessed. The whole power of the tradition lay in the recognition that the divine feminine is not something you arrive at — it is the horizon that keeps the seeker moving.</p>
+          <p class="quote-attr">— Hall on the Troubadour Mysteries, Chapter VII</p>
+        </div>
+        <p class="body-text">
+          The Cathars of Languedoc — persecuted and finally annihilated by the Albigensian Crusade of 1209 — shared the troubadour spiritual territory. They worshipped a feminine principle of light, rejected the material world as the creation of a lesser god (clearly Gnostic-Hermetic in origin), and called their female spiritual leaders <em>perfectae</em>. When Montségur fell in 1244, the last major flame of Isiac-Gnostic Christianity was extinguished.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MUMMIFICATION CARDS ═══ -->
+<div class="mummy-section">
+  <div class="mummy-inner">
+    <h2 class="section-heading gold reveal">The Mummification of the Dead</h2>
+    <p class="body-text reveal">
+      Hall examines the Egyptian practice of mummification not as primitive superstition but as a sophisticated spiritual technology — each step a ritual enactment of the Osiris myth, each bandage a prayer, each removed organ a philosophical statement about the relationship between body, soul, and immortality.
+    </p>
+    <div class="mummy-steps">
+      <div class="mummy-card reveal">
+        <div class="mummy-step-num">STAGE I</div>
+        <span class="mummy-icon">🧂</span>
+        <p class="mummy-title">The Natron Bath</p>
+        <p class="mummy-desc">The body was submerged in natron — a naturally occurring salt mixture — for 70 days. Seventy: the number of days Sirius (Isis's star) was absent from the sky before its heliacal rising. The body's dissolution mirrors the soul's immersion in the primordial waters between incarnations.</p>
+      </div>
+      <div class="mummy-card reveal">
+        <div class="mummy-step-num">STAGE II</div>
+        <span class="mummy-icon">🫀</span>
+        <p class="mummy-title">Removal of the Organs</p>
+        <p class="mummy-desc">The four Canopic jars — guarded by the four Sons of Horus — held the liver, lungs, stomach, and intestines. The heart alone was left in the body. In Egyptian philosophy the heart was the seat of intelligence and conscience — the organ weighed against the feather of Ma'at. It must face judgment itself.</p>
+      </div>
+      <div class="mummy-card reveal">
+        <div class="mummy-step-num">STAGE III</div>
+        <span class="mummy-icon">📜</span>
+        <p class="mummy-title">The Wrapping Ritual</p>
+        <p class="mummy-desc">Each layer of linen was soaked in resins and inscribed with protective spells from the Book of the Dead. The priests recited spells of transformation, identification with Osiris, and safe passage through the Duat. The wrapping was not preservation — it was transformation. The bandaged body was a chrysalis.</p>
+      </div>
+      <div class="mummy-card reveal">
+        <div class="mummy-step-num">STAGE IV</div>
+        <span class="mummy-icon">👁️</span>
+        <p class="mummy-title">The Opening of the Mouth</p>
+        <p class="mummy-desc">Before burial, the Sem priest performed the Opening of the Mouth ceremony — touching the mummy's mouth, eyes, ears, and nose with sacred instruments to restore the senses for the afterlife. The ritual re-enacted what Isis and Horus did for Osiris: restoring the murdered and dismembered god to functional life in the divine realm.</p>
+      </div>
+      <div class="mummy-card reveal">
+        <div class="mummy-step-num">STAGE V</div>
+        <span class="mummy-icon">⚖️</span>
+        <p class="mummy-title">The Hall of Two Truths</p>
+        <p class="mummy-desc">The soul's ultimate destination: the Hall of Ma'at, where Anubis weighed the heart against the feather of divine truth. The 42 Negative Confessions — "I have not lied, I have not stolen, I have not caused suffering" — were not a legal protocol but a philosophical inventory of what it means to have lived a fully conscious life.</p>
+      </div>
+      <div class="mummy-card reveal">
+        <div class="mummy-step-num">STAGE VI</div>
+        <span class="mummy-icon">✨</span>
+        <p class="mummy-title">Becoming Osiris</p>
+        <p class="mummy-desc">The successful initiate-soul achieved identification with Osiris — becoming not merely a spirit who survived death but a being who had undergone the complete transformation. "I am Osiris" was the declaration of the fully realized soul. Hall: this is the Egyptian equivalent of the Hermetic gnosis — not knowledge about the divine, but identity with it.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ HERMETIC ISIS ACCORDION ═══ -->
+<div class="herm-section">
+  <div class="herm-inner">
+    <h2 class="section-heading nile reveal">The Hermetic Isis</h2>
+    <p class="body-text reveal">Beyond the mythological Isis of the popular cult, Hall explores the philosophical Isis of the Hermetic tradition — a figure of cosmic importance whose veil conceals the deepest truths of existence.</p>
+    <div class="accordion reveal">
+      <div class="acc-item">
+        <button class="acc-btn" onclick="toggleAcc(this)">
+          <span>Isis as Nature — The Veiled Goddess of Sais</span><span class="acc-arr">▾</span>
+        </button>
+        <div class="acc-body">The famous inscription at the temple of Neith at Sais — "I am all that has been, that is, and that will be, and no mortal has yet lifted my veil" — gave rise to the entire Western tradition of Nature as a veiled mystery. Hall notes that this is not a prohibition but an invitation: the veil is not locked, only heavy. The natural world does not conceal itself from malice but because its depths can only be perceived by eyes prepared through philosophical discipline. Science without wisdom, Hall argues, will always be looking at the veil rather than through it.</div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-btn" onclick="toggleAcc(this)">
+          <span>The Birthdays of the Gods — Five Epagomenal Days</span><span class="acc-arr">▾</span>
+        </button>
+        <div class="acc-body">The Egyptian calendar had 360 days plus five "epagomenal" days outside the calendar — days won by Thoth in a dice game with the Moon. These five days were the birthdays of Osiris, Horus the Elder, Set, Isis, and Nephthys. Hall explores the cosmological significance: these gods are not merely personalities but forces whose birth at the threshold of the year marks the fundamental tensions within existence — life/death, order/chaos, love/jealousy — that the cosmos must navigate eternally.</div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-btn" onclick="toggleAcc(this)">
+          <span>Isis as the Star Sirius — The Celestial Cow</span><span class="acc-arr">▾</span>
+        </button>
+        <div class="acc-body">In Egyptian astronomy, Isis was identified with Sirius — the brightest star in the night sky, whose heliacal rising each July marked the beginning of the Nile flood and the Egyptian New Year. For 70 days each year Sirius was invisible — this was Isis mourning Osiris, the world mourning its lost light. When Sirius rose again, Osiris was reborn, the Nile flooded, and the agricultural cycle recommenced. The entire Egyptian economy was governed by the heartbeat of the goddess-star.</div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-btn" onclick="toggleAcc(this)">
+          <span>Isis in Christian Symbolism — The Madonna</span><span class="acc-arr">▾</span>
+        </button>
+        <div class="acc-body">Hall documents extensively how the iconography of the Virgin Mary with the Christ child was modeled directly on the Egyptian image of Isis nursing the infant Horus on her lap — the same throne posture, the same maternal gaze, the same divine child. The title "Theotokos" (God-bearer) given to Mary is a precise translation of the Egyptian "Mut-Netjeret" (Mother of God) applied to Isis for millennia. The Black Madonnas of medieval Europe — found at Chartres, Rocamadour, Montserrat — retain the dark complexion and enthroned posture of Isis most clearly.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CLOSING ═══ -->
+<div class="closing-section" id="closingSection">
+  <canvas id="closingCanvas"></canvas>
+  <div class="closing-inner">
+    <p class="closing-title" id="closingTitle">She is the world's hidden face —<br>and also its most visible one.</p>
+    <p class="closing-sub" id="closingSub">Every river. Every harvest. Every mother holding her child.<br>Every seeker who senses beauty in the dark — is looking at Isis.</p>
+  </div>
+</div>
+
+<!-- ═══ FOOTER NAV ═══ -->
+<nav class="book-nav">
+  <p class="book-nav-series">The Secret Teachings of All Ages · Manly P. Hall · 1928</p>
+  <p class="book-nav-title">Chapter VIII: The Sun, A Universal Deity →</p>
+  <div class="nav-row">
+    <a class="nav-btn prev" href="ch06-pyramid.html">← Chapter VI</a>
+    <a class="nav-btn" href="#">Chapter VIII →</a>
+  </div>
+</nav>
+
+<script>
+// ── CURSOR ──
+const cursor=document.getElementById('cursor'), ring=document.getElementById('cursorRing');
+document.addEventListener('mousemove',e=>{
+  cursor.style.left=e.clientX+'px'; cursor.style.top=e.clientY+'px';
+  setTimeout(()=>{ring.style.left=e.clientX+'px';ring.style.top=e.clientY+'px';},90);
+});
+
+// ── SCROLL REVEAL ──
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});
+},{threshold:0.07});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+// Closing reveal
+const closingObs=new IntersectionObserver(entries=>{
+  if(entries[0].isIntersecting){
+    document.getElementById('closingTitle').classList.add('visible');
+    document.getElementById('closingSub').classList.add('visible');
+  }
+},{threshold:0.4});
+const cs=document.getElementById('closingSection');
+if(cs) closingObs.observe(cs);
+
+// ── HERO NIGHT CANVAS ──
+(function(){
+  const c=document.getElementById('nightCanvas');
+  const ctx=c.getContext('2d');
+  function resize(){c.width=window.innerWidth;c.height=window.innerHeight;}
+  resize(); window.addEventListener('resize',resize);
+
+  // Stars
+  const stars=Array.from({length:220},()=>({
+    x:Math.random(), y:Math.random()*0.75,
+    r:Math.random()*1.4+0.3,
+    alpha:Math.random()*0.7+0.1,
+    phase:Math.random()*Math.PI*2,
+    speed:Math.random()*0.015+0.005,
+    isis: Math.random()<0.15, // lotus particles
+  }));
+
+  // Lotus petals drifting
+  const lotuses=Array.from({length:18},()=>({
+    x:Math.random(), y:0.5+Math.random()*0.5,
+    vx:(Math.random()-0.5)*0.0002,
+    vy:-Math.random()*0.0003-0.0001,
+    r:Math.random()*3+2,
+    alpha:Math.random()*0.4+0.1,
+    phase:Math.random()*Math.PI*2,
+    rot:Math.random()*Math.PI*2,
+  }));
+
+  let t=0, mx=0.5, my=0.5;
+  document.addEventListener('mousemove',e=>{mx=e.clientX/window.innerWidth;my=e.clientY/window.innerHeight;});
+
+  function draw(){
+    ctx.clearRect(0,0,c.width,c.height);
+
+    // Night sky gradient
+    const bg=ctx.createLinearGradient(0,0,0,c.height);
+    bg.addColorStop(0,'#03020a');
+    bg.addColorStop(0.4,'#07051a');
+    bg.addColorStop(0.7,'#0e0a2e');
+    bg.addColorStop(1,'#160e42');
+    ctx.fillStyle=bg; ctx.fillRect(0,0,c.width,c.height);
+
+    // Moon glow (mouse-following)
+    const moonX=c.width*(0.3+mx*0.4), moonY=c.height*(0.1+my*0.2);
+    const moonGrad=ctx.createRadialGradient(moonX,moonY,0,moonX,moonY,c.width*0.5);
+    moonGrad.addColorStop(0,'rgba(200,216,240,0.08)');
+    moonGrad.addColorStop(0.3,'rgba(200,168,240,0.04)');
+    moonGrad.addColorStop(1,'rgba(200,168,240,0)');
+    ctx.fillStyle=moonGrad; ctx.fillRect(0,0,c.width,c.height);
+
+    // Stars
+    stars.forEach(s=>{
+      const a=s.alpha*(0.5+0.5*Math.sin(t*s.speed+s.phase));
+      const px=s.x*c.width, py=s.y*c.height;
+      // Glow
+      const sg=ctx.createRadialGradient(px,py,0,px,py,s.r*5);
+      sg.addColorStop(0,s.isis?`rgba(216,112,144,${a*0.4})`:`rgba(200,216,240,${a*0.3})`);
+      sg.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.beginPath(); ctx.arc(px,py,s.r*5,0,Math.PI*2);
+      ctx.fillStyle=sg; ctx.fill();
+      // Core
+      ctx.beginPath(); ctx.arc(px,py,s.r,0,Math.PI*2);
+      ctx.fillStyle=s.isis?`rgba(240,168,184,${a})`:`rgba(220,232,248,${a})`;
+      ctx.fill();
+    });
+
+    // Nile reflection strip (bottom)
+    const nileY=c.height*0.75;
+    const nileGrad=ctx.createLinearGradient(0,nileY,0,c.height);
+    nileGrad.addColorStop(0,'rgba(26,64,96,0.6)');
+    nileGrad.addColorStop(1,'rgba(14,10,46,0.9)');
+    ctx.fillStyle=nileGrad; ctx.fillRect(0,nileY,c.width,c.height-nileY);
+
+    // Nile ripples
+    for(let i=0;i<4;i++){
+      ctx.beginPath();
+      for(let x=0;x<=c.width;x+=4){
+        const y=nileY+8+Math.sin(x*0.01+t*0.02+i)*4+Math.sin(x*0.005-t*0.015+i*0.7)*6;
+        if(x===0)ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      }
+      ctx.strokeStyle=`rgba(96,184,232,${0.04-i*0.008})`;
+      ctx.lineWidth=0.8; ctx.stroke();
+    }
+
+    // Lotus petals
+    lotuses.forEach(l=>{
+      l.x+=l.vx+Math.sin(t*0.004+l.phase)*0.0001;
+      l.y+=l.vy;
+      l.rot+=0.004;
+      if(l.y<-0.02){l.y=1.02;l.x=Math.random();}
+      if(l.x<0)l.x=1; if(l.x>1)l.x=0;
+      const px=l.x*c.width, py=l.y*c.height;
+      const a=l.alpha*(0.6+0.4*Math.sin(t*0.03+l.phase));
+      ctx.save(); ctx.translate(px,py); ctx.rotate(l.rot);
+      // Simple petal shape
+      ctx.beginPath();
+      ctx.ellipse(0,0,l.r*0.6,l.r*1.4,0,0,Math.PI*2);
+      ctx.fillStyle=`rgba(216,112,144,${a*0.6})`;
+      ctx.fill();
+      ctx.restore();
+    });
+
+    t++;
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ── OSIRIS MYTH CANVAS ──
+(function(){
+  const canvas=document.getElementById('osirisCanvas');
+  if(!canvas) return;
+  const ctx=canvas.getContext('2d');
+  const W=720,H=460; canvas.width=W; canvas.height=H;
+  const info=document.getElementById('osirisInfo');
+
+  const scenes=[
+    {id:'golden',  x:60,  y:100, r:70, color:'#c8a030', icon:'👑',
+     title:'The Golden Age of Osiris',
+     desc:"Osiris reigned as the first pharaoh — a divine being who taught humanity agriculture, law, music, and the arts. Under his reign, Egypt was paradise. His sister-wife Isis was his queen. The world was in its golden age — the direct governance of the divine principle over human civilization."},
+    {id:'murder',  x:240, y:260, r:70, color:'#8a1a2a', icon:'🌑',
+     title:'The Murder by Set',
+     desc:"Set — Osiris's brother, god of storms and the desert — tricked Osiris into lying in a golden coffin, sealed it with lead, and cast it into the Nile. The murder of Osiris is the mythological statement of the central human predicament: the divine principle within us is continually being suppressed, scattered, and buried by the forces of ego and matter."},
+    {id:'search',  x:420, y:130, r:70, color:'#2a1660', icon:'⭐',
+     title:'Isis Searches the World',
+     desc:"Isis traversed the entire known world searching for the body of Osiris, which had washed ashore at Byblos in Phoenicia, inside the trunk of a great tree. The Phoenician king had incorporated the tree — and thus the body — into a pillar of his palace. Isis, in disguise, recovered it. The search of Isis is the soul's search for its own divine nature, scattered and hidden within the material world."},
+    {id:'scatter', x:570, y:300, r:70, color:'#4a3810', icon:'🌿',
+     title:'The 14 Pieces of Osiris',
+     desc:"Set stole the body of Osiris again and cut it into 14 pieces, scattering them across Egypt. Isis and Nephthys searched again, recovering 13 pieces. The 14th — the phallus — had been swallowed by a fish of the Nile. Isis fashioned a golden replacement and magically conceived Horus. The 14 pieces are the 14 days of the waning moon — the god's dissolution into the material world one degree at a time."},
+    {id:'horus',   x:360, y:380, r:55, color:'#1a4060', icon:'🦅',
+     title:'Horus the Avenger',
+     desc:"Isis raised Horus in secret in the marshes of the Nile delta, protecting him from Set. When Horus grew to manhood, he fought Set in a cosmic battle spanning 80 years. Their conflict is ongoing — the eternal struggle between the spiritual and material principles. Horus does not permanently defeat Set; Set is necessary. The point is the struggle itself, which elevates the soul through its very difficulty."},
+    {id:'resurrection', x:180, y:380, r:55, color:'#2a6640', icon:'☀️',
+     title:'The Resurrection of Osiris',
+     desc:"Osiris was not restored to earthly life — he became King of the Dead, ruler of the Duat, the lord of resurrection. His resurrection is spiritual, not physical. This is Hall's crucial point: the Osiris myth is not about bodily immortality but about the soul's capacity to reconstitute itself after the most total imaginable destruction. The scattered god becomes the most whole being in existence."},
+  ];
+
+  let hovered=null, t=0;
+
+  // Connection lines between scenes
+  const connections=[
+    [0,1],[1,2],[2,3],[3,4],[4,5],[5,0]
+  ];
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    // Background
+    const bg=ctx.createLinearGradient(0,0,W,H);
+    bg.addColorStop(0,'#07051a'); bg.addColorStop(1,'#03020a');
+    ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
+
+    // Connection lines
+    connections.forEach(([a,b])=>{
+      const sa=scenes[a], sb=scenes[b];
+      ctx.beginPath(); ctx.moveTo(sa.x,sa.y); ctx.lineTo(sb.x,sb.y);
+      ctx.strokeStyle='rgba(200,168,240,0.06)'; ctx.lineWidth=0.6;
+      ctx.setLineDash([3,6]); ctx.stroke(); ctx.setLineDash([]);
+    });
+
+    // Draw scenes
+    scenes.forEach(sc=>{
+      const isHov=hovered===sc;
+      const pulse=isHov?Math.sin(t*0.1)*4:0;
+      const rr=sc.r*0.55+pulse;
+
+      // Outer halo
+      const halo=ctx.createRadialGradient(sc.x,sc.y,rr*0.5,sc.x,sc.y,rr*2.5);
+      halo.addColorStop(0,sc.color+(isHov?'30':'10'));
+      halo.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.beginPath(); ctx.arc(sc.x,sc.y,rr*2.5,0,Math.PI*2);
+      ctx.fillStyle=halo; ctx.fill();
+
+      // Circle
+      ctx.beginPath(); ctx.arc(sc.x,sc.y,rr,0,Math.PI*2);
+      ctx.fillStyle=sc.color+(isHov?'40':'18');
+      ctx.fill();
+      ctx.strokeStyle=isHov?sc.color:sc.color+'55';
+      ctx.lineWidth=isHov?1.5:0.6; ctx.stroke();
+
+      // Icon
+      ctx.font=`${isHov?26:20}px serif`;
+      ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.shadowBlur=isHov?15:0; ctx.shadowColor=sc.color;
+      ctx.fillText(sc.icon,sc.x,sc.y-5);
+      ctx.shadowBlur=0;
+
+      // Title
+      ctx.font=`${isHov?10:9}px 'Cinzel',serif`;
+      ctx.fillStyle=isHov?sc.color:sc.color+'99';
+      ctx.textAlign='center'; ctx.textBaseline='top';
+      ctx.fillText(sc.title, sc.x, sc.y+rr+5);
+    });
+
+    t++;
+    requestAnimationFrame(draw);
+  }
+
+  canvas.addEventListener('mousemove',e=>{
+    const rect=canvas.getBoundingClientRect();
+    const mx=(e.clientX-rect.left)*(W/rect.width);
+    const my=(e.clientY-rect.top)*(H/rect.height);
+    hovered=null;
+    scenes.forEach(sc=>{
+      const dx=mx-sc.x, dy=my-sc.y;
+      if(Math.sqrt(dx*dx+dy*dy)<sc.r*0.6) hovered=sc;
+    });
+    if(hovered){
+      info.innerHTML=`<strong style="font-family:'Playfair Display',serif;color:${hovered.color};font-size:1.05rem">${hovered.title}</strong><br>${hovered.desc}`;
+      info.style.borderColor=hovered.color+'44';
+    } else {
+      info.textContent='Hover a scene to enter the sacred drama';
+      info.style.borderColor='';
+    }
+  });
+  canvas.addEventListener('mouseleave',()=>{hovered=null;info.textContent='Hover a scene to enter the sacred drama';info.style.borderColor='';});
+  draw();
+})();
+
+// ── ISIS SYMBOLS CONSTELLATION ──
+(function(){
+  const canvas=document.getElementById('symbolsCanvas');
+  if(!canvas) return;
+  const ctx=canvas.getContext('2d');
+  const W=640,H=480,cx=W/2,cy=H/2;
+  const infoEl=document.getElementById('symbolsInfo');
+
+  const symbols=[
+    {angle:270,r:170,glyph:'𓋹',name:'The Ankh',color:'#c8a030',
+     desc:'ANKH — The Key of Life. The loop represents the soul, the cross represents matter. Together: the divine principle eternally joined to the material world. Isis holds the Ankh to the nostrils of the newly reborn, restoring the breath of life.'},
+    {angle:330,r:170,glyph:'⭐',name:'Sirius / Sopdet',color:'#c8d8f0',
+     desc:'SIRIUS — Isis\'s star. The brightest in the sky. Its heliacal rising each July announced the Nile flood and the Egyptian New Year. For 70 days each year, Sirius was absent — this was Isis mourning Osiris. Its return was Osiris reborn, the world renewed.'},
+    {angle:30, r:170,glyph:'☽',name:'The Crescent Moon',color:'#a8b8d8',
+     desc:'THE MOON — Isis wears the crescent as crown in her aspect as lunar goddess. The moon regulates the tides, the menstrual cycle, the harvest calendar — all the rhythms of receptive feminine nature. The waxing moon is Isis gathering the pieces of Osiris; the full moon is his resurrection.'},
+    {angle:90, r:170,glyph:'🌺',name:'The Lotus Throne',color:'#d87090',
+     desc:'LOTUS — The lotus emerges from mud through dark water to bloom in sunlight — the perfect symbol of the soul\'s emergence from matter toward the divine. Isis sits upon a lotus throne; Horus emerges from the lotus as the newborn sun. The lotus is the symbol of spiritual birth from material conditions.'},
+    {angle:150,r:170,glyph:'𓂀',name:'The Eye of Ra / Wedjat',color:'#d4901a',
+     desc:'THE WEDJAT — The Eye of Horus, restored by Thoth after Set tore it out in their cosmic battle. Isis healed the eye and offered it to Osiris — it became the symbol of sacred offerings and healing. The perfectly restored divine organ: clear perception, unclouded vision of reality.'},
+    {angle:210,r:170,glyph:'🐍',name:'The Uraeus Serpent',color:'#2a8050',
+     desc:'URAEUS — The rearing cobra of the crown of Egypt. Isis tamed the serpent and wore it as her diadem — the kundalini force mastered and elevated. The uraeus at the brow is the mark of divine royalty: the life-force that has been raised from the base of the spine to the seat of divine consciousness.'},
+    {angle:60, r:85,glyph:'𓅜',name:'The Vulture Crown',color:'#8080c0',
+     desc:'VULTURE — The vulture goddess Nekhbet shared the double crown with the cobra. The vulture represents maternal protection — the great bird that shields her young beneath her wings. Isis spreads her wings protectively over the mummy of Osiris and over the infant Horus. Protection through encompassing love.'},
+    {angle:180,r:85,glyph:'🌿',name:'The Papyrus Scepter',color:'#50a060',
+     desc:'PAPYRUS — The Was-scepter topped with the papyrus plant was the symbol of power and vitality. Isis in the Nile delta was surrounded by papyrus reeds — they hid her and the infant Horus from Set\'s wrath. The marsh becomes the place of miraculous preservation.'},
+    {angle:300,r:85,glyph:'🔱',name:'The Tyet / Knot of Isis',color:'#b03080',
+     desc:'TYET (ISIS KNOT) — An ancient symbol resembling the ankh with arms bent downward. Made from red jasper and placed over the throat of the mummy, it was said to contain the blood of Isis, conferring her protective power. One of the oldest divine symbols in Egypt, its meaning is "welfare" and "life."'},
+  ];
+
+  let hovered=null, t=0;
+  function toRad(d){return d*Math.PI/180;}
+
+  function getPos(s){
+    const a=toRad(s.angle)+t*(s.r>100?0.003:-0.004);
+    return {x:cx+Math.cos(a)*s.r, y:cy+Math.sin(a)*s.r};
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    const bg=ctx.createRadialGradient(cx,cy,0,cx,cy,W*0.7);
+    bg.addColorStop(0,'#0e0a2e'); bg.addColorStop(1,'#03020a');
+    ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
+
+    // Orbit rings
+    [170,85].forEach(r=>{
+      ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2);
+      ctx.strokeStyle='rgba(200,168,240,0.06)'; ctx.lineWidth=0.6; ctx.stroke();
+    });
+
+    // Center - Isis glyph
+    ctx.font='32px serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.shadowBlur=20; ctx.shadowColor='rgba(200,168,240,0.6)';
+    ctx.fillStyle='rgba(200,168,240,0.8)';
+    ctx.fillText('𓅝',cx,cy);
+    ctx.shadowBlur=0;
+
+    // Lines from center
+    symbols.forEach(s=>{
+      const p=getPos(s);
+      ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(p.x,p.y);
+      ctx.strokeStyle=`${s.color}15`; ctx.lineWidth=0.5; ctx.stroke();
+    });
+
+    // Symbols
+    symbols.forEach(s=>{
+      const p=getPos(s), isHov=hovered===s;
+      const rr=isHov?24:16;
+      // Halo
+      const grad=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,rr*3);
+      grad.addColorStop(0,s.color+(isHov?'33':'10'));
+      grad.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.beginPath(); ctx.arc(p.x,p.y,rr*3,0,Math.PI*2);
+      ctx.fillStyle=grad; ctx.fill();
+      // Circle
+      ctx.beginPath(); ctx.arc(p.x,p.y,rr,0,Math.PI*2);
+      ctx.fillStyle=s.color+(isHov?'30':'12'); ctx.fill();
+      ctx.strokeStyle=isHov?s.color:s.color+'55';
+      ctx.lineWidth=isHov?1.5:0.6; ctx.stroke();
+      // Glyph
+      ctx.font=`${isHov?20:15}px serif`;
+      ctx.fillStyle=isHov?s.color:s.color+'cc';
+      ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.shadowBlur=isHov?12:0; ctx.shadowColor=s.color;
+      ctx.fillText(s.glyph,p.x,p.y);
+      ctx.shadowBlur=0;
+      // Name on hover
+      if(isHov){
+        ctx.font="9px 'Cinzel',serif"; ctx.fillStyle=s.color;
+        ctx.textBaseline='top'; ctx.fillText(s.name,p.x,p.y+rr+6);
+      }
+    });
+
+    t++;
+    requestAnimationFrame(draw);
+  }
+
+  canvas.addEventListener('mousemove',e=>{
+    const rect=canvas.getBoundingClientRect();
+    const mx=(e.clientX-rect.left)*(W/rect.width), my=(e.clientY-rect.top)*(H/rect.height);
+    hovered=null;
+    symbols.forEach(s=>{
+      const p=getPos(s), dx=mx-p.x, dy=my-p.y;
+      if(Math.sqrt(dx*dx+dy*dy)<20) hovered=s;
+    });
+    if(hovered){infoEl.textContent=`${hovered.name} — ${hovered.desc}`;infoEl.style.color=hovered.color;}
+    else{infoEl.textContent='Hover a symbol to receive its teaching';infoEl.style.color='';}
+  });
+  canvas.addEventListener('mouseleave',()=>{hovered=null;infoEl.textContent='Hover a symbol to receive its teaching';infoEl.style.color='';});
+  draw();
+})();
+
+// ── NILE CANVAS ──
+(function(){
+  const c=document.getElementById('nileCanvas');
+  if(!c) return;
+  const ctx=c.getContext('2d');
+  function resize(){c.width=window.innerWidth; c.height=c.parentElement.clientHeight;}
+  resize(); window.addEventListener('resize',resize);
+  let t=0;
+  function draw(){
+    ctx.clearRect(0,0,c.width,c.height);
+    const bg=ctx.createLinearGradient(0,0,0,c.height);
+    bg.addColorStop(0,'#07051a'); bg.addColorStop(1,'#1a4060');
+    ctx.fillStyle=bg; ctx.fillRect(0,0,c.width,c.height);
+    for(let i=0;i<5;i++){
+      ctx.beginPath();
+      for(let x=0;x<=c.width;x+=4){
+        const y=c.height*(0.3+i*0.12)+Math.sin(x*0.008+t*0.02+i*0.9)*6+Math.sin(x*0.003-t*0.015+i)*10;
+        if(x===0)ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      }
+      ctx.strokeStyle=`rgba(96,184,232,${0.06-i*0.01})`;
+      ctx.lineWidth=1.2; ctx.stroke();
+    }
+    // Moonlight column
+    const mGrad=ctx.createLinearGradient(c.width*0.48,0,c.width*0.52,0);
+    mGrad.addColorStop(0,'rgba(200,216,240,0)');
+    mGrad.addColorStop(0.5,'rgba(200,216,240,0.04)');
+    mGrad.addColorStop(1,'rgba(200,216,240,0)');
+    ctx.fillStyle=mGrad; ctx.fillRect(c.width*0.4,0,c.width*0.2,c.height);
+    t++;
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ── CLOSING CANVAS ──
+(function(){
+  const c=document.getElementById('closingCanvas');
+  const container=document.getElementById('closingSection');
+  if(!c||!container) return;
+  const ctx=c.getContext('2d');
+  function resize(){c.width=container.offsetWidth;c.height=container.offsetHeight;}
+  resize(); window.addEventListener('resize',resize);
+  let t=0;
+  function draw(){
+    ctx.clearRect(0,0,c.width,c.height);
+    const bg=ctx.createLinearGradient(0,0,0,c.height);
+    bg.addColorStop(0,'#07051a'); bg.addColorStop(0.5,'#0e0a2e'); bg.addColorStop(1,'#07051a');
+    ctx.fillStyle=bg; ctx.fillRect(0,0,c.width,c.height);
+    // Floating lotus petals
+    for(let i=0;i<12;i++){
+      const px=c.width*(0.1+((i*0.17+t*0.0005)%0.85));
+      const py=c.height*(0.2+Math.sin(t*0.008+i*0.5)*0.3+i*0.04);
+      const a=0.1+0.1*Math.sin(t*0.02+i);
+      ctx.beginPath();
+      ctx.ellipse(px,py,4,10,t*0.005+i,0,Math.PI*2);
+      ctx.fillStyle=`rgba(216,112,144,${a})`; ctx.fill();
+    }
+    // Stars
+    for(let i=0;i<40;i++){
+      const sx=(Math.sin(i*127.1)*0.5+0.5)*c.width;
+      const sy=(Math.sin(i*311.7)*0.5+0.5)*c.height*0.9;
+      const a=(0.2+0.3*Math.sin(t*0.02+i))*0.6;
+      ctx.beginPath(); ctx.arc(sx,sy,0.7,0,Math.PI*2);
+      ctx.fillStyle=`rgba(200,216,240,${a})`; ctx.fill();
+    }
+    t++;
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ── ACCORDION ──
+function toggleAcc(btn){
+  const body=btn.nextElementSibling, isOpen=body.classList.contains('open');
+  document.querySelectorAll('.acc-body.open').forEach(b=>{b.classList.remove('open');b.previousElementSibling.classList.remove('open');});
+  if(!isOpen){body.classList.add('open');btn.classList.add('open');}
+}
+</script>
+</body>
+</html>

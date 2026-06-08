@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Initiation of the Pyramid — Secret Teachings of All Ages</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Cinzel:wght@400;600&family=Vollkorn:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void:       #000000;
+    --stone:      #0a0a0a;
+    --granite:    #111111;
+    --limestone:  #181614;
+    --basalt:     #1e1c1a;
+    --ash:        #2a2824;
+    --dust:       #3a3630;
+    --beam:       #f5e8c0;
+    --beam-core:  #ffffff;
+    --beam-dim:   #8a7a50;
+    --amber:      #d4901a;
+    --amber-dim:  #5a3a08;
+    --gold:       #c8a030;
+    --gold-dim:   #4a3810;
+    --sand-text:  #b8a888;
+    --sand-dim:   #604e38;
+    --sphinx:     #c8a878;
+    --sphinx-dim: #604830;
+    --white-ray:  rgba(245,232,192,0.9);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body {
+    background: var(--void);
+    color: var(--sand-text);
+    font-family: 'Vollkorn', serif;
+    overflow-x: hidden;
+  }
+
+  /* ── CURSOR ── */
+  .cursor {
+    position:fixed; width:3px; height:3px;
+    background: var(--beam-core);
+    border-radius:50%; pointer-events:none; z-index:9999;
+    transform:translate(-50%,-50%);
+    box-shadow:0 0 8px var(--beam), 0 0 20px rgba(245,232,192,0.3);
+  }
+  .cursor-cross {
+    position:fixed; pointer-events:none; z-index:9998;
+    transform:translate(-50%,-50%);
+  }
+  .cursor-cross::before, .cursor-cross::after {
+    content:''; position:absolute;
+    background:rgba(245,232,192,0.3);
+  }
+  .cursor-cross::before { width:20px; height:1px; top:0; left:-10px; }
+  .cursor-cross::after  { width:1px; height:20px; top:-10px; left:0; }
+
+  /* ── HERO ── */
+  .hero {
+    position:relative; min-height:100vh;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    text-align:center; overflow:hidden; z-index:1;
+  }
+  #pyramidCanvas {
+    position:absolute; inset:0; width:100%; height:100%;
+    pointer-events:none; z-index:0;
+  }
+  .hero-content { position:relative; z-index:2; padding:2rem; }
+
+  .chapter-label {
+    font-family:'Rajdhani', serif; font-weight:300;
+    font-size:0.65rem; letter-spacing:0.7em;
+    color:var(--sand-dim); text-transform:uppercase;
+    margin-bottom:2rem;
+    opacity:0; animation:fadeIn 1s ease 0.5s forwards;
+  }
+  .hero-title {
+    font-family:'Rajdhani', serif; font-weight:700;
+    font-size:clamp(2.5rem,8vw,7rem);
+    color:var(--beam);
+    text-transform:uppercase; letter-spacing:0.15em;
+    line-height:0.95;
+    text-shadow:0 0 60px rgba(245,232,192,0.15);
+    opacity:0; animation:titleCut 1.5s ease 0.8s forwards;
+  }
+  .hero-title .sub-word {
+    display:block; font-size:0.4em; letter-spacing:0.4em;
+    color:var(--sand-dim); font-weight:300; margin-top:0.5em;
+  }
+  @keyframes titleCut {
+    from { opacity:0; clip-path:inset(100% 0 0 0); }
+    to   { opacity:1; clip-path:inset(0% 0 0 0); }
+  }
+
+  .hero-sub {
+    font-size:clamp(0.75rem,1.4vw,0.9rem);
+    color:var(--sand-dim); letter-spacing:0.2em;
+    margin-top:2rem; font-family:'Rajdhani', serif; font-weight:300;
+    opacity:0; animation:fadeIn 1s ease 2s forwards;
+  }
+
+  .measurement-strip {
+    display:flex; gap:3rem; justify-content:center;
+    margin-top:3rem; flex-wrap:wrap;
+    opacity:0; animation:fadeIn 1s ease 2.5s forwards;
+  }
+  .measure {
+    display:flex; flex-direction:column; align-items:center; gap:0.2rem;
+  }
+  .measure-num {
+    font-family:'Rajdhani', serif; font-weight:700;
+    font-size:1.6rem; color:var(--beam); letter-spacing:0.05em;
+    line-height:1;
+  }
+  .measure-unit {
+    font-family:'Rajdhani', serif; font-weight:300;
+    font-size:0.55rem; letter-spacing:0.4em; color:var(--sand-dim);
+    text-transform:uppercase;
+  }
+
+  .scroll-cue {
+    position:absolute; bottom:2rem; left:50%;
+    transform:translateX(-50%);
+    display:flex; flex-direction:column; align-items:center; gap:0.5rem;
+    font-family:'Rajdhani', serif; font-weight:300; font-size:0.55rem;
+    letter-spacing:0.6em; color:var(--sand-dim); text-transform:uppercase;
+    opacity:0; animation:fadeIn 1s ease 3s forwards;
+  }
+  .scroll-cue .vline {
+    width:1px; height:50px;
+    background:linear-gradient(to bottom,transparent,var(--sand-dim));
+    animation:lineBreath 2.5s ease-in-out 3.5s infinite;
+  }
+  @keyframes lineBreath { 0%,100%{opacity:0.3} 50%{opacity:1} }
+  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+  /* ── STONE SECTION DIVIDER ── */
+  .stone-rule {
+    position:relative; z-index:1;
+    height:1px;
+    background:linear-gradient(to right,transparent,var(--dust),transparent);
+    margin:0;
+  }
+
+  /* ── SECTION ── */
+  .section {
+    position:relative; z-index:1;
+    max-width:900px; margin:0 auto; padding:5rem 2rem;
+  }
+  .section-heading {
+    font-family:'Rajdhani', serif; font-weight:700;
+    font-size:clamp(1.2rem,2.8vw,2rem);
+    color:var(--beam); letter-spacing:0.2em;
+    text-transform:uppercase; margin-bottom:2rem;
+    border-left:2px solid var(--amber-dim);
+    padding-left:1.2rem;
+  }
+  .section-heading.gold-rule { border-left-color:var(--gold-dim); color:var(--gold); }
+  .section-heading.sphinx-rule { border-left-color:var(--sphinx-dim); color:var(--sphinx); }
+
+  .body-text {
+    font-size:1.08rem; line-height:2.05;
+    color:var(--sand-text); margin:1.5rem 0;
+  }
+  .drop-cap::first-letter {
+    font-family:'Rajdhani', serif; font-weight:700;
+    font-size:5rem; float:left;
+    line-height:0.72; margin:0.05em 0.1em 0 0;
+    color:var(--beam);
+    text-shadow:0 0 30px rgba(245,232,192,0.4);
+  }
+
+  .quote-block {
+    border-left:1px solid var(--dust);
+    padding:1.5rem 2rem; margin:3rem 0;
+    background:rgba(255,255,255,0.02); position:relative;
+  }
+  .quote-block.amber { border-left-color:var(--amber-dim); }
+  .quote-text { font-size:1.1rem; font-style:italic; line-height:1.95; color:var(--sand-text); }
+  .quote-attr {
+    font-family:'Rajdhani', serif; font-weight:300; font-size:0.65rem;
+    letter-spacing:0.25em; color:var(--sand-dim); margin-top:1rem;
+    text-transform:uppercase;
+  }
+
+  /* ── CROSS-SECTION INTERACTIVE ── */
+  .cross-section {
+    position:relative; z-index:1;
+    padding:5rem 2rem;
+    background:var(--stone);
+  }
+  .cross-section-inner { max-width:900px; margin:0 auto; }
+  #crossCanvas {
+    width:100%; max-width:720px; height:480px;
+    margin:2rem auto; display:block; cursor:crosshair;
+    border:1px solid rgba(255,255,255,0.04);
+  }
+  .chamber-info {
+    max-width:720px; margin:0.8rem auto 0;
+    min-height:4rem; padding:1.2rem 1.5rem;
+    border:1px solid rgba(255,255,255,0.04);
+    background:rgba(255,255,255,0.02);
+    font-size:0.97rem; line-height:1.85;
+    color:var(--sand-dim); font-style:italic;
+    transition:all 0.4s;
+  }
+
+  /* ── SPHINX PANEL ── */
+  .sphinx-section {
+    position:relative; z-index:1;
+    padding:5rem 2rem;
+    background:linear-gradient(180deg, var(--stone), var(--limestone), var(--stone));
+    overflow:hidden;
+  }
+  .sphinx-section::before {
+    content:'';
+    position:absolute; top:0; left:0; right:0; height:100%;
+    background:repeating-linear-gradient(
+      -45deg, transparent, transparent 40px,
+      rgba(255,255,255,0.008) 40px, rgba(255,255,255,0.008) 41px
+    );
+    pointer-events:none;
+  }
+  .sphinx-inner { max-width:900px; margin:0 auto; position:relative; z-index:1; }
+  .sphinx-grid {
+    display:grid; grid-template-columns:1fr 1fr; gap:3rem;
+    align-items:start; margin-top:3rem;
+  }
+  .sphinx-text-block { }
+  .sphinx-canvas-col { display:flex; flex-direction:column; align-items:center; }
+  #sphinxCanvas { width:340px; height:280px; cursor:pointer; }
+  .sphinx-caption {
+    font-family:'Rajdhani', serif; font-weight:300; font-size:0.6rem;
+    letter-spacing:0.35em; color:var(--sand-dim); margin-top:0.8rem;
+    text-align:center; text-transform:uppercase;
+  }
+
+  /* ── COFFER MYSTERY ── */
+  .coffer-section {
+    position:relative; z-index:1;
+    padding:5rem 2rem;
+    background:var(--void);
+  }
+  .coffer-inner { max-width:900px; margin:0 auto; }
+  #cofferCanvas {
+    width:100%; max-width:560px; height:380px;
+    margin:2rem auto; display:block; cursor:pointer;
+  }
+  .coffer-label {
+    font-family:'Rajdhani', serif; font-weight:300; font-size:0.6rem;
+    letter-spacing:0.35em; color:var(--sand-dim); text-align:center;
+    margin-top:0.5rem; text-transform:uppercase;
+    min-height:1.5rem; transition:color 0.3s;
+  }
+
+  /* ── INITIATION STAGES ── */
+  .stages-section {
+    position:relative; z-index:1;
+    padding:5rem 2rem;
+    background:var(--granite);
+  }
+  .stages-inner { max-width:900px; margin:0 auto; }
+  .stages-grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:1px; background:rgba(255,255,255,0.04);
+    border:1px solid rgba(255,255,255,0.04);
+    margin:2.5rem 0;
+  }
+  .stage-card {
+    background:var(--granite); padding:2.2rem 1.8rem;
+    transition:background 0.4s; cursor:default;
+    position:relative; overflow:hidden;
+  }
+  .stage-card::before {
+    content:''; position:absolute; top:0; left:0;
+    width:2px; height:100%;
+    background:var(--amber-dim);
+    transform:scaleY(0); transform-origin:top;
+    transition:transform 0.5s ease;
+  }
+  .stage-card:hover { background:rgba(245,232,192,0.03); }
+  .stage-card:hover::before { transform:scaleY(1); }
+  .stage-num {
+    font-family:'Rajdhani', serif; font-weight:700;
+    font-size:3rem; color:rgba(245,232,192,0.06);
+    line-height:1; margin-bottom:0.5rem; letter-spacing:-0.02em;
+  }
+  .stage-element {
+    font-family:'Rajdhani', serif; font-weight:300; font-size:0.6rem;
+    letter-spacing:0.4em; color:var(--amber-dim); text-transform:uppercase;
+    margin-bottom:0.5rem;
+  }
+  .stage-title {
+    font-family:'Rajdhani', serif; font-weight:700;
+    font-size:1rem; color:var(--beam); letter-spacing:0.12em;
+    text-transform:uppercase; margin-bottom:0.8rem;
+  }
+  .stage-desc { font-size:0.9rem; line-height:1.75; color:var(--sand-dim); }
+
+  /* ── AL-MAMUN ENTRY PANEL ── */
+  .mamun-section {
+    position:relative; z-index:1;
+    padding:5rem 2rem;
+    border-top:1px solid rgba(255,255,255,0.04);
+    border-bottom:1px solid rgba(255,255,255,0.04);
+  }
+  .mamun-inner { max-width:900px; margin:0 auto; }
+  .mamun-grid {
+    display:grid; grid-template-columns:2fr 1fr; gap:3rem;
+    align-items:start; margin-top:2rem;
+  }
+  .mamun-stat-col { display:flex; flex-direction:column; gap:1.5rem; }
+  .stat-block {
+    padding:1.5rem; border:1px solid rgba(255,255,255,0.05);
+    background:rgba(255,255,255,0.02); transition:border-color 0.3s;
+  }
+  .stat-block:hover { border-color:rgba(245,232,192,0.15); }
+  .stat-num {
+    font-family:'Rajdhani', serif; font-weight:700;
+    font-size:2.2rem; color:var(--beam); letter-spacing:0.05em; line-height:1;
+  }
+  .stat-label { font-family:'Rajdhani', serif; font-weight:300; font-size:0.6rem; letter-spacing:0.3em; color:var(--sand-dim); text-transform:uppercase; margin-top:0.3rem; }
+
+  /* ── CLOSING RAY ── */
+  .closing-ray {
+    position:relative; z-index:1;
+    height:200px; overflow:hidden;
+    background:var(--void);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .closing-ray canvas { position:absolute; inset:0; width:100%; height:100%; }
+  .closing-ray-text {
+    position:relative; z-index:1;
+    font-family:'Rajdhani', serif; font-weight:300;
+    font-size:clamp(0.8rem,2vw,1rem); letter-spacing:0.5em;
+    color:var(--sand-dim); text-transform:uppercase;
+    opacity:0; transition:opacity 1s;
+  }
+  .closing-ray-text.visible { opacity:1; }
+
+  /* ── FOOTER NAV ── */
+  .book-nav {
+    position:relative; z-index:1;
+    padding:4rem 2rem; text-align:center;
+    background:var(--stone);
+    border-top:1px solid rgba(255,255,255,0.04);
+  }
+  .book-nav-series {
+    font-family:'Rajdhani', serif; font-weight:300; font-size:0.6rem;
+    letter-spacing:0.4em; color:var(--sand-dim); margin-bottom:0.8rem;
+    text-transform:uppercase;
+  }
+  .book-nav-title {
+    font-family:'Rajdhani', serif; font-weight:700; font-size:1rem;
+    color:var(--beam); letter-spacing:0.15em; margin-bottom:2.5rem;
+    text-transform:uppercase;
+  }
+  .nav-row { display:flex; justify-content:center; gap:1px; }
+  .nav-btn {
+    font-family:'Rajdhani', serif; font-weight:300; font-size:0.65rem;
+    letter-spacing:0.25em; color:var(--sand-text);
+    border:1px solid rgba(255,255,255,0.08);
+    padding:1rem 2.5rem; background:none;
+    transition:all 0.3s; text-decoration:none; cursor:pointer;
+    text-transform:uppercase;
+  }
+  .nav-btn:hover { background:rgba(245,232,192,0.05); border-color:rgba(245,232,192,0.2); color:var(--beam); }
+  .nav-btn.prev { color:var(--sand-dim); }
+
+  /* ── REVEAL ── */
+  .reveal { opacity:0; transform:translateY(30px); transition:all 0.85s ease; }
+  .reveal.visible { opacity:1; transform:translateY(0); }
+  .reveal-left { opacity:0; transform:translateX(-30px); transition:all 0.85s ease; }
+  .reveal-left.visible { opacity:1; transform:translateX(0); }
+
+  @media(max-width:660px) {
+    .sphinx-grid { grid-template-columns:1fr; }
+    .mamun-grid  { grid-template-columns:1fr; }
+    .sphinx-canvas-col { margin-top:1.5rem; }
+  }
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-cross" id="cursorCross"></div>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <canvas id="pyramidCanvas"></canvas>
+  <div class="hero-content">
+    <p class="chapter-label">Chapter VI · Secret Teachings of All Ages</p>
+    <h1 class="hero-title">
+      The Initiation
+      <span class="sub-word">of the Pyramid</span>
+    </h1>
+    <p class="hero-sub">The Passageways · The King's Chamber · The Riddle of the Sphinx · The Secret of the Coffer · The Hidden God</p>
+
+    <div class="measurement-strip">
+      <div class="measure">
+        <span class="measure-num">481</span>
+        <span class="measure-unit">Feet Tall</span>
+      </div>
+      <div class="measure">
+        <span class="measure-num">2.3M</span>
+        <span class="measure-unit">Stone Blocks</span>
+      </div>
+      <div class="measure">
+        <span class="measure-num">820</span>
+        <span class="measure-unit">CE · Al-Ma'mun Opens It</span>
+      </div>
+      <div class="measure">
+        <span class="measure-num">∞</span>
+        <span class="measure-unit">Years of Mystery</span>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-cue">
+    <div class="vline"></div>
+    <span>Enter</span>
+  </div>
+</section>
+
+<!-- ═══ INTRO ═══ -->
+<div class="section">
+  <div class="stone-rule reveal"></div>
+  <p class="body-text drop-cap reveal" style="margin-top:2rem;">
+    In the year 820 CE, the Abbasid Caliph Abdullah al-Ma'mun forced his way into the Great Pyramid with hammers and fire, convinced it contained the accumulated treasures of the ancient world. What he found instead — empty chambers, a lidless granite coffer containing nothing — was either the greatest disappointment or the greatest teaching in the history of exploration. Hall argues for the latter. The Pyramid was never a tomb. It was a machine for transformation.
+  </p>
+  <p class="body-text reveal">
+    Working from Plato's account of his own initiation and from the surviving architectural evidence, Hall reconstructs the Pyramid as an initiatic temple of extraordinary sophistication. Its passages do not merely connect chambers — they enact a cosmology. The descent into the subterranean pit, the ascent through the Grand Gallery, the trial in the Queen's Chamber, and the final confrontation in the King's Chamber each represent a stage in the candidate's death, purification, and rebirth as a fully realized being.
+  </p>
+  <div class="quote-block amber reveal">
+    <p class="quote-text">The Great Pyramid of Gizeh is the text and testament of an ancient and hidden wisdom — a scripture in stone more enduring than papyrus, encoded in mathematics rather than words, readable only by those already initiated enough to ask the right questions.</p>
+    <p class="quote-attr">— Hall's thesis, Chapter VI</p>
+  </div>
+</div>
+
+<!-- ═══ CROSS-SECTION INTERACTIVE ═══ -->
+<div class="cross-section">
+  <div class="cross-section-inner">
+    <h2 class="section-heading reveal">The Passages & Chambers</h2>
+    <p class="body-text reveal" style="max-width:700px;">
+      Hover each chamber and passage in the cross-section below to understand its initiatic function. Every architectural feature carries a meaning.
+    </p>
+    <canvas id="crossCanvas" width="720" height="480"></canvas>
+    <div class="chamber-info" id="chamberInfo">Hover a chamber or passage to reveal its initiatic meaning</div>
+  </div>
+</div>
+
+<!-- ═══ AL-MAMUN ENTRY ═══ -->
+<div class="mamun-section">
+  <div class="mamun-inner">
+    <h2 class="section-heading reveal">Caliph Al-Ma'mun's Forced Entry · 820 CE</h2>
+    <div class="mamun-grid">
+      <div class="reveal">
+        <p class="body-text">
+          For millennia the Pyramid stood sealed, its original entrance hidden and its interior unknown to the world outside its builders. In 820 CE, the Abbasid Caliph al-Ma'mun — a patron of science, mathematics, and esoteric philosophy — commanded his workers to tunnel through the northern face. For months they hammered, heated the stone with fire and shocked it with cold vinegar. They broke through not into the original entrance but into the Descending Passage, stumbling upon it accidentally.
+        </p>
+        <p class="body-text">
+          What they found: a network of passages, an empty granite coffer in the King's Chamber, and — in Hall's reading — unmistakable evidence that the Pyramid had been deliberately emptied or had never contained material treasure at all. The knowledge it contained was architectural, mathematical, astronomical. It was encoded in the structure itself. The empty coffer was the final teaching: the seeker must bring the treasure with them, or find none.
+        </p>
+      </div>
+      <div class="mamun-stat-col reveal">
+        <div class="stat-block">
+          <div class="stat-num">3</div>
+          <div class="stat-label">Months of Forced Entry</div>
+        </div>
+        <div class="stat-block">
+          <div class="stat-num">0</div>
+          <div class="stat-label">Objects Found Inside</div>
+        </div>
+        <div class="stat-block">
+          <div class="stat-num">4°</div>
+          <div class="stat-label">Passage Slope Angle</div>
+        </div>
+        <div class="stat-block">
+          <div class="stat-num">1</div>
+          <div class="stat-label">Lidless Granite Coffer</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ INITIATION STAGES ═══ -->
+<div class="stages-section">
+  <div class="stages-inner">
+    <h2 class="section-heading gold-rule reveal">The Four Initiatic Trials</h2>
+    <p class="body-text reveal">Hall correlates the Pyramid's chambers to the four classical elements — and to four stages of initiatic transformation that the candidate underwent during the nine-day rite of passage.</p>
+    <div class="stages-grid">
+      <div class="stage-card reveal">
+        <div class="stage-num">01</div>
+        <div class="stage-element">Earth · Subterranean</div>
+        <div class="stage-title">The Pit of Probation</div>
+        <div class="stage-desc">The Descending Passage leads to an unfinished pit cut into bedrock far below the Pyramid's base. The candidate descended here alone in total darkness — confronting the chthonic forces of the underworld, the animal nature, the fear of annihilation. This was the death of the old self.</div>
+      </div>
+      <div class="stage-card reveal">
+        <div class="stage-num">02</div>
+        <div class="stage-element">Water · Queen's Chamber</div>
+        <div class="stage-title">The Hall of Truth in Darkness</div>
+        <div class="stage-desc">The Queen's Chamber — incorrectly named by Arab explorers — was the Chamber of Second Birth in Hall's reading. Here the candidate confronted the emotional and astral nature, the desires and illusions that bind the soul to matter. Water as the realm of feeling, reflection, dream.</div>
+      </div>
+      <div class="stage-card reveal">
+        <div class="stage-num">03</div>
+        <div class="stage-element">Fire · Grand Gallery</div>
+        <div class="stage-title">The Hall of Truth in Light</div>
+        <div class="stage-desc">The Grand Gallery — 28 feet tall, corbelled in seven overlapping tiers — was the passage of solar ascent. Its extraordinary proportions encode the mathematics of the solar year. The candidate ascended this passage as the solar hero ascending toward the divine realm, the intellect purified of passion.</div>
+      </div>
+      <div class="stage-card reveal">
+        <div class="stage-num">04</div>
+        <div class="stage-element">Air & Ether · King's Chamber</div>
+        <div class="stage-title">The Chamber of the Open Tomb</div>
+        <div class="stage-desc">The King's Chamber — constructed entirely of red Aswan granite, resonant as a bell — was the Hall of the Twice-Born. Here the candidate was sealed in the empty lidless coffer for three days. In this symbolic death, the soul left the body and journeyed through the underworld. On the third day it returned — and the initiate who arose was no longer the same being who descended.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SPHINX SECTION ═══ -->
+<div class="sphinx-section">
+  <div class="sphinx-inner">
+    <h2 class="section-heading sphinx-rule reveal">The Riddle of the Sphinx</h2>
+    <div class="sphinx-grid">
+      <div class="sphinx-text-block">
+        <p class="body-text reveal-left">
+          The Sphinx — carved from the living bedrock of the Giza plateau, its face turned permanently east — is in Hall's view not a monument but a question. Its composite form (human head, lion body) encodes the ultimate riddle of esoteric philosophy: what is the relationship between the human mind and the animal nature? The Sphinx does not ask "What walks on four legs?" It asks: <em>what are you?</em>
+        </p>
+        <p class="body-text reveal-left">
+          The lion body represents the animal-vital nature — raw instinctual power, solar force, the energy of incarnate life. The human head represents the rational-spiritual nature — the capacity for self-reflection, abstract thought, and divine aspiration. The Sphinx's riddle is the initiatic question in every mystery school: can you unite these two? Can the human mind ride and direct the lion-power without being consumed by it?
+        </p>
+        <div class="quote-block reveal-left">
+          <p class="quote-text">The answer the Sphinx expects is not a clever answer about mankind's life stages. The answer is a demonstration: the initiate who has genuinely solved the riddle has become the Sphinx — has unified the animal and divine natures within themselves.</p>
+          <p class="quote-attr">— Hall on the Sphinx, Chapter VI</p>
+        </div>
+        <p class="body-text reveal-left">
+          Hall also raises the question of what lies beneath the Sphinx — the legendary Hall of Records, a hidden chamber containing the complete library of Atlantean wisdom brought to Egypt before the catastrophe. The Sphinx, as guardian of the threshold, stands watch over the most ancient secret on earth.
+        </p>
+      </div>
+      <div class="sphinx-canvas-col reveal">
+        <canvas id="sphinxCanvas" width="340" height="280"></canvas>
+        <p class="sphinx-caption" id="sphinxCaption">Hover the Sphinx to explore its symbolism</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ COFFER MYSTERY ═══ -->
+<div class="coffer-section">
+  <div class="coffer-inner">
+    <h2 class="section-heading reveal">The Secret of the Coffer</h2>
+    <p class="body-text reveal" style="max-width:680px;">
+      The lidless granite coffer in the King's Chamber is the central mystery of the Pyramid. Too large to fit through the passages — it must have been placed there during construction. Acoustically resonant at 110 Hz when struck. Precisely oriented. Empty. Hall explores its four possible meanings — hover each face of the coffer to receive its teaching.
+    </p>
+    <canvas id="cofferCanvas" width="560" height="380"></canvas>
+    <p class="coffer-label" id="cofferLabel">Hover a face of the coffer</p>
+  </div>
+</div>
+
+<!-- ═══ CLOSING RAY ═══ -->
+<div class="closing-ray" id="closingRay">
+  <canvas id="rayCanvas"></canvas>
+  <p class="closing-ray-text" id="closingText">The tomb that was never a tomb · The king who was never buried · The mystery that was always alive</p>
+</div>
+
+<!-- ═══ FOOTER NAV ═══ -->
+<nav class="book-nav">
+  <p class="book-nav-series">The Secret Teachings of All Ages · Manly P. Hall · 1928</p>
+  <p class="book-nav-title">Chapter VII: Isis, the Virgin of the World</p>
+  <div class="nav-row">
+    <a class="nav-btn prev" href="ch05-thoth-hermes.html">← Chapter V</a>
+    <a class="nav-btn" href="#">Chapter VII →</a>
+  </div>
+</nav>
+
+<script>
+// ── CURSOR ──
+const cursor = document.getElementById('cursor');
+const cross  = document.getElementById('cursorCross');
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX+'px'; cursor.style.top = e.clientY+'px';
+  setTimeout(()=>{ cross.style.left = e.clientX+'px'; cross.style.top = e.clientY+'px'; }, 60);
+});
+
+// ── SCROLL REVEAL ──
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);} });
+},{threshold:0.07});
+document.querySelectorAll('.reveal,.reveal-left').forEach(el=>obs.observe(el));
+
+// ── HERO PYRAMID CANVAS ──
+(function(){
+  const c = document.getElementById('pyramidCanvas');
+  const ctx = c.getContext('2d');
+  function resize(){ c.width=window.innerWidth; c.height=window.innerHeight; }
+  resize(); window.addEventListener('resize',resize);
+
+  let t = 0, mx = 0.5, my = 0.5;
+  document.addEventListener('mousemove', e=>{
+    mx = e.clientX/window.innerWidth; my = e.clientY/window.innerHeight;
+  });
+
+  function draw(){
+    ctx.clearRect(0,0,c.width,c.height);
+    // Void background
+    ctx.fillStyle='#000000';
+    ctx.fillRect(0,0,c.width,c.height);
+
+    const cx = c.width/2, cy = c.height*0.75;
+    const pw = Math.min(c.width*0.7, 700);
+    const ph = pw*0.63;
+
+    // Pyramid silhouette
+    ctx.beginPath();
+    ctx.moveTo(cx, cy-ph);
+    ctx.lineTo(cx+pw/2, cy);
+    ctx.lineTo(cx-pw/2, cy);
+    ctx.closePath();
+    ctx.fillStyle='rgba(10,10,10,0.98)';
+    ctx.fill();
+    ctx.strokeStyle='rgba(245,232,192,0.12)';
+    ctx.lineWidth=0.8; ctx.stroke();
+
+    // Interior light beam from apex
+    const apexX = cx, apexY = cy-ph;
+    const beamW = 60 + 30*Math.sin(t*0.01);
+    const beamAlpha = 0.03 + 0.015*Math.sin(t*0.008);
+    const beamGrad = ctx.createLinearGradient(apexX, apexY, cx, cy);
+    beamGrad.addColorStop(0,'rgba(245,232,192,0)');
+    beamGrad.addColorStop(0.3,`rgba(245,232,192,${beamAlpha})`);
+    beamGrad.addColorStop(1,'rgba(245,232,192,0)');
+    ctx.beginPath();
+    ctx.moveTo(apexX, apexY);
+    ctx.lineTo(cx-beamW, cy);
+    ctx.lineTo(cx+beamW, cy);
+    ctx.closePath();
+    ctx.fillStyle=beamGrad; ctx.fill();
+
+    // Entrance passage hint
+    const entX = cx - pw*0.05;
+    const entY = cy - ph*0.22;
+    ctx.fillStyle='rgba(245,232,192,0.06)';
+    ctx.fillRect(entX-3, entY, 6, ph*0.22);
+
+    // Stars behind
+    for(let i=0;i<3;i++){
+      const sx=cx+Math.cos(t*0.003+i*2.1)*120;
+      const sy=cy-ph*0.5+Math.sin(t*0.003+i*1.7)*60;
+      ctx.beginPath(); ctx.arc(sx,sy,0.8,0,Math.PI*2);
+      ctx.fillStyle=`rgba(245,232,192,${0.2+0.1*Math.sin(t*0.05+i)})`;
+      ctx.fill();
+    }
+
+    // Distant star field
+    if(t<3){
+      for(let i=0;i<80;i++){
+        ctx.beginPath();
+        ctx.arc(Math.random()*c.width, Math.random()*cy*0.85, Math.random()*0.8, 0, Math.PI*2);
+        ctx.fillStyle='rgba(245,232,192,0.15)'; ctx.fill();
+      }
+    }
+
+    // Ground plane
+    const gGrad = ctx.createLinearGradient(0, cy, 0, c.height);
+    gGrad.addColorStop(0,'rgba(20,16,10,0.9)');
+    gGrad.addColorStop(1,'rgba(5,4,2,1)');
+    ctx.fillStyle=gGrad;
+    ctx.fillRect(0,cy,c.width,c.height-cy);
+
+    // Mouse-follow glow at apex
+    const gx = apexX + (mx-0.5)*30;
+    const gy = apexY + (my-0.5)*15;
+    const apexGlow = ctx.createRadialGradient(gx,gy,0,gx,gy,80);
+    apexGlow.addColorStop(0,`rgba(245,232,192,${0.12+0.06*Math.sin(t*0.02)})`);
+    apexGlow.addColorStop(1,'rgba(245,232,192,0)');
+    ctx.beginPath(); ctx.arc(gx,gy,80,0,Math.PI*2);
+    ctx.fillStyle=apexGlow; ctx.fill();
+
+    t++;
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ── CROSS-SECTION CANVAS ──
+(function(){
+  const canvas = document.getElementById('crossCanvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W=720,H=480; canvas.width=W; canvas.height=H;
+  const info = document.getElementById('chamberInfo');
+
+  // Pyramid geometry
+  const apexX=W/2, apexY=30;
+  const baseY=H-40, baseW=640;
+  const baseL=apexX-baseW/2, baseR=apexX+baseW/2;
+
+  // Scale factor
+  function py(h){ return apexY + (baseY-apexY)*(1-h); } // h=0 base, h=1 apex
+  function px(t,h){ // t=-1..1 horizontal, h=height proportion
+    const w = baseW/2*(1-h);
+    return apexX + t*w;
+  }
+
+  const chambers = [
+    {
+      id:'subterranean', label:'Subterranean Chamber',
+      x:apexX-50, y:baseY-20, w:100, h:35,
+      color:'rgba(80,60,40,0.5)', stroke:'rgba(200,160,80,0.5)',
+      desc:'THE PIT OF PROBATION — Cut into bedrock 100 feet below the pyramid\'s base. The candidate descended here in absolute darkness, facing the primal forces of earth and death. The trial of Earth: confronting the dissolution of the physical self.'
+    },
+    {
+      id:'descending', label:'Descending Passage',
+      x1:apexX-180, y1:baseY-160, x2:apexX-40, y2:baseY-20,
+      isPath:true, color:'rgba(60,50,35,0.6)', stroke:'rgba(200,160,80,0.3)',
+      desc:'THE DESCENDING PASSAGE — Slopes downward at 26°17\' (the same angle as the slope of the Pyramid face) into the bedrock. Aligned to allow the star Thuban (the North Star of 2160 BCE) to shine directly down it at culmination. The descent into matter, the soul entering incarnation.'
+    },
+    {
+      id:'ascending', label:'Ascending Passage',
+      isPath:true, x1:apexX-130, y1:baseY-180, x2:apexX-80, y2:baseY-260,
+      color:'rgba(60,50,35,0.6)', stroke:'rgba(200,160,80,0.3)',
+      desc:'THE ASCENDING PASSAGE — Sealed with granite plugs when al-Ma\'mun forced entry. Its slope mirrors the Descending Passage exactly. The upward path after the trial of Earth: the soul beginning its conscious ascent toward the divine.'
+    },
+    {
+      id:'queen', label:"Queen's Chamber",
+      x:apexX-55, y:baseY-270, w:110, h:50,
+      color:'rgba(40,45,60,0.5)', stroke:'rgba(120,150,200,0.5)',
+      desc:"THE QUEEN'S CHAMBER (Hall of Truth in Darkness) — Incorrectly named by Arab explorers. Hall identifies this as the Chamber of Water — the trial of the emotional and astral nature. The candidate confronted the lunar forces: desire, illusion, the depths of the unconscious. The chamber has an unfinished quality, suggesting it was never meant for human occupation in the mundane sense."
+    },
+    {
+      id:'gallery', label:'Grand Gallery',
+      isPath:true, x1:apexX-80, y1:baseY-260, x2:apexX+40, y2:baseY-340,
+      wide:true, color:'rgba(70,60,30,0.5)', stroke:'rgba(220,180,60,0.5)',
+      desc:'THE GRAND GALLERY — 156 feet long, 28 feet high, corbelled in 7 overlapping tiers of polished limestone. Its proportions encode the mathematics of the solar year. Hall calls this the Hall of Truth in Light — the ascent of the purified intellect toward the solar realm. The number seven recalls the seven planetary spheres of Hermetic cosmology.'
+    },
+    {
+      id:'kings', label:"King's Chamber",
+      x:apexX-50, y:baseY-370, w:120, h:55,
+      color:'rgba(60,20,20,0.5)', stroke:'rgba(245,200,100,0.6)',
+      desc:"THE KING'S CHAMBER (Hall of the Twice-Born) — Built entirely of red Aswan granite. Acoustically resonant at 110 Hz. Contains the lidless coffer. Hall identifies this as the Chamber of Fire and the Solar Ether — the innermost sanctum where the candidate lay in the coffer for three days and three nights, experiencing symbolic death and divine rebirth. The empty coffer is its own teaching."
+    },
+    {
+      id:'coffer', label:'The Coffer',
+      x:apexX+10, y:baseY-365, w:35, h:20,
+      color:'rgba(180,100,20,0.4)', stroke:'rgba(245,200,100,0.8)',
+      desc:'THE LIDLESS GRANITE COFFER — Too large to pass through the passages; placed during construction. Acoustically resonant. Precisely oriented. Empty of everything material. The candidate sealed within for three days. Hall: "The open sarcophagus told the initiate: you are not the body. You will leave it. You will return. The tomb is empty because you are not dead."'
+    }
+  ];
+
+  let hovered = null;
+
+  function drawPyramid(){
+    ctx.clearRect(0,0,W,H);
+
+    // Background
+    ctx.fillStyle='#0a0a0a'; ctx.fillRect(0,0,W,H);
+
+    // Star field
+    for(let i=0;i<60;i++){
+      ctx.beginPath();
+      ctx.arc(Math.random()*W, Math.random()*(apexY+80), Math.random()*0.7, 0,Math.PI*2);
+      ctx.fillStyle='rgba(245,232,192,0.2)'; ctx.fill();
+    }
+
+    // Ground
+    ctx.fillStyle='#0d0b08';
+    ctx.fillRect(0,baseY,W,H-baseY);
+
+    // Pyramid outline
+    ctx.beginPath();
+    ctx.moveTo(apexX, apexY);
+    ctx.lineTo(baseR, baseY);
+    ctx.lineTo(baseL, baseY);
+    ctx.closePath();
+    ctx.fillStyle='rgba(14,12,9,0.97)'; ctx.fill();
+    ctx.strokeStyle='rgba(245,232,192,0.2)'; ctx.lineWidth=1; ctx.stroke();
+
+    // Internal structure lines (faint)
+    // Bedrock line
+    ctx.beginPath(); ctx.moveTo(baseL+20,baseY-15); ctx.lineTo(baseR-20,baseY-15);
+    ctx.strokeStyle='rgba(100,80,50,0.2)'; ctx.lineWidth=0.5; ctx.stroke();
+
+    // Draw chambers
+    chambers.forEach(ch=>{
+      const isHov = hovered===ch;
+      if(ch.isPath){
+        ctx.beginPath();
+        ctx.moveTo(ch.x1,ch.y1);
+        ctx.lineTo(ch.x2,ch.y2);
+        ctx.strokeStyle = isHov ? ch.stroke.replace('0.3','0.9').replace('0.5','0.9') : ch.stroke;
+        ctx.lineWidth = ch.wide ? (isHov?10:7) : (isHov?5:3);
+        ctx.stroke();
+      } else {
+        ctx.fillStyle = isHov ? ch.color.replace('0.5','0.7').replace('0.4','0.6') : ch.color;
+        ctx.fillRect(ch.x, ch.y, ch.w, ch.h);
+        ctx.strokeStyle = isHov ? ch.stroke.replace('0.5','0.9').replace('0.6','0.95').replace('0.8','1') : ch.stroke;
+        ctx.lineWidth = isHov?1.5:0.8; ctx.strokeRect(ch.x,ch.y,ch.w,ch.h);
+      }
+
+      // Label on hover
+      if(isHov){
+        ctx.font='10px "Rajdhani",sans-serif';
+        ctx.fillStyle='rgba(245,232,192,0.8)';
+        ctx.textAlign='center';
+        const lx = ch.isPath ? (ch.x1+ch.x2)/2 : ch.x+ch.w/2;
+        const ly = ch.isPath ? (ch.y1+ch.y2)/2-10 : ch.y-8;
+        ctx.shadowBlur=6; ctx.shadowColor='rgba(245,232,192,0.5)';
+        ctx.fillText(ch.label.toUpperCase(), lx, ly);
+        ctx.shadowBlur=0;
+      }
+    });
+
+    // North-star alignment line (Descending Passage extended)
+    ctx.beginPath(); ctx.moveTo(apexX-180,baseY-160); ctx.lineTo(apexX-320,apexY-40);
+    ctx.strokeStyle='rgba(100,150,255,0.08)'; ctx.lineWidth=1; ctx.setLineDash([3,6]);
+    ctx.stroke(); ctx.setLineDash([]);
+  }
+
+  // Pre-render stars once
+  const starOffscreen = document.createElement('canvas');
+  starOffscreen.width=W; starOffscreen.height=H;
+  const sctx = starOffscreen.getContext('2d');
+  for(let i=0;i<60;i++){
+    sctx.beginPath();
+    sctx.arc(Math.random()*W, Math.random()*(apexY+80), Math.random()*0.7,0,Math.PI*2);
+    sctx.fillStyle='rgba(245,232,192,0.2)'; sctx.fill();
+  }
+
+  drawPyramid();
+
+  canvas.addEventListener('mousemove',e=>{
+    const rect=canvas.getBoundingClientRect();
+    const mx=(e.clientX-rect.left)*(W/rect.width);
+    const my=(e.clientY-rect.top)*(H/rect.height);
+    let found=null;
+    chambers.forEach(ch=>{
+      if(ch.isPath){
+        // Check distance from line segment
+        const dx=ch.x2-ch.x1, dy=ch.y2-ch.y1;
+        const len=Math.sqrt(dx*dx+dy*dy);
+        const t2=Math.max(0,Math.min(1,((mx-ch.x1)*dx+(my-ch.y1)*dy)/(len*len)));
+        const nearX=ch.x1+t2*dx, nearY=ch.y1+t2*dy;
+        const dist=Math.sqrt((mx-nearX)**2+(my-nearY)**2);
+        if(dist<(ch.wide?12:8)) found=ch;
+      } else {
+        if(mx>=ch.x&&mx<=ch.x+ch.w&&my>=ch.y&&my<=ch.y+ch.h) found=ch;
+      }
+    });
+    if(found!==hovered){ hovered=found; drawPyramid(); }
+    if(hovered){
+      info.innerHTML=`<strong style="color:rgba(245,232,192,0.9);font-family:'Rajdhani',serif;letter-spacing:0.15em;font-size:0.8rem">${hovered.label.toUpperCase()}</strong><br>${hovered.desc}`;
+      info.style.borderColor='rgba(245,232,192,0.15)';
+    } else {
+      info.textContent='Hover a chamber or passage to reveal its initiatic meaning';
+      info.style.borderColor='';
+    }
+  });
+  canvas.addEventListener('mouseleave',()=>{ hovered=null; drawPyramid(); info.textContent='Hover a chamber or passage to reveal its initiatic meaning'; });
+})();
+
+// ── SPHINX CANVAS ──
+(function(){
+  const canvas = document.getElementById('sphinxCanvas');
+  if(!canvas) return;
+  const ctx=canvas.getContext('2d');
+  const W=340,H=280; canvas.width=W; canvas.height=H;
+  const caption=document.getElementById('sphinxCaption');
+
+  const zones=[
+    { id:'head', label:'The Human Head', x:175,y:60,rx:45,ry:55, color:'rgba(200,168,120,0.4)', strokeColor:'rgba(200,168,120,0.7)', desc:'RATIONAL MIND — The human head represents consciousness, the capacity for self-reflection and divine aspiration. It looks East — toward the rising sun, toward the source of light.' },
+    { id:'body', label:'The Lion Body', x:160,y:185,rx:130,ry:65, color:'rgba(160,120,60,0.3)', strokeColor:'rgba(160,120,60,0.6)', desc:'ANIMAL FORCE — The lion body is raw solar power, instinctual vitality, the primal energy of incarnate life. The greatest force in nature, waiting to be directed by a worthy mind.' },
+    { id:'paws', label:'The Outstretched Paws', x:90,y:230,rx:60,ry:22, color:'rgba(120,90,40,0.3)', strokeColor:'rgba(120,90,40,0.5)', desc:'THE GUARDIAN POSTURE — The extended paws frame the threshold to a hidden doorway. The Hall of Records, if it exists, lies somewhere between these paws. The Sphinx does not bar entry — it questions the worthiness of those who approach.' },
+    { id:'east', label:'Gazing East', x:220,y:80,rx:20,ry:18, color:'rgba(245,200,80,0.2)', strokeColor:'rgba(245,200,80,0.5)', desc:'THE ETERNAL WATCH — The Sphinx faces due east, aligned to the equinox sunrise. At the spring equinox, the sun rises precisely in front of the Sphinx\'s gaze. It has watched 13,000 sunrises without blinking. It is watching the same sun that initiated Plato.' },
+  ];
+
+  let hovered=null, t=0;
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='#0a0a0a'; ctx.fillRect(0,0,W,H);
+
+    // Night sky
+    for(let i=0;i<30;i++){
+      ctx.beginPath();
+      ctx.arc(10+i*11+Math.sin(i)*5,10+Math.sin(i*0.7)*20,0.6,0,Math.PI*2);
+      ctx.fillStyle=`rgba(245,232,192,${0.1+0.1*Math.sin(t*0.02+i)})`;
+      ctx.fill();
+    }
+
+    // Ground
+    ctx.fillStyle='rgba(18,14,8,0.9)';
+    ctx.fillRect(0,H*0.82,W,H*0.18);
+
+    // Sphinx body (simplified silhouette)
+    // Body
+    ctx.beginPath();
+    ctx.ellipse(155,190,135,65,0,0,Math.PI*2);
+    ctx.fillStyle='rgba(40,30,16,0.9)'; ctx.fill();
+    ctx.strokeStyle='rgba(100,80,40,0.4)'; ctx.lineWidth=0.8; ctx.stroke();
+
+    // Head
+    ctx.beginPath();
+    ctx.ellipse(178,80,46,56,0.1,0,Math.PI*2);
+    ctx.fillStyle='rgba(50,38,20,0.95)'; ctx.fill();
+    ctx.strokeStyle='rgba(140,110,60,0.5)'; ctx.lineWidth=0.8; ctx.stroke();
+
+    // Nemes headdress hint
+    ctx.beginPath();
+    ctx.moveTo(135,55); ctx.lineTo(210,55);
+    ctx.lineTo(215,100); ctx.lineTo(205,130);
+    ctx.moveTo(145,55); ctx.lineTo(135,130);
+    ctx.strokeStyle='rgba(120,95,45,0.4)'; ctx.lineWidth=0.6; ctx.stroke();
+
+    // Eye
+    ctx.beginPath(); ctx.ellipse(192,78,8,5,0,0,Math.PI*2);
+    ctx.fillStyle='rgba(80,60,20,0.9)'; ctx.fill();
+    ctx.strokeStyle='rgba(200,160,80,0.6)'; ctx.lineWidth=0.7; ctx.stroke();
+    ctx.beginPath(); ctx.arc(192,78,2,0,Math.PI*2);
+    const eyeGlow=0.4+0.3*Math.sin(t*0.04);
+    ctx.fillStyle=`rgba(240,180,60,${eyeGlow})`; ctx.fill();
+
+    // Paws
+    ctx.beginPath();
+    ctx.roundRect(42,210,90,28,3);
+    ctx.fillStyle='rgba(45,35,18,0.9)'; ctx.fill();
+    ctx.strokeStyle='rgba(100,80,40,0.4)'; ctx.lineWidth=0.7; ctx.stroke();
+    ctx.beginPath();
+    ctx.roundRect(200,215,80,24,3);
+    ctx.fillStyle='rgba(45,35,18,0.9)'; ctx.fill();
+    ctx.strokeStyle='rgba(100,80,40,0.4)'; ctx.lineWidth=0.7; ctx.stroke();
+
+    // Hover zones (ellipses, semi-transparent)
+    zones.forEach(z=>{
+      const isHov=hovered===z;
+      ctx.beginPath();
+      ctx.ellipse(z.x,z.y,z.rx,z.ry,0,0,Math.PI*2);
+      ctx.fillStyle = isHov ? z.color.replace('0.3','0.5').replace('0.2','0.35').replace('0.4','0.55') : 'transparent';
+      ctx.fill();
+      if(isHov){
+        ctx.strokeStyle=z.strokeColor; ctx.lineWidth=1;
+        ctx.setLineDash([3,4]); ctx.stroke(); ctx.setLineDash([]);
+      }
+    });
+
+    // Horizon glow (east)
+    const hGrad=ctx.createRadialGradient(W,H*0.82,0,W,H*0.82,120);
+    hGrad.addColorStop(0,`rgba(180,100,20,${0.06+0.03*Math.sin(t*0.02)})`);
+    hGrad.addColorStop(1,'rgba(180,100,20,0)');
+    ctx.beginPath(); ctx.arc(W,H*0.82,120,0,Math.PI*2);
+    ctx.fillStyle=hGrad; ctx.fill();
+
+    t++;
+    requestAnimationFrame(draw);
+  }
+
+  canvas.addEventListener('mousemove',e=>{
+    const rect=canvas.getBoundingClientRect();
+    const mx=(e.clientX-rect.left)*(W/rect.width);
+    const my=(e.clientY-rect.top)*(H/rect.height);
+    hovered=null;
+    // Check innermost zones first
+    zones.forEach(z=>{
+      const dx=(mx-z.x)/z.rx, dy=(my-z.y)/z.ry;
+      if(dx*dx+dy*dy<=1) hovered=z;
+    });
+    if(hovered){ caption.textContent=`${hovered.label} — ${hovered.desc}`; caption.style.color='rgba(200,168,120,0.8)'; }
+    else { caption.textContent='Hover the Sphinx to explore its symbolism'; caption.style.color=''; }
+  });
+  canvas.addEventListener('mouseleave',()=>{ hovered=null; caption.textContent='Hover the Sphinx to explore its symbolism'; caption.style.color=''; });
+
+  draw();
+})();
+
+// ── COFFER CANVAS ──
+(function(){
+  const canvas=document.getElementById('cofferCanvas');
+  if(!canvas) return;
+  const ctx=canvas.getContext('2d');
+  const W=560,H=380; canvas.width=W; canvas.height=H;
+  const label=document.getElementById('cofferLabel');
+
+  // Isometric coffer
+  const cx=W/2, cy=H/2+20;
+  const cw=200, ch=70, cd=120; // width, height, depth
+  const iso={x:0.866, y:0.5}; // isometric projection
+
+  const faces=[
+    {
+      id:'top', pts:[[cx-cw/2,cy-ch], [cx+cw/2,cy-ch], [cx+cw/2-cd*iso.x*0.5,cy-ch-cd*iso.y*0.5], [cx-cw/2-cd*iso.x*0.5,cy-ch-cd*iso.y*0.5]],
+      color:'rgba(60,45,20,0.9)', stroke:'rgba(220,180,80,0.6)',
+      label:'The Open Lid', desc:'THE EMPTY OPENING — The coffer has no lid and never had one. This was deliberate. The initiate who lay within was not sealed in death but exposed to the cosmos. The opening above framed a rectangle of stars, precisely aligned to allow one star to culminate directly overhead at midnight. The body lay in darkness; the soul journeyed under open sky.'
+    },
+    {
+      id:'front', pts:[[cx-cw/2,cy-ch], [cx+cw/2,cy-ch], [cx+cw/2,cy], [cx-cw/2,cy]],
+      color:'rgba(50,36,14,0.95)', stroke:'rgba(220,180,80,0.4)',
+      label:'The South Face', desc:'THE RESONANT WALL — Strike the coffer\'s south face and it rings at 110 Hz — a frequency produced nowhere else in the pyramid. This is not accidental. Hall notes that 110 Hz corresponds to trance-inducing frequencies documented in acoustic archaeology. The chamber itself amplifies this resonance. The initiate in the coffer was bathed in standing waves of sacred sound.'
+    },
+    {
+      id:'right', pts:[[cx+cw/2,cy-ch], [cx+cw/2,cy], [cx+cw/2-cd*iso.x*0.5,cy-cd*iso.y*0.5], [cx+cw/2-cd*iso.x*0.5,cy-ch-cd*iso.y*0.5]],
+      color:'rgba(45,32,12,0.95)', stroke:'rgba(220,180,80,0.35)',
+      label:'The East Face', desc:'THE MORNING FACE — The east face of the coffer was oriented to catch the first light entering through the shaft aligned to a specific star. On the morning of the third day, a shaft of light would have struck the initiate\'s face, marking the moment of symbolic resurrection. The dawn was not metaphor — it was architecture.'
+    },
+    {
+      id:'interior', pts:[[cx-cw/2+8,cy-ch+8], [cx+cw/2-8,cy-ch+8], [cx+cw/2-8,cy-10], [cx-cw/2+8,cy-10]],
+      color:'rgba(8,6,3,0.98)', stroke:'rgba(120,90,30,0.3)',
+      label:'The Interior Void', desc:'THE HOLLOW TEACHING — The interior of the coffer is slightly larger than a human body — large enough to hold one person with arms crossed on the chest, in the Osirian position. Its volume is precisely equal to the volume of the Pyramid\'s capstone (now missing). Hall\'s interpretation: the coffer and the capstone together form a complete symbol — the vessel and the crown, the body and the spirit, waiting to be united.'
+    }
+  ];
+
+  let hovered=null, t=0;
+
+  function drawCoffer(){
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='#000000'; ctx.fillRect(0,0,W,H);
+
+    // Ambient glow on floor
+    const floorGrad=ctx.createRadialGradient(cx,cy+40,0,cx,cy+40,180);
+    floorGrad.addColorStop(0,'rgba(80,50,10,0.08)');
+    floorGrad.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.beginPath(); ctx.arc(cx,cy+40,180,0,Math.PI*2);
+    ctx.fillStyle=floorGrad; ctx.fill();
+
+    // Stone floor lines
+    ctx.strokeStyle='rgba(60,48,30,0.2)'; ctx.lineWidth=0.5;
+    for(let i=-3;i<=3;i++){
+      ctx.beginPath(); ctx.moveTo(0,cy+i*18+20); ctx.lineTo(W,cy+i*18+20); ctx.stroke();
+    }
+
+    // Draw faces
+    faces.forEach(face=>{
+      const isHov=hovered===face;
+      ctx.beginPath();
+      ctx.moveTo(face.pts[0][0],face.pts[0][1]);
+      face.pts.slice(1).forEach(p=>ctx.lineTo(p[0],p[1]));
+      ctx.closePath();
+      if(isHov){
+        ctx.fillStyle=face.color.replace('0.9','0.95').replace('0.95','0.98');
+        const glowGrad=ctx.createLinearGradient(face.pts[0][0],face.pts[0][1],face.pts[2][0],face.pts[2][1]);
+        glowGrad.addColorStop(0,'rgba(220,180,80,0.12)');
+        glowGrad.addColorStop(1,'rgba(220,180,80,0.04)');
+        ctx.fill();
+        ctx.fillStyle=glowGrad; ctx.fill();
+        ctx.strokeStyle=face.stroke.replace('0.4','0.9').replace('0.6','0.95').replace('0.35','0.8').replace('0.3','0.7');
+      } else {
+        ctx.fillStyle=face.color; ctx.fill();
+        ctx.strokeStyle=face.stroke;
+      }
+      ctx.lineWidth=isHov?1.2:0.6; ctx.stroke();
+
+      // Label on hover
+      if(isHov){
+        const lx=face.pts.reduce((s,p)=>s+p[0],0)/face.pts.length;
+        const ly=face.pts.reduce((s,p)=>s+p[1],0)/face.pts.length;
+        ctx.font='bold 10px "Rajdhani",sans-serif';
+        ctx.fillStyle='rgba(245,220,150,0.9)';
+        ctx.textAlign='center'; ctx.textBaseline='middle';
+        ctx.shadowBlur=8; ctx.shadowColor='rgba(220,180,80,0.5)';
+        ctx.fillText(face.label.toUpperCase(),lx,ly);
+        ctx.shadowBlur=0;
+      }
+    });
+
+    // Caption above
+    ctx.font='10px "Rajdhani",sans-serif';
+    ctx.fillStyle='rgba(100,80,40,0.5)';
+    ctx.textAlign='center';
+    ctx.fillText('KING\'S CHAMBER — GREAT PYRAMID OF GIZA — LIDLESS GRANITE COFFER',cx,25);
+
+    t++;
+  }
+
+  canvas.addEventListener('mousemove',e=>{
+    const rect=canvas.getBoundingClientRect();
+    const mx=(e.clientX-rect.left)*(W/rect.width);
+    const my=(e.clientY-rect.top)*(H/rect.height);
+
+    function inPoly(pts){
+      let inside=false;
+      for(let i=0,j=pts.length-1;i<pts.length;j=i++){
+        const xi=pts[i][0],yi=pts[i][1],xj=pts[j][0],yj=pts[j][1];
+        if(((yi>my)!==(yj>my))&&(mx<(xj-xi)*(my-yi)/(yj-yi)+xi)) inside=!inside;
+      }
+      return inside;
+    }
+
+    hovered=null;
+    // check interior first (top most)
+    for(let i=faces.length-1;i>=0;i--){
+      if(inPoly(faces[i].pts)){ hovered=faces[i]; break; }
+    }
+
+    drawCoffer();
+    if(hovered){ label.textContent=`${hovered.label} — ${hovered.desc}`; label.style.color='rgba(220,180,80,0.8)'; }
+    else { label.textContent='Hover a face of the coffer'; label.style.color=''; }
+  });
+  canvas.addEventListener('mouseleave',()=>{ hovered=null; drawCoffer(); label.textContent='Hover a face of the coffer'; label.style.color=''; });
+  drawCoffer();
+})();
+
+// ── CLOSING RAY CANVAS ──
+(function(){
+  const canvas=document.getElementById('rayCanvas');
+  const container=document.getElementById('closingRay');
+  const text=document.getElementById('closingText');
+  if(!canvas||!container) return;
+  const ctx=canvas.getContext('2d');
+  function resize(){ canvas.width=container.offsetWidth; canvas.height=container.offsetHeight; }
+  resize(); window.addEventListener('resize',resize);
+
+  let t=0;
+  // Reveal text when in view
+  const rayObs=new IntersectionObserver(entries=>{
+    if(entries[0].isIntersecting) text.classList.add('visible');
+  },{threshold:0.5});
+  rayObs.observe(container);
+
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle='#000000'; ctx.fillRect(0,0,canvas.width,canvas.height);
+    const cx=canvas.width/2, cy=canvas.height;
+    const rays=7;
+    for(let i=0;i<rays;i++){
+      const angle=-Math.PI/2 + (i/(rays-1)-0.5)*0.6;
+      const len=canvas.height*1.5;
+      const ex=cx+Math.cos(angle)*len, ey=cy+Math.sin(angle)*len;
+      const w=4+i*3;
+      const alpha=(0.03+0.015*Math.sin(t*0.015+i*0.5))*(1-Math.abs(i-rays/2)/(rays/2)*0.6);
+      const grad=ctx.createLinearGradient(cx,cy,ex,ey);
+      grad.addColorStop(0,`rgba(245,232,192,${alpha*3})`);
+      grad.addColorStop(0.3,`rgba(245,232,192,${alpha})`);
+      grad.addColorStop(1,'rgba(245,232,192,0)');
+      ctx.beginPath();
+      ctx.moveTo(cx,cy);
+      ctx.lineTo(ex+w,ey); ctx.lineTo(ex-w,ey);
+      ctx.closePath();
+      ctx.fillStyle=grad; ctx.fill();
+    }
+    t++;
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thoth Hermes Trismegistus — Secret Teachings of All Ages</title>
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Slab:ital,wght@0,100;0,300;0,400;0,700;1,300;1,400&family=Cinzel:wght@400;600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void:       #07050a;
+    --sand:       #100c06;
+    --dune:       #1e1508;
+    --ochre:      #8a6020;
+    --ochre-bright:#c8901a;
+    --gold:       #d4a832;
+    --gold-light: #f0c848;
+    --gold-dim:   #5a4010;
+    --lapis:      #1a3060;
+    --lapis-bright:#2858c0;
+    --lapis-glow: #4080ff;
+    --turquoise:  #20a090;
+    --turquoise-dim:#0a4040;
+    --papyrus:    #d8c090;
+    --papyrus-dim:#7a6840;
+    --smoke:      #c8b8a0;
+    --smoke-dim:  #6a5840;
+    --text:       #c8b890;
+    --text-dim:   #70604a;
+    --emerald:    #30a060;
+    --emerald-dim:#104030;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body {
+    background: var(--void);
+    color: var(--text);
+    font-family: 'Libre Baskerville', serif;
+    overflow-x: hidden;
+  }
+
+  /* ── CURSOR ── */
+  .cursor {
+    position:fixed; width:10px; height:10px;
+    background: var(--gold-light);
+    border-radius:50%; pointer-events:none; z-index:9999;
+    transform:translate(-50%,-50%);
+    mix-blend-mode:screen;
+    box-shadow:0 0 14px var(--gold), 0 0 28px rgba(212,168,50,0.4);
+    transition:transform 0.08s;
+  }
+  .cursor-ring {
+    position:fixed; width:34px; height:34px;
+    border:1px solid rgba(212,168,50,0.4); border-radius:50%;
+    pointer-events:none; z-index:9998;
+    transform:translate(-50%,-50%);
+    transition:all 0.2s ease;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position:relative; min-height:100vh;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    text-align:center; padding:3rem 2rem;
+    overflow:hidden; z-index:1;
+  }
+  #sandCanvas {
+    position:absolute; inset:0; width:100%; height:100%;
+    pointer-events:none; z-index:0;
+  }
+  .hero-content { position:relative; z-index:2; }
+
+  /* Thoth SVG sigil */
+  .thoth-sigil {
+    width:200px; height:200px;
+    margin:0 auto 2.5rem;
+    opacity:0;
+    animation:sigilEmerge 2.2s cubic-bezier(0.22,1,0.36,1) 0.4s forwards;
+    filter:drop-shadow(0 0 20px rgba(212,168,50,0.6)) drop-shadow(0 0 50px rgba(26,48,96,0.5));
+  }
+  @keyframes sigilEmerge {
+    from { opacity:0; transform:scale(0.75) rotate(8deg); }
+    to   { opacity:1; transform:scale(1) rotate(0deg); }
+  }
+
+  .chapter-label {
+    font-family:'Cinzel', serif; font-size:0.65rem;
+    letter-spacing:0.55em; color:var(--gold-dim);
+    text-transform:uppercase; margin-bottom:1rem;
+    opacity:0; animation:fadeUp 1s ease 1.3s forwards;
+  }
+  .hero-title {
+    font-family:'Josefin Slab', serif; font-weight:700;
+    font-size:clamp(1.8rem,5.5vw,4rem);
+    color:var(--gold);
+    text-shadow:0 0 40px rgba(212,168,50,0.6), 0 0 100px rgba(212,168,50,0.2);
+    line-height:1.1; max-width:820px; letter-spacing:0.03em;
+    opacity:0; animation:fadeUp 1.2s ease 1.6s forwards;
+  }
+  .hero-title em { color:var(--gold-light); font-style:normal; }
+  .hero-sub {
+    font-size:clamp(0.85rem,1.8vw,1.05rem);
+    font-style:italic; color:var(--text-dim);
+    margin-top:1.2rem; letter-spacing:0.08em;
+    opacity:0; animation:fadeUp 1s ease 2s forwards;
+  }
+  .emerald-tablet-teaser {
+    font-family:'Josefin Slab', serif; font-weight:300;
+    font-size:clamp(0.85rem,1.6vw,1.1rem);
+    color:var(--turquoise); letter-spacing:0.06em;
+    margin-top:2rem; line-height:1.7;
+    opacity:0; animation:fadeUp 1s ease 2.4s forwards;
+    max-width:550px;
+    text-shadow:0 0 20px rgba(32,160,144,0.4);
+  }
+
+  .scroll-cue {
+    position:absolute; bottom:2rem; left:50%;
+    transform:translateX(-50%);
+    display:flex; flex-direction:column; align-items:center; gap:0.5rem;
+    font-family:'Cinzel', serif; font-size:0.55rem;
+    letter-spacing:0.5em; color:var(--gold-dim);
+    opacity:0; animation:fadeIn 1s ease 3s forwards;
+  }
+  .scroll-cue .vline {
+    width:1px; height:50px;
+    background:linear-gradient(to bottom,transparent,var(--gold-dim));
+    animation:breathe 2.5s ease-in-out 3.5s infinite;
+  }
+  @keyframes breathe { 0%,100%{opacity:0.4;transform:scaleY(1)} 50%{opacity:1;transform:scaleY(1.15)} }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes fadeIn { to{opacity:1} }
+
+  /* ── HERMETIC AXIOM BANNER ── */
+  .axiom-banner {
+    position:relative; z-index:1;
+    background:linear-gradient(135deg, rgba(26,48,96,0.4), rgba(30,21,8,0.8), rgba(26,48,96,0.4));
+    border-top:1px solid rgba(212,168,50,0.12);
+    border-bottom:1px solid rgba(212,168,50,0.12);
+    padding:3rem 2rem; text-align:center; overflow:hidden;
+  }
+  .axiom-banner::before {
+    content:'';
+    position:absolute; inset:0;
+    background:repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 60px,
+      rgba(212,168,50,0.02) 60px,
+      rgba(212,168,50,0.02) 61px
+    );
+    pointer-events:none;
+  }
+  .axiom-latin {
+    font-family:'Josefin Slab', serif; font-weight:100;
+    font-size:clamp(1.2rem,3vw,2.2rem);
+    color:var(--gold-light); letter-spacing:0.12em;
+    text-shadow:0 0 30px rgba(212,168,50,0.5);
+    margin-bottom:0.8rem;
+  }
+  .axiom-translation {
+    font-family:'Libre Baskerville', serif; font-style:italic;
+    font-size:clamp(0.8rem,1.5vw,1rem);
+    color:var(--text-dim); letter-spacing:0.08em;
+  }
+  .axiom-dots {
+    display:flex; justify-content:center; gap:1.5rem;
+    margin-top:2rem;
+  }
+  .axiom-dot {
+    width:6px; height:6px;
+    background:var(--gold-dim); border-radius:50%;
+    animation:dotPulse 2s ease-in-out infinite;
+  }
+  .axiom-dot:nth-child(2) { animation-delay:0.3s; }
+  .axiom-dot:nth-child(3) { animation-delay:0.6s; }
+  @keyframes dotPulse { 0%,100%{opacity:0.3;transform:scale(1)} 50%{opacity:1;transform:scale(1.5)} }
+
+  /* ── SECTION ── */
+  .section {
+    position:relative; z-index:1;
+    max-width:860px; margin:0 auto; padding:4rem 2rem;
+  }
+  .section-heading {
+    font-family:'Josefin Slab', serif; font-weight:700;
+    font-size:clamp(1.1rem,2.4vw,1.7rem);
+    color:var(--gold); letter-spacing:0.06em; margin-bottom:1.8rem;
+  }
+  .section-heading.lapis { color:var(--lapis-glow); }
+  .section-heading.turq  { color:var(--turquoise); }
+  .section-heading.smoke { color:var(--smoke); }
+
+  .body-text {
+    font-size:1.08rem; line-height:2.05; color:var(--text); margin:1.5rem 0;
+  }
+  .drop-cap::first-letter {
+    font-family:'Josefin Slab', serif; font-weight:700;
+    font-size:4.8rem; float:left;
+    line-height:0.75; margin:0.08em 0.1em 0 0;
+    color:var(--gold);
+    text-shadow:0 0 30px rgba(212,168,50,0.7);
+  }
+
+  .ornament {
+    display:flex; align-items:center; gap:1.2rem;
+    margin:2.5rem auto; max-width:500px; padding:0 2rem;
+  }
+  .ornament-line { flex:1; height:1px; background:linear-gradient(to right,transparent,var(--gold-dim),transparent); }
+  .ornament-glyph { font-size:1.1rem; color:var(--gold); }
+
+  .quote-block {
+    border-left:2px solid var(--gold-dim);
+    padding:1.5rem 2rem; margin:3rem 0;
+    background:rgba(212,168,50,0.04); position:relative;
+  }
+  .quote-block.lapis { border-left-color:var(--lapis); background:rgba(26,48,96,0.08); }
+  .quote-block.turq  { border-left-color:var(--turquoise-dim); background:rgba(32,160,144,0.05); }
+  .quote-block::before {
+    content:'"'; font-family:'Josefin Slab', serif; font-weight:700;
+    font-size:4.5rem; color:var(--gold-dim); opacity:0.25;
+    position:absolute; top:-0.8rem; left:0.8rem; line-height:1;
+  }
+  .quote-text { font-size:1.12rem; font-style:italic; line-height:1.95; color:var(--text); }
+  .quote-attr {
+    font-family:'Cinzel', serif; font-size:0.65rem;
+    letter-spacing:0.22em; color:var(--gold-dim); margin-top:1rem;
+  }
+
+  /* ── IDENTITY TABS ── */
+  .identity-section {
+    position:relative; z-index:1;
+    padding:5rem 2rem;
+    background:linear-gradient(180deg,transparent,rgba(26,48,96,0.08),transparent);
+  }
+  .identity-inner { max-width:860px; margin:0 auto; }
+  .tab-bar {
+    display:flex; gap:0; border-bottom:1px solid rgba(212,168,50,0.15);
+    margin-bottom:0; overflow-x:auto;
+  }
+  .tab-btn {
+    font-family:'Cinzel', serif; font-size:0.7rem;
+    letter-spacing:0.18em; color:var(--text-dim);
+    padding:1rem 1.8rem; background:none; border:none;
+    border-bottom:2px solid transparent; cursor:pointer;
+    transition:all 0.3s; white-space:nowrap; flex-shrink:0;
+  }
+  .tab-btn:hover { color:var(--gold); }
+  .tab-btn.active {
+    color:var(--gold); border-bottom-color:var(--gold);
+    background:rgba(212,168,50,0.04);
+  }
+  .tab-panel {
+    display:none; padding:2.5rem 0;
+    animation:panelFade 0.5s ease;
+  }
+  .tab-panel.active { display:block; }
+  @keyframes panelFade { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+  .tab-content {
+    display:grid; grid-template-columns:1fr 1fr; gap:3rem; align-items:start;
+  }
+  .tab-glyph {
+    font-size:5rem; text-align:center;
+    filter:drop-shadow(0 0 20px rgba(212,168,50,0.4));
+    padding:2rem;
+  }
+  .tab-body { font-size:1rem; line-height:1.9; color:var(--text-dim); }
+  .tab-title {
+    font-family:'Josefin Slab', serif; font-weight:700;
+    font-size:1.2rem; color:var(--gold);
+    margin-bottom:1rem; letter-spacing:0.05em;
+  }
+  .tab-subtitle {
+    font-family:'Cinzel', serif; font-size:0.65rem;
+    letter-spacing:0.3em; color:var(--gold-dim); margin-bottom:1rem;
+  }
+
+  /* ── POIMANDRES VISION SCROLL ── */
+  .vision-section {
+    position:relative; z-index:1;
+    padding:5rem 2rem;
+  }
+  .vision-inner { max-width:860px; margin:0 auto; }
+  .vision-steps { display:flex; flex-direction:column; gap:0; }
+  .vision-step {
+    display:grid; grid-template-columns:80px 1fr;
+    gap:2rem; padding:2rem 0;
+    border-bottom:1px solid rgba(212,168,50,0.07);
+    opacity:0; transform:translateX(-30px);
+    transition:all 0.8s ease;
+  }
+  .vision-step:last-child { border-bottom:none; }
+  .vision-step.visible { opacity:1; transform:translateX(0); }
+  .vision-icon {
+    display:flex; align-items:center; justify-content:center;
+    font-size:2rem; padding-top:0.2rem;
+    filter:drop-shadow(0 0 10px rgba(212,168,50,0.5));
+  }
+  .vision-content {}
+  .vision-title {
+    font-family:'Josefin Slab', serif; font-weight:700;
+    font-size:1rem; color:var(--papyrus);
+    letter-spacing:0.05em; margin-bottom:0.5rem;
+  }
+  .vision-text { font-size:0.97rem; line-height:1.85; color:var(--text-dim); }
+
+  /* ── SEVEN GOVERNORS WHEEL ── */
+  .governors-section {
+    position:relative; z-index:1;
+    padding:5rem 2rem; text-align:center;
+    background:linear-gradient(180deg,transparent,rgba(26,21,8,0.6),transparent);
+  }
+  #governorsCanvas {
+    width:100%; max-width:560px; height:560px;
+    margin:2rem auto; display:block; cursor:pointer;
+  }
+  .gov-info {
+    max-width:560px; margin:0 auto;
+    min-height:4rem; font-size:1rem; line-height:1.8;
+    color:var(--text-dim); font-style:italic;
+    transition:color 0.4s;
+  }
+
+  /* ── EMERALD TABLET ── */
+  .emerald-section {
+    position:relative; z-index:1;
+    padding:5rem 2rem;
+    background:linear-gradient(135deg, rgba(16,64,48,0.1), transparent, rgba(26,48,96,0.08));
+  }
+  .emerald-inner { max-width:860px; margin:0 auto; }
+  .emerald-tablet-display {
+    border:1px solid rgba(32,160,144,0.2);
+    background:rgba(32,160,144,0.04);
+    padding:3rem; margin:2rem 0;
+    position:relative;
+  }
+  .emerald-tablet-display::before {
+    content:'𒀭'; /* Sumerian divine determinative */
+    position:absolute; top:-1rem; left:50%; transform:translateX(-50%);
+    font-size:2rem; color:var(--turquoise);
+    background:var(--void); padding:0 1rem;
+    filter:drop-shadow(0 0 8px rgba(32,160,144,0.6));
+  }
+  .tablet-verse {
+    font-family:'Josefin Slab', serif; font-weight:300;
+    font-size:clamp(0.95rem,1.8vw,1.15rem);
+    color:var(--turquoise); line-height:2.1;
+    text-align:center; letter-spacing:0.04em;
+  }
+  .tablet-verse span {
+    display:block; padding:0.1rem 0;
+    transition:color 0.3s, text-shadow 0.3s;
+    cursor:default;
+  }
+  .tablet-verse span:hover {
+    color:var(--gold-light);
+    text-shadow:0 0 20px rgba(212,168,50,0.5);
+  }
+
+  /* ── BOOK OF THOTH ACCORDION ── */
+  .accordion { margin:2rem 0; }
+  .acc-item {
+    border-bottom:1px solid rgba(212,168,50,0.1);
+  }
+  .acc-btn {
+    width:100%; background:none; border:none;
+    padding:1.3rem 1.5rem;
+    display:flex; justify-content:space-between; align-items:center;
+    cursor:pointer; transition:background 0.3s;
+    font-family:'Cinzel', serif; font-size:0.8rem;
+    letter-spacing:0.12em; color:var(--gold); text-align:left;
+  }
+  .acc-btn:hover { background:rgba(212,168,50,0.05); }
+  .acc-btn .arr { transition:transform 0.4s; color:var(--gold-dim); }
+  .acc-btn.open .arr { transform:rotate(180deg); }
+  .acc-body {
+    max-height:0; overflow:hidden;
+    transition:max-height 0.5s ease, padding 0.3s;
+    padding:0 1.5rem; font-size:0.97rem;
+    line-height:1.85; color:var(--text-dim);
+  }
+  .acc-body.open { max-height:400px; padding:1rem 1.5rem 1.5rem; }
+
+  /* ── HIEROGLYPH STRIP ── */
+  .hieroglyph-strip {
+    position:relative; z-index:1;
+    padding:2rem;
+    border-top:1px solid rgba(212,168,50,0.08);
+    border-bottom:1px solid rgba(212,168,50,0.08);
+    background:rgba(30,21,8,0.5);
+    display:flex; justify-content:center; gap:2.5rem;
+    flex-wrap:wrap; overflow:hidden;
+  }
+  .hieroglyph-strip::before {
+    content:'';
+    position:absolute; inset:0;
+    background:repeating-linear-gradient(
+      0deg, transparent, transparent 20px,
+      rgba(212,168,50,0.015) 20px, rgba(212,168,50,0.015) 21px
+    );
+  }
+  .hiero-item {
+    display:flex; flex-direction:column; align-items:center;
+    gap:0.4rem; cursor:default; transition:transform 0.3s;
+    position:relative; z-index:1;
+  }
+  .hiero-item:hover { transform:translateY(-4px); }
+  .hiero-glyph {
+    font-size:2rem; color:var(--gold);
+    filter:drop-shadow(0 0 8px rgba(212,168,50,0.4));
+    transition:filter 0.3s;
+  }
+  .hiero-item:hover .hiero-glyph { filter:drop-shadow(0 0 16px rgba(212,168,50,0.8)); }
+  .hiero-name { font-family:'Cinzel', serif; font-size:0.55rem; letter-spacing:0.2em; color:var(--gold-dim); }
+
+  /* ── FOOTER NAV ── */
+  .book-nav {
+    position:relative; z-index:1;
+    padding:4rem 2rem; text-align:center;
+    border-top:1px solid rgba(212,168,50,0.1);
+  }
+  .book-nav-series {
+    font-family:'Cinzel', serif; font-size:0.6rem;
+    letter-spacing:0.4em; color:var(--gold-dim); margin-bottom:0.8rem;
+  }
+  .book-nav-title {
+    font-family:'Josefin Slab', serif; font-weight:700;
+    font-size:0.9rem; color:var(--papyrus); margin-bottom:2rem;
+  }
+  .nav-row { display:flex; justify-content:center; gap:1.5rem; flex-wrap:wrap; }
+  .nav-btn {
+    font-family:'Cinzel', serif; font-size:0.7rem;
+    letter-spacing:0.18em; color:var(--papyrus);
+    border:1px solid rgba(216,192,144,0.2);
+    padding:0.8rem 2rem; background:none;
+    transition:all 0.3s; text-decoration:none; cursor:pointer;
+  }
+  .nav-btn:hover {
+    border-color:var(--gold); color:var(--gold);
+    background:rgba(212,168,50,0.06);
+    box-shadow:0 0 20px rgba(212,168,50,0.1);
+  }
+  .nav-btn.prev { color:var(--text-dim); border-color:rgba(112,96,72,0.3); }
+
+  /* ── BG ORBS ── */
+  .orb { position:fixed; border-radius:50%; filter:blur(100px); pointer-events:none; z-index:0; }
+  .orb-1 { width:700px; height:700px; background:#1a1008; top:0; left:-200px; opacity:1; }
+  .orb-2 { width:500px; height:500px; background:var(--lapis); bottom:-100px; right:-100px; opacity:0.06; }
+  .orb-3 { width:400px; height:400px; background:var(--ochre); top:40%; right:10%; opacity:0.04; }
+
+  /* ── REVEAL ── */
+  .reveal { opacity:0; transform:translateY(35px); transition:all 0.85s ease; }
+  .reveal.visible { opacity:1; transform:translateY(0); }
+
+  @media(max-width:640px) {
+    .tab-content { grid-template-columns:1fr; }
+    .tab-glyph { padding:1rem; }
+  }
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <canvas id="sandCanvas"></canvas>
+  <div class="hero-content">
+
+    <!-- Thoth SVG Sigil -->
+    <svg class="thoth-sigil" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" fill="none">
+      <!-- Outer ring -->
+      <circle cx="100" cy="100" r="94" stroke="#d4a832" stroke-width="0.5" stroke-dasharray="8 4" opacity="0.5"/>
+      <!-- Caduceus-like staff -->
+      <line x1="100" y1="30" x2="100" y2="170" stroke="#d4a832" stroke-width="1.5" opacity="0.9"/>
+      <!-- Two serpents winding -->
+      <path d="M 100 50 Q 120 65 100 80 Q 80 95 100 110 Q 120 125 100 140"
+            stroke="#d4a832" stroke-width="1.2" opacity="0.8"/>
+      <path d="M 100 50 Q 80 65 100 80 Q 120 95 100 110 Q 80 125 100 140"
+            stroke="#1a3060" stroke-width="1.2" opacity="0.8"/>
+      <!-- Ibis head (Thoth) hint -->
+      <ellipse cx="100" cy="22" rx="10" ry="8" fill="rgba(212,168,50,0.2)" stroke="#d4a832" stroke-width="0.8" opacity="0.8"/>
+      <!-- Ibis beak -->
+      <path d="M 100 18 Q 118 12 122 16" stroke="#d4a832" stroke-width="1" opacity="0.7"/>
+      <!-- Eye of Horus -->
+      <ellipse cx="100" cy="100" rx="16" ry="10" stroke="#d4a832" stroke-width="1" opacity="0.7"/>
+      <circle cx="100" cy="100" r="4" fill="rgba(212,168,50,0.5)" stroke="#d4a832" stroke-width="0.8"/>
+      <path d="M 84 105 Q 90 112 100 110 Q 110 112 116 105" stroke="#d4a832" stroke-width="0.7" opacity="0.6"/>
+      <path d="M 90 100 Q 95 92 100 91" stroke="#d4a832" stroke-width="0.6" opacity="0.5"/>
+      <!-- Wings -->
+      <path d="M 100 100 Q 140 85 165 95 Q 145 100 130 108 Z" fill="rgba(212,168,50,0.1)" stroke="#d4a832" stroke-width="0.5" opacity="0.6"/>
+      <path d="M 100 100 Q 60 85 35 95 Q 55 100 70 108 Z" fill="rgba(212,168,50,0.1)" stroke="#d4a832" stroke-width="0.5" opacity="0.6"/>
+      <!-- Bottom crescent (moon) -->
+      <path d="M 82 168 Q 100 162 118 168 Q 108 178 100 178 Q 92 178 82 168 Z" fill="rgba(26,48,96,0.4)" stroke="#4080ff" stroke-width="0.8" opacity="0.7"/>
+      <!-- Stars -->
+      <circle cx="30"  cy="30"  r="1.5" fill="#d4a832" opacity="0.7"/>
+      <circle cx="170" cy="30"  r="1.5" fill="#d4a832" opacity="0.7"/>
+      <circle cx="170" cy="170" r="1.5" fill="#d4a832" opacity="0.5"/>
+      <circle cx="30"  cy="170" r="1.5" fill="#d4a832" opacity="0.5"/>
+      <circle cx="100" cy="5"   r="2"   fill="#f0c848" opacity="0.8"/>
+    </svg>
+
+    <p class="chapter-label">Chapter V · Secret Teachings of All Ages</p>
+    <h1 class="hero-title">Thoth Hermes<br><em>Trismegistus</em></h1>
+    <p class="hero-sub">The Thrice-Greatest · The Hermetic Fragments · The Book of Thoth · The Vision of Poimandres · The Seven Governors</p>
+    <p class="emerald-tablet-teaser">"That which is Below corresponds to that which is Above,<br>and that which is Above corresponds to that which is Below."</p>
+  </div>
+  <div class="scroll-cue">
+    <div class="vline"></div>
+    <span>ASCEND</span>
+  </div>
+</section>
+
+<!-- ═══ HERMETIC AXIOM ═══ -->
+<div class="axiom-banner reveal">
+  <p class="axiom-latin">As Above · So Below · As Within · So Without</p>
+  <p class="axiom-translation">The fundamental law of Hermetic philosophy — the bridge between the visible and invisible worlds</p>
+  <div class="axiom-dots">
+    <div class="axiom-dot"></div>
+    <div class="axiom-dot"></div>
+    <div class="axiom-dot"></div>
+  </div>
+</div>
+
+<!-- ═══ INTRO ═══ -->
+<div class="section">
+  <div class="ornament reveal">
+    <div class="ornament-line"></div>
+    <div class="ornament-glyph">𓂀</div>
+    <div class="ornament-line"></div>
+  </div>
+  <p class="body-text drop-cap reveal">
+    No figure in the entire esoteric tradition is more ancient, more mysterious, or more consequential than Hermes Trismegistus — "Thrice-Greatest Hermes." He is simultaneously a god, a deified man, and a title assumed by a lineage of initiated priest-philosophers. The Greeks identified him with their messenger-god Hermes; the Egyptians knew him as Thoth, the ibis-headed scribe of the gods; the Arabs called him Idris; the Hebrews, Enoch. All traditions agree: this being possessed the totality of divine knowledge and transmitted it to humanity.
+  </p>
+  <p class="body-text reveal">
+    Hall navigates the scholarly debate with characteristic breadth: whether Hermes was one historical person who lived in Egypt circa 3000 BCE, a succession of sages who each took the title, or purely a mythological composite — the Hermetic writings themselves are what matter. In their fractured, partially translated, endlessly copied state, they contain what Hall calls "the most complete system of philosophic thought ever committed to writing in the Western world."
+  </p>
+</div>
+
+<!-- ═══ IDENTITY TABS ═══ -->
+<div class="identity-section">
+  <div class="identity-inner">
+    <h2 class="section-heading reveal">Who Was Hermes Trismegistus?</h2>
+    <div class="tab-bar reveal">
+      <button class="tab-btn active" onclick="showTab('thoth')">As Thoth</button>
+      <button class="tab-btn" onclick="showTab('hermes')">As Hermes</button>
+      <button class="tab-btn" onclick="showTab('enoch')">As Enoch</button>
+      <button class="tab-btn" onclick="showTab('idris')">As Idris</button>
+      <button class="tab-btn" onclick="showTab('lineage')">The Lineage Theory</button>
+    </div>
+
+    <div id="tab-thoth" class="tab-panel active">
+      <div class="tab-content">
+        <div class="tab-glyph">𓅝</div>
+        <div class="tab-body">
+          <p class="tab-subtitle">EGYPT · c. 3100 BCE</p>
+          <p class="tab-title">Thoth, Scribe of the Gods</p>
+          <p>The ibis-headed god of writing, wisdom, magic, and the moon. Thoth weighed the souls of the dead against the feather of Ma'at in the Hall of Two Truths. He invented writing, mathematics, astronomy, and medicine — and recorded the judgments of the divine council. The Egyptians credited him with authoring 42 books of divine knowledge, each encoding a branch of the sacred sciences.</p>
+        </div>
+      </div>
+    </div>
+    <div id="tab-hermes" class="tab-panel">
+      <div class="tab-content">
+        <div class="tab-glyph">☿</div>
+        <div class="tab-body">
+          <p class="tab-subtitle">GREECE · HELLENISTIC PERIOD</p>
+          <p class="tab-title">Hermes, Messenger of the Gods</p>
+          <p>When Alexander's armies absorbed Egypt, Greek translators identified Thoth with their own Hermes — divine messenger, guide of souls to the underworld, patron of travelers, thieves, and alchemists. The name "Trismegistus" (Thrice-Greatest) was a Greek honorific, possibly referring to his supremacy in the three domains of philosophy, priesthood, and kingship. The Corpus Hermeticum was composed in Greek but claims to transmit Egyptian teachings of immense antiquity.</p>
+        </div>
+      </div>
+    </div>
+    <div id="tab-enoch" class="tab-panel">
+      <div class="tab-content">
+        <div class="tab-glyph">✡</div>
+        <div class="tab-body">
+          <p class="tab-subtitle">HEBREW TRADITION</p>
+          <p class="tab-title">Enoch, Who Walked With God</p>
+          <p>The Book of Genesis describes Enoch as a man who "walked with God and was not, for God took him" — meaning he did not die but was translated directly into the divine realm. Jewish and early Christian tradition credited Enoch with receiving and transmitting the same knowledge as Hermes. The apocryphal Books of Enoch describe his astronomical and angelic visions with a richness remarkably parallel to the Hermetic texts. Hall treats Hermes and Enoch as titles pointing to the same office.</p>
+        </div>
+      </div>
+    </div>
+    <div id="tab-idris" class="tab-panel">
+      <div class="tab-content">
+        <div class="tab-glyph">☽</div>
+        <div class="tab-body">
+          <p class="tab-subtitle">ISLAMIC TRADITION</p>
+          <p class="tab-title">Idris, the Learned One</p>
+          <p>Islamic philosophy identifies Hermes Trismegistus with the Quranic prophet Idris, who was "raised to a high station" by God. Arab alchemists and philosophers of the medieval Islamic golden age transmitted the Hermetic texts and built upon them, producing the rich tradition of Islamic alchemy (from which the word "alchemy" itself derives — al-kimiya). The Sufi orders preserved Hermetic cosmology within their mystical framework. Hall sees Islam as a crucial link in the chain of Hermetic transmission.</p>
+        </div>
+      </div>
+    </div>
+    <div id="tab-lineage" class="tab-panel">
+      <div class="tab-content">
+        <div class="tab-glyph">⚕️</div>
+        <div class="tab-body">
+          <p class="tab-subtitle">HALL'S SYNTHESIS</p>
+          <p class="tab-title">A Succession of Initiated Sages</p>
+          <p>Hall's most nuanced reading: "Hermes Trismegistus" was not one man but a title — like "Pharaoh" or "Caesar" — assumed by successive generations of initiated Egyptian priest-philosophers who had each attained the highest degree of sacred wisdom. Each bearer added to the Hermetic corpus, expanding and deepening the tradition. The texts we possess are thus a layered transmission spanning perhaps three thousand years, all sheltering under the same divine name to claim unbroken apostolic succession from the gods themselves.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ POIMANDRES VISION ═══ -->
+<div class="vision-section">
+  <div class="vision-inner">
+    <h2 class="section-heading lapis reveal">The Vision of Poimandres</h2>
+    <p class="body-text reveal">The <em>Poimandres</em> — "Shepherd of Men" — is the first and most important text of the Corpus Hermeticum. In it, Hermes receives a divine vision in which the Universal Mind itself appears to him and reveals the complete cosmology of creation, the soul's descent, and the path of return. Hall calls it "the most sublime spiritual document in the Western philosophical tradition."</p>
+    <div class="vision-steps" id="visionSteps">
+      <div class="vision-step">
+        <div class="vision-icon">🌫️</div>
+        <div class="vision-content">
+          <p class="vision-title">The Infinite Light Appears</p>
+          <p class="vision-text">Hermes falls into a trance and encounters a boundless, limitless light — serene, joyful, filled with beauty. Then a darkness descends, coiling and serpentine, forming a kind of moist nature from which smoke and a sound arise.</p>
+        </div>
+      </div>
+      <div class="vision-step">
+        <div class="vision-icon">🔥</div>
+        <div class="vision-content">
+          <p class="vision-title">The Word Descends</p>
+          <p class="vision-text">From the Light a holy Word descends into the moist nature. The Word is the Son of God — pure fire, leaping up, ascending. What remained was the lower nature of matter, mingled with fire and water — the seed of our world.</p>
+        </div>
+      </div>
+      <div class="vision-step">
+        <div class="vision-icon">🌍</div>
+        <div class="vision-content">
+          <p class="vision-title">The Seven Governors Are Set</p>
+          <p class="vision-text">The Divine Mind forms seven Administrators (the planetary intelligences) who encircle the sensory world in circles and govern Fate. Their administration is called Destiny — the engine of karma and the mechanism of the soul's education through incarnation.</p>
+        </div>
+      </div>
+      <div class="vision-step">
+        <div class="vision-icon">👁️</div>
+        <div class="vision-content">
+          <p class="vision-title">Man Falls and Sees His Own Reflection</p>
+          <p class="vision-text">The Primal Man, gazing downward through the spheres, falls in love with his own reflection in the waters of Nature and descends into matter. This is the original fall — not of sin but of fascination. The soul becomes entangled in the material world through love of its own image.</p>
+        </div>
+      </div>
+      <div class="vision-step">
+        <div class="vision-icon">⬆️</div>
+        <div class="vision-content">
+          <p class="vision-title">The Path of Return</p>
+          <p class="vision-text">At death, the soul ascends back through the seven planetary spheres, surrendering at each gate the qualities it acquired on the way down — irrationality, desire, lust, pride, rashness, falsehood, illusion — until it enters the eighth sphere naked, possessing only its own true power, and rises into the divine.</p>
+        </div>
+      </div>
+      <div class="vision-step">
+        <div class="vision-icon">✨</div>
+        <div class="vision-content">
+          <p class="vision-title">Gnosis Is the Way</p>
+          <p class="vision-text">The Poimandres ends with Hermes receiving his commission: go forth and teach. Those who have gnosis — direct experiential knowledge of the Divine Mind — are already saved. Those who remain in ignorance are already dying. Knowledge is the only redemption; ignorance is the only sin.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SEVEN GOVERNORS WHEEL ═══ -->
+<div class="governors-section">
+  <h2 class="section-heading reveal">The Seven Governors of the World</h2>
+  <p class="body-text reveal" style="max-width:620px;margin:0 auto;">
+    The Hermetic cosmology placed seven planetary intelligences between the Divine Mind and the material world. Each Governor rules a sphere and imprints souls on their descent into matter. Hover each planet to receive its Hermetic teaching.
+  </p>
+  <canvas id="governorsCanvas" width="560" height="560"></canvas>
+  <p class="gov-info" id="govInfo">Hover a Governor to receive its teaching</p>
+</div>
+
+<!-- ═══ EMERALD TABLET ═══ -->
+<div class="emerald-section">
+  <div class="emerald-inner">
+    <h2 class="section-heading turq reveal">The Emerald Tablet of Hermes</h2>
+    <p class="body-text reveal">
+      The <em>Tabula Smaragdina</em> — the Emerald Tablet — is the most condensed expression of Hermetic philosophy ever written. Thirteen sentences. Newton translated it. Every alchemist memorized it. Every Rosicrucian meditated upon it. Hall calls it "the key to all magic, all alchemy, all philosophy." Hover each verse to contemplate its meaning.
+    </p>
+    <div class="emerald-tablet-display reveal">
+      <div class="tablet-verse">
+        <span>True it is, without falsehood, certain and most true.</span>
+        <span>That which is above is like to that which is below,</span>
+        <span>and that which is below is like to that which is above,</span>
+        <span>to accomplish the miracles of one thing.</span>
+        <span>&nbsp;</span>
+        <span>And as all things were by contemplation of one,</span>
+        <span>so all things arose from this one thing by a single act of adaptation.</span>
+        <span>&nbsp;</span>
+        <span>The father thereof is the Sun, the mother the Moon.</span>
+        <span>The wind carried it in its womb, the earth is the nurse thereof.</span>
+        <span>&nbsp;</span>
+        <span>It is the father of all works of wonder throughout the whole world.</span>
+        <span>The power thereof is perfect.</span>
+        <span>&nbsp;</span>
+        <span>Separate thou the earth from the fire,</span>
+        <span>the subtle from the gross, sweetly, with great industry.</span>
+        <span>&nbsp;</span>
+        <span>It ascends from the earth to the heaven</span>
+        <span>and again it descends to the earth,</span>
+        <span>and receives the force of things superior and inferior.</span>
+        <span>&nbsp;</span>
+        <span>By this means you shall have the glory of the whole world.</span>
+        <span>Therefore let all obscurity flee before you.</span>
+        <span>&nbsp;</span>
+        <span>This is the strong force of all forces,</span>
+        <span>overcoming every subtle and penetrating every solid thing.</span>
+        <span>&nbsp;</span>
+        <span>So the world was created. Hence are all wonderful adaptations,</span>
+        <span>of which this is the manner. Therefore am I called</span>
+        <span>Thrice Greatest Hermes, having the three parts</span>
+        <span>of the philosophy of the whole world.</span>
+        <span>&nbsp;</span>
+        <span>That which I have said of the operation of the Sun is accomplished and ended.</span>
+      </div>
+    </div>
+
+    <!-- Book of Thoth accordion -->
+    <h2 class="section-heading reveal" style="margin-top:4rem;">The Book of Thoth</h2>
+    <p class="body-text reveal">Hall describes a legendary text — the original Book of Thoth — supposedly containing 36,000 volumes of divine knowledge, locked in a golden box in an Egyptian temple. No scholar has ever seen it. But its shadow falls across every esoteric tradition.</p>
+    <div class="accordion reveal">
+      <div class="acc-item">
+        <button class="acc-btn" onclick="toggleAcc(this)">
+          <span>The 42 Books of Thoth</span><span class="arr">▾</span>
+        </button>
+        <div class="acc-body">The Egyptian priest Manetho described 42 sacred books of Hermes — texts containing hymns to the gods, royal lists, ritual procedures, geographical knowledge, priestly education, astronomy, music, writing, medicine, and more. These 42 books were the complete curriculum of the Egyptian temple school. Most were lost in the fires of Alexandria. Hall believes fragments survived in the Hermetic corpus and in early Gnostic texts.</div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-btn" onclick="toggleAcc(this)">
+          <span>The Corpus Hermeticum</span><span class="arr">▾</span>
+        </button>
+        <div class="acc-body">The collection of 17 Greek texts rediscovered in 1460 CE and translated by Ficino for Cosimo de' Medici — who ordered Ficino to set aside his Plato translations to do this one first. The texts caused a sensation in Renaissance Florence: here, apparently, was Greek philosophy predating Plato and Pythagoras, teaching many of the same doctrines. Modern scholars date the texts to the 2nd–3rd centuries CE, but Hall holds their content reflects a much older oral tradition.</div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-btn" onclick="toggleAcc(this)">
+          <span>The Hermetic Philosophy: Three Parts</span><span class="arr">▾</span>
+        </button>
+        <div class="acc-body">The Emerald Tablet's closing claim that Hermes possesses "the three parts of the philosophy of the whole world" refers to: (1) Theurgy — the science of working with divine forces; (2) Astrology — the science of understanding those forces as they manifest through celestial mechanics; (3) Alchemy — the science of transforming matter and soul by applying the same principles at the material level. These three are not separate disciplines but one unified science of transformation at different scales.</div>
+      </div>
+      <div class="acc-item">
+        <button class="acc-btn" onclick="toggleAcc(this)">
+          <span>The Kybalion & the Seven Hermetic Principles</span><span class="arr">▾</span>
+        </button>
+        <div class="acc-body">Drawing on the Hermetic tradition, Hall outlines seven universal principles: Mentalism (all is mind), Correspondence (as above so below), Vibration (nothing rests), Polarity (opposites are the same), Rhythm (everything has tides), Cause and Effect (every effect has its cause), and Gender (gender is in everything). These seven principles, he argues, if truly understood and applied, would give their possessor mastery over all levels of existence.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ HIEROGLYPH STRIP ═══ -->
+<div class="hieroglyph-strip reveal">
+  <div class="hiero-item"><div class="hiero-glyph">𓂀</div><div class="hiero-name">EYE OF HORUS</div></div>
+  <div class="hiero-item"><div class="hiero-glyph">𓋹</div><div class="hiero-name">ANKH</div></div>
+  <div class="hiero-item"><div class="hiero-glyph">𓆣</div><div class="hiero-glyph" style="font-size:1.8rem">𓆣</div><div class="hiero-name">SCARAB</div></div>
+  <div class="hiero-item"><div class="hiero-glyph">𓇳</div><div class="hiero-name">SUN DISK</div></div>
+  <div class="hiero-item"><div class="hiero-glyph">𓅝</div><div class="hiero-name">IBIS (THOTH)</div></div>
+  <div class="hiero-item"><div class="hiero-glyph">𓂋</div><div class="hiero-name">MOUTH / WORD</div></div>
+  <div class="hiero-item"><div class="hiero-glyph">𓆙</div><div class="hiero-name">URAEUS</div></div>
+  <div class="hiero-item"><div class="hiero-glyph">𓋴</div><div class="hiero-name">FOLDED CLOTH</div></div>
+</div>
+
+<!-- ═══ FOOTER NAV ═══ -->
+<nav class="book-nav">
+  <p class="book-nav-series">The Secret Teachings of All Ages · Manly P. Hall · 1928</p>
+  <p class="book-nav-title">Chapter VI: The Initiation of the Pyramid →</p>
+  <div class="nav-row">
+    <a class="nav-btn prev" href="ch04-atlantis.html">← Chapter IV</a>
+    <a class="nav-btn" href="#">Chapter VI →</a>
+  </div>
+</nav>
+
+<script>
+// ── CURSOR ──
+const cursor = document.getElementById('cursor');
+const ring   = document.getElementById('cursorRing');
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px';
+  setTimeout(() => { ring.style.left = e.clientX + 'px'; ring.style.top = e.clientY + 'px'; }, 90);
+});
+
+// ── SCROLL REVEAL ──
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+}, { threshold: 0.07 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+// ── VISION STEPS ──
+const vObs = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.querySelectorAll('.vision-step').forEach((s, i) => {
+        setTimeout(() => s.classList.add('visible'), i * 200);
+      });
+      vObs.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.05 });
+const vEl = document.getElementById('visionSteps');
+if (vEl) vObs.observe(vEl);
+
+// ── TABS ──
+function showTab(id) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+
+// ── ACCORDION ──
+function toggleAcc(btn) {
+  const body = btn.nextElementSibling;
+  const isOpen = body.classList.contains('open');
+  document.querySelectorAll('.acc-body.open').forEach(b => { b.classList.remove('open'); b.previousElementSibling.classList.remove('open'); });
+  if (!isOpen) { body.classList.add('open'); btn.classList.add('open'); }
+}
+
+// ── HERO SAND CANVAS (drifting sand particles + star field) ──
+(function() {
+  const c = document.getElementById('sandCanvas');
+  const ctx = c.getContext('2d');
+  function resize() { c.width = window.innerWidth; c.height = window.innerHeight; }
+  resize(); window.addEventListener('resize', resize);
+
+  // Sand motes
+  const motes = Array.from({length: 180}, () => ({
+    x: Math.random(), y: Math.random(),
+    vx: (Math.random() - 0.5) * 0.0003,
+    vy: (Math.random() - 0.3) * 0.0002,
+    r: Math.random() * 1.5 + 0.3,
+    alpha: Math.random() * 0.5 + 0.05,
+    phase: Math.random() * Math.PI * 2,
+    isStar: Math.random() < 0.3,
+  }));
+
+  let t = 0;
+  function draw() {
+    ctx.clearRect(0, 0, c.width, c.height);
+
+    // Sand-dune gradient
+    const bg = ctx.createLinearGradient(0, 0, 0, c.height);
+    bg.addColorStop(0,   '#07050a');
+    bg.addColorStop(0.4, '#0d0a04');
+    bg.addColorStop(0.8, '#100c06');
+    bg.addColorStop(1,   '#1a1408');
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, c.width, c.height);
+
+    // Lapis horizon glow
+    const lapisGrad = ctx.createRadialGradient(c.width*0.5, c.height*0.3, 50, c.width*0.5, c.height*0.3, c.width*0.7);
+    lapisGrad.addColorStop(0, 'rgba(26,48,96,0.15)');
+    lapisGrad.addColorStop(1, 'rgba(26,48,96,0)');
+    ctx.fillStyle = lapisGrad;
+    ctx.fillRect(0, 0, c.width, c.height);
+
+    // Sand / star motes
+    motes.forEach(p => {
+      p.x += p.vx + Math.sin(t * 0.004 + p.phase) * 0.0001;
+      p.y += p.vy;
+      if (p.y < -0.01) { p.y = 1.01; p.x = Math.random(); }
+      if (p.y > 1.01)  { p.y = -0.01; }
+      if (p.x < 0) p.x = 1; if (p.x > 1) p.x = 0;
+
+      const px = p.x * c.width, py = p.y * c.height;
+      const flicker = p.alpha * (0.6 + 0.4 * Math.sin(t * 0.02 + p.phase));
+
+      if (p.isStar) {
+        // Star twinkle
+        ctx.beginPath();
+        ctx.arc(px, py, p.r * 0.8, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(240,200,80,${flicker * 0.9})`;
+        ctx.fill();
+        // Star glow
+        const sg = ctx.createRadialGradient(px,py,0,px,py,p.r*5);
+        sg.addColorStop(0, `rgba(212,168,50,${flicker*0.3})`);
+        sg.addColorStop(1, 'rgba(212,168,50,0)');
+        ctx.beginPath(); ctx.arc(px,py,p.r*5,0,Math.PI*2);
+        ctx.fillStyle=sg; ctx.fill();
+      } else {
+        // Sand mote
+        ctx.beginPath();
+        ctx.arc(px, py, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(200,160,80,${flicker * 0.4})`;
+        ctx.fill();
+      }
+    });
+
+    // Sand dunes at base
+    ctx.beginPath();
+    for (let x = 0; x <= c.width; x += 3) {
+      const y = c.height * 0.82 + Math.sin(x * 0.008 + t * 0.003) * 20 + Math.sin(x * 0.003 - t * 0.002) * 15;
+      if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.lineTo(c.width, c.height); ctx.lineTo(0, c.height);
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(30,21,8,0.5)';
+    ctx.fill();
+
+    t++;
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ── SEVEN GOVERNORS WHEEL ──
+(function() {
+  const canvas = document.getElementById('governorsCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = 560, H = 560, cx = W/2, cy = H/2;
+  const info = document.getElementById('govInfo');
+
+  const governors = [
+    { name: 'Saturn',  angle: 270, r: 200, color: '#8888aa', glyph: '♄',
+      desc: 'KRONOS / SATURN — Ruler of time, limitation, and form. The outermost Governor impresses upon souls the quality of seriousness, depth, and mortality. He is the guardian at the final gate.',
+      gift: 'Melancholy of genius', strip: 'Rashness' },
+    { name: 'Jupiter', angle: 321, r: 200, color: '#c8a840', glyph: '♃',
+      desc: 'ZEUS / JUPITER — King of the divine council. Impresses magnanimity, justice, and abundance. The soul\'s capacity for wisdom and law-giving originates here.',
+      gift: 'Royal wisdom', strip: 'Desire for possessions' },
+    { name: 'Mars',    angle: 12,  r: 200, color: '#c84030', glyph: '♂',
+      desc: 'ARES / MARS — God of force, courage, and desire. Impresses drive and the will to overcome. Without this fire, the soul could not survive incarnation.',
+      gift: 'Courage', strip: 'Audacity and reckless daring' },
+    { name: 'Sun',     angle: 63,  r: 200, color: '#f0c030', glyph: '☉',
+      desc: 'HELIOS / SOL — The heart of the system. Impresses identity, selfhood, and the divine spark. The sun-principle in the soul is the part that remembers its origin in light.',
+      gift: 'Illumination', strip: 'Boastfulness' },
+    { name: 'Venus',   angle: 114, r: 200, color: '#d070a0', glyph: '♀',
+      desc: 'APHRODITE / VENUS — Governess of beauty, desire, and love. Impresses the soul\'s aesthetic sense and its longing for union. Both the highest love and the most entangling.',
+      gift: 'Capacity for love', strip: 'Passion for illusions' },
+    { name: 'Mercury', angle: 165, r: 200, color: '#80d0a0', glyph: '☿',
+      desc: 'HERMES / MERCURY — The messenger, patron of the intellect, language, and commerce. Impresses the soul\'s capacity for thought, communication, and the manipulation of form.',
+      gift: 'Intelligence', strip: 'Lust for wealth' },
+    { name: 'Moon',    angle: 216, r: 200, color: '#c0d8e8', glyph: '☽',
+      desc: 'SELENE / LUNA — The innermost Governor, closest to matter. Impresses the soul\'s relationship with the body, instinct, and the rhythms of physical life. She is the final veil before incarnation.',
+      gift: 'Fertile feeling', strip: 'Irrationality' },
+    { name: 'Divine Mind', angle: 0, r: 0, color: '#f0c848', glyph: '⊙',
+      desc: 'THE NOUS — The Divine Mind at the center, source of all. The soul\'s ultimate origin and destination. The Governors are its instruments; initiatic ascent is the return to this center.',
+      gift: 'Pure consciousness', strip: '(nothing — only addition)' },
+  ];
+
+  let hovered = null, t = 0;
+  function toRad(d) { return d * Math.PI / 180; }
+  function getPos(g) {
+    if (g.r === 0) return { x: cx, y: cy };
+    const spin = t * (g.name === 'Moon' ? 0.008 : g.name === 'Sun' ? 0.004 : 0.002);
+    const a = toRad(g.angle) + spin;
+    return { x: cx + Math.cos(a)*g.r, y: cy + Math.sin(a)*g.r };
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    t += 0.5;
+
+    // Background
+    const bg = ctx.createRadialGradient(cx,cy,0,cx,cy,W*0.7);
+    bg.addColorStop(0,'#1a1408'); bg.addColorStop(1,'#07050a');
+    ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
+
+    // Orbit rings
+    [200, 135, 70].forEach(r => {
+      ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2);
+      ctx.strokeStyle='rgba(212,168,50,0.07)'; ctx.lineWidth=1; ctx.stroke();
+    });
+
+    // Zodiac ring hint (outer)
+    for (let i=0; i<12; i++) {
+      const a = toRad(i*30);
+      ctx.beginPath();
+      ctx.moveTo(cx+Math.cos(a)*210, cy+Math.sin(a)*210);
+      ctx.lineTo(cx+Math.cos(a)*225, cy+Math.sin(a)*225);
+      ctx.strokeStyle='rgba(212,168,50,0.15)'; ctx.lineWidth=0.8; ctx.stroke();
+    }
+    ctx.beginPath(); ctx.arc(cx,cy,222,0,Math.PI*2);
+    ctx.strokeStyle='rgba(212,168,50,0.06)'; ctx.lineWidth=0.5; ctx.stroke();
+
+    // Lines from center to planets
+    governors.slice(0,7).forEach(g => {
+      const p = getPos(g);
+      ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(p.x,p.y);
+      ctx.strokeStyle=`${g.color}18`; ctx.lineWidth=0.5; ctx.stroke();
+    });
+
+    // Draw each governor
+    governors.forEach(g => {
+      const p = getPos(g);
+      const isHov = hovered===g;
+      const rr = g.r===0 ? (isHov?30:22) : (isHov?22:15);
+      const pulse = isHov ? Math.sin(t*0.1)*4 : 0;
+
+      // Glow halo
+      const grad = ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,(rr+pulse)*3);
+      grad.addColorStop(0, g.color+(isHov?'44':'18'));
+      grad.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.beginPath(); ctx.arc(p.x,p.y,(rr+pulse)*3,0,Math.PI*2);
+      ctx.fillStyle=grad; ctx.fill();
+
+      // Circle
+      ctx.beginPath(); ctx.arc(p.x,p.y,rr+pulse,0,Math.PI*2);
+      ctx.fillStyle = g.r===0 ? 'rgba(240,200,72,0.2)' : `${g.color}22`;
+      ctx.fill();
+      ctx.strokeStyle = isHov ? g.color : g.color+'66';
+      ctx.lineWidth = isHov?1.8:0.8; ctx.stroke();
+
+      // Glyph
+      ctx.font=`${g.r===0?24:(isHov?18:14)}px serif`;
+      ctx.fillStyle = isHov ? g.color : g.color+'cc';
+      ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.shadowBlur = isHov?15:g.r===0?12:0; ctx.shadowColor=g.color;
+      ctx.fillText(g.glyph, p.x, p.y);
+      ctx.shadowBlur=0;
+
+      // Name label (always for center, hover for others)
+      if (isHov || g.r===0) {
+        ctx.font=`${g.r===0?10:9}px 'Cinzel',serif`;
+        ctx.fillStyle = g.color+'cc';
+        ctx.textAlign='center';
+        ctx.fillText(g.name, p.x, p.y+(rr+pulse)+10);
+      }
+    });
+
+    requestAnimationFrame(draw);
+  }
+
+  canvas.addEventListener('mousemove', e => {
+    const rect=canvas.getBoundingClientRect();
+    const mx=(e.clientX-rect.left)*(W/rect.width);
+    const my=(e.clientY-rect.top)*(H/rect.height);
+    hovered=null;
+    governors.forEach(g => {
+      const p=getPos(g);
+      const rr=g.r===0?26:18;
+      const dx=mx-p.x, dy=my-p.y;
+      if(Math.sqrt(dx*dx+dy*dy)<rr+8) hovered=g;
+    });
+    if(hovered) {
+      info.innerHTML=`<strong style="color:${hovered.color};font-family:'Cinzel',serif;font-size:0.8rem;letter-spacing:0.15em">${hovered.name}</strong><br>${hovered.desc}<br><span style="color:var(--gold-dim);font-size:0.85rem">Gift to the soul: <em>${hovered.gift}</em> · Stripped at ascent: <em>${hovered.strip}</em></span>`;
+      info.style.color='var(--text)';
+    } else {
+      info.textContent='Hover a Governor to receive its teaching';
+      info.style.color='';
+    }
+  });
+  canvas.addEventListener('mouseleave',()=>{
+    hovered=null;
+    info.textContent='Hover a Governor to receive its teaching';
+    info.style.color='';
+  });
+
+  draw();
+})();
+</script>
+</body>
+</html>

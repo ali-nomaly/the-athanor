@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Ancient Mysteries — Secret Teachings of All Ages</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --gold-dim: #7a5f2a;
+    --void: #050407;
+    --deep: #0a0810;
+    --mid: #100d1a;
+    --text: #d4c49a;
+    --text-dim: #8a7a5a;
+    --accent: #8b2fc9;
+    --accent-light: #b060ff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--void);
+    color: var(--text);
+    font-family: 'EB Garamond', serif;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* ── CUSTOM CURSOR ── */
+  .cursor {
+    position: fixed;
+    width: 12px; height: 12px;
+    background: var(--gold);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease, opacity 0.3s;
+    mix-blend-mode: screen;
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 36px; height: 36px;
+    border: 1px solid var(--gold-dim);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: all 0.15s ease;
+  }
+
+  /* ── STARFIELD CANVAS ── */
+  #starfield {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    text-align: center;
+    padding: 2rem;
+    overflow: hidden;
+  }
+
+  .hero-sigil {
+    width: 220px; height: 220px;
+    margin-bottom: 2.5rem;
+    animation: sigilRotate 40s linear infinite;
+    filter: drop-shadow(0 0 30px rgba(201,168,76,0.4));
+    opacity: 0;
+    transition: opacity 1.5s ease 0.3s;
+  }
+  .hero-sigil.visible { opacity: 1; }
+
+  @keyframes sigilRotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .chapter-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.5em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+    margin-bottom: 1.2rem;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 1s ease 0.6s;
+  }
+  .chapter-label.visible { opacity: 1; transform: translateY(0); }
+
+  .hero-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(1.8rem, 5vw, 3.5rem);
+    color: var(--gold);
+    line-height: 1.2;
+    text-shadow: 0 0 60px rgba(201,168,76,0.5), 0 0 120px rgba(201,168,76,0.2);
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 1.2s ease 0.9s;
+    max-width: 800px;
+  }
+  .hero-title.visible { opacity: 1; transform: translateY(0); }
+
+  .hero-sub {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(0.7rem, 1.5vw, 1rem);
+    color: var(--text-dim);
+    letter-spacing: 0.25em;
+    margin-top: 1rem;
+    opacity: 0;
+    transition: opacity 1s ease 1.4s;
+  }
+  .hero-sub.visible { opacity: 1; }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.4em;
+    color: var(--gold-dim);
+    opacity: 0;
+    animation: fadeIn 1s ease 2.2s forwards, scrollBounce 2s ease-in-out 3s infinite;
+  }
+  .scroll-hint .line {
+    width: 1px; height: 50px;
+    background: linear-gradient(to bottom, transparent, var(--gold-dim));
+  }
+  @keyframes scrollBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(8px); }
+  }
+  @keyframes fadeIn { to { opacity: 1; } }
+
+  /* ── DIVIDER ── */
+  .ornament {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    justify-content: center;
+    margin: 3rem auto;
+    max-width: 600px;
+    padding: 0 2rem;
+  }
+  .ornament-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold-dim), transparent);
+  }
+  .ornament-diamond {
+    width: 8px; height: 8px;
+    background: var(--gold);
+    transform: rotate(45deg);
+    box-shadow: 0 0 10px var(--gold);
+  }
+
+  /* ── SECTIONS ── */
+  .section {
+    position: relative;
+    z-index: 1;
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+  }
+
+  /* ── KEY THEMES GRID ── */
+  .themes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin: 3rem 0;
+  }
+
+  .theme-card {
+    background: rgba(201,168,76,0.04);
+    border: 1px solid rgba(201,168,76,0.15);
+    border-radius: 2px;
+    padding: 1.8rem 1.5rem;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .theme-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(201,168,76,0.08), transparent);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  .theme-card:hover {
+    border-color: var(--gold);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 30px rgba(201,168,76,0.1);
+  }
+  .theme-card:hover::before { opacity: 1; }
+
+  .theme-icon {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    display: block;
+    filter: drop-shadow(0 0 8px rgba(201,168,76,0.6));
+  }
+  .theme-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    margin-bottom: 0.7rem;
+  }
+  .theme-desc {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--text-dim);
+  }
+
+  /* ── QUOTE BLOCK ── */
+  .quote-block {
+    border-left: 2px solid var(--gold-dim);
+    padding: 1.5rem 2rem;
+    margin: 3rem 0;
+    position: relative;
+    background: rgba(201,168,76,0.03);
+  }
+  .quote-block::before {
+    content: '"';
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 5rem;
+    color: var(--gold-dim);
+    opacity: 0.3;
+    position: absolute;
+    top: -1rem;
+    left: 1rem;
+    line-height: 1;
+  }
+  .quote-text {
+    font-size: 1.15rem;
+    font-style: italic;
+    line-height: 1.9;
+    color: var(--text);
+    position: relative;
+  }
+  .quote-attr {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: var(--gold-dim);
+    margin-top: 1rem;
+  }
+
+  /* ── BODY TEXT ── */
+  .body-text {
+    font-size: 1.05rem;
+    line-height: 1.95;
+    color: var(--text);
+    margin: 1.5rem 0;
+  }
+  .body-text + .body-text { margin-top: 0; }
+  .drop-cap::first-letter {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 4.5rem;
+    float: left;
+    line-height: 0.75;
+    margin: 0.1em 0.12em 0 0;
+    color: var(--gold);
+    text-shadow: 0 0 30px rgba(201,168,76,0.5);
+  }
+
+  /* ── SECTION HEADING ── */
+  .section-heading {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+    color: var(--gold-light);
+    letter-spacing: 0.08em;
+    margin-bottom: 1.5rem;
+  }
+
+  /* ── MYSTERY SCHOOLS ACCORDION ── */
+  .accordion {
+    margin: 2rem 0;
+    border: 1px solid rgba(201,168,76,0.15);
+  }
+  .accordion-item {
+    border-bottom: 1px solid rgba(201,168,76,0.1);
+  }
+  .accordion-item:last-child { border-bottom: none; }
+  .accordion-btn {
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 1.2rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    color: var(--gold);
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.12em;
+    text-align: left;
+    transition: background 0.3s;
+  }
+  .accordion-btn:hover { background: rgba(201,168,76,0.06); }
+  .accordion-btn .arrow {
+    font-size: 1rem;
+    transition: transform 0.4s ease;
+    color: var(--gold-dim);
+  }
+  .accordion-btn.open .arrow { transform: rotate(180deg); }
+  .accordion-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease, padding 0.3s ease;
+    padding: 0 1.5rem;
+    font-size: 0.97rem;
+    line-height: 1.85;
+    color: var(--text-dim);
+  }
+  .accordion-body.open {
+    max-height: 400px;
+    padding: 1rem 1.5rem 1.5rem;
+  }
+
+  /* ── SYMBOL WHEEL INTERACTIVE ── */
+  .symbol-section {
+    text-align: center;
+    padding: 4rem 2rem;
+    position: relative;
+    z-index: 1;
+  }
+  #symbolCanvas {
+    width: 100%;
+    max-width: 500px;
+    height: 500px;
+    cursor: crosshair;
+    margin: 2rem auto;
+    display: block;
+  }
+  .symbol-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    color: var(--gold-dim);
+    margin-top: 0.5rem;
+    min-height: 1.5rem;
+    transition: color 0.3s;
+  }
+
+  /* ── TIMELINE ── */
+  .timeline {
+    position: relative;
+    padding: 2rem 0;
+    margin: 2rem 0;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, var(--gold-dim), transparent);
+    transform: translateX(-50%);
+  }
+  .timeline-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 2rem;
+    margin-bottom: 3rem;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.7s ease;
+  }
+  .timeline-item.visible { opacity: 1; transform: translateY(0); }
+  .timeline-item:nth-child(odd) {
+    flex-direction: row;
+    text-align: right;
+  }
+  .timeline-item:nth-child(odd) .t-content { order: 1; }
+  .timeline-item:nth-child(odd) .t-dot-wrap { order: 2; }
+  .timeline-item:nth-child(even) { flex-direction: row-reverse; text-align: left; }
+  .t-content { flex: 1; padding: 1.2rem 1.5rem; background: rgba(201,168,76,0.04); border: 1px solid rgba(201,168,76,0.12); }
+  .t-year {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+  }
+  .t-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.9rem;
+    color: var(--gold-light);
+    margin: 0.3rem 0;
+  }
+  .t-desc { font-size: 0.9rem; color: var(--text-dim); line-height: 1.7; }
+  .t-dot-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+    padding-top: 1.3rem;
+  }
+  .t-dot {
+    width: 12px; height: 12px;
+    background: var(--gold);
+    border-radius: 50%;
+    box-shadow: 0 0 12px var(--gold);
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── FOOTER NAV ── */
+  .book-nav {
+    position: relative;
+    z-index: 1;
+    padding: 4rem 2rem;
+    text-align: center;
+    border-top: 1px solid rgba(201,168,76,0.1);
+  }
+  .book-nav-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.4em;
+    color: var(--gold-dim);
+    margin-bottom: 1rem;
+  }
+  .book-nav-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.9rem;
+    color: var(--gold);
+    margin-bottom: 2rem;
+  }
+  .nav-btn {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    border: 1px solid var(--gold-dim);
+    padding: 0.8rem 2rem;
+    cursor: pointer;
+    background: none;
+    transition: all 0.3s;
+    text-decoration: none;
+  }
+  .nav-btn:hover {
+    background: rgba(201,168,76,0.1);
+    border-color: var(--gold);
+    box-shadow: 0 0 20px rgba(201,168,76,0.15);
+  }
+
+  /* ── PARALLAX BG ORBS ── */
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.06;
+  }
+  .orb-1 { width: 600px; height: 600px; background: var(--accent); top: -100px; right: -200px; }
+  .orb-2 { width: 400px; height: 400px; background: var(--gold); bottom: 100px; left: -150px; }
+
+  /* ── SCROLL REVEAL ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 0.9s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 600px) {
+    .timeline::before { left: 20px; }
+    .timeline-item, .timeline-item:nth-child(odd) { flex-direction: column; text-align: left; }
+    .t-dot-wrap { flex-direction: row; padding-top: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<canvas id="starfield"></canvas>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <!-- SVG Sigil -->
+  <svg class="hero-sigil" id="heroSigil" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Outer circle -->
+    <circle cx="100" cy="100" r="96" stroke="#c9a84c" stroke-width="0.5" stroke-dasharray="4 3" opacity="0.6"/>
+    <!-- Middle circle -->
+    <circle cx="100" cy="100" r="72" stroke="#c9a84c" stroke-width="0.5" opacity="0.4"/>
+    <!-- Inner circle -->
+    <circle cx="100" cy="100" r="48" stroke="#c9a84c" stroke-width="1" opacity="0.5"/>
+    <!-- Hexagram -->
+    <polygon points="100,28 128,76 72,76" fill="none" stroke="#c9a84c" stroke-width="0.8" opacity="0.7"/>
+    <polygon points="100,172 72,124 128,124" fill="none" stroke="#c9a84c" stroke-width="0.8" opacity="0.7"/>
+    <!-- Cross -->
+    <line x1="100" y1="4" x2="100" y2="196" stroke="#c9a84c" stroke-width="0.4" opacity="0.3"/>
+    <line x1="4" y1="100" x2="196" y2="100" stroke="#c9a84c" stroke-width="0.4" opacity="0.3"/>
+    <!-- Diagonals -->
+    <line x1="32" y1="32" x2="168" y2="168" stroke="#c9a84c" stroke-width="0.3" opacity="0.25"/>
+    <line x1="168" y1="32" x2="32" y2="168" stroke="#c9a84c" stroke-width="0.3" opacity="0.25"/>
+    <!-- Center eye -->
+    <ellipse cx="100" cy="100" rx="20" ry="12" stroke="#c9a84c" stroke-width="1" opacity="0.9"/>
+    <circle cx="100" cy="100" r="5" fill="#c9a84c" opacity="0.9"/>
+    <circle cx="100" cy="100" r="2" fill="#050407"/>
+    <!-- Dots at cardinal points -->
+    <circle cx="100" cy="4" r="2" fill="#c9a84c" opacity="0.8"/>
+    <circle cx="100" cy="196" r="2" fill="#c9a84c" opacity="0.8"/>
+    <circle cx="4" cy="100" r="2" fill="#c9a84c" opacity="0.8"/>
+    <circle cx="196" cy="100" r="2" fill="#c9a84c" opacity="0.8"/>
+  </svg>
+
+  <p class="chapter-label" id="chapLabel">Chapter I · Secret Teachings of All Ages</p>
+  <h1 class="hero-title" id="heroTitle">The Ancient Mysteries<br>& Secret Societies</h1>
+  <p class="hero-sub" id="heroSub">Which Have Influenced Modern Masonic Symbolism</p>
+
+  <div class="scroll-hint" id="scrollHint">
+    <div class="line"></div>
+    <span>DESCEND</span>
+  </div>
+</section>
+
+<!-- ═══ INTRO TEXT ═══ -->
+<div class="section">
+  <div class="ornament reveal"><div class="ornament-line"></div><div class="ornament-diamond"></div><div class="ornament-line"></div></div>
+
+  <p class="body-text drop-cap reveal">
+    Before the profane could hope to receive the <em>sacred fire</em>, they were required to undergo trials of initiation whose severity tested the very limits of mortal endurance. The Mystery Schools of the ancient world — from the sweltering temples of Egypt to the oak groves of the Druids — held a single conviction: that the universe concealed, within its visible face, a hidden order accessible only to the purified mind.
+  </p>
+  <p class="body-text reveal">
+    Hall illuminates how these secret brotherhoods formed an unbroken chain of esoteric transmission, threading through Druidic Britain, Mithraic Persia, Gnostic Alexandria, and ultimately into the symbolic architecture of Freemasonry itself. The profane world changed; the inner doctrine, whispered between initiates, did not.
+  </p>
+
+  <div class="quote-block reveal">
+    <p class="quote-text">He who knows all that can be known by intellectual energy is a God among men — for his being partakes of the luminosity with which his reason has brought him into proximity.</p>
+    <p class="quote-attr">— Manly P. Hall, Introduction</p>
+  </div>
+</div>
+
+<!-- ═══ KEY THEMES ═══ -->
+<div class="section">
+  <h2 class="section-heading reveal">Core Themes of the Chapter</h2>
+  <div class="themes-grid">
+    <div class="theme-card reveal">
+      <span class="theme-icon">🏛️</span>
+      <p class="theme-title">Ancient Education</p>
+      <p class="theme-desc">The Mysteries were not mere religion — they were the highest form of philosophical education, reserved for those deemed ready.</p>
+    </div>
+    <div class="theme-card reveal">
+      <span class="theme-icon">🌿</span>
+      <p class="theme-title">The Druidic Mysteries</p>
+      <p class="theme-desc">Britain and Gaul harbored a complex priestly tradition of cosmology and oral transmission that predated Rome.</p>
+    </div>
+    <div class="theme-card reveal">
+      <span class="theme-icon">☀️</span>
+      <p class="theme-title">Rites of Mithras</p>
+      <p class="theme-desc">The solar cult of Mithras shared remarkable structural parallels with early Christianity — a fact the Church fathers found deeply uncomfortable.</p>
+    </div>
+    <div class="theme-card reveal">
+      <span class="theme-icon">🔺</span>
+      <p class="theme-title">Masonic Symbolism</p>
+      <p class="theme-desc">The symbols of Freemasonry — the square, compass, and all-seeing eye — are direct descendants of mystery school ritual.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MYSTERY SCHOOLS ACCORDION ═══ -->
+<div class="section">
+  <h2 class="section-heading reveal">The Mystery Schools</h2>
+  <div class="accordion reveal">
+    <div class="accordion-item">
+      <button class="accordion-btn" onclick="toggleAccordion(this)">
+        <span>The Druidic Mysteries of Britain & Gaul</span>
+        <span class="arrow">▾</span>
+      </button>
+      <div class="accordion-body">
+        The Druids formed the intellectual class of the Celtic world — philosopher-priests who memorized vast bodies of sacred knowledge over twenty years of oral study. They taught the immortality of the soul and the transmigration into successive lives. Their sacred groves (nemeton) served as outdoor temples. Celsus, the Roman philosopher, drew pointed comparisons between their secret doctrines and those of Egypt and Persia.
+      </div>
+    </div>
+    <div class="accordion-item">
+      <button class="accordion-btn" onclick="toggleAccordion(this)">
+        <span>The Rites of Mithras</span>
+        <span class="arrow">▾</span>
+      </button>
+      <div class="accordion-body">
+        Mithraism swept the Roman legions in the 1st–4th centuries CE. Its seven grades of initiation — Raven, Occult, Soldier, Lion, Persian, Sun-Courier, Father — mirrored cosmic ascent through the planetary spheres. The sacramental meal of bread and wine, the December 25th birth date, the resurrection symbolism — all of it predated Christianity by centuries. Hall suggests the early Church absorbed these forms rather than invented them.
+      </div>
+    </div>
+    <div class="accordion-item">
+      <button class="accordion-btn" onclick="toggleAccordion(this)">
+        <span>Celsus & the Early Christian Mysteries</span>
+        <span class="arrow">▾</span>
+      </button>
+      <div class="accordion-body">
+        The philosopher Celsus (2nd century CE) wrote extensively comparing the Christian Mysteries to those of Mithras, Osiris, and Dionysus. He argued that Christianity had simply repackaged older esoteric traditions for mass consumption — stripping out the deeper philosophical core and replacing wisdom with blind faith. Hall treats Celsus as an important witness to the esoteric dimension that the institutional Church suppressed.
+      </div>
+    </div>
+    <div class="accordion-item">
+      <button class="accordion-btn" onclick="toggleAccordion(this)">
+        <span>The Chain of Transmission into Freemasonry</span>
+        <span class="arrow">▾</span>
+      </button>
+      <div class="accordion-body">
+        Hall's central thesis in this chapter is that the Mystery School tradition never died — it went underground. Through Gnostic brotherhoods, the Knights Templar, Rosicrucians, and finally Freemasonry, a lineage of initiatic knowledge passed from hand to hand. The symbols changed; the inner doctrine of cosmic law, self-purification, and ascent toward the divine remained constant across millennia.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ INTERACTIVE SYMBOL WHEEL ═══ -->
+<div class="symbol-section">
+  <h2 class="section-heading reveal">The Symbolic Vocabulary</h2>
+  <p class="body-text reveal" style="max-width:600px;margin:0 auto 1rem;">Hover over the symbols below — each represents a core glyph inherited from the ancient mysteries and transmitted into modern esoteric tradition.</p>
+  <canvas id="symbolCanvas" width="500" height="500"></canvas>
+  <p class="symbol-label" id="symbolLabel">Hover a symbol to reveal its meaning</p>
+</div>
+
+<!-- ═══ HISTORICAL TIMELINE ═══ -->
+<div class="section">
+  <h2 class="section-heading reveal">A Lineage of Secrets</h2>
+  <div class="timeline" id="timeline">
+    <div class="timeline-item">
+      <div class="t-content">
+        <p class="t-year">c. 3000 BCE</p>
+        <p class="t-title">Egyptian Mystery Schools</p>
+        <p class="t-desc">The temples of Karnak and Luxor housed initiatic chambers where candidates faced trials of earth, water, fire, and air before receiving secret names of the divine.</p>
+      </div>
+      <div class="t-dot-wrap"><div class="t-dot"></div></div>
+    </div>
+    <div class="timeline-item">
+      <div class="t-content">
+        <p class="t-year">c. 600 BCE</p>
+        <p class="t-title">Eleusinian Mysteries</p>
+        <p class="t-desc">Greece's most sacred rites, held annually at Eleusis for 2,000 years. Initiates — from Plato to Cicero — refused to reveal what they witnessed, yet agreed it transformed the soul entirely.</p>
+      </div>
+      <div class="t-dot-wrap"><div class="t-dot"></div></div>
+    </div>
+    <div class="timeline-item">
+      <div class="t-content">
+        <p class="t-year">c. 300 BCE</p>
+        <p class="t-title">Druidic Orders of Gaul</p>
+        <p class="t-desc">Celtic philosopher-priests taught a doctrine of immortality, cosmic cycles, and numerology. Caesar noted they memorized thousands of sacred verses — never committing doctrine to writing.</p>
+      </div>
+      <div class="t-dot-wrap"><div class="t-dot"></div></div>
+    </div>
+    <div class="timeline-item">
+      <div class="t-content">
+        <p class="t-year">c. 100 CE</p>
+        <p class="t-title">Mithraic Legions</p>
+        <p class="t-desc">The cult of Mithras spread through Rome's military. Subterranean mithraeum temples were carved across the Empire from Britain to Syria, each housing seven-grade initiations under the eternal sun.</p>
+      </div>
+      <div class="t-dot-wrap"><div class="t-dot"></div></div>
+    </div>
+    <div class="timeline-item">
+      <div class="t-content">
+        <p class="t-year">c. 1300 CE</p>
+        <p class="t-title">Knights Templar & Gothic Builders</p>
+        <p class="t-desc">The Dionysiac Architects and later the Templars carried esoteric geometry into European cathedral building. Their suppression in 1307 forced the stream underground — into operative masonry.</p>
+      </div>
+      <div class="t-dot-wrap"><div class="t-dot"></div></div>
+    </div>
+    <div class="timeline-item">
+      <div class="t-content">
+        <p class="t-year">1717 CE</p>
+        <p class="t-title">Grand Lodge of England</p>
+        <p class="t-desc">Speculative Freemasonry formally organized in London — the mystery tradition donned the costume of gentleman's fraternity, preserving through allegory what could no longer be taught directly.</p>
+      </div>
+      <div class="t-dot-wrap"><div class="t-dot"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CLOSING QUOTE ═══ -->
+<div class="section">
+  <div class="ornament reveal"><div class="ornament-line"></div><div class="ornament-diamond"></div><div class="ornament-line"></div></div>
+  <div class="quote-block reveal">
+    <p class="quote-text">Ancient systems of education differed fundamentally from modern methods. The goal was not to fill the mind with information, but to awaken within the candidate the divine potentialities of his own nature.</p>
+    <p class="quote-attr">— Manly P. Hall, Chapter I</p>
+  </div>
+</div>
+
+<!-- ═══ BOOK NAVIGATION ═══ -->
+<nav class="book-nav">
+  <p class="book-nav-label">The Secret Teachings of All Ages · Manly P. Hall · 1928</p>
+  <p class="book-nav-title">Chapter II: The Ancient Mysteries, Part Two →</p>
+  <a class="nav-btn" href="#">Next Chapter</a>
+</nav>
+
+<script>
+// ── CURSOR ──
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx = 0, my = 0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx + 'px';
+  cursor.style.top = my + 'px';
+  setTimeout(() => {
+    ring.style.left = mx + 'px';
+    ring.style.top = my + 'px';
+  }, 80);
+});
+
+// ── STARFIELD ──
+(function() {
+  const canvas = document.getElementById('starfield');
+  const ctx = canvas.getContext('2d');
+  let W, H, stars = [];
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+
+  function makeStars(n) {
+    stars = [];
+    for (let i = 0; i < n; i++) {
+      stars.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        r: Math.random() * 1.2,
+        speed: Math.random() * 0.015 + 0.003,
+        phase: Math.random() * Math.PI * 2
+      });
+    }
+  }
+
+  function draw(t) {
+    ctx.clearRect(0, 0, W, H);
+    stars.forEach(s => {
+      const a = 0.3 + 0.5 * Math.sin(s.phase + t * s.speed);
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(212,196,154,${a})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+
+  resize();
+  makeStars(200);
+  requestAnimationFrame(draw);
+  window.addEventListener('resize', () => { resize(); makeStars(200); });
+})();
+
+// ── HERO REVEAL ──
+window.addEventListener('load', () => {
+  document.getElementById('heroSigil').classList.add('visible');
+  document.getElementById('chapLabel').classList.add('visible');
+  document.getElementById('heroTitle').classList.add('visible');
+  document.getElementById('heroSub').classList.add('visible');
+  document.getElementById('scrollHint').style.animation = 'fadeIn 1s ease 2.2s forwards, scrollBounce 2s ease-in-out 3s infinite';
+});
+
+// ── SCROLL REVEAL ──
+const reveals = document.querySelectorAll('.reveal, .timeline-item');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      const el = e.target;
+      const delay = el.dataset.delay || 0;
+      setTimeout(() => el.classList.add('visible'), delay);
+      observer.unobserve(el);
+    }
+  });
+}, { threshold: 0.1 });
+
+// stagger children in grids
+document.querySelectorAll('.themes-grid .theme-card').forEach((el, i) => {
+  el.dataset.delay = i * 120;
+});
+
+reveals.forEach(el => observer.observe(el));
+
+// ── ACCORDION ──
+function toggleAccordion(btn) {
+  const body = btn.nextElementSibling;
+  const isOpen = body.classList.contains('open');
+  // close all
+  document.querySelectorAll('.accordion-body.open').forEach(b => {
+    b.classList.remove('open');
+    b.previousElementSibling.classList.remove('open');
+  });
+  if (!isOpen) {
+    body.classList.add('open');
+    btn.classList.add('open');
+  }
+}
+
+// ── SYMBOL WHEEL ──
+(function() {
+  const canvas = document.getElementById('symbolCanvas');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const cx = W / 2, cy = H / 2;
+  const label = document.getElementById('symbolLabel');
+
+  const symbols = [
+    { angle: 0,    radius: 160, glyph: '☉', name: 'The Sun', desc: 'Universal Deity — source of all spiritual light in the ancient world' },
+    { angle: 60,   radius: 160, glyph: '☽', name: 'The Moon', desc: 'The Great Mother — reflects divine light into the material realm' },
+    { angle: 120,  radius: 160, glyph: '△', name: 'The Upward Triangle', desc: 'Fire — the masculine, ascending principle of solar force' },
+    { angle: 180,  radius: 160, glyph: '▽', name: 'The Downward Triangle', desc: 'Water — the feminine, descending principle of lunar receptivity' },
+    { angle: 240,  radius: 160, glyph: '✡', name: 'The Hexagram', desc: 'Union of opposites — "As above, so below" — the Seal of Solomon' },
+    { angle: 300,  radius: 160, glyph: '⊕', name: 'The Cross in Circle', desc: 'The four elements contained within eternity — the oldest symbol of the world soul' },
+    { angle: 30,   radius: 90,  glyph: '⚡', name: 'The Thunderbolt', desc: 'Zeus / Jupiter — divine will descending into manifestation' },
+    { angle: 150,  radius: 90,  glyph: '♄', name: 'Saturn', desc: 'Kronos — time, limitation, the guardian at the threshold' },
+    { angle: 270,  radius: 90,  glyph: '⚷', name: 'Chiron', desc: 'The wounded healer — initiation through suffering' },
+  ];
+
+  let hovered = null;
+  let t = 0;
+
+  function toRad(deg) { return deg * Math.PI / 180; }
+
+  function getPos(s, time) {
+    const a = toRad(s.angle + time * (s.radius > 120 ? 0.8 : -1.2));
+    return {
+      x: cx + Math.cos(a) * s.radius,
+      y: cy + Math.sin(a) * s.radius
+    };
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    t += 0.2;
+
+    // Background rings
+    [160, 90, 40].forEach(r => {
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(201,168,76,0.08)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    });
+
+    // Center symbol
+    ctx.font = '28px serif';
+    ctx.fillStyle = 'rgba(201,168,76,0.9)';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.shadowBlur = 20;
+    ctx.shadowColor = '#c9a84c';
+    ctx.fillText('🜁', cx, cy);
+    ctx.shadowBlur = 0;
+
+    // Connection lines from center
+    symbols.forEach(s => {
+      const pos = getPos(s, t);
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(pos.x, pos.y);
+      ctx.strokeStyle = 'rgba(201,168,76,0.06)';
+      ctx.lineWidth = 0.5;
+      ctx.stroke();
+    });
+
+    // Draw symbols
+    symbols.forEach(s => {
+      const pos = getPos(s, t);
+      const isHov = hovered === s;
+      const r = isHov ? 22 : 16;
+
+      // Glow circle
+      ctx.beginPath();
+      ctx.arc(pos.x, pos.y, r, 0, Math.PI * 2);
+      ctx.fillStyle = isHov ? 'rgba(201,168,76,0.2)' : 'rgba(201,168,76,0.07)';
+      ctx.fill();
+      ctx.strokeStyle = isHov ? 'rgba(201,168,76,0.9)' : 'rgba(201,168,76,0.3)';
+      ctx.lineWidth = isHov ? 1.5 : 0.5;
+      ctx.stroke();
+
+      ctx.font = `${isHov ? '18' : '14'}px serif`;
+      ctx.fillStyle = isHov ? '#e8c97a' : '#c9a84c';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.shadowBlur = isHov ? 15 : 0;
+      ctx.shadowColor = '#c9a84c';
+      ctx.fillText(s.glyph, pos.x, pos.y);
+      ctx.shadowBlur = 0;
+    });
+
+    requestAnimationFrame(draw);
+  }
+
+  canvas.addEventListener('mousemove', e => {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = W / rect.width;
+    const scaleY = H / rect.height;
+    const mx = (e.clientX - rect.left) * scaleX;
+    const my = (e.clientY - rect.top) * scaleY;
+
+    hovered = null;
+    symbols.forEach(s => {
+      const pos = getPos(s, t);
+      const dx = mx - pos.x, dy = my - pos.y;
+      if (Math.sqrt(dx*dx + dy*dy) < 24) hovered = s;
+    });
+
+    if (hovered) {
+      label.textContent = `${hovered.name} — ${hovered.desc}`;
+      label.style.color = '#c9a84c';
+      canvas.style.cursor = 'pointer';
+    } else {
+      label.textContent = 'Hover a symbol to reveal its meaning';
+      label.style.color = '';
+      canvas.style.cursor = 'crosshair';
+    }
+  });
+
+  canvas.addEventListener('mouseleave', () => {
+    hovered = null;
+    label.textContent = 'Hover a symbol to reveal its meaning';
+    label.style.color = '';
+  });
+
+  draw();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atlantis & the Gods of Antiquity — Secret Teachings of All Ages</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@400;700&family=Crimson+Pro:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --abyss:      #010810;
+    --deep-sea:   #020f1a;
+    --ocean:      #041828;
+    --tide:       #063050;
+    --teal:       #0a6878;
+    --teal-bright:#12a0b8;
+    --biolum:     #40e0d0;
+    --biolum-dim: #1a6060;
+    --coral:      #c84830;
+    --coral-dim:  #602018;
+    --gold:       #c8a840;
+    --gold-dim:   #5a4818;
+    --silver:     #a8c8d8;
+    --silver-dim: #405868;
+    --text:       #b0c8d8;
+    --text-dim:   #506878;
+    --foam:       #d8eef8;
+    --foam-dim:   #607888;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body {
+    background: var(--abyss);
+    color: var(--text);
+    font-family: 'Crimson Pro', serif;
+    overflow-x: hidden;
+  }
+
+  /* ── CURSOR ── */
+  .cursor {
+    position:fixed; width:10px; height:10px;
+    background:var(--biolum); border-radius:50%;
+    pointer-events:none; z-index:9999;
+    transform:translate(-50%,-50%);
+    mix-blend-mode:screen;
+    box-shadow:0 0 15px var(--biolum), 0 0 30px rgba(64,224,208,0.4);
+  }
+  .cursor-ring {
+    position:fixed; width:36px; height:36px;
+    border:1px solid rgba(64,224,208,0.3); border-radius:50%;
+    pointer-events:none; z-index:9998;
+    transform:translate(-50%,-50%);
+    transition:all 0.2s ease;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position:relative; min-height:100vh;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    text-align:center; padding:3rem 2rem;
+    overflow:hidden; z-index:1;
+  }
+
+  #oceanCanvas {
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    pointer-events:none; z-index:0;
+  }
+
+  .hero-content { position:relative; z-index:2; }
+
+  /* Atlantis sigil */
+  .atlantis-sigil {
+    width:210px; height:210px;
+    margin:0 auto 2.5rem;
+    opacity:0;
+    animation:sigilSurface 2.4s cubic-bezier(0.22,1,0.36,1) 0.3s forwards;
+    filter:drop-shadow(0 0 25px rgba(64,224,208,0.5)) drop-shadow(0 0 60px rgba(18,160,184,0.25));
+  }
+  @keyframes sigilSurface {
+    from { opacity:0; transform:translateY(60px) scale(0.8); }
+    to   { opacity:1; transform:translateY(0)    scale(1); }
+  }
+
+  .chapter-label {
+    font-family:'Cinzel', serif; font-size:0.65rem;
+    letter-spacing:0.55em; color:var(--biolum-dim);
+    text-transform:uppercase; margin-bottom:1rem;
+    opacity:0; animation:fadeUp 1s ease 1.2s forwards;
+  }
+  .hero-title {
+    font-family:'Cinzel Decorative', serif;
+    font-size:clamp(1.7rem,5vw,3.6rem);
+    color:var(--biolum);
+    text-shadow:0 0 40px rgba(64,224,208,0.6), 0 0 100px rgba(18,160,184,0.3);
+    line-height:1.2; max-width:800px;
+    opacity:0; animation:fadeUp 1.2s ease 1.5s forwards;
+  }
+  .hero-sub {
+    font-size:clamp(0.85rem,1.8vw,1.1rem);
+    font-style:italic; color:var(--text-dim);
+    margin-top:1rem; letter-spacing:0.1em;
+    opacity:0; animation:fadeUp 1s ease 1.9s forwards;
+  }
+  .plato-quote {
+    font-family:'Cinzel', serif;
+    font-size:clamp(0.7rem,1.4vw,0.9rem);
+    color:var(--silver-dim); margin-top:2rem;
+    letter-spacing:0.08em; line-height:1.6;
+    opacity:0; animation:fadeUp 1s ease 2.3s forwards;
+    max-width:600px;
+  }
+
+  .scroll-cue {
+    position:absolute; bottom:2rem; left:50%;
+    transform:translateX(-50%);
+    display:flex; flex-direction:column;
+    align-items:center; gap:0.5rem;
+    font-family:'Cinzel', serif; font-size:0.55rem;
+    letter-spacing:0.5em; color:var(--biolum-dim);
+    opacity:0; animation:fadeIn 1s ease 3s forwards;
+  }
+  .scroll-cue .vline {
+    width:1px; height:50px;
+    background:linear-gradient(to bottom, transparent, var(--biolum-dim));
+    animation:pulse 2s ease-in-out 3.5s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:0.4} 50%{opacity:1} }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes fadeIn { to{opacity:1} }
+
+  /* ── DEPTH METER ── */
+  .depth-banner {
+    position:relative; z-index:1;
+    display:flex; align-items:stretch;
+    background:linear-gradient(to right, var(--deep-sea), var(--ocean), var(--deep-sea));
+    border-top:1px solid rgba(64,224,208,0.08);
+    border-bottom:1px solid rgba(64,224,208,0.08);
+    overflow:hidden;
+  }
+  .depth-item {
+    flex:1; padding:2rem 1.5rem; text-align:center;
+    border-right:1px solid rgba(64,224,208,0.06);
+    transition:background 0.4s;
+  }
+  .depth-item:last-child { border-right:none; }
+  .depth-item:hover { background:rgba(64,224,208,0.04); }
+  .depth-num {
+    font-family:'Cinzel', serif;
+    font-size:clamp(1.2rem,3vw,2rem);
+    color:var(--biolum); letter-spacing:0.05em;
+    text-shadow:0 0 20px rgba(64,224,208,0.5);
+  }
+  .depth-unit { font-size:0.65rem; color:var(--biolum-dim); letter-spacing:0.3em; }
+  .depth-label { font-size:0.85rem; color:var(--text-dim); margin-top:0.4rem; line-height:1.5; }
+
+  /* ── SECTION ── */
+  .section {
+    position:relative; z-index:1;
+    max-width:860px; margin:0 auto; padding:4rem 2rem;
+  }
+  .section-heading {
+    font-family:'Cinzel', serif;
+    font-size:clamp(1rem,2.3vw,1.6rem);
+    color:var(--biolum); letter-spacing:0.08em; margin-bottom:1.8rem;
+  }
+  .section-heading.coral { color:var(--coral); }
+  .section-heading.gold  { color:var(--gold); }
+  .section-heading.silver{ color:var(--silver); }
+
+  .body-text {
+    font-size:1.1rem; line-height:2; color:var(--text); margin:1.5rem 0;
+  }
+  .drop-cap::first-letter {
+    font-family:'Cinzel Decorative', serif;
+    font-size:4.5rem; float:left;
+    line-height:0.78; margin:0.1em 0.12em 0 0;
+    color:var(--biolum);
+    text-shadow:0 0 30px rgba(64,224,208,0.7);
+  }
+
+  .ornament {
+    display:flex; align-items:center; gap:1.2rem;
+    margin:2.5rem auto; max-width:500px; padding:0 2rem;
+  }
+  .ornament-line {
+    flex:1; height:1px;
+    background:linear-gradient(to right, transparent, var(--biolum-dim), transparent);
+  }
+  .ornament-glyph { font-size:1rem; color:var(--biolum); }
+
+  .quote-block {
+    border-left:2px solid var(--biolum-dim);
+    padding:1.5rem 2rem; margin:3rem 0;
+    background:rgba(64,224,208,0.03); position:relative;
+  }
+  .quote-block.coral { border-left-color:var(--coral-dim); background:rgba(200,72,48,0.04); }
+  .quote-block.gold  { border-left-color:var(--gold-dim); background:rgba(200,168,64,0.04); }
+  .quote-block::before {
+    content:'"'; font-family:'Cinzel Decorative', serif;
+    font-size:4.5rem; color:var(--biolum-dim); opacity:0.2;
+    position:absolute; top:-0.8rem; left:0.8rem; line-height:1;
+  }
+  .quote-text { font-size:1.12rem; font-style:italic; line-height:1.9; color:var(--text); }
+  .quote-attr {
+    font-family:'Cinzel', serif; font-size:0.65rem;
+    letter-spacing:0.22em; color:var(--biolum-dim); margin-top:1rem;
+  }
+
+  /* ── PLATO MAP INTERACTIVE ── */
+  .map-section {
+    position:relative; z-index:1;
+    padding:5rem 2rem; text-align:center;
+    background:linear-gradient(180deg,transparent,rgba(4,24,40,0.5),transparent);
+  }
+  #atlantisCanvas {
+    width:100%; max-width:680px; height:420px;
+    margin:2rem auto; display:block; cursor:crosshair;
+    border:1px solid rgba(64,224,208,0.1);
+  }
+  .map-info {
+    max-width:600px; margin:0.8rem auto 0;
+    font-size:1rem; line-height:1.8; color:var(--text-dim);
+    font-style:italic; min-height:3rem; transition:color 0.4s;
+  }
+
+  /* ── DYING GODS GRID ── */
+  .gods-grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(250px,1fr));
+    gap:1px; background:rgba(64,224,208,0.06);
+    border:1px solid rgba(64,224,208,0.08);
+    margin:2.5rem 0;
+  }
+  .god-card {
+    background:var(--abyss); padding:2.2rem 1.8rem;
+    cursor:pointer; transition:background 0.4s;
+    position:relative; overflow:hidden;
+  }
+  .god-card::after {
+    content:''; position:absolute; top:0; left:0; right:0; height:2px;
+    background:linear-gradient(to right, transparent, var(--biolum), transparent);
+    transform:scaleX(0); transform-origin:center;
+    transition:transform 0.5s ease;
+  }
+  .god-card:hover { background:rgba(64,224,208,0.05); }
+  .god-card:hover::after { transform:scaleX(1); }
+  .god-origin {
+    font-family:'Cinzel', serif; font-size:0.58rem;
+    letter-spacing:0.35em; color:var(--biolum-dim);
+    text-transform:uppercase; margin-bottom:0.5rem;
+  }
+  .god-name {
+    font-family:'Cinzel', serif; font-size:1.1rem;
+    color:var(--foam); margin-bottom:0.8rem; letter-spacing:0.05em;
+  }
+  .god-symbol { font-size:1.6rem; margin-bottom:0.8rem; display:block; }
+  .god-desc { font-size:0.93rem; line-height:1.75; color:var(--text-dim); }
+  .god-parallel {
+    margin-top:0.8rem; padding-top:0.8rem;
+    border-top:1px solid rgba(64,224,208,0.08);
+    font-size:0.82rem; color:var(--biolum-dim); font-style:italic;
+  }
+
+  /* ── ATLANTIS TIMELINE (horizontal scroll) ── */
+  .hscroll-section {
+    position:relative; z-index:1;
+    padding:4rem 0; overflow:hidden;
+  }
+  .hscroll-title {
+    font-family:'Cinzel', serif;
+    font-size:clamp(1rem,2.3vw,1.6rem);
+    color:var(--gold); letter-spacing:0.08em;
+    margin-bottom:2rem; padding:0 2rem;
+    max-width:860px; margin-left:auto; margin-right:auto;
+  }
+  .hscroll-track {
+    display:flex; gap:0; overflow-x:auto;
+    padding:0 2rem 2rem;
+    scrollbar-width:thin; scrollbar-color:var(--biolum-dim) transparent;
+    cursor:grab;
+  }
+  .hscroll-track:active { cursor:grabbing; }
+  .hscroll-track::-webkit-scrollbar { height:3px; }
+  .hscroll-track::-webkit-scrollbar-thumb { background:var(--biolum-dim); border-radius:2px; }
+  .era-card {
+    flex:0 0 280px; padding:2rem 1.8rem;
+    border-right:1px solid rgba(64,224,208,0.1);
+    background:linear-gradient(to bottom, rgba(6,48,80,0.4), transparent);
+    transition:background 0.3s;
+  }
+  .era-card:hover { background:rgba(6,48,80,0.6); }
+  .era-period {
+    font-family:'Cinzel', serif; font-size:0.7rem;
+    letter-spacing:0.25em; color:var(--biolum); margin-bottom:0.6rem;
+  }
+  .era-title {
+    font-family:'Cinzel', serif; font-size:0.95rem;
+    color:var(--foam); margin-bottom:0.8rem;
+  }
+  .era-body { font-size:0.88rem; line-height:1.75; color:var(--text-dim); }
+
+  /* ── WAVE DIVIDER ── */
+  .wave-div {
+    position:relative; z-index:1;
+    height:60px; overflow:hidden;
+  }
+  .wave-div svg { width:100%; height:100%; }
+
+  /* ── CABIRIC / SAMOTHRACE ── */
+  .samothrace-panel {
+    position:relative; z-index:1;
+    padding:5rem 2rem;
+    background:linear-gradient(135deg,rgba(10,104,120,0.08),transparent,rgba(200,72,48,0.05));
+  }
+  .samothrace-inner {
+    max-width:860px; margin:0 auto;
+    display:grid; grid-template-columns:1fr 1fr; gap:3rem;
+    align-items:start;
+  }
+  .samothrace-text-col {}
+  .samothrace-canvas-col { display:flex; flex-direction:column; align-items:center; }
+  #cabiricCanvas {
+    width:300px; height:300px; cursor:pointer;
+    filter:drop-shadow(0 0 20px rgba(64,224,208,0.2));
+  }
+  .cabiric-note {
+    font-family:'Cinzel', serif; font-size:0.6rem;
+    letter-spacing:0.25em; color:var(--biolum-dim);
+    margin-top:0.5rem; text-align:center;
+  }
+
+  /* ── SINKING ANIMATION TEXT ── */
+  .sinking-text {
+    position:relative; z-index:1;
+    padding:6rem 2rem; text-align:center;
+    overflow:hidden;
+  }
+  .sinking-text::before {
+    content:'';
+    position:absolute; inset:0;
+    background:radial-gradient(ellipse at center, rgba(10,104,120,0.12) 0%, transparent 70%);
+    pointer-events:none;
+  }
+  .sink-line {
+    font-family:'Cinzel Decorative', serif;
+    font-size:clamp(1.5rem,4vw,3rem);
+    color:var(--biolum);
+    opacity:0; transform:translateY(30px);
+    transition:all 1s ease;
+    text-shadow:0 0 40px rgba(64,224,208,0.4);
+    line-height:1.4;
+  }
+  .sink-line.visible { opacity:1; transform:translateY(0); }
+  .sink-sub {
+    font-size:clamp(0.85rem,1.6vw,1rem);
+    color:var(--text-dim); font-style:italic;
+    margin-top:1rem; letter-spacing:0.1em;
+    opacity:0; transition:all 1.2s ease 0.3s;
+  }
+  .sink-sub.visible { opacity:1; }
+
+  /* ── FOOTER NAV ── */
+  .book-nav {
+    position:relative; z-index:1;
+    padding:4rem 2rem; text-align:center;
+    border-top:1px solid rgba(64,224,208,0.08);
+  }
+  .book-nav-series {
+    font-family:'Cinzel', serif; font-size:0.6rem;
+    letter-spacing:0.4em; color:var(--biolum-dim); margin-bottom:0.8rem;
+  }
+  .book-nav-title {
+    font-family:'Cinzel Decorative', serif; font-size:0.85rem;
+    color:var(--foam); margin-bottom:2rem;
+  }
+  .nav-row { display:flex; justify-content:center; gap:1.5rem; flex-wrap:wrap; }
+  .nav-btn {
+    font-family:'Cinzel', serif; font-size:0.7rem;
+    letter-spacing:0.18em; color:var(--foam);
+    border:1px solid rgba(216,238,248,0.2);
+    padding:0.8rem 2rem; background:none;
+    transition:all 0.3s; text-decoration:none; cursor:pointer;
+  }
+  .nav-btn:hover {
+    border-color:var(--biolum);
+    background:rgba(64,224,208,0.06);
+    box-shadow:0 0 20px rgba(64,224,208,0.1);
+    color:var(--biolum);
+  }
+  .nav-btn.prev { color:var(--text-dim); border-color:rgba(80,104,120,0.3); }
+
+  /* ── BG ORBS ── */
+  .orb {
+    position:fixed; border-radius:50%;
+    filter:blur(100px); pointer-events:none; z-index:0;
+  }
+  .orb-1 { width:800px; height:800px; background:var(--ocean); top:-200px; left:-200px; opacity:0.9; }
+  .orb-2 { width:500px; height:500px; background:var(--teal); bottom:-100px; right:-100px; opacity:0.06; }
+  .orb-3 { width:400px; height:400px; background:var(--coral); top:50%; left:50%; transform:translate(-50%,-50%); opacity:0.03; }
+
+  /* ── REVEAL ── */
+  .reveal {
+    opacity:0; transform:translateY(35px);
+    transition:all 0.85s ease;
+  }
+  .reveal.visible { opacity:1; transform:translateY(0); }
+
+  @media(max-width:680px){
+    .samothrace-inner { grid-template-columns:1fr; }
+    .samothrace-canvas-col { margin-top:2rem; }
+  }
+  @media(max-width:520px){
+    .depth-banner { flex-direction:column; }
+    .depth-item { border-right:none; border-bottom:1px solid rgba(64,224,208,0.06); }
+  }
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <canvas id="oceanCanvas"></canvas>
+  <div class="hero-content">
+
+    <!-- Atlantis SVG Sigil -->
+    <svg class="atlantis-sigil" viewBox="0 0 210 210" xmlns="http://www.w3.org/2000/svg" fill="none">
+      <!-- Concentric rings (Plato's Atlantis layout) -->
+      <circle cx="105" cy="105" r="100" stroke="#0a6878" stroke-width="0.6" opacity="0.5"/>
+      <circle cx="105" cy="105" r="82" stroke="#12a0b8" stroke-width="1" opacity="0.35"/>
+      <circle cx="105" cy="105" r="64" stroke="#0a6878" stroke-width="0.6" opacity="0.5"/>
+      <circle cx="105" cy="105" r="46" stroke="#40e0d0" stroke-width="1" opacity="0.4"/>
+      <circle cx="105" cy="105" r="28" stroke="#40e0d0" stroke-width="0.8" opacity="0.6"/>
+      <!-- Central island -->
+      <circle cx="105" cy="105" r="12" fill="rgba(64,224,208,0.15)" stroke="#40e0d0" stroke-width="1.2" opacity="0.9"/>
+      <!-- Trident at center -->
+      <line x1="105" y1="95" x2="105" y2="118" stroke="#40e0d0" stroke-width="1.5" opacity="0.9"/>
+      <line x1="99"  y1="98" x2="99"  y2="106" stroke="#40e0d0" stroke-width="1.2" opacity="0.8"/>
+      <line x1="111" y1="98" x2="111" y2="106" stroke="#40e0d0" stroke-width="1.2" opacity="0.8"/>
+      <path d="M 99 98 Q 99 94 105 93 Q 111 94 111 98" stroke="#40e0d0" stroke-width="1" fill="none" opacity="0.7"/>
+      <!-- Channels (4 cardinal crossings) -->
+      <line x1="5"   y1="105" x2="205" y2="105" stroke="#40e0d0" stroke-width="0.3" opacity="0.15"/>
+      <line x1="105" y1="5"   x2="105" y2="205" stroke="#40e0d0" stroke-width="0.3" opacity="0.15"/>
+      <!-- Wave pattern at base -->
+      <path d="M 15 165 Q 35 158 55 165 Q 75 172 95 165 Q 115 158 135 165 Q 155 172 175 165 Q 185 162 195 165"
+            stroke="#40e0d0" stroke-width="0.8" opacity="0.4"/>
+      <path d="M 20 175 Q 40 168 60 175 Q 80 182 100 175 Q 120 168 140 175 Q 160 182 180 175"
+            stroke="#40e0d0" stroke-width="0.5" opacity="0.25"/>
+      <!-- Corner stars -->
+      <circle cx="22"  cy="22"  r="2" fill="#40e0d0" opacity="0.5"/>
+      <circle cx="188" cy="22"  r="2" fill="#40e0d0" opacity="0.5"/>
+      <circle cx="22"  cy="188" r="2" fill="#40e0d0" opacity="0.5"/>
+      <circle cx="188" cy="188" r="2" fill="#40e0d0" opacity="0.5"/>
+    </svg>
+
+    <p class="chapter-label">Chapter IV · Secret Teachings of All Ages</p>
+    <h1 class="hero-title">Atlantis &amp; the<br>Gods of Antiquity</h1>
+    <p class="hero-sub">Plato's Sunken Empire · The Dying God · Tammuz · Ishtar · Atys · Adonis · The Cabiric Mysteries</p>
+    <p class="plato-quote">"There occurred violent earthquakes and floods, and in a single day and night of misfortune, the island of Atlantis disappeared into the depths of the sea."<br><span style="font-size:0.75em;opacity:0.6">— Plato, Timaeus</span></p>
+  </div>
+  <div class="scroll-cue">
+    <div class="vline"></div>
+    <span>SUBMERGE</span>
+  </div>
+</section>
+
+<!-- ═══ DEPTH FACTS ═══ -->
+<div class="depth-banner reveal">
+  <div class="depth-item">
+    <div class="depth-num">9,000</div>
+    <div class="depth-unit">YEARS BEFORE SOLON</div>
+    <div class="depth-label">Plato's timeline for Atlantis's destruction — placing it around 9600 BCE</div>
+  </div>
+  <div class="depth-item">
+    <div class="depth-num">50</div>
+    <div class="depth-unit">STADIA ACROSS</div>
+    <div class="depth-label">The central plain of Atlantis, ringed by alternating bands of sea and land</div>
+  </div>
+  <div class="depth-item">
+    <div class="depth-num">5</div>
+    <div class="depth-unit">DYING GODS</div>
+    <div class="depth-label">Tammuz, Osiris, Atys, Adonis, Dionysus — one universal myth, five civilizations</div>
+  </div>
+  <div class="depth-item">
+    <div class="depth-num">∞</div>
+    <div class="depth-unit">THE PATTERN</div>
+    <div class="depth-label">Civilization rises, reaches its spiritual peak, sins against the divine, and is destroyed — then reborn</div>
+  </div>
+</div>
+
+<!-- ═══ INTRO ═══ -->
+<div class="section">
+  <div class="ornament reveal">
+    <div class="ornament-line"></div>
+    <div class="ornament-glyph">🌊</div>
+    <div class="ornament-line"></div>
+  </div>
+  <p class="body-text drop-cap reveal">
+    Of all the chapters in Hall's great compendium, this one strikes closest to the mythological heart of Western civilization. Atlantis is not merely a lost island — it is a <em>cosmological metaphor</em>. In Hall's reading, informed by Plato's two dialogues, Atlantis represents the spiritual golden age of humanity: a civilization that possessed the ancient wisdom whole and uncorrupted, and whose destruction by divine flood encoded in myth the perpetual cycle of spiritual rise and fall.
+  </p>
+  <p class="body-text reveal">
+    Alongside Atlantis, Hall places the great fraternity of <em>Dying Gods</em>: Tammuz of Babylon, Osiris of Egypt, Atys of Phrygia, Adonis of Phoenicia, Dionysus of Greece. These are not separate myths. They are one myth, told across the ancient world in varying dialects — the story of the solar deity who descends into death and rises again, and whose initiates undergo the same journey in the mystery rites.
+  </p>
+  <div class="quote-block reveal">
+    <p class="quote-text">The myth of the Dying God is the master myth of the ancient world — the one story beneath all stories, the key to all initiation, and the secret meaning of every harvest festival from the Nile to the Thames.</p>
+    <p class="quote-attr">— Hall's thesis, Chapter IV</p>
+  </div>
+</div>
+
+<!-- ═══ ATLANTIS MAP INTERACTIVE ═══ -->
+<div class="map-section">
+  <h2 class="section-heading reveal">The Platonic Map of Atlantis</h2>
+  <p class="body-text reveal" style="max-width:620px;margin:0 auto;">
+    Plato described Atlantis in precise architectural detail — concentric rings of water and land surrounding a sacred central island. Hover the rings to explore the city's layout as Plato described it in the <em>Critias</em>.
+  </p>
+  <canvas id="atlantisCanvas"></canvas>
+  <p class="map-info" id="mapInfo">Hover a ring to explore Plato's Atlantis</p>
+</div>
+
+<!-- ═══ THE DYING GODS ═══ -->
+<div class="section">
+  <h2 class="section-heading coral reveal">The Universal Myth of the Dying God</h2>
+  <p class="body-text reveal">Hall demonstrates with meticulous cross-cultural analysis that the same myth — solar deity born, betrayed, killed, mourned, resurrected — appears independently in at least five major ancient civilizations. This was, he argues, no coincidence. It was the esoteric teaching about the soul itself, clothed in local costume.</p>
+  <div class="gods-grid">
+    <div class="god-card reveal">
+      <p class="god-origin">Sumer · Babylon</p>
+      <span class="god-symbol">🌙</span>
+      <p class="god-name">Tammuz</p>
+      <p class="god-desc">The shepherd-god of vegetation, beloved of Ishtar. Each summer he descends to the underworld; the earth withers. Each spring he returns; the world blooms again. His mourning rites involved women weeping at the temple gates for seven days.</p>
+      <p class="god-parallel">↔ Mourned by all of Babylon in the fourth month (still called Tammuz in the Hebrew calendar)</p>
+    </div>
+    <div class="god-card reveal">
+      <p class="god-origin">Babylon · Assyria</p>
+      <span class="god-symbol">⭐</span>
+      <p class="god-name">Ishtar's Descent</p>
+      <p class="god-desc">Ishtar, Queen of Heaven, descends through seven gates to the underworld to reclaim Tammuz. At each gate she surrenders a garment or ornament — stripping herself of all worldly power. She emerges naked, transformed. The original descent-and-return myth.</p>
+      <p class="god-parallel">↔ Mirrors Persephone, Inanna, and the soul's initiatic descent through matter</p>
+    </div>
+    <div class="god-card reveal">
+      <p class="god-origin">Phrygia · Asia Minor</p>
+      <span class="god-symbol">🌲</span>
+      <p class="god-name">Atys</p>
+      <p class="god-desc">The Phrygian god of vegetation, beloved of Cybele the Great Mother. His self-mutilation and death beneath a pine tree was ritually re-enacted each spring by the Galli, his priests. On the third day after his symbolic death, his resurrection was proclaimed with wild joy.</p>
+      <p class="god-parallel">↔ Three-day death and resurrection, centuries before Christianity</p>
+    </div>
+    <div class="god-card reveal">
+      <p class="god-origin">Phoenicia · Syria</p>
+      <span class="god-symbol">🌹</span>
+      <p class="god-name">Adonis</p>
+      <p class="god-desc">Born of a myrrh tree, beloved of Aphrodite, slain by a wild boar on the mountains of Lebanon. The anemone sprang from his blood. His mourning rites — women weeping, "Adonis gardens" of fast-blooming plants — spread from Byblos across the entire Mediterranean.</p>
+      <p class="god-parallel">↔ The red anemone as his blood echoes the Eucharistic symbolism of wine</p>
+    </div>
+    <div class="god-card reveal">
+      <p class="god-origin">Samothrace · Greece</p>
+      <span class="god-symbol">🔱</span>
+      <p class="god-name">The Kabiri</p>
+      <p class="god-desc">The mysterious Cabiric gods of Samothrace — whose true names were never to be spoken aloud. Initiates received a purple sash as protection against shipwreck. Hall identifies the Kabiri as an extremely ancient mystery tradition possibly predating Greece itself, transmitted from Atlantis.</p>
+      <p class="god-parallel">↔ Philip of Macedon and his son Alexander were initiated here before their conquests</p>
+    </div>
+    <div class="god-card reveal">
+      <p class="god-origin">Arabia · Nabataea</p>
+      <span class="god-symbol">⚡</span>
+      <p class="god-name">Sabazius</p>
+      <p class="god-desc">The Phrygian-Thracian sky god whose rites involved a serpent being passed through the initiate's robes — the serpent of wisdom threading through the body. His cult blended with Dionysus and later with Jewish Yahweh worship in a remarkable religious syncretism.</p>
+      <p class="god-parallel">↔ The serpent through the bosom — a kinesthetic initiation into divine knowledge</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ HORIZONTAL ERA SCROLL ═══ -->
+<div class="hscroll-section">
+  <p class="hscroll-title reveal">🌊 Hall's Theory of Antediluvian Civilization</p>
+  <div class="hscroll-track" id="hscrollTrack">
+    <div class="era-card">
+      <p class="era-period">Before the Flood · Unknown</p>
+      <p class="era-title">The Golden Age</p>
+      <p class="era-body">Hall posits an Atlantean civilization in possession of the complete esoteric wisdom — a golden age when humanity lived in conscious knowledge of its divine nature. Science and spirituality were unified. The mystery schools had not yet become secret because all knowledge was openly held.</p>
+    </div>
+    <div class="era-card">
+      <p class="era-period">c. 9600 BCE · Plato's Date</p>
+      <p class="era-title">The Great Catastrophe</p>
+      <p class="era-body">Through hubris and the corruption of spiritual power into material ambition, Atlantis brought divine judgment upon itself. The island sank in a single cataclysmic night. Survivors fled — carrying fragments of the ancient wisdom to Egypt, the Americas, and the Fertile Crescent.</p>
+    </div>
+    <div class="era-card">
+      <p class="era-period">c. 5000–3000 BCE</p>
+      <p class="era-title">Wisdom Fragments</p>
+      <p class="era-body">The refugee priests established new mystery schools in their host civilizations. Egypt received the highest portion; from these early priests came the astronomical knowledge, architectural genius, and initiatic tradition that built the pyramids and the Hermetic philosophy.</p>
+    </div>
+    <div class="era-card">
+      <p class="era-period">c. 3000–500 BCE</p>
+      <p class="era-title">The Dying God Cults</p>
+      <p class="era-body">As the direct memory of Atlantis faded, its central teaching — death and resurrection of the divine principle — became encoded in the myth of the Dying God. Tammuz, Atys, Adonis, Osiris, Dionysus are all local expressions of this single Atlantean original doctrine.</p>
+    </div>
+    <div class="era-card">
+      <p class="era-period">c. 500 BCE – 400 CE</p>
+      <p class="era-title">The Mystery Schools</p>
+      <p class="era-body">The Eleusinian, Mithraic, Orphic, and Pythagorean schools carry the Atlantean wisdom in progressively more encoded form. The outer teaching becomes myth; the inner teaching becomes the mystery rite. Only initiates receive the esoteric core.</p>
+    </div>
+    <div class="era-card">
+      <p class="era-period">400 CE – Present</p>
+      <p class="era-title">The Underground Stream</p>
+      <p class="era-body">With the closing of the mystery schools by imperial Christianity, the wisdom goes underground: into alchemy, Kabbalah, Rosicrucianism, and finally Freemasonry. Hall's entire book is a map of this hidden river — tracing it from Atlantis to the founding of America.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ WAVE DIVIDER ═══ -->
+<div class="wave-div">
+  <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,30 C240,60 480,0 720,30 C960,60 1200,0 1440,30 L1440,60 L0,60 Z" fill="rgba(4,24,40,0.4)"/>
+    <path d="M0,40 C360,20 720,55 1080,35 C1260,25 1380,45 1440,40" stroke="rgba(64,224,208,0.08)" stroke-width="1" fill="none"/>
+  </svg>
+</div>
+
+<!-- ═══ CABIRIC / SAMOTHRACE ═══ -->
+<div class="samothrace-panel">
+  <div class="samothrace-inner">
+    <div class="samothrace-text-col">
+      <h2 class="section-heading silver reveal">The Cabiric Mysteries of Samothrace</h2>
+      <p class="body-text reveal">
+        Of all the ancient mystery schools, the Cabiric rites of Samothrace are perhaps the most obscure — and in Hall's view, the most ancient. The rocky island of Samothrace in the northern Aegean was a pilgrimage site for mariners; the Kabiri were its gods, their true names so sacred they could not be spoken.
+      </p>
+      <p class="body-text reveal">
+        Initiates received a <em>purple sash</em> as a talisman against drowning — a protection supremely ironic given Atlantis's fate. Philip II of Macedon was initiated here; it was at Samothrace that he met his future wife Olympias, also an initiate. Their son Alexander grew up steeped in mystery school philosophy.
+      </p>
+      <div class="quote-block gold reveal">
+        <p class="quote-text">The Kabiri were worshipped under different names throughout the ancient world. Wherever their cult appeared, it brought with it certain common features: secrecy, a mythology of divine murder and resurrection, and initiation that conferred protection and cosmic knowledge simultaneously.</p>
+        <p class="quote-attr">— Hall on the Cabiric Mysteries, Chapter IV</p>
+      </div>
+    </div>
+    <div class="samothrace-canvas-col reveal">
+      <canvas id="cabiricCanvas" width="300" height="300"></canvas>
+      <p class="cabiric-note">Hover to reveal the Kabiri</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SINKING CLOSING ═══ -->
+<div class="sinking-text">
+  <div class="sink-line reveal">Every civilization is Atlantis.</div>
+  <div class="sink-sub reveal">It rises, receives the wisdom, forgets its source, and sinks —<br>leaving only myths behind for the next wave of seekers to decode.</div>
+</div>
+
+<!-- ═══ FOOTER NAV ═══ -->
+<nav class="book-nav">
+  <p class="book-nav-series">The Secret Teachings of All Ages · Manly P. Hall · 1928</p>
+  <p class="book-nav-title">Chapter V: The Life and Writings of Thoth Hermes Trismegistus →</p>
+  <div class="nav-row">
+    <a class="nav-btn prev" href="ch03-eleusinian-mysteries.html">← Chapter III</a>
+    <a class="nav-btn" href="#">Chapter V →</a>
+  </div>
+</nav>
+
+<script>
+// ── CURSOR ──
+const cursor = document.getElementById('cursor');
+const ring   = document.getElementById('cursorRing');
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top  = e.clientY + 'px';
+  setTimeout(() => {
+    ring.style.left = e.clientX + 'px';
+    ring.style.top  = e.clientY + 'px';
+  }, 90);
+});
+
+// ── SCROLL REVEAL ──
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+  });
+}, { threshold: 0.07 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+// ── OCEAN HERO CANVAS ──
+(function() {
+  const c = document.getElementById('oceanCanvas');
+  const ctx = c.getContext('2d');
+  function resize() { c.width = window.innerWidth; c.height = window.innerHeight; }
+  resize(); window.addEventListener('resize', resize);
+
+  // Bioluminescent particles
+  const particles = Array.from({length: 120}, () => ({
+    x: Math.random(),
+    y: Math.random(),
+    r: Math.random() * 2.5 + 0.5,
+    speed: Math.random() * 0.0002 + 0.00005,
+    drift: (Math.random() - 0.5) * 0.0001,
+    phase: Math.random() * Math.PI * 2,
+    alpha: Math.random() * 0.6 + 0.1,
+  }));
+
+  // Wave layers
+  const waves = Array.from({length: 5}, (_, i) => ({
+    amp: 15 + i * 8,
+    freq: 0.003 + i * 0.001,
+    speed: 0.0005 + i * 0.0003,
+    y: 0.5 + i * 0.06,
+    opacity: 0.04 + i * 0.02,
+    phase: i * 1.2,
+  }));
+
+  let t = 0;
+  function draw() {
+    ctx.clearRect(0, 0, c.width, c.height);
+
+    // Deep ocean gradient
+    const bg = ctx.createLinearGradient(0, 0, 0, c.height);
+    bg.addColorStop(0,   '#010810');
+    bg.addColorStop(0.5, '#020f1a');
+    bg.addColorStop(1,   '#041828');
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, c.width, c.height);
+
+    // Wave layers
+    waves.forEach(w => {
+      ctx.beginPath();
+      ctx.moveTo(0, c.height);
+      for (let x = 0; x <= c.width; x += 4) {
+        const y = c.height * w.y + Math.sin(x * w.freq + t * w.speed + w.phase) * w.amp;
+        if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
+      ctx.lineTo(c.width, c.height);
+      ctx.closePath();
+      ctx.fillStyle = `rgba(10,104,120,${w.opacity})`;
+      ctx.fill();
+    });
+
+    // Bioluminescent particles
+    particles.forEach(p => {
+      p.y -= p.speed;
+      p.x += p.drift + Math.sin(t * 0.001 + p.phase) * 0.0001;
+      if (p.y < -0.02) { p.y = 1.02; p.x = Math.random(); }
+      if (p.x < 0) p.x = 1; if (p.x > 1) p.x = 0;
+
+      const px = p.x * c.width, py = p.y * c.height;
+      const flicker = p.alpha * (0.7 + 0.3 * Math.sin(t * 0.03 + p.phase));
+
+      // Glow
+      const grad = ctx.createRadialGradient(px, py, 0, px, py, p.r * 8);
+      grad.addColorStop(0, `rgba(64,224,208,${flicker * 0.8})`);
+      grad.addColorStop(0.5, `rgba(18,160,184,${flicker * 0.3})`);
+      grad.addColorStop(1, 'rgba(18,160,184,0)');
+      ctx.beginPath();
+      ctx.arc(px, py, p.r * 8, 0, Math.PI * 2);
+      ctx.fillStyle = grad;
+      ctx.fill();
+
+      // Core
+      ctx.beginPath();
+      ctx.arc(px, py, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(180,255,248,${flicker})`;
+      ctx.fill();
+    });
+
+    t++;
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ── ATLANTIS MAP CANVAS ──
+(function() {
+  const canvas = document.getElementById('atlantisCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = 680, H = 420;
+  canvas.width = W; canvas.height = H;
+  const cx = W / 2, cy = H / 2;
+
+  const rings = [
+    { r: 50,  color: '#40e0d0', fill: 'rgba(64,224,208,0.2)', label: 'Royal Citadel', desc: 'The innermost island — home of Poseidon\'s palace and the sacred temple of Cleito. The founding couple of the Atlantean royal line dwelt here.' },
+    { r: 90,  color: '#12a0b8', fill: 'rgba(18,160,184,0.1)', label: 'Inner Sea Ring', desc: 'The first water ring — 300 feet wide, navigable by ships. Bridged at the four cardinal points by roads leading to the outer rings.' },
+    { r: 130, color: '#0a6878', fill: 'rgba(10,104,120,0.12)', label: 'Middle Land Ring', desc: 'A ring of land 3 stadia wide — containing horse racing tracks, gymnasia, barracks for the royal guard, and hot and cold springs.' },
+    { r: 175, color: '#063050', fill: 'rgba(6,48,80,0.15)', label: 'Outer Sea Ring', desc: 'The largest water ring — 600 feet wide, connected to the outer ocean by a great canal 300 feet wide and 100 feet deep.' },
+    { r: 210, color: '#0a6878', fill: 'rgba(10,104,120,0.08)', label: 'Outer Plain', desc: 'The outermost land ring — containing the great wall of orichalcum (a lost metal), and beyond it the vast agricultural plain stretching to the mountains.' },
+  ];
+
+  let hovered = null, t = 0;
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    t += 0.4;
+
+    // Ocean background
+    const bg = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.max(W,H));
+    bg.addColorStop(0, '#041828');
+    bg.addColorStop(1, '#010810');
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, W, H);
+
+    // Draw rings outer → inner
+    [...rings].reverse().forEach((ring, ri) => {
+      const i = rings.length - 1 - ri;
+      const isHov = hovered === ring;
+      const pulse = isHov ? Math.sin(t * 0.08) * 4 : 0;
+
+      ctx.beginPath();
+      ctx.arc(cx, cy, ring.r + pulse, 0, Math.PI * 2);
+      ctx.fillStyle = ring.fill;
+      ctx.fill();
+      ctx.strokeStyle = isHov ? ring.color : ring.color + '80';
+      ctx.lineWidth = isHov ? 2 : 1;
+      ctx.stroke();
+
+      // Wave animation on water rings (even indices)
+      if (i % 2 === 1) {
+        ctx.beginPath();
+        for (let a = 0; a < Math.PI*2; a += 0.1) {
+          const wave = Math.sin(a * 6 + t * 0.05) * 2;
+          const r = ring.r + pulse + wave;
+          const x = cx + Math.cos(a) * r;
+          const y = cy + Math.sin(a) * r;
+          if (a === 0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+        }
+        ctx.strokeStyle = ring.color + '30';
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+      }
+
+      // Label on right side
+      if (isHov) {
+        ctx.font = '11px "Cinzel", serif';
+        ctx.fillStyle = ring.color;
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'middle';
+        ctx.shadowBlur = 8; ctx.shadowColor = ring.color;
+        ctx.fillText(ring.label, cx + ring.r + pulse + 10, cy);
+        ctx.shadowBlur = 0;
+      }
+    });
+
+    // Cardinal bridges
+    [0, 90, 180, 270].forEach(angle => {
+      const rad = angle * Math.PI / 180;
+      ctx.beginPath();
+      ctx.moveTo(cx + Math.cos(rad) * 50, cy + Math.sin(rad) * 50);
+      ctx.lineTo(cx + Math.cos(rad) * 210, cy + Math.sin(rad) * 210);
+      ctx.strokeStyle = 'rgba(64,224,208,0.2)';
+      ctx.lineWidth = 3;
+      ctx.stroke();
+    });
+
+    // Poseidon temple hint at center
+    ctx.font = 'bold 16px serif';
+    ctx.fillStyle = 'rgba(64,224,208,0.7)';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.shadowBlur = 12; ctx.shadowColor = '#40e0d0';
+    ctx.fillText('𓇳', cx, cy);
+    ctx.shadowBlur = 0;
+
+    requestAnimationFrame(draw);
+  }
+
+  canvas.addEventListener('mousemove', e => {
+    const rect = canvas.getBoundingClientRect();
+    const mx = (e.clientX - rect.left) * (W / rect.width);
+    const my = (e.clientY - rect.top)  * (H / rect.height);
+    const dist = Math.sqrt((mx-cx)**2 + (my-cy)**2);
+    hovered = null;
+    for (let i = 0; i < rings.length; i++) {
+      const inner = i === 0 ? 0 : rings[i-1].r;
+      if (dist >= inner && dist < rings[i].r) { hovered = rings[i]; break; }
+    }
+    const info = document.getElementById('mapInfo');
+    if (hovered) { info.textContent = `${hovered.label} — ${hovered.desc}`; info.style.color = hovered.color; }
+    else { info.textContent = 'Hover a ring to explore Plato\'s Atlantis'; info.style.color = ''; }
+  });
+  canvas.addEventListener('mouseleave', () => {
+    hovered = null;
+    document.getElementById('mapInfo').textContent = 'Hover a ring to explore Plato\'s Atlantis';
+    document.getElementById('mapInfo').style.color = '';
+  });
+
+  draw();
+})();
+
+// ── HORIZONTAL SCROLL DRAG ──
+(function() {
+  const track = document.getElementById('hscrollTrack');
+  if (!track) return;
+  let isDown = false, startX, scrollLeft;
+  track.addEventListener('mousedown', e => { isDown=true; startX=e.pageX-track.offsetLeft; scrollLeft=track.scrollLeft; });
+  track.addEventListener('mouseleave', () => isDown=false);
+  track.addEventListener('mouseup', () => isDown=false);
+  track.addEventListener('mousemove', e => {
+    if (!isDown) return; e.preventDefault();
+    const x = e.pageX - track.offsetLeft;
+    track.scrollLeft = scrollLeft - (x - startX) * 1.5;
+  });
+})();
+
+// ── CABIRIC MYSTERY CANVAS ──
+(function() {
+  const canvas = document.getElementById('cabiricCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = 300, H = 300, cx = 150, cy = 150;
+
+  const kabiri = [
+    { angle: 270, r: 80, name: 'Axieros',  color: '#40e0d0', desc: 'Demeter aspect — the receiving principle, earth, the vessel' },
+    { angle: 30,  r: 80, name: 'Axiokersa',color: '#c8a840', desc: 'Persephone aspect — the soul in descent, the middle world' },
+    { angle: 150, r: 80, name: 'Axiokersos',color:'#c84830', desc: 'Hades aspect — death, transformation, the hidden treasure' },
+    { angle: 90,  r: 40, name: 'Kadmilos', color: '#a8c8d8', desc: 'Hermes aspect — the messenger who carries the soul between worlds' },
+  ];
+
+  let hovered = null, t = 0;
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    t += 0.5;
+
+    // Background
+    ctx.fillStyle = '#010810';
+    ctx.fillRect(0, 0, W, H);
+
+    // Star of Samothrace
+    ctx.beginPath();
+    ctx.arc(cx, cy, 125, 0, Math.PI*2);
+    ctx.strokeStyle = 'rgba(64,224,208,0.06)';
+    ctx.lineWidth = 1; ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(cx, cy, 95, 0, Math.PI*2);
+    ctx.strokeStyle = 'rgba(64,224,208,0.06)';
+    ctx.lineWidth = 0.5; ctx.stroke();
+
+    // Triangle connecting the three outer Kabiri
+    ctx.beginPath();
+    kabiri.slice(0,3).forEach((k, i) => {
+      const rad = k.angle * Math.PI / 180 + t * 0.004;
+      const x = cx + Math.cos(rad) * k.r;
+      const y = cy + Math.sin(rad) * k.r;
+      if (i === 0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    });
+    ctx.closePath();
+    ctx.strokeStyle = 'rgba(64,224,208,0.15)'; ctx.lineWidth=0.8; ctx.stroke();
+
+    // Draw all Kabiri
+    kabiri.forEach(k => {
+      const rad = k.angle * Math.PI / 180 + t * 0.004;
+      const x = cx + Math.cos(rad) * k.r;
+      const y = cy + Math.sin(rad) * k.r;
+      const isHov = hovered === k;
+      const rr = isHov ? 22 : 15;
+
+      // Line to center
+      ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(x, y);
+      ctx.strokeStyle = isHov ? k.color+'55' : k.color+'20';
+      ctx.lineWidth = isHov ? 1 : 0.5; ctx.stroke();
+
+      // Circle
+      ctx.beginPath(); ctx.arc(x, y, rr, 0, Math.PI*2);
+      ctx.fillStyle = isHov ? k.color+'33' : k.color+'11';
+      ctx.fill();
+      ctx.strokeStyle = isHov ? k.color : k.color+'55';
+      ctx.lineWidth = isHov ? 1.5 : 0.7; ctx.stroke();
+
+      // Name
+      ctx.font = `${isHov?11:9}px 'Cinzel', serif`;
+      ctx.fillStyle = isHov ? k.color : k.color+'aa';
+      ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.shadowBlur = isHov ? 10 : 0; ctx.shadowColor = k.color;
+      ctx.fillText(k.name, x, y);
+      ctx.shadowBlur = 0;
+    });
+
+    // Center glyph
+    ctx.font = '20px serif';
+    ctx.fillStyle = 'rgba(64,224,208,0.7)';
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.shadowBlur=12; ctx.shadowColor='#40e0d0';
+    ctx.fillText('⚓', cx, cy);
+    ctx.shadowBlur=0;
+
+    requestAnimationFrame(draw);
+  }
+
+  canvas.addEventListener('mousemove', e => {
+    const rect = canvas.getBoundingClientRect();
+    const mx = (e.clientX-rect.left)*(W/rect.width);
+    const my = (e.clientY-rect.top)*(H/rect.height);
+    hovered = null;
+    kabiri.forEach(k => {
+      const rad = k.angle*Math.PI/180 + (Date.now()*0.0005*0.004*1000/1000); // approx
+      const x = cx+Math.cos(k.angle*Math.PI/180)*k.r;
+      const y = cy+Math.sin(k.angle*Math.PI/180)*k.r;
+      const dx=mx-x, dy=my-y;
+      if(Math.sqrt(dx*dx+dy*dy)<22) hovered=k;
+    });
+    const note = canvas.nextElementSibling;
+    if(hovered) { note.textContent=`${hovered.name} — ${hovered.desc}`; note.style.color=hovered.color; }
+    else { note.textContent='Hover to reveal the Kabiri'; note.style.color=''; }
+  });
+  canvas.addEventListener('mouseleave', () => {
+    hovered=null;
+    canvas.nextElementSibling.textContent='Hover to reveal the Kabiri';
+    canvas.nextElementSibling.style.color='';
+  });
+
+  draw();
+})();
+</script>
+</body>
+</html>
