@@ -1,11 +1,25 @@
 {
   "entries": [
     {
-      "date": "2026.06.02",
+      "date": "2026.06.08",
       "title": "THE SECRET TEACHINGS OF ALL AGES",
       "gloss": "Manly P. Hall // 1928",
       "tag": "BOOK",
-      "path": "/spiritus/codex/secret-teachings/"
+      "path": "/aether/codex/secret-teachings/"
+    },
+    {
+      "date": "2026.06.08",
+      "title": "ATOMIC HABITS — FIELD MANUAL",
+      "gloss": "James Clear // 2018",
+      "tag": "BOOK",
+      "path": "/aether/codex/atomic-habits-field-manual.html"
+    },
+    {
+      "date": "2026.06.08",
+      "title": "THE COURAGE TO BE DISLIKED — FIELD MANUAL",
+      "gloss": "Ichiro Kishimi & Fumitake Koga // 2013",
+      "tag": "BOOK",
+      "path": "/aether/codex/courage-to-be-disliked-field-manual.html"
     }
   ]
 }

@@ -1,0 +1,1405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THE TECHNIQUES // NODE_03</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;700&family=Outfit:wght@200;300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --nerv-bg: #0A0B0D;
+    --nerv-panel: #11131A;
+    --nerv-border: #1E2230;
+    --nerv-green: #C7FF43;
+    --nerv-green-dim: #7A9E29;
+    --nerv-amber: #FF6B1A;
+    --nerv-cyan: #43E5FF;
+    --nerv-purple: #C77DFF;
+    --nerv-rose: #FF5577;
+    --nerv-text: #D4D7DD;
+    --nerv-text-dim: #6B6F78;
+    --nerv-warning: #FF3838;
+    --grid-line: rgba(199, 255, 67, 0.04);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--nerv-bg);
+    color: var(--nerv-text);
+    font-family: 'DM Sans', sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+    min-height: 100vh;
+    position: relative;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(transparent 50%, rgba(199, 255, 67, 0.015) 50%);
+    background-size: 100% 4px;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.5;
+  }
+
+  .status-bar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 32px;
+    background: var(--nerv-panel);
+    border-bottom: 1px solid var(--nerv-border);
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--nerv-green-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    z-index: 100;
+    gap: 24px;
+  }
+
+  .status-item { display: flex; align-items: center; gap: 8px; }
+  .status-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--nerv-green); box-shadow: 0 0 8px var(--nerv-green);
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+  @keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+  .status-bar .right { margin-left: auto; display: flex; gap: 24px; }
+  .status-bar a { color: var(--nerv-green-dim); text-decoration: none; transition: color 0.2s; }
+  .status-bar a:hover { color: var(--nerv-green); }
+
+  .container {
+    position: relative;
+    z-index: 2;
+    padding: 80px 5vw 60px;
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+
+  .header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 40px;
+    margin-bottom: 60px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--nerv-border);
+  }
+
+  .breadcrumb {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--nerv-text-dim);
+    letter-spacing: 0.2em;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+  .breadcrumb a { color: var(--nerv-green-dim); text-decoration: none; transition: color 0.2s; }
+  .breadcrumb a:hover { color: var(--nerv-green); }
+  .breadcrumb .sep { margin: 0 10px; color: var(--nerv-border); }
+  .breadcrumb .current { color: var(--nerv-green); }
+
+  .designation {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--nerv-green);
+    letter-spacing: 0.2em;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .designation::before { content: '> '; }
+
+  h1.title {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 200;
+    font-size: clamp(48px, 8vw, 112px);
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+  }
+  h1.title .accent { color: var(--nerv-green); font-weight: 700; display: block; }
+
+  .subtitle {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--nerv-text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-top: 24px;
+    max-width: 600px;
+  }
+
+  .header-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--nerv-text-dim);
+    text-align: right;
+    line-height: 2;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .header-meta .val { color: var(--nerv-green); }
+
+  .corner {
+    position: absolute;
+    width: 16px; height: 16px;
+    border: 1.5px solid var(--nerv-green);
+  }
+  .corner.tl { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+  .corner.tr { top: -1px; right: -1px; border-left: none; border-bottom: none; }
+  .corner.bl { bottom: -1px; left: -1px; border-right: none; border-top: none; }
+  .corner.br { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+
+  /* INTRO */
+  .intro {
+    background: var(--nerv-panel);
+    border: 1px solid var(--nerv-border);
+    padding: 40px 48px;
+    margin-bottom: 60px;
+    position: relative;
+  }
+
+  .intro-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--nerv-green);
+    letter-spacing: 0.25em;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+
+  .intro p {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 300;
+    font-size: clamp(18px, 1.7vw, 21px);
+    line-height: 1.55;
+    color: var(--nerv-text);
+    margin-bottom: 16px;
+    max-width: 1000px;
+  }
+
+  .intro p:last-child { margin-bottom: 0; }
+  .intro em { color: var(--nerv-green); font-style: normal; font-weight: 500; }
+
+  /* ================================================
+     SELECTOR CONTROL
+     ================================================ */
+  .selector-panel {
+    background: var(--nerv-panel);
+    border: 1px solid var(--nerv-green);
+    padding: 32px 40px;
+    margin-bottom: 64px;
+    position: relative;
+  }
+
+  .selector-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--nerv-green);
+    letter-spacing: 0.25em;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+
+  .selector-prompt {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 300;
+    font-size: clamp(20px, 2.4vw, 28px);
+    line-height: 1.2;
+    margin-bottom: 28px;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+  }
+
+  .selector-prompt strong { color: var(--nerv-green); font-weight: 700; }
+
+  .selector-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+  }
+
+  .selector-button {
+    background: transparent;
+    border: 1px solid var(--nerv-border);
+    color: var(--nerv-text);
+    padding: 20px 18px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .selector-button::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, currentColor 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.25s;
+    pointer-events: none;
+  }
+
+  .selector-button .btn-num {
+    display: block;
+    font-size: 9px;
+    color: var(--nerv-text-dim);
+    margin-bottom: 8px;
+    letter-spacing: 0.2em;
+  }
+
+  .selector-button .btn-name {
+    font-size: 14px;
+    font-weight: 500;
+    display: block;
+    line-height: 1.2;
+  }
+
+  .selector-button .btn-count {
+    font-size: 9px;
+    color: var(--nerv-text-dim);
+    margin-top: 6px;
+    display: block;
+  }
+
+  .selector-button[data-state="all"]:hover,
+  .selector-button[data-state="all"].active {
+    border-color: var(--nerv-green); color: var(--nerv-green);
+    background: rgba(199, 255, 67, 0.05);
+  }
+
+  .selector-button[data-state="calm"]:hover,
+  .selector-button[data-state="calm"].active {
+    border-color: var(--nerv-cyan); color: var(--nerv-cyan);
+    background: rgba(67, 229, 255, 0.05);
+  }
+
+  .selector-button[data-state="energize"]:hover,
+  .selector-button[data-state="energize"].active {
+    border-color: var(--nerv-amber); color: var(--nerv-amber);
+    background: rgba(255, 107, 26, 0.05);
+  }
+
+  .selector-button[data-state="focus"]:hover,
+  .selector-button[data-state="focus"].active {
+    border-color: var(--nerv-green); color: var(--nerv-green);
+    background: rgba(199, 255, 67, 0.05);
+  }
+
+  .selector-button[data-state="release"]:hover,
+  .selector-button[data-state="release"].active {
+    border-color: var(--nerv-rose); color: var(--nerv-rose);
+    background: rgba(255, 85, 119, 0.05);
+  }
+
+  /* Filter status display */
+  .filter-status {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--nerv-text-dim);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px dashed var(--nerv-border);
+  }
+
+  .filter-status .filter-active { color: var(--nerv-green); }
+  .filter-status .count { color: var(--nerv-green); }
+
+  /* ================================================
+     TECHNIQUE CATALOGUE
+     ================================================ */
+  .technique-catalogue {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+    gap: 20px;
+    margin-bottom: 80px;
+  }
+
+  .technique-card {
+    background: var(--nerv-panel);
+    border: 1px solid var(--nerv-border);
+    padding: 32px 28px;
+    position: relative;
+    transition: all 0.4s ease;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .technique-card.hidden {
+    display: none;
+  }
+
+  .technique-card[data-cat="calm"]:hover { border-color: var(--nerv-cyan); }
+  .technique-card[data-cat="energize"]:hover { border-color: var(--nerv-amber); }
+  .technique-card[data-cat="focus"]:hover { border-color: var(--nerv-green); }
+  .technique-card[data-cat="release"]:hover { border-color: var(--nerv-rose); }
+
+  .tech-tag {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border: 1px solid;
+  }
+
+  .technique-card[data-cat="calm"] .tech-tag { color: var(--nerv-cyan); border-color: var(--nerv-cyan); }
+  .technique-card[data-cat="energize"] .tech-tag { color: var(--nerv-amber); border-color: var(--nerv-amber); }
+  .technique-card[data-cat="focus"] .tech-tag { color: var(--nerv-green); border-color: var(--nerv-green); }
+  .technique-card[data-cat="release"] .tech-tag { color: var(--nerv-rose); border-color: var(--nerv-rose); }
+
+  .tech-header {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px dashed var(--nerv-border);
+  }
+
+  .tech-id {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--nerv-green);
+    letter-spacing: 0.2em;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+
+  .tech-sanskrit {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    margin-top: 4px;
+  }
+
+  .technique-card[data-cat="calm"] .tech-sanskrit { color: var(--nerv-cyan); }
+  .technique-card[data-cat="energize"] .tech-sanskrit { color: var(--nerv-amber); }
+  .technique-card[data-cat="focus"] .tech-sanskrit { color: var(--nerv-green); }
+  .technique-card[data-cat="release"] .tech-sanskrit { color: var(--nerv-rose); }
+
+  .tech-name {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: clamp(28px, 3vw, 36px);
+    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    color: var(--nerv-text);
+    margin-bottom: 6px;
+  }
+
+  .tech-translation {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 300;
+    font-size: 14px;
+    color: var(--nerv-text-dim);
+    font-style: italic;
+    margin-bottom: 12px;
+  }
+
+  /* Rhythm display */
+  .tech-rhythm {
+    background: var(--nerv-bg);
+    border: 1px solid var(--nerv-border);
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .rhythm-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--nerv-text-dim);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .rhythm-pattern {
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    color: var(--nerv-green);
+    letter-spacing: 0.1em;
+    font-weight: 500;
+  }
+
+  .rhythm-pattern .sep {
+    color: var(--nerv-text-dim);
+    margin: 0 4px;
+  }
+
+  /* Body content */
+  .tech-body {
+    flex-grow: 1;
+  }
+
+  .tech-section {
+    margin-bottom: 16px;
+  }
+
+  .tech-section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--nerv-text-dim);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .tech-section-body {
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: var(--nerv-text);
+  }
+
+  .tech-section-body em {
+    color: var(--nerv-green);
+    font-style: normal;
+    font-weight: 500;
+  }
+
+  .tech-mechanism {
+    background: rgba(199, 255, 67, 0.03);
+    border-left: 2px solid var(--nerv-green);
+    padding: 12px 16px;
+    margin: 16px 0;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    line-height: 1.6;
+    color: var(--nerv-text);
+  }
+
+  .tech-mechanism::before {
+    content: '// MECHANISM';
+    display: block;
+    color: var(--nerv-green);
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    margin-bottom: 6px;
+  }
+
+  /* Teleology line per card */
+  .tech-teleology {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px dashed var(--nerv-amber);
+    font-family: 'DM Mono', monospace;
+    font-size: 10.5px;
+    line-height: 1.6;
+    color: var(--nerv-text);
+    letter-spacing: 0.03em;
+  }
+
+  .tech-teleology::before {
+    content: '// PURPOSE_INQUIRY';
+    display: block;
+    color: var(--nerv-amber);
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
+
+  /* Step instructions */
+  .tech-steps {
+    margin: 14px 0;
+    padding-left: 0;
+    list-style: none;
+    counter-reset: step;
+  }
+
+  .tech-steps li {
+    counter-increment: step;
+    position: relative;
+    padding-left: 28px;
+    margin-bottom: 8px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--nerv-text);
+  }
+
+  .tech-steps li::before {
+    content: counter(step, decimal-leading-zero);
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--nerv-green);
+    letter-spacing: 0.1em;
+  }
+
+  /* SECTION HEADERS / DIVIDERS */
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--nerv-green);
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .section-label::before { content: '[ '; color: var(--nerv-text-dim); }
+  .section-label::after { content: ' ]'; color: var(--nerv-text-dim); }
+
+  .section-title {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 300;
+    font-size: clamp(32px, 4.5vw, 56px);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .section-title strong { color: var(--nerv-green); font-weight: 700; }
+
+  .section-intro {
+    color: var(--nerv-text-dim);
+    font-size: 15px;
+    max-width: 900px;
+    line-height: 1.7;
+    margin-bottom: 40px;
+  }
+
+  /* TELEOLOGY MAIN */
+  .teleology {
+    background:
+      repeating-linear-gradient(
+        45deg,
+        rgba(255, 107, 26, 0.02),
+        rgba(255, 107, 26, 0.02) 10px,
+        transparent 10px,
+        transparent 20px
+      ),
+      var(--nerv-panel);
+    border: 1px solid var(--nerv-amber);
+    padding: 40px 48px;
+    margin-bottom: 80px;
+    position: relative;
+  }
+
+  .teleology .corner { border-color: var(--nerv-amber); }
+
+  .teleology-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--nerv-amber);
+    letter-spacing: 0.25em;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+
+  .teleology-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 28px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    margin-bottom: 20px;
+  }
+
+  .teleology-title strong { color: var(--nerv-amber); font-weight: 700; }
+
+  .teleology-body {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--nerv-text);
+    max-width: 900px;
+  }
+  .teleology-body p { margin-bottom: 12px; }
+  .teleology-body em { color: var(--nerv-amber); font-style: normal; }
+
+  /* Nav */
+  .nav-back {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 32px 0;
+    border-top: 1px solid var(--nerv-border);
+    margin-bottom: 40px;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .nav-link {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--nerv-green);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.2s;
+    padding: 12px 20px;
+    border: 1px solid var(--nerv-border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .nav-link:hover {
+    border-color: var(--nerv-green);
+    background: rgba(199, 255, 67, 0.05);
+  }
+
+  .footer {
+    border-top: 1px solid var(--nerv-border);
+    padding-top: 32px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 24px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--nerv-text-dim);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  .footer .athanor { color: var(--nerv-green); }
+
+  /* Mobile */
+  @media (max-width: 900px) {
+    .container { padding: 60px 5vw 40px; }
+    .header { grid-template-columns: 1fr; }
+    .header-meta { text-align: left; }
+    .intro, .selector-panel { padding: 28px 24px; }
+    .selector-grid { grid-template-columns: 1fr 1fr; }
+    .technique-catalogue { grid-template-columns: 1fr; }
+    .teleology { padding: 28px 24px; }
+    .status-bar { font-size: 9px; padding: 0 12px; gap: 12px; }
+    .status-bar .right { display: none; }
+    .tech-rhythm { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<div class="status-bar">
+  <div class="status-item"><span class="status-dot"></span>NODE_03 // TECHNIQUE_CATALOGUE</div>
+  <div class="status-item">TECHNIQUES</div>
+  <div class="status-item">SYNC.READY</div>
+  <div class="right">
+    <div class="status-item"><a href="./the-bridge-between-worlds.html">← RETURN TO HUB</a></div>
+    <div class="status-item">ATHANOR.ARCHIVE</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <header class="header">
+    <div>
+      <div class="breadcrumb">
+        <a href="./the-bridge-between-worlds.html">THE BRIDGE</a>
+        <span class="sep">/</span>
+        <span class="current">NODE_03 / TECHNIQUES</span>
+      </div>
+      <div class="designation">FILE_03 // TECHNIQUE_CATALOGUE // OPERATOR_MANUAL</div>
+      <h1 class="title">
+        The<br>
+        <span class="accent">Techniques</span>
+      </h1>
+      <p class="subtitle">Twelve pranayama practices specified by mechanism, rhythm, and intended effect. Filter by state. Each card includes the Adlerian inquiry — what is this in service of, before it is what it is.</p>
+    </div>
+    <div class="header-meta">
+      Class.................<span class="val">CATALOGUE</span><br>
+      Techniques.Indexed....<span class="val">12</span><br>
+      States.Mapped.........<span class="val">04</span><br>
+      Interactive...........<span class="val">YES</span><br>
+      Lineage...............<span class="val">CROSS-TRADITION</span>
+    </div>
+  </header>
+
+  <!-- INTRO -->
+  <section class="intro">
+    <span class="corner tl"></span><span class="corner tr"></span>
+    <span class="corner bl"></span><span class="corner br"></span>
+    <div class="intro-label">// PREMISE</div>
+    <p>A catalogue is not a curriculum. The techniques below are not a sequence to work through — they are a set of <em>levers</em>, each engineered to produce a specific physiological and felt effect. The skilled practitioner does not memorize them all and apply them randomly. They learn the small subset that serves the states they actually need to engineer, and they keep the rest available for when the need arises.</p>
+    <p>Every technique here has a clear mechanism and an intended outcome. None is universally "good for you." <em>The question is always: what state does my system require, and which lever produces it?</em></p>
+  </section>
+
+  <!-- ================================================
+       SELECTOR
+       ================================================ -->
+  <section class="selector-panel">
+    <span class="corner tl"></span><span class="corner tr"></span>
+    <span class="corner bl"></span><span class="corner br"></span>
+    <div class="selector-label">// QUERY_INTERFACE</div>
+    <h2 class="selector-prompt">What State Does The <strong>Pilot</strong> Require?</h2>
+
+    <div class="selector-grid">
+      <button class="selector-button active" data-state="all">
+        <span class="btn-num">[ FILTER_00 ]</span>
+        <span class="btn-name">ALL TECHNIQUES</span>
+        <span class="btn-count">12 indexed</span>
+      </button>
+      <button class="selector-button" data-state="calm">
+        <span class="btn-num">[ FILTER_01 ]</span>
+        <span class="btn-name">CALM / DOWNREGULATE</span>
+        <span class="btn-count">6 techniques</span>
+      </button>
+      <button class="selector-button" data-state="energize">
+        <span class="btn-num">[ FILTER_02 ]</span>
+        <span class="btn-name">ENERGIZE / ACTIVATE</span>
+        <span class="btn-count">3 techniques</span>
+      </button>
+      <button class="selector-button" data-state="focus">
+        <span class="btn-num">[ FILTER_03 ]</span>
+        <span class="btn-name">FOCUS / STEADY</span>
+        <span class="btn-count">2 techniques</span>
+      </button>
+      <button class="selector-button" data-state="release">
+        <span class="btn-num">[ FILTER_04 ]</span>
+        <span class="btn-name">RELEASE / CATHARSIS</span>
+        <span class="btn-count">1 technique</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- Filter status -->
+  <div class="filter-status">
+    <div>// CURRENT FILTER: <span class="filter-active" id="filterDisplay">ALL TECHNIQUES</span></div>
+    <div>VISIBLE: <span class="count" id="countDisplay">12 / 12</span></div>
+  </div>
+
+  <!-- ================================================
+       TECHNIQUE CATALOGUE
+       ================================================ -->
+  <div class="technique-catalogue" id="catalogue">
+
+    <!-- ========= CALM ========= -->
+
+    <!-- NADI SHODHANA -->
+    <article class="technique-card" data-cat="calm">
+      <span class="corner tl"></span><span class="corner br"></span>
+      <span class="tech-tag">CALM</span>
+      <div class="tech-header">
+        <div class="tech-id">[ TECH_01 // BALANCING ]</div>
+        <div class="tech-sanskrit">नाडी शोधन</div>
+        <h3 class="tech-name">Nadi Shodhana</h3>
+        <div class="tech-translation">"channel cleansing" — alternate nostril breath</div>
+      </div>
+
+      <div class="tech-rhythm">
+        <span class="rhythm-label">RHYTHM</span>
+        <span class="rhythm-pattern">4<span class="sep">·</span>4<span class="sep">·</span>4<span class="sep">·</span>4</span>
+        <span class="rhythm-label">L-NOSTRIL → R-NOSTRIL</span>
+      </div>
+
+      <div class="tech-body">
+        <div class="tech-section">
+          <div class="tech-section-label">// FUNCTION</div>
+          <div class="tech-section-body">
+            The keystone balancing practice. Alternating inhalation and exhalation between nostrils <em>deliberately equalizes ida and pingala</em>, the lunar and solar channels — drawing the system toward sushumna, the central channel of integration.
+          </div>
+        </div>
+
+        <div class="tech-mechanism">
+          Alternate nostril breathing has been shown to balance hemispheric activity, raise HRV, lower blood pressure, and bring the autonomic nervous system into measurable coherence within 5-10 minutes of practice.
+        </div>
+
+        <ol class="tech-steps">
+          <li>Right hand to face. Right thumb closes right nostril.</li>
+          <li>Inhale through left nostril (4 count).</li>
+          <li>Ring finger closes left. Release right. Exhale right (4).</li>
+          <li>Inhale right (4). Close right. Exhale left (4).</li>
+          <li>This is one round. Begin at 5 rounds. Build to 10-15.</li>
+        </ol>
+
+        <div class="tech-teleology">
+          Used in service of <em>integration</em>: re-finding the center after a fragmenting day. If used compulsively to feel "balanced," it can mask the question of <em>what unbalanced the system in the first place</em>.
+        </div>
+      </div>
+    </article>
+
+    <!-- BHRAMARI -->
+    <article class="technique-card" data-cat="calm">
+      <span class="corner tl"></span><span class="corner br"></span>
+      <span class="tech-tag">CALM</span>
+      <div class="tech-header">
+        <div class="tech-id">[ TECH_02 // VAGAL_VIBRATION ]</div>
+        <div class="tech-sanskrit">भ्रामरी</div>
+        <h3 class="tech-name">Bhramari</h3>
+        <div class="tech-translation">"bee breath" — humming exhalation</div>
+      </div>
+
+      <div class="tech-rhythm">
+        <span class="rhythm-label">RHYTHM</span>
+        <span class="rhythm-pattern">4<span class="sep">·</span>8<span class="sep">~</span>HUM</span>
+        <span class="rhythm-label">NASAL · CLOSED EYES</span>
+      </div>
+
+      <div class="tech-body">
+        <div class="tech-section">
+          <div class="tech-section-label">// FUNCTION</div>
+          <div class="tech-section-body">
+            Slow nasal inhale followed by a long, audible humming exhale. The vibration travels through the skull, the throat, and the chest. Strongly <em>parasympathetic-engaging</em> and uniquely effective at quieting cortical chatter.
+          </div>
+        </div>
+
+        <div class="tech-mechanism">
+          Humming increases nasal nitric oxide output ~15-fold (Weitzberg & Lundberg, 2002). The laryngeal vibration directly stimulates the vagus through its recurrent laryngeal branch. The lengthened exhale further engages baroreceptor reflex pathways.
+        </div>
+
+        <ol class="tech-steps">
+          <li>Sit comfortably. Eyes closed. Optionally, fingers lightly over ears.</li>
+          <li>Inhale slowly through nose (4 count).</li>
+          <li>Exhale with a steady, low "mmmm" humming sound (8+ count).</li>
+          <li>Feel the vibration in the skull, throat, chest.</li>
+          <li>5-10 rounds. Best before sleep or in moments of cortical overload.</li>
+        </ol>
+
+        <div class="tech-teleology">
+          Used in service of <em>quieting</em> — and unusually effective for it. Worth examining if the quieting is sought to integrate experience, or to mute a signal that should be heard.
+        </div>
+      </div>
+    </article>
+
+    <!-- COHERENT BREATHING -->
+    <article class="technique-card" data-cat="calm">
+      <span class="corner tl"></span><span class="corner br"></span>
+      <span class="tech-tag">CALM</span>
+      <div class="tech-header">
+        <div class="tech-id">[ TECH_03 // RESONANCE ]</div>
+        <div class="tech-sanskrit">[ modern / clinical ]</div>
+        <h3 class="tech-name">Coherent Breathing</h3>
+        <div class="tech-translation">resonance breathing — ~6 breaths per minute</div>
+      </div>
+
+      <div class="tech-rhythm">
+        <span class="rhythm-label">RHYTHM</span>
+        <span class="rhythm-pattern">5.5<span class="sep">·</span>5.5</span>
+        <span class="rhythm-label">~6 BR/MIN</span>
+      </div>
+
+      <div class="tech-body">
+        <div class="tech-section">
+          <div class="tech-section-label">// FUNCTION</div>
+          <div class="tech-section-body">
+            The simplest possible practice: <em>equal inhale and exhale, around five and a half seconds each</em>, producing approximately six breaths per minute. At this rate, heart rate variability peaks. The cardiovascular and respiratory systems enter resonance.
+          </div>
+        </div>
+
+        <div class="tech-mechanism">
+          The 0.1 Hz resonant frequency of the baroreflex aligns with ~6 breaths/min. At this rate, blood pressure oscillation, breathing, and HRV all phase-lock — producing maximum autonomic coherence with minimum effort.
+        </div>
+
+        <ol class="tech-steps">
+          <li>No special preparation required.</li>
+          <li>Inhale through nose for ~5.5 seconds.</li>
+          <li>Exhale through nose for ~5.5 seconds.</li>
+          <li>No retention. No effort. Just the slow steady rhythm.</li>
+          <li>Begin with 5 minutes. Extend to 20 if desired.</li>
+        </ol>
+
+        <div class="tech-teleology">
+          Used in service of <em>baseline regulation</em>. The closest thing to a universally beneficial practice. Almost no failure modes — but precisely because of that, can be relied on as a way to manage symptoms without engaging causes.
+        </div>
+      </div>
+    </article>
+
+    <!-- 4-7-8 -->
+    <article class="technique-card" data-cat="calm">
+      <span class="corner tl"></span><span class="corner br"></span>
+      <span class="tech-tag">CALM</span>
+      <div class="tech-header">
+        <div class="tech-id">[ TECH_04 // EXTENDED_EXHALE ]</div>
+        <div class="tech-sanskrit">[ modern / clinical ]</div>
+        <h3 class="tech-name">4 · 7 · 8</h3>
+        <div class="tech-translation">inhale 4 · hold 7 · exhale 8</div>
+      </div>
+
+      <div class="tech-rhythm">
+        <span class="rhythm-label">RHYTHM</span>
+        <span class="rhythm-pattern">4<span class="sep">·</span>7<span class="sep">·</span>8</span>
+        <span class="rhythm-label">FOR FALLING ASLEEP</span>
+      </div>
+
+      <div class="tech-body">
+        <div class="tech-section">
+          <div class="tech-section-label">// FUNCTION</div>
+          <div class="tech-section-body">
+            Popularized by Andrew Weil, drawing from yogic retention practice. A short inhale, moderate retention, and <em>doubled exhale</em>. The 8-count exhale is the active ingredient — it surges parasympathetic engagement reliably enough to be used clinically for sleep induction.
+          </div>
+        </div>
+
+        <div class="tech-mechanism">
+          The lengthened exhale (twice the inhale) reliably triggers vagal afferent firing via baroreceptors and pulmonary stretch receptors. The hold builds mild CO₂ accumulation, deepening the subsequent release.
+        </div>
+
+        <ol class="tech-steps">
+          <li>Inhale silently through nose for 4 counts.</li>
+          <li>Hold the breath for 7 counts.</li>
+          <li>Exhale through pursed lips (audible) for 8 counts.</li>
+          <li>4 cycles maximum at first. Lying in bed.</li>
+          <li>Effect typically reached within 2-3 cycles.</li>
+        </ol>
+
+        <div class="tech-teleology">
+          Used in service of <em>downshifting</em> at the threshold of sleep. Effective and benign. Becomes worth examining if needed nightly as the only way to fall asleep — that is the system telling you something about the day, not about the technique.
+        </div>
+      </div>
+    </article>
+
+    <!-- PHYSIOLOGICAL SIGH -->
+    <article class="technique-card" data-cat="calm">
+      <span class="corner tl"></span><span class="corner br"></span>
+      <span class="tech-tag">CALM</span>
+      <div class="tech-header">
+        <div class="tech-id">[ TECH_05 // FASTEST_RESET ]</div>
+        <div class="tech-sanskrit">[ modern / Feinberg, Huberman ]</div>
+        <h3 class="tech-name">Physiological Sigh</h3>
+        <div class="tech-translation">double-inhale + long exhale</div>
+      </div>
+
+      <div class="tech-rhythm">
+        <span class="rhythm-label">RHYTHM</span>
+        <span class="rhythm-pattern">IN<span class="sep">·</span>IN+<span class="sep">·</span>OUT---</span>
+        <span class="rhythm-label">1-3 REPS</span>
+      </div>
+
+      <div class="tech-body">
+        <div class="tech-section">
+          <div class="tech-section-label">// FUNCTION</div>
+          <div class="tech-section-body">
+            Identified by Mark Krasnow's lab as the spontaneous reset the body performs roughly every five minutes. <em>Two inhales (the second a top-up) followed by a long, audible exhale.</em> Resets blood gas balance and downregulates arousal faster than any other known breath pattern.
+          </div>
+        </div>
+
+        <div class="tech-mechanism">
+          The double inhale fully expands alveoli that have collapsed during normal breathing, optimizing gas exchange surface area. The extended exhale offloads accumulated CO₂ rapidly while engaging parasympathetic pathways.
+        </div>
+
+        <ol class="tech-steps">
+          <li>Through the nose: inhale to about 80% lung capacity.</li>
+          <li>Without exhaling, take a second short sharp inhale on top.</li>
+          <li>Exhale slowly and audibly through the mouth — empty.</li>
+          <li>1-3 repetitions is typically sufficient.</li>
+          <li>The fastest physiological off-ramp from acute stress.</li>
+        </ol>
+
+        <div class="tech-teleology">
+          Used in service of <em>acute interruption</em> — when the nervous system has spiked and needs to land. Among the most teleologically clean practices: no altered state, no claim, just a reset. The thing the body would have done on its own had it been allowed.
+        </div>
+      </div>
+    </article>
+
+    <!-- CHANDRA BHEDANA -->
+    <article class="technique-card" data-cat="calm">
+      <span class="corner tl"></span><span class="corner br"></span>
+      <span class="tech-tag">CALM</span>
+      <div class="tech-header">
+        <div class="tech-id">[ TECH_06 // LUNAR ]</div>
+        <div class="tech-sanskrit">चन्द्र भेदन</div>
+        <h3 class="tech-name">Chandra Bhedana</h3>
+        <div class="tech-translation">"moon-piercing breath" — left nostril only</div>
+      </div>
+
+      <div class="tech-rhythm">
+        <span class="rhythm-label">RHYTHM</span>
+        <span class="rhythm-pattern">4<span class="sep">·</span>8</span>
+        <span class="rhythm-label">L-IN · R-OUT</span>
+      </div>
+
+      <div class="tech-body">
+        <div class="tech-section">
+          <div class="tech-section-label">// FUNCTION</div>
+          <div class="tech-section-body">
+            Inhale exclusively through the left nostril (ida); exhale through the right (pingala). <em>Strongly activates the cooling, parasympathetic lunar current</em> while expelling residual sympathetic activation through the solar channel.
+          </div>
+        </div>
+
+        <div class="tech-mechanism">
+          Forced left-nostril breathing has been shown in studies to reduce blood pressure, lower heart rate, and shift cortical activity toward right-hemisphere dominance — consistent with the yogic mapping of ida to parasympathetic dominance.
+        </div>
+
+        <ol class="tech-steps">
+          <li>Close right nostril with right thumb.</li>
+          <li>Inhale slowly through left nostril (4 count).</li>
+          <li>Close left nostril, open right.</li>
+          <li>Exhale through right nostril (8 count).</li>
+          <li>9-12 rounds. Avoid in cold or low-energy states.</li>
+        </ol>
+
+        <div class="tech-teleology">
+          Used in service of <em>cooling</em> — useful in heat, anger, agitation. Worth checking the pattern: chronic preference for chandra over surya can serve a goal of <em>avoiding activation</em>, which is different from genuinely calibrating it.
+        </div>
+      </div>
+    </article>
+
+    <!-- ========= ENERGIZE ========= -->
+
+    <!-- BHASTRIKA -->
+    <article class="technique-card" data-cat="energize">
+      <span class="corner tl"></span><span class="corner br"></span>
+      <span class="tech-tag">ENERGIZE</span>
+      <div class="tech-header">
+        <div class="tech-id">[ TECH_07 // BELLOWS ]</div>
+        <div class="tech-sanskrit">भस्त्रिका</div>
+        <h3 class="tech-name">Bhastrika</h3>
+        <div class="tech-translation">"bellows breath" — forceful in and out</div>
+      </div>
+
+      <div class="tech-rhythm">
+        <span class="rhythm-label">RHYTHM</span>
+        <span class="rhythm-pattern">~1/SEC<span class="sep">·</span>FORCEFUL</span>
+        <span class="rhythm-label">SYMPATHETIC</span>
+      </div>
+
+      <div class="tech-body">
+        <div class="tech-section">
+          <div class="tech-section-label">// FUNCTION</div>
+          <div class="tech-section-body">
+            Strong, forceful, equal-pressure inhale and exhale through the nose — the diaphragm pumps like a blacksmith's bellows. <em>Powerfully sympathetic-activating</em>, generating heat, mental clarity, and physiological alertness rapidly.
+          </div>
+        </div>
+
+        <div class="tech-mechanism">
+          The active engagement of both inhalation and exhalation (unlike Kapalabhati's passive inhale) recruits the full diaphragmatic and intercostal pump. Drops CO₂, raises adrenaline, increases cortical arousal. Effectively an internal cardio.
+        </div>
+
+        <ol class="tech-steps">
+          <li>Sit upright. Hands on knees or lower belly.</li>
+          <li>Forceful inhale through nose, forceful exhale — equal effort both directions.</li>
+          <li>Pace: about one breath per second.</li>
+          <li>20-30 breaths. Pause. Breathe naturally. Repeat 2-3 rounds.</li>
+          <li>Discontinue immediately if lightheaded.</li>
+        </ol>
+
+        <div class="tech-teleology">
+          Used in service of <em>activation</em> — bypassing morning lethargy, building heat in cold practice spaces. Worth scrutinizing if pursued for the altered state itself, which is often hypoxia-adjacent and can be confused with insight.
+        </div>
+      </div>
+    </article>
+
+    <!-- KAPALABHATI -->
+    <article class="technique-card" data-cat="energize">
+      <span class="corner tl"></span><span class="corner br"></span>
+      <span class="tech-tag">ENERGIZE</span>
+      <div class="tech-header">
+        <div class="tech-id">[ TECH_08 // SKULL_SHINING ]</div>
+        <div class="tech-sanskrit">कपालभाति</div>
+        <h3 class="tech-name">Kapalabhati</h3>
+        <div class="tech-translation">"skull-shining breath" — sharp exhales, passive inhales</div>
+      </div>
+
+      <div class="tech-rhythm">
+        <span class="rhythm-label">RHYTHM</span>
+        <span class="rhythm-pattern">SHARP-OUT<span class="sep">·</span>PASSIVE-IN</span>
+        <span class="rhythm-label">~2/SEC</span>
+      </div>
+
+      <div class="tech-body">
+        <div class="tech-section">
+          <div class="tech-section-label">// FUNCTION</div>
+          <div class="tech-section-body">
+            Sharp, percussive exhales through the nose driven by the lower abdomen; inhale is <em>entirely passive</em>, the natural rebound of the abdominal release. Generates heat, sharpens mental clarity, "polishes the skull" of stagnation.
+          </div>
+        </div>
+
+        <div class="tech-mechanism">
+          Classified as a <em>kriya</em> (cleansing) rather than strictly pranayama. The rhythmic abdominal pumping massages internal organs and lymph nodes, while the rapid CO₂ offload produces a transient hyperventilation-like alertness.
+        </div>
+
+        <ol class="tech-steps">
+          <li>Sit tall. Hand on low belly to feel the action.</li>
+          <li>Sharp contraction of low belly drives air out through nose.</li>
+          <li>Release belly; inhale happens automatically.</li>
+          <li>Pace: 60-120 pumps per round.</li>
+          <li>1-3 rounds. Rest fully between rounds.</li>
+        </ol>
+
+        <div class="tech-teleology">
+          Used in service of <em>burning off stagnation</em> — mental fog, residual lethargy. Pursued compulsively, can become a way of <em>blowing past</em> emotions rather than meeting them. The cleansing intent matters.
+        </div>
+      </div>
+    </article>
+
+    <!-- SURYA BHEDANA -->
+    <article class="technique-card" data-cat="energize">
+      <span class="corner tl"></span><span class="corner br"></span>
+      <span class="tech-tag">ENERGIZE</span>
+      <div class="tech-header">
+        <div class="tech-id">[ TECH_09 // SOLAR ]</div>
+        <div class="tech-sanskrit">सूर्य भेदन</div>
+        <h3 class="tech-name">Surya Bhedana</h3>
+        <div class="tech-translation">"sun-piercing breath" — right nostril only</div>
+      </div>
+
+      <div class="tech-rhythm">
+        <span class="rhythm-label">RHYTHM</span>
+        <span class="rhythm-pattern">4<span class="sep">·</span>4</span>
+        <span class="rhythm-label">R-IN · L-OUT</span>
+      </div>
+
+      <div class="tech-body">
+        <div class="tech-section">
+          <div class="tech-section-label">// FUNCTION</div>
+          <div class="tech-section-body">
+            The polar complement of Chandra Bhedana: inhale exclusively through right nostril (pingala); exhale through left (ida). <em>Activates the warming, sympathetic solar current</em>. Used to wake the system, generate heat, build outward focus.
+          </div>
+        </div>
+
+        <div class="tech-mechanism">
+          Right-nostril forced breathing has been measured to raise heart rate, increase body temperature, raise oxygen consumption, and shift cortical balance toward the left hemisphere — consistent with sympathetic activation and pingala dominance.
+        </div>
+
+        <ol class="tech-steps">
+          <li>Close left nostril with right ring finger.</li>
+          <li>Inhale slowly through right nostril (4 count).</li>
+          <li>Close right, open left.</li>
+          <li>Exhale through left nostril (4 count).</li>
+          <li>9-12 rounds. Avoid in anxious or already-activated states.</li>
+        </ol>
+
+        <div class="tech-teleology">
+          Used in service of <em>warming the system</em> — winter mornings, lethargy, depressive flatness. Worth examining: if reached for as an escape from stillness, it serves a different goal than calibration.
+        </div>
+      </div>
+    </article>
+
+    <!-- ========= FOCUS ========= -->
+
+    <!-- BOX BREATHING -->
+    <article class="technique-card" data-cat="focus">
+      <span class="corner tl"></span><span class="corner br"></span>
+      <span class="tech-tag">FOCUS</span>
+      <div class="tech-header">
+        <div class="tech-id">[ TECH_10 // EQUAL_RATIO ]</div>
+        <div class="tech-sanskrit">[ modern / tactical ]</div>
+        <h3 class="tech-name">Box Breathing</h3>
+        <div class="tech-translation">sama vritti — equal four-part breath</div>
+      </div>
+
+      <div class="tech-rhythm">
+        <span class="rhythm-label">RHYTHM</span>
+        <span class="rhythm-pattern">4<span class="sep">·</span>4<span class="sep">·</span>4<span class="sep">·</span>4</span>
+        <span class="rhythm-label">IN · HOLD · OUT · HOLD</span>
+      </div>
+
+      <div class="tech-body">
+        <div class="tech-section">
+          <div class="tech-section-label">// FUNCTION</div>
+          <div class="tech-section-body">
+            Four equal phases: inhale, hold, exhale, hold — typically four counts each. Used by Navy SEALs for pre-action focus, and by yogic practitioners as <em>sama vritti</em> — "even fluctuation." Builds steady, alert presence without either activating or sedating.
+          </div>
+        </div>
+
+        <div class="tech-mechanism">
+          The equal four-part rhythm balances sympathetic and parasympathetic input, while the deliberate counting recruits prefrontal attention. CO₂ levels rise mildly during the holds, building tolerance and engaging the diving response slightly.
+        </div>
+
+        <ol class="tech-steps">
+          <li>Inhale through nose for 4 counts.</li>
+          <li>Hold the breath (gentle, not strained) for 4 counts.</li>
+          <li>Exhale through nose for 4 counts.</li>
+          <li>Hold empty for 4 counts.</li>
+          <li>Continue 5-10 minutes. Increase count as comfort builds.</li>
+        </ol>
+
+        <div class="tech-teleology">
+          Used in service of <em>steady alertness</em> — before difficult conversations, focused work, decisions under pressure. Among the most operationally clean techniques — neither over-stimulating nor sedating, simply <em>present</em>.
+        </div>
+      </div>
+    </article>
+
+    <!-- UJJAYI -->
+    <article class="technique-card" data-cat="focus">
+      <span class="corner tl"></span><span class="corner br"></span>
+      <span class="tech-tag">FOCUS</span>
+      <div class="tech-header">
+        <div class="tech-id">[ TECH_11 // OCEANIC ]</div>
+        <div class="tech-sanskrit">उज्जायी</div>
+        <h3 class="tech-name">Ujjayi</h3>
+        <div class="tech-translation">"victorious breath" — slight throat constriction</div>
+      </div>
+
+      <div class="tech-rhythm">
+        <span class="rhythm-label">RHYTHM</span>
+        <span class="rhythm-pattern">SLOW<span class="sep">·</span>EVEN<span class="sep">·</span>AUDIBLE</span>
+        <span class="rhythm-label">CONTINUOUS</span>
+      </div>
+
+      <div class="tech-body">
+        <div class="tech-section">
+          <div class="tech-section-label">// FUNCTION</div>
+          <div class="tech-section-body">
+            A slight constriction at the glottis creates audible turbulent airflow — the "oceanic" sound — through both inhale and exhale. <em>Sustains focus through self-generated sensory feedback</em>; foundational to asana practice and meditative concentration.
+          </div>
+        </div>
+
+        <div class="tech-mechanism">
+          Glottal constriction increases airway resistance, requiring deeper diaphragmatic engagement. The audible feedback recruits attention continuously. Engages the same laryngeal-vagal pathway as humming, contributing to parasympathetic activation despite the practice's alerting effect.
+        </div>
+
+        <ol class="tech-steps">
+          <li>Slight constriction at the back of the throat — as if fogging a mirror with mouth closed.</li>
+          <li>Inhale slowly through nose — audible oceanic sound.</li>
+          <li>Exhale through nose with the same gentle throat hold — audible sound.</li>
+          <li>Continue smoothly. Use throughout asana practice or meditation.</li>
+          <li>Sound is soft, internal — others should barely hear it.</li>
+        </ol>
+
+        <div class="tech-teleology">
+          Used in service of <em>sustained presence</em> — the breath that anchors movement, sustains concentration through long sits. Almost no failure modes when held correctly; the rare risk is forcing the sound and creating throat tension.
+        </div>
+      </div>
+    </article>
+
+    <!-- ========= RELEASE ========= -->
+
+    <!-- CONNECTED BREATHING -->
+    <article class="technique-card" data-cat="release">
+      <span class="corner tl"></span><span class="corner br"></span>
+      <span class="tech-tag">RELEASE</span>
+      <div class="tech-header">
+        <div class="tech-id">[ TECH_12 // CONSCIOUS_CONNECTED ]</div>
+        <div class="tech-sanskrit">[ Grof / Orr / Holotropic ]</div>
+        <h3 class="tech-name">Connected Breathing</h3>
+        <div class="tech-translation">rebirthing / holotropic / circular breath</div>
+      </div>
+
+      <div class="tech-rhythm">
+        <span class="rhythm-label">RHYTHM</span>
+        <span class="rhythm-pattern">NO-PAUSE<span class="sep">·</span>MOUTH<span class="sep">·</span>FULL</span>
+        <span class="rhythm-label">30-60 MIN SESSIONS</span>
+      </div>
+
+      <div class="tech-body">
+        <div class="tech-section">
+          <div class="tech-section-label">// FUNCTION</div>
+          <div class="tech-section-body">
+            Continuous, full inhalation and exhalation through the mouth with <em>no pause between breaths</em>. Sustained for extended periods, produces altered states involving emotional release, somatic catharsis, and non-ordinary consciousness. <em>The most powerful — and most dangerous — practice in the catalogue.</em>
+          </div>
+        </div>
+
+        <div class="tech-mechanism">
+          Sustained over-breathing drops blood CO₂ significantly, producing respiratory alkalosis. The Bohr effect shifts — hemoglobin clings to oxygen, cerebral hypoxia develops, and the brain enters altered states characterized by intense emotional content, body sensations, and dissolution of ordinary cognitive boundaries.
+        </div>
+
+        <ol class="tech-steps">
+          <li>This technique requires preparation, time, and ideally a trained facilitator.</li>
+          <li>Lying down, eyes closed, ideally with evocative music.</li>
+          <li>Full, deep, mouth-breathing — no pause between inhale and exhale.</li>
+          <li>Sustained for 30-60+ minutes. Tetany, tears, tremors common.</li>
+          <li>Integration period afterward is non-negotiable.</li>
+        </ol>
+
+        <div class="tech-teleology">
+          The teleological inquiry here is <em>critical</em>. Connected breathing can serve genuine integration of stored emotional material — and can also serve <em>repetitive catharsis as a substitute for change</em>. The altered state is, mechanistically, induced cerebral hypoxia. The content that surfaces is real; the technique is real. The question is what the system is using the practice for. <em>Repeated catharsis without integration is not the same as transformation.</em> Strongly inadvisable for those with cardiovascular conditions, psychosis history, or unprocessed trauma without skilled support.
+        </div>
+      </div>
+    </article>
+
+  </div>
+
+  <!-- TELEOLOGY -->
+  <section class="teleology">
+    <span class="corner tl"></span><span class="corner tr"></span>
+    <span class="corner bl"></span><span class="corner br"></span>
+    <div class="teleology-label">// ADVISORY // TELEOLOGY_PROTOCOL</div>
+    <h3 class="teleology-title">On <strong>Choosing</strong> a Technique</h3>
+    <div class="teleology-body">
+      <p>The catalogue invites a question more interesting than "which technique should I do today?" The Adlerian question is: <em>what state am I attempting to engineer, and why?</em></p>
+      <p>If the system is genuinely dysregulated and a specific lever brings it back to baseline — calm when activated, alert when foggy, present when scattered — the technique has served its purpose. This is the use case the techniques were built for.</p>
+      <p>But there is a second use case that often masquerades as the first. The system is uncomfortable not because it is dysregulated but because <em>it is reporting something true</em>. Discomfort can be a signal that conditions need to change, that a relationship needs naming, that a direction is wrong. The technique applied to <em>this</em> kind of discomfort serves a different goal — <em>silencing the signal so the conditions need not be changed</em>. The system returns to baseline. The cause persists.</p>
+      <p>Both uses produce the same physiological result. They are distinguished only by the inquiry: <em>what is this in service of?</em> Asked before each session — not as moral test, but as diagnostic instrument — the question keeps the techniques aligned with what the pilot actually needs, rather than allowing them to become a sophisticated way of not feeling what is present.</p>
+      <p>The techniques are excellent. They are also only ever instruments. <em>The lever does not pull itself, and the lever does not know what it should be in service of. Only the pilot does.</em></p>
+    </div>
+  </section>
+
+  <!-- Nav -->
+  <div class="nav-back">
+    <a href="./the-bridge-between-worlds.html" class="nav-link">← RETURN TO BRIDGE</a>
+    <a href="#" class="nav-link" style="opacity: 0.5; cursor: not-allowed;">NEXT: PROTOCOLS →</a>
+  </div>
+
+  <footer class="footer">
+    <div>// THE ATHANOR / OPERATIONS_MANUAL / <span class="athanor">TECHNIQUE_CATALOGUE</span></div>
+    <div>FILE_03 // END_OF_TRANSMISSION</div>
+  </footer>
+
+</div>
+
+<script>
+  // Filter labels
+  const filterLabels = {
+    all: 'ALL TECHNIQUES',
+    calm: 'CALM / DOWNREGULATE',
+    energize: 'ENERGIZE / ACTIVATE',
+    focus: 'FOCUS / STEADY',
+    release: 'RELEASE / CATHARSIS'
+  };
+
+  const buttons = document.querySelectorAll('.selector-button');
+  const cards = document.querySelectorAll('.technique-card');
+  const filterDisplay = document.getElementById('filterDisplay');
+  const countDisplay = document.getElementById('countDisplay');
+  const totalCount = cards.length;
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const state = btn.dataset.state;
+
+      // Update button states
+      buttons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      // Filter cards
+      let visibleCount = 0;
+      cards.forEach(card => {
+        if (state === 'all' || card.dataset.cat === state) {
+          card.classList.remove('hidden');
+          visibleCount++;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+
+      // Update status display
+      filterDisplay.textContent = filterLabels[state];
+      countDisplay.textContent = `${visibleCount} / ${totalCount}`;
+
+      // Smooth scroll to top of catalogue
+      const catalogueTop = document.getElementById('catalogue').offsetTop;
+      window.scrollTo({ top: catalogueTop - 80, behavior: 'smooth' });
+    });
+  });
+</script>
+
+</body>
+</html>
