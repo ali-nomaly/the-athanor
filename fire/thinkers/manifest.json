@@ -1,3 +1,18 @@
 {
-  "entries": []
+  "entries": [
+    {
+      "date": "2026.06.08",
+      "title": "ADLERIAN ATLAS",
+      "gloss": "Visual map of Alfred Adler's individual psychology — inferiority, compensation, and the teleological self.",
+      "tag": "PSYCHOLOGY",
+      "path": "/fire/thinkers/adlerian-atlas.html"
+    },
+    {
+      "date": "2026.06.08",
+      "title": "DEPTH PSYCHOLOGY ATLAS",
+      "gloss": "Visual atlas of depth psychology — the unconscious, archetypes, and the cartography of the inner world.",
+      "tag": "PSYCHOLOGY",
+      "path": "/fire/thinkers/depth-psychology-atlas.html"
+    }
+  ]
 }

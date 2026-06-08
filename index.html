@@ -162,10 +162,18 @@
     border-style: solid;
     z-index: 20;
   }
-  #corner-tl { top: 40px; left: 8px; border-width: 1px 0 0 1px; }
+#corner-tl { top: 40px; left: 8px; border-width: 1px 0 0 1px; }
   #corner-tr { top: 40px; right: 8px; border-width: 1px 1px 0 0; }
   #corner-bl { bottom: 8px; left: 8px; border-width: 0 0 1px 1px; }
   #corner-br { bottom: 8px; right: 8px; border-width: 0 1px 1px 0; }
+
+  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; }
+  .legend-shape { width: 14px; height: 14px; flex-shrink: 0; }
+  .legend-earth  { color: #39ff6a; }
+  .legend-water  { color: #5dffda; }
+  .legend-fire   { color: #ff6a00; }
+  .legend-air    { color:	#ffd46c; }
+  .legend-aether { color: #c77dff; }
 
   #log-link {
   font-size: 9px;
@@ -203,42 +211,50 @@
     <button id="panel-btn">ENTER ENTRY →</button>
   </div>
 
-  <div id="legend">
-    <div class="legend-item">
-      <svg class="legend-shape" viewBox="0 0 14 14"><circle cx="7" cy="7" r="6" fill="none" stroke="#C7FF43" stroke-width="1.5"/></svg>
-      CORPUS
+<div id="legend">
+    <div class="legend-item legend-earth">
+      <svg class="legend-shape" viewBox="0 0 14 14"><rect x="2" y="2" width="10" height="10" fill="none" stroke="#39ff6a" stroke-width="1.5"/></svg>
+      EARTH
     </div>
-    <div class="legend-item">
-      <svg class="legend-shape" viewBox="0 0 14 14"><polygon points="7,1 13,13 1,13" fill="none" stroke="#C7FF43" stroke-width="1.5"/></svg>
-      ANIMA
+    <div class="legend-item legend-water">
+      <svg class="legend-shape" viewBox="0 0 14 14"><circle cx="7" cy="7" r="6" fill="none" stroke="#00cfff" stroke-width="1.5"/></svg>
+      WATER
     </div>
-    <div class="legend-item">
-      <svg class="legend-shape" viewBox="0 0 14 14"><rect x="1" y="1" width="12" height="12" fill="none" stroke="#C7FF43" stroke-width="1.5" transform="rotate(45 7 7)"/></svg>
-      SPIRITUS
+    <div class="legend-item legend-fire">
+      <svg class="legend-shape" viewBox="0 0 14 14"><polygon points="7,1 13,13 1,13" fill="none" stroke="#ff6a00" stroke-width="1.5"/></svg>
+      FIRE
+    </div>
+    <div class="legend-item legend-air">
+      <svg class="legend-shape" viewBox="0 0 14 14"><polygon points="7,13 13,1 1,1" fill="none" stroke="#ffd46c" stroke-width="1.5"/></svg>
+      AIR
+    </div>
+    <div class="legend-item legend-aether">
+      <svg class="legend-shape" viewBox="0 0 14 14"><rect x="1" y="1" width="12" height="12" fill="none" stroke="#c77dff" stroke-width="1.5" transform="rotate(45 7 7)"/></svg>
+      AETHER
     </div>
   </div>
-</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
 <script>
+  
 const nodes = [
-  { id: 'hub',       label: 'ATHANOR',   domain: 'hub',      gloss: 'The living archive. A digital record of one lifetime examined.', path: '/', date: '2026' },
-  { id: 'craft',     label: 'CRAFT',     domain: 'corpus',   gloss: 'Visual guides for making things. Crochet, music production, coding, art software.', path: '/corpus/craft/', date: '2026' },
-  { id: 'analysis',  label: 'ANALYSIS',  domain: 'corpus',   gloss: 'Visual breakdowns of film, television, and music.', path: '/corpus/analysis/', date: '2026' },
-  { id: 'thinkers',  label: 'THINKERS',  domain: 'anima',    gloss: 'Philosopher and thinker depictions. Ideas given visual form.', path: '/anima/thinkers/', date: '2026' },
-  { id: 'esoterica', label: 'ESOTERICA', domain: 'anima',    gloss: 'Visual guides to esoteric subjects. Hermetic, alchemical, symbolic.', path: '/anima/esoterica/', date: '2026' },
-  { id: 'codex',     label: 'CODEX',     domain: 'spiritus', gloss: 'Nonfiction book summaries and visual notes. The read archive.', path: '/spiritus/codex/', date: '2026' },
+  { id: 'hub',     label: 'ATHANOR', domain: 'hub',    gloss: 'The living archive. A digital record of one lifetime examined.', path: '/', date: '2026' },
+{ id: 'earth',    label: 'EARTH',    domain: 'earth',  gloss: 'Material, practical, skill-based. Guides for making things.', path: '/earth/', date: '2026' },
+{ id: 'water',    label: 'WATER',    domain: 'water',  gloss: 'Receptive, symbolic, interpretive. Visual analysis of media.', path: '/water/', date: '2026' },
+{ id: 'fire',     label: 'FIRE',     domain: 'fire',   gloss: 'Transformative, philosophical. Thinkers and their ideas.', path: '/fire/', date: '2026' },
+{ id: 'air',      label: 'AIR',      domain: 'air',    gloss: 'Invisible structures, hidden orders. Esoteric systems.', path: '/air/', date: '2026' },
+{ id: 'aether',   label: 'AETHER',   domain: 'aether', gloss: 'Synthesis and quintessence. Knowledge distilled from reading.', path: '/aether/', date: '2026' },
 ];
 
 const links = [
-  { source: 'hub', target: 'craft' },
-  { source: 'hub', target: 'analysis' },
-  { source: 'hub', target: 'thinkers' },
-  { source: 'hub', target: 'esoterica' },
-  { source: 'hub', target: 'codex' },
-  { source: 'craft',     target: 'analysis' },
-  { source: 'thinkers',  target: 'esoterica' },
-  { source: 'esoterica', target: 'codex' },
+  { source: 'hub',   target: 'earth' },
+  { source: 'hub',   target: 'water' },
+  { source: 'hub',   target: 'fire' },
+  { source: 'hub',   target: 'air' },
+  { source: 'hub',   target: 'aether' },
+  { source: 'earth', target: 'water' },
+  { source: 'fire',  target: 'air' },
+  { source: 'air',   target: 'aether' },
 ];
 
 const domainColors = {
@@ -273,6 +289,9 @@ function resize() {
 }
 
 resize();
+// pin hub to center
+const hubNode = nodes.find(n => n.id === 'hub');
+if (hubNode) { hubNode.fx = W / 2; hubNode.fy = H / 2; }
 
 const sim = d3.forceSimulation(nodes)
   .force('link', d3.forceLink(links).id(d => d.id).distance(d => d.source.id === 'hub' ? 130 : 80).strength(0.8))
@@ -280,6 +299,20 @@ const sim = d3.forceSimulation(nodes)
   .force('center', d3.forceCenter(W / 2, H / 2 + 20))
   .force('collision', d3.forceCollide().radius(d => d.id === 'hub' ? 50 : 36))
   .alphaDecay(0.015);
+
+function drawSquare(x, y, r) {
+  ctx.beginPath();
+  ctx.rect(x - r, y - r, r * 2, r * 2);
+  ctx.closePath();
+}
+
+function drawTriangleDown(x, y, r) {
+  ctx.beginPath();
+  ctx.moveTo(x, y + r);
+  ctx.lineTo(x + r * 0.866, y - r * 0.5);
+  ctx.lineTo(x - r * 0.866, y - r * 0.5);
+  ctx.closePath();
+}
 
 function drawDiamond(x, y, r) {
   ctx.beginPath();
@@ -311,33 +344,41 @@ function drawNode(d, pulse) {
   ctx.save();
 
   if (isHovered) {
-    ctx.globalAlpha = 0.12 + pulse * 0.08;
-    ctx.fillStyle = '#C7FF43';
-    if (d.domain === 'corpus' || d.id === 'hub') { ctx.beginPath(); ctx.arc(x, y, pr + 10, 0, Math.PI * 2); ctx.fill(); }
-    else if (d.domain === 'anima') { drawTriangle(x, y, pr + 10); ctx.fill(); }
+ctx.globalAlpha = 0.12 + pulse * 0.08;
+    const glowColor = { earth: '#39ff6a', water: '#00cfff', fire: '#ff6a00', air: '#ffd46c', aether: '#c77dff', hub: '#C7FF43' }[d.domain] || '#C7FF43';
+    ctx.fillStyle = glowColor;
+    if (d.id === 'hub' || d.domain === 'water') { ctx.beginPath(); ctx.arc(x, y, pr + 10, 0, Math.PI * 2); ctx.fill(); }
+    else if (d.domain === 'earth') { drawSquare(x, y, pr + 10); ctx.fill(); }
+    else if (d.domain === 'fire') { drawTriangle(x, y, pr + 10); ctx.fill(); }
+    else if (d.domain === 'air') { drawTriangleDown(x, y, pr + 10); ctx.fill(); }
     else { drawDiamond(x, y, pr + 10); ctx.fill(); }
     ctx.globalAlpha = 1;
   }
 
-  ctx.strokeStyle = '#C7FF43';
+const nodeColor = { earth: '#39ff6a', water: '#00cfff', fire: '#ff6a00', air: '#ffd46c', aether: '#c77dff', hub: '#C7FF43' }[d.domain] || '#C7FF43';
+  ctx.strokeStyle = nodeColor;
   ctx.lineWidth = d.id === 'hub' ? 2 : 1.5;
   ctx.fillStyle = d.id === 'hub' ? 'rgba(199,255,67,0.12)' : 'rgba(8,8,8,0.9)';
 
-  if (d.id === 'hub') {
+if (d.id === 'hub') {
     ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2);
     ctx.fill(); ctx.stroke();
     ctx.beginPath(); ctx.arc(x, y, r - 5, 0, Math.PI * 2);
     ctx.strokeStyle = 'rgba(199,255,67,0.3)'; ctx.lineWidth = 0.5; ctx.stroke();
-  } else if (d.domain === 'corpus') {
+  } else if (d.domain === 'water') {
     ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2);
     ctx.fill(); ctx.stroke();
-  } else if (d.domain === 'anima') {
+  } else if (d.domain === 'earth') {
+    drawSquare(x, y, r); ctx.fill(); ctx.stroke();
+  } else if (d.domain === 'fire') {
     drawTriangle(x, y, r); ctx.fill(); ctx.stroke();
-  } else if (d.domain === 'spiritus') {
+  } else if (d.domain === 'air') {
+    drawTriangleDown(x, y, r); ctx.fill(); ctx.stroke();
+  } else if (d.domain === 'aether') {
     drawDiamond(x, y, r); ctx.fill(); ctx.stroke();
   }
 
-  ctx.fillStyle = '#C7FF43';
+ctx.fillStyle = nodeColor;
   ctx.font = d.id === 'hub'
     ? "700 9px 'Orbitron', monospace"
     : "400 7.5px 'IBM Plex Mono', monospace";
@@ -440,6 +481,7 @@ panelBtn.addEventListener('click', () => {
 
 window.addEventListener('resize', () => {
   resize();
+  if (hubNode) { hubNode.fx = W / 2; hubNode.fy = H / 2; }
   sim.force('center', d3.forceCenter(W / 2, H / 2 + 20));
   sim.alpha(0.1).restart();
 });
