@@ -1,13 +1,18 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THE ATHANOR // alinomali.com</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=IBM+Plex+Mono:wght@300;400;500&display=swap');
-  
   html, body {
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  background: #080808;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: #080808;
   }
+
   #athanor-root {
     width: 100%;
     height: 100vh;
@@ -53,7 +58,18 @@
     color: rgba(199,255,67,0.45);
     letter-spacing: 0.15em;
   }
-  
+
+  #log-link {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: rgba(199,255,67,0.45);
+    text-decoration: none;
+    text-transform: uppercase;
+    font-family: 'IBM Plex Mono', monospace;
+    transition: color 0.2s;
+  }
+  #log-link:hover { color: #C7FF43; }
+
   #detail-panel {
     position: absolute;
     bottom: 0; right: 0;
@@ -142,17 +158,13 @@
     gap: 6px;
   }
 
-  .legend-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 9px;
-    color: rgba(199,255,67,0.5);
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-  }
-
-  .legend-shape { width: 14px; height: 14px; }
+  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; }
+  .legend-shape { width: 14px; height: 14px; flex-shrink: 0; }
+  .legend-earth  { color: #39ff6a; }
+  .legend-water  { color: #00cfff; }
+  .legend-fire   { color: #ff6a00; }
+  .legend-air    { color: #ffd46c; }
+  .legend-aether { color: #c77dff; }
 
   #corner-tl, #corner-tr, #corner-bl, #corner-br {
     position: absolute;
@@ -162,31 +174,44 @@
     border-style: solid;
     z-index: 20;
   }
-#corner-tl { top: 40px; left: 8px; border-width: 1px 0 0 1px; }
+  #corner-tl { top: 40px; left: 8px; border-width: 1px 0 0 1px; }
   #corner-tr { top: 40px; right: 8px; border-width: 1px 1px 0 0; }
   #corner-bl { bottom: 8px; left: 8px; border-width: 0 0 1px 1px; }
   #corner-br { bottom: 8px; right: 8px; border-width: 0 1px 1px 0; }
 
-  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; }
-  .legend-shape { width: 14px; height: 14px; flex-shrink: 0; }
-  .legend-earth  { color: #39ff6a; }
-  .legend-water  { color: #5dffda; }
-  .legend-fire   { color: #ff6a00; }
-  .legend-air    { color:	#ffd46c; }
-  .legend-aether { color: #c77dff; }
-
-  #log-link {
-  font-size: 9px;
-  letter-spacing: 0.2em;
-  color: rgba(199,255,67,0.45);
-  text-decoration: none;
-  text-transform: uppercase;
-  font-family: 'IBM Plex Mono', monospace;
-  transition: color 0.2s;
-}
-#log-link:hover { color: #C7FF43; }
-
+  #profile-btn {
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    z-index: 50;
+    border: 1px solid rgba(199,255,67,0.3);
+    padding: 8px 12px;
+    background: rgba(0,0,0,0.7);
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    text-decoration: none;
+    display: block;
+  }
+  #profile-btn:hover {
+    border-color: #C7FF43;
+    background: rgba(199,255,67,0.07);
+  }
+  .pbtn-label {
+    font-size: 7px;
+    letter-spacing: 0.18em;
+    color: rgba(199,255,67,0.4);
+    margin-bottom: 3px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .pbtn-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    color: #C7FF43;
+  }
 </style>
+</head>
+<body>
 
 <div id="athanor-root">
   <div id="corner-tl"></div>
@@ -194,11 +219,16 @@
   <div id="corner-bl"></div>
   <div id="corner-br"></div>
 
-<div id="header-bar">
-  <div id="header-title">THE ATHANOR</div>
-  <a href="/log/log-index" id="log-link">THE LOG →</a>
-  <div id="header-meta">ARCHIVE // alinomali.com // MAGI:ACTIVE</div>
-</div>
+  <div id="header-bar">
+    <div id="header-title">THE ATHANOR</div>
+    <a href="/log/" id="log-link">THE LOG →</a>
+    <div id="header-meta">ARCHIVE // alinomali.com // MAGI:ACTIVE</div>
+  </div>
+
+  <a href="/about/" id="profile-btn">
+    <div class="pbtn-label">OPERATOR</div>
+    <div class="pbtn-title">ALI →</div>
+  </a>
 
   <canvas id="athanor-canvas"></canvas>
 
@@ -211,7 +241,7 @@
     <button id="panel-btn">ENTER ENTRY →</button>
   </div>
 
-<div id="legend">
+  <div id="legend">
     <div class="legend-item legend-earth">
       <svg class="legend-shape" viewBox="0 0 14 14"><rect x="2" y="2" width="10" height="10" fill="none" stroke="#39ff6a" stroke-width="1.5"/></svg>
       EARTH
@@ -233,17 +263,18 @@
       AETHER
     </div>
   </div>
+</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
 <script>
-  
+
 const nodes = [
-  { id: 'hub',     label: 'ATHANOR', domain: 'hub',    gloss: 'The living archive. A digital record of one lifetime examined.', path: '/', date: '2026' },
-{ id: 'earth',    label: 'EARTH',    domain: 'earth',  gloss: 'Material, practical, skill-based. Guides for making things.', path: '/earth/', date: '2026' },
-{ id: 'water',    label: 'WATER',    domain: 'water',  gloss: 'Receptive, symbolic, interpretive. Visual analysis of media.', path: '/water/', date: '2026' },
-{ id: 'fire',     label: 'FIRE',     domain: 'fire',   gloss: 'Transformative, philosophical. Thinkers and their ideas.', path: '/fire/', date: '2026' },
-{ id: 'air',      label: 'AIR',      domain: 'air',    gloss: 'Invisible structures, hidden orders. Esoteric systems.', path: '/air/', date: '2026' },
-{ id: 'aether',   label: 'AETHER',   domain: 'aether', gloss: 'Synthesis and quintessence. Knowledge distilled from reading.', path: '/aether/', date: '2026' },
+  { id: 'hub',    label: 'ATHANOR', domain: 'hub',    gloss: 'The living archive. A digital record of one lifetime examined.', path: '/', date: '2026' },
+  { id: 'earth',  label: 'EARTH',   domain: 'earth',  gloss: 'Material, practical, skill-based. Guides for making things.', path: '/earth/', date: '2026' },
+  { id: 'water',  label: 'WATER',   domain: 'water',  gloss: 'Receptive, symbolic, interpretive. Visual analysis of media.', path: '/water/', date: '2026' },
+  { id: 'fire',   label: 'FIRE',    domain: 'fire',   gloss: 'Transformative, philosophical. Thinkers and their ideas.', path: '/fire/', date: '2026' },
+  { id: 'air',    label: 'AIR',     domain: 'air',    gloss: 'Invisible structures, hidden orders. Esoteric systems.', path: '/air/', date: '2026' },
+  { id: 'aether', label: 'AETHER',  domain: 'aether', gloss: 'Synthesis and quintessence. Knowledge distilled from reading.', path: '/aether/', date: '2026' },
 ];
 
 const links = [
@@ -257,15 +288,6 @@ const links = [
   { source: 'air',   target: 'aether' },
 ];
 
-const domainColors = {
-  hub: '#C7FF43',
-  corpus: '#C7FF43',
-  anima: '#C7FF43',
-  spiritus: '#C7FF43',
-};
-
-const domainAlpha = { hub: 1, corpus: 0.9, anima: 0.9, spiritus: 0.9 };
-
 const root = document.getElementById('athanor-root');
 const canvas = document.getElementById('athanor-canvas');
 const ctx = canvas.getContext('2d');
@@ -273,7 +295,6 @@ const ctx = canvas.getContext('2d');
 let W, H, scale = 1;
 let hoveredNode = null;
 let pulseT = 0;
-let animFrame;
 let currentNode = null;
 
 function resize() {
@@ -289,7 +310,7 @@ function resize() {
 }
 
 resize();
-// pin hub to center
+
 const hubNode = nodes.find(n => n.id === 'hub');
 if (hubNode) { hubNode.fx = W / 2; hubNode.fy = H / 2; }
 
@@ -335,18 +356,20 @@ function getNodeRadius(d) {
   return d.id === 'hub' ? 22 : 14;
 }
 
+const nodeColors = { earth: '#39ff6a', water: '#00cfff', fire: '#ff6a00', air: '#ffd46c', aether: '#c77dff', hub: '#C7FF43' };
+
 function drawNode(d, pulse) {
   const x = d.x, y = d.y;
   const r = getNodeRadius(d);
   const isHovered = hoveredNode && hoveredNode.id === d.id;
   const pr = isHovered ? r + pulse * 8 : r;
+  const nodeColor = nodeColors[d.domain] || '#C7FF43';
 
   ctx.save();
 
   if (isHovered) {
-ctx.globalAlpha = 0.12 + pulse * 0.08;
-    const glowColor = { earth: '#39ff6a', water: '#00cfff', fire: '#ff6a00', air: '#ffd46c', aether: '#c77dff', hub: '#C7FF43' }[d.domain] || '#C7FF43';
-    ctx.fillStyle = glowColor;
+    ctx.globalAlpha = 0.12 + pulse * 0.08;
+    ctx.fillStyle = nodeColor;
     if (d.id === 'hub' || d.domain === 'water') { ctx.beginPath(); ctx.arc(x, y, pr + 10, 0, Math.PI * 2); ctx.fill(); }
     else if (d.domain === 'earth') { drawSquare(x, y, pr + 10); ctx.fill(); }
     else if (d.domain === 'fire') { drawTriangle(x, y, pr + 10); ctx.fill(); }
@@ -355,12 +378,11 @@ ctx.globalAlpha = 0.12 + pulse * 0.08;
     ctx.globalAlpha = 1;
   }
 
-const nodeColor = { earth: '#39ff6a', water: '#00cfff', fire: '#ff6a00', air: '#ffd46c', aether: '#c77dff', hub: '#C7FF43' }[d.domain] || '#C7FF43';
   ctx.strokeStyle = nodeColor;
   ctx.lineWidth = d.id === 'hub' ? 2 : 1.5;
   ctx.fillStyle = d.id === 'hub' ? 'rgba(199,255,67,0.12)' : 'rgba(8,8,8,0.9)';
 
-if (d.id === 'hub') {
+  if (d.id === 'hub') {
     ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2);
     ctx.fill(); ctx.stroke();
     ctx.beginPath(); ctx.arc(x, y, r - 5, 0, Math.PI * 2);
@@ -378,7 +400,7 @@ if (d.id === 'hub') {
     drawDiamond(x, y, r); ctx.fill(); ctx.stroke();
   }
 
-ctx.fillStyle = nodeColor;
+  ctx.fillStyle = nodeColor;
   ctx.font = d.id === 'hub'
     ? "700 9px 'Orbitron', monospace"
     : "400 7.5px 'IBM Plex Mono', monospace";
@@ -412,15 +434,16 @@ function draw() {
     ctx.moveTo(link.source.x, link.source.y);
     ctx.lineTo(link.target.x, link.target.y);
     const isConnected = hoveredNode && (link.source.id === hoveredNode.id || link.target.id === hoveredNode.id);
-    ctx.strokeStyle = isConnected ? 'rgba(199,255,67,0.5)' : 'rgba(199,255,67,0.1)';
+    const src = typeof link.source === 'object' ? link.source.domain : 'hub';
+    const lc = nodeColors[src] || '#C7FF43';
+    ctx.strokeStyle = isConnected ? lc : 'rgba(199,255,67,0.08)';
     ctx.lineWidth = isConnected ? 1 : 0.5;
     ctx.stroke();
   });
   ctx.restore();
 
   nodes.forEach(d => drawNode(d, pulse));
-
-  animFrame = requestAnimationFrame(draw);
+  requestAnimationFrame(draw);
 }
 
 sim.on('tick', () => {});
@@ -474,9 +497,7 @@ document.getElementById('panel-close').addEventListener('click', () => {
 });
 
 panelBtn.addEventListener('click', () => {
-  if (currentNode) {
-    window.location.href = currentNode.path;
-  }
+  if (currentNode) window.location.href = currentNode.path;
 });
 
 window.addEventListener('resize', () => {
@@ -486,3 +507,5 @@ window.addEventListener('resize', () => {
   sim.alpha(0.1).restart();
 });
 </script>
+</body>
+</html>
