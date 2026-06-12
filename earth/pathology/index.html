@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PATHOLOGY // EARTH</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void: #000000;
+    --surface: #080808;
+    --panel: #0d0d0d;
+    --border: #1a1a1a;
+    --border-active: #2e2e2e;
+    --acid: #C7FF43;
+    --acid-dim: rgba(199,255,67,0.15);
+    --acid-faint: rgba(199,255,67,0.04);
+    --red: #FF4343;
+    --amber: #FFB443;
+    --text-primary: #e8e8e8;
+    --text-secondary: #888;
+    --text-dim: #444;
+    --scanline-opacity: 0.025;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    background: var(--void);
+    color: var(--text-primary);
+    font-family: 'IBM Plex Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* SCANLINES */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.08) 2px,
+      rgba(0,0,0,0.08) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* CORNER BRACKETS */
+  .bracketed {
+    position: relative;
+  }
+  .bracketed::before,
+  .bracketed::after {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-color: var(--acid);
+    border-style: solid;
+    opacity: 0.6;
+  }
+  .bracketed::before {
+    top: -1px; left: -1px;
+    border-width: 1px 0 0 1px;
+  }
+  .bracketed::after {
+    bottom: -1px; right: -1px;
+    border-width: 0 1px 1px 0;
+  }
+
+  /* LAYOUT */
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* HEADER */
+  .site-header {
+    border-bottom: 1px solid var(--border);
+    padding: 20px 0;
+    position: sticky;
+    top: 0;
+    background: rgba(0,0,0,0.95);
+    backdrop-filter: blur(4px);
+    z-index: 100;
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .breadcrumb {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--text-dim);
+    font-family: 'Orbitron', sans-serif;
+  }
+
+  .breadcrumb span {
+    color: var(--acid);
+  }
+
+  .status-bar {
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: var(--text-dim);
+    display: flex;
+    gap: 24px;
+  }
+
+  .status-dot {
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    background: var(--acid);
+    border-radius: 50%;
+    margin-right: 6px;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  /* HERO */
+  .hero {
+    padding: 80px 0 60px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .domain-tag {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    color: var(--acid);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .domain-tag::after {
+    content: '';
+    flex: 1;
+    max-width: 60px;
+    height: 1px;
+    background: var(--acid);
+    opacity: 0.4;
+  }
+
+  .hero-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(36px, 6vw, 72px);
+    font-weight: 900;
+    letter-spacing: 0.05em;
+    line-height: 0.9;
+    color: var(--text-primary);
+    margin-bottom: 32px;
+  }
+
+  .hero-title .accent {
+    color: var(--acid);
+    display: block;
+  }
+
+  .hero-gloss {
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--text-secondary);
+    max-width: 620px;
+    border-left: 2px solid var(--border-active);
+    padding-left: 20px;
+    margin-bottom: 40px;
+  }
+
+  .hero-meta {
+    display: flex;
+    gap: 40px;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--text-dim);
+  }
+
+  .hero-meta strong {
+    color: var(--text-secondary);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  /* LEGEND */
+  .legend {
+    padding: 32px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .legend-label {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--text-dim);
+    font-family: 'Orbitron', sans-serif;
+    margin-right: 8px;
+  }
+
+  .legend-items {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 10px;
+    color: var(--text-secondary);
+    letter-spacing: 0.1em;
+  }
+
+  .legend-pip {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* GRID */
+  .grid-header {
+    padding: 40px 0 20px;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+  }
+
+  .grid-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--text-dim);
+  }
+
+  .grid-count {
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+  }
+
+  .grid-count span {
+    color: var(--acid);
+  }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-bottom: 80px;
+  }
+
+  /* ENTRY CARD */
+  .entry-card {
+    background: var(--surface);
+    padding: 28px;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    transition: background 0.15s;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .entry-card:hover {
+    background: var(--panel);
+  }
+
+  .entry-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 2px;
+    background: transparent;
+    transition: background 0.15s;
+  }
+
+  .entry-card:hover::before {
+    background: var(--acid);
+  }
+
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .card-category {
+    font-size: 8px;
+    letter-spacing: 0.25em;
+    padding: 3px 8px;
+    border: 1px solid var(--border-active);
+    color: var(--text-dim);
+    font-family: 'Orbitron', sans-serif;
+  }
+
+  .card-threat {
+    font-size: 8px;
+    letter-spacing: 0.15em;
+    color: var(--text-dim);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .threat-pip {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+
+  .threat-low { background: #43FF8F; }
+  .threat-mod { background: var(--amber); }
+  .threat-high { background: var(--red); }
+
+  .card-name {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: var(--text-primary);
+    line-height: 1.2;
+  }
+
+  .card-latin {
+    font-size: 10px;
+    color: var(--text-dim);
+    font-style: italic;
+    font-family: 'IBM Plex Sans', sans-serif;
+    letter-spacing: 0.05em;
+  }
+
+  .card-gloss {
+    font-size: 11px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+
+  .card-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: auto;
+  }
+
+  .card-tag {
+    font-size: 8px;
+    letter-spacing: 0.15em;
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    padding: 2px 7px;
+  }
+
+  .card-arrow {
+    font-size: 10px;
+    color: var(--acid);
+    opacity: 0;
+    transition: opacity 0.15s;
+    margin-top: 8px;
+    letter-spacing: 0.1em;
+  }
+
+  .entry-card:hover .card-arrow {
+    opacity: 1;
+  }
+
+  /* PLACEHOLDER CARD */
+  .placeholder-card {
+    background: var(--void);
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: relative;
+    cursor: default;
+  }
+
+  .placeholder-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .placeholder-tag {
+    font-size: 8px;
+    letter-spacing: 0.25em;
+    color: var(--border-active);
+    font-family: 'Orbitron', sans-serif;
+    border: 1px solid var(--border);
+    padding: 3px 8px;
+  }
+
+  .placeholder-id {
+    font-size: 8px;
+    color: var(--border-active);
+    letter-spacing: 0.1em;
+  }
+
+  .placeholder-name {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--border-active);
+    letter-spacing: 0.05em;
+  }
+
+  .placeholder-bar {
+    height: 1px;
+    background: var(--border);
+    width: 100%;
+    margin: 4px 0;
+  }
+
+  .placeholder-lines {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .placeholder-line {
+    height: 8px;
+    background: var(--border);
+    border-radius: 1px;
+  }
+
+  .placeholder-line:nth-child(2) { width: 80%; }
+  .placeholder-line:nth-child(3) { width: 60%; }
+
+  .placeholder-status {
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    color: var(--border-active);
+    margin-top: 8px;
+  }
+
+  /* FOOTER */
+  .site-footer {
+    border-top: 1px solid var(--border);
+    padding: 24px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: var(--text-dim);
+  }
+
+  .footer-left {
+    font-family: 'Orbitron', sans-serif;
+  }
+
+  .footer-left span {
+    color: var(--acid);
+  }
+
+  /* SECTION DIVIDER */
+  .section-divider {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 48px 0 24px;
+  }
+
+  .divider-label {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    color: var(--text-dim);
+    white-space: nowrap;
+  }
+
+  .divider-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* FRAMEWORK STRIP */
+  .framework-strip {
+    background: var(--acid-faint);
+    border: 1px solid rgba(199,255,67,0.08);
+    padding: 24px 28px;
+    margin-bottom: 1px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .framework-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .framework-label {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 8px;
+    letter-spacing: 0.25em;
+    color: var(--acid);
+    opacity: 0.7;
+  }
+
+  .framework-desc {
+    font-size: 10px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="container">
+    <div class="header-inner">
+      <div class="breadcrumb">
+        THE ATHANOR // <span>EARTH</span> // PATHOLOGY
+      </div>
+      <div class="status-bar">
+        <span><span class="status-dot"></span>EARTH:PATHOLOGY</span>
+        <span>ENTRIES: 0 ACTIVE / ∞ CAPACITY</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="domain-tag">EARTH // SOMA // MATTER</div>
+    <h1 class="hero-title">
+      PATH
+      <span class="accent">OLOGY</span>
+    </h1>
+    <p class="hero-gloss">
+      A cross-tradition compendium of physical adversaries — parasites, pathogens, dysfunctions — examined through three simultaneous lenses: medical science, Ayurvedic framework, and TCM system theory. Each profile maps the same phenomenon across all three without collapsing their differences.
+    </p>
+    <div class="hero-meta">
+      <div>
+        <strong>DOMAIN</strong>
+        EARTH
+      </div>
+      <div>
+        <strong>METHOD</strong>
+        TRIANGULATED ANALYSIS
+      </div>
+      <div>
+        <strong>SCOPE</strong>
+        PHYSICAL / SOMATIC / SYSTEMIC
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LEGEND -->
+<div class="container">
+  <div class="legend">
+    <span class="legend-label">THREAT</span>
+    <div class="legend-items">
+      <div class="legend-item">
+        <div class="legend-pip threat-low"></div>
+        LOW — manageable, common
+      </div>
+      <div class="legend-item">
+        <div class="legend-pip threat-mod"></div>
+        MODERATE — systemic disruption
+      </div>
+      <div class="legend-item">
+        <div class="legend-pip threat-high"></div>
+        HIGH — organ compromise / behavioral hijack
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FRAMEWORK NOTE -->
+<div class="container">
+  <div class="section-divider">
+    <span class="divider-label">ANALYTICAL FRAMEWORK</span>
+    <div class="divider-line"></div>
+  </div>
+  <div class="framework-strip bracketed">
+    <div class="framework-item">
+      <div class="framework-label">MEDICAL SCIENCE</div>
+      <div class="framework-desc">Taxonomy, mechanism, vector, treatment. Evidence-graded. Claims separated from speculation.</div>
+    </div>
+    <div class="framework-item">
+      <div class="framework-label">AYURVEDIC READ</div>
+      <div class="framework-desc">Dosha disruption pattern, agni compromise, tissue layer affected, classical herbal protocol.</div>
+    </div>
+    <div class="framework-item">
+      <div class="framework-label">TCM READ</div>
+      <div class="framework-desc">Organ system mapping, pathogenic factor (damp, heat, wind, cold), acupuncture channel, formula direction.</div>
+    </div>
+  </div>
+</div>
+
+<!-- GRID -->
+<div class="container">
+  <div class="section-divider">
+    <span class="divider-label">PATHOGEN INDEX</span>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="grid-header">
+    <span class="grid-title">ALL ENTRIES</span>
+    <span class="grid-count"><span>0</span> ACTIVE — CAPACITY OPEN</span>
+  </div>
+
+  <div class="card-grid">
+
+    <!-- PLACEHOLDER 01 -->
+    <div class="placeholder-card">
+      <div class="placeholder-top">
+        <span class="placeholder-tag">HELMINTH</span>
+        <span class="placeholder-id">PTH-001</span>
+      </div>
+      <div class="placeholder-name">// PENDING</div>
+      <div class="placeholder-bar"></div>
+      <div class="placeholder-lines">
+        <div class="placeholder-line"></div>
+        <div class="placeholder-line"></div>
+        <div class="placeholder-line"></div>
+      </div>
+      <div class="placeholder-status">AWAITING ENTRY</div>
+    </div>
+
+    <!-- PLACEHOLDER 02 -->
+    <div class="placeholder-card">
+      <div class="placeholder-top">
+        <span class="placeholder-tag">PROTOZOA</span>
+        <span class="placeholder-id">PTH-002</span>
+      </div>
+      <div class="placeholder-name">// PENDING</div>
+      <div class="placeholder-bar"></div>
+      <div class="placeholder-lines">
+        <div class="placeholder-line"></div>
+        <div class="placeholder-line"></div>
+        <div class="placeholder-line"></div>
+      </div>
+      <div class="placeholder-status">AWAITING ENTRY</div>
+    </div>
+
+    <!-- PLACEHOLDER 03 -->
+    <div class="placeholder-card">
+      <div class="placeholder-top">
+        <span class="placeholder-tag">ECTOPARASITE</span>
+        <span class="placeholder-id">PTH-003</span>
+      </div>
+      <div class="placeholder-name">// PENDING</div>
+      <div class="placeholder-bar"></div>
+      <div class="placeholder-lines">
+        <div class="placeholder-line"></div>
+        <div class="placeholder-line"></div>
+        <div class="placeholder-line"></div>
+      </div>
+      <div class="placeholder-status">AWAITING ENTRY</div>
+    </div>
+
+    <!-- PLACEHOLDER 04 -->
+    <div class="placeholder-card">
+      <div class="placeholder-top">
+        <span class="placeholder-tag">FUNGAL</span>
+        <span class="placeholder-id">PTH-004</span>
+      </div>
+      <div class="placeholder-name">// PENDING</div>
+      <div class="placeholder-bar"></div>
+      <div class="placeholder-lines">
+        <div class="placeholder-line"></div>
+        <div class="placeholder-line"></div>
+        <div class="placeholder-line"></div>
+      </div>
+      <div class="placeholder-status">AWAITING ENTRY</div>
+    </div>
+
+    <!-- PLACEHOLDER 05 -->
+    <div class="placeholder-card">
+      <div class="placeholder-top">
+        <span class="placeholder-tag">BACTERIAL</span>
+        <span class="placeholder-id">PTH-005</span>
+      </div>
+      <div class="placeholder-name">// PENDING</div>
+      <div class="placeholder-bar"></div>
+      <div class="placeholder-lines">
+        <div class="placeholder-line"></div>
+        <div class="placeholder-line"></div>
+        <div class="placeholder-line"></div>
+      </div>
+      <div class="placeholder-status">AWAITING ENTRY</div>
+    </div>
+
+    <!-- PLACEHOLDER 06 -->
+    <div class="placeholder-card">
+      <div class="placeholder-top">
+        <span class="placeholder-tag">VIRAL</span>
+        <span class="placeholder-id">PTH-006</span>
+      </div>
+      <div class="placeholder-name">// PENDING</div>
+      <div class="placeholder-bar"></div>
+      <div class="placeholder-lines">
+        <div class="placeholder-line"></div>
+        <div class="placeholder-line"></div>
+        <div class="placeholder-line"></div>
+      </div>
+      <div class="placeholder-status">AWAITING ENTRY</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="site-footer">
+      <div class="footer-left">THE ATHANOR // <span>EARTH:PATHOLOGY</span></div>
+      <div>MAGI SYSTEM — CASPER / BALTHASAR / MELCHIOR</div>
+      <div>TRIANGULATED ANALYSIS PROTOCOL ACTIVE</div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

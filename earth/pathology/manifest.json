@@ -1,0 +1,14 @@
+{
+  "entries": [
+    {
+      "id": "PTH-001",
+      "date": "2026.06.10",
+      "title": "PINWORM",
+      "latin": "Enterobius vermicularis",
+      "category": "HELMINTH",
+      "threat": "LOW",
+      "gloss": "Most prevalent parasitic infection in the developed world. Nocturnal oviposition, extreme contagion, near-universal childhood exposure.",
+      "path": "/earth/pathology/pinworm.html"
+    }
+  ]
+}

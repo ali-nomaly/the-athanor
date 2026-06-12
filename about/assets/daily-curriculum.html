@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DAILY CURRICULUM // ALI NOMALY</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;900&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --void: #080808;
+    --panel: #0d0d0d;
+    --border: #1a1a1a;
+    --border-mid: #242424;
+    --green: #C7FF43;
+    --green-dim: rgba(199,255,67,0.12);
+    --green-mid: rgba(199,255,67,0.35);
+    --text: #b0b0b0;
+    --text-dim: #555;
+    --text-bright: #e0e0e0;
+    --amber: #FFB830;
+    --amber-dim: rgba(255,184,48,0.12);
+    --red: #FF4444;
+    --red-dim: rgba(255,68,68,0.10);
+    --blue: #4FC3F7;
+    --blue-dim: rgba(79,195,247,0.10);
+  }
+
+  html { background: var(--void); color: var(--text); font-family: 'IBM Plex Mono', monospace; font-size: 13px; line-height: 1.6; }
+
+  /* scanlines */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.04) 2px, rgba(0,0,0,0.04) 4px);
+  }
+
+  .wrap { max-width: 820px; margin: 0 auto; padding: 40px 20px 80px; position: relative; z-index: 1; }
+
+  /* header */
+  .header { border-bottom: 1px solid var(--border-mid); padding-bottom: 28px; margin-bottom: 40px; }
+  .sys-tag { font-size: 9px; letter-spacing: 0.25em; color: var(--text-dim); text-transform: uppercase; margin-bottom: 12px; }
+  .title { font-family: 'Orbitron', monospace; font-size: 22px; font-weight: 900; color: var(--green); letter-spacing: 0.08em; line-height: 1.1; }
+  .subtitle { font-family: 'IBM Plex Mono'; font-size: 10px; color: var(--text-dim); letter-spacing: 0.15em; margin-top: 6px; }
+  .header-meta { display: flex; gap: 24px; margin-top: 20px; }
+  .meta-item { font-size: 9px; letter-spacing: 0.12em; color: var(--text-dim); text-transform: uppercase; }
+  .meta-item span { color: var(--green); }
+
+  /* premise */
+  .premise {
+    background: var(--green-dim);
+    border: 1px solid rgba(199,255,67,0.2);
+    border-left: 3px solid var(--green);
+    padding: 16px 20px;
+    margin-bottom: 40px;
+    font-size: 12px;
+    color: var(--text-bright);
+    line-height: 1.7;
+  }
+  .premise strong { color: var(--green); font-weight: 500; }
+
+  /* section label */
+  .section-label {
+    font-family: 'Orbitron'; font-size: 9px; font-weight: 600;
+    letter-spacing: 0.3em; color: var(--text-dim); text-transform: uppercase;
+    display: flex; align-items: center; gap: 12px; margin-bottom: 16px;
+  }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border-mid); }
+
+  /* phase block */
+  .phase { margin-bottom: 48px; }
+
+  .phase-header {
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 20px; padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .phase-id {
+    font-family: 'Orbitron'; font-size: 9px; font-weight: 600;
+    padding: 3px 8px; border: 1px solid; letter-spacing: 0.2em;
+  }
+  .phase-id.morning { color: var(--amber); border-color: rgba(255,184,48,0.3); background: var(--amber-dim); }
+  .phase-id.midday  { color: var(--green); border-color: rgba(199,255,67,0.3); background: var(--green-dim); }
+  .phase-id.evening { color: var(--blue);  border-color: rgba(79,195,247,0.3); background: var(--blue-dim); }
+  .phase-id.anchor  { color: var(--red);   border-color: rgba(255,68,68,0.3);  background: var(--red-dim); }
+
+  .phase-title { font-family: 'Orbitron'; font-size: 13px; font-weight: 600; color: var(--text-bright); letter-spacing: 0.06em; }
+  .phase-window { font-size: 10px; color: var(--text-dim); margin-left: auto; letter-spacing: 0.1em; }
+
+  /* task row */
+  .task {
+    display: grid; grid-template-columns: 28px 1fr auto;
+    gap: 0 14px; align-items: start;
+    padding: 14px 0; border-bottom: 1px solid var(--border);
+    cursor: pointer; transition: background 0.15s;
+  }
+  .task:hover { background: rgba(255,255,255,0.015); }
+  .task:last-child { border-bottom: none; }
+
+  .task-check {
+    width: 16px; height: 16px; margin-top: 2px;
+    border: 1px solid var(--border-mid);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: all 0.15s;
+  }
+  .task.done .task-check { border-color: var(--green); background: var(--green-dim); }
+  .task.done .task-check::after { content: '✓'; font-size: 9px; color: var(--green); }
+  .task.done .task-name { color: var(--text-dim); text-decoration: line-through; }
+
+  .task-body { min-width: 0; }
+  .task-name { font-size: 12px; color: var(--text-bright); font-weight: 400; line-height: 1.4; margin-bottom: 4px; }
+  .task-desc { font-size: 10px; color: var(--text-dim); line-height: 1.55; }
+  .task-desc strong { color: var(--text); font-weight: 500; }
+
+  .task-duration {
+    font-size: 9px; color: var(--text-dim); letter-spacing: 0.1em;
+    white-space: nowrap; padding-top: 3px;
+    font-family: 'IBM Plex Mono';
+  }
+
+  /* weekly pulse */
+  .week-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-top: 12px; }
+  .day-cell {
+    aspect-ratio: 1; border: 1px solid var(--border-mid);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px; letter-spacing: 0.1em; color: var(--text-dim);
+    cursor: pointer; transition: all 0.15s;
+    font-family: 'Orbitron';
+  }
+  .day-cell:hover { border-color: var(--green); color: var(--green); }
+  .day-cell.done { background: var(--green-dim); border-color: var(--green); color: var(--green); }
+
+  /* reframe box */
+  .reframe {
+    background: var(--panel); border: 1px solid var(--border-mid);
+    padding: 20px; margin-top: 48px;
+  }
+  .reframe-label { font-family: 'Orbitron'; font-size: 9px; color: var(--text-dim); letter-spacing: 0.25em; margin-bottom: 14px; }
+  .reframe-line { font-size: 11px; color: var(--text); line-height: 1.8; padding: 6px 0; border-bottom: 1px solid var(--border); }
+  .reframe-line:last-child { border-bottom: none; }
+  .reframe-line em { color: var(--green); font-style: normal; }
+
+  /* progress bar */
+  .progress-row { display: flex; align-items: center; gap: 12px; margin-top: 32px; }
+  .progress-label { font-size: 9px; color: var(--text-dim); letter-spacing: 0.15em; white-space: nowrap; }
+  .progress-bar { flex: 1; height: 2px; background: var(--border-mid); }
+  .progress-fill { height: 100%; background: var(--green); width: 0%; transition: width 0.4s ease; }
+  .progress-pct { font-family: 'Orbitron'; font-size: 10px; color: var(--green); min-width: 32px; text-align: right; }
+
+  /* footer */
+  .footer { margin-top: 60px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 9px; color: var(--text-dim); letter-spacing: 0.12em; display: flex; justify-content: space-between; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="header">
+    <div class="sys-tag">ATHANOR SYSTEM // PERSONAL OPERATIONS</div>
+    <div class="title">DAILY CURRICULUM</div>
+    <div class="subtitle">GROUND PRESENT. ORIENT FORWARD. MOVE.</div>
+    <div class="header-meta">
+      <div class="meta-item">STATUS <span>ACTIVE</span></div>
+      <div class="meta-item">FRAMEWORK <span>SOMATIC + ADLERIAN + DEPTH</span></div>
+      <div class="meta-item">REVISION <span>1.0</span></div>
+    </div>
+  </div>
+
+  <div class="premise">
+    Two failure modes to avoid simultaneously:<br>
+    <strong>Drift</strong> — no anchor to present reality, living entirely inside future projections.<br>
+    <strong>Stagnation</strong> — so absorbed in maintenance that no forward movement occurs.<br><br>
+    This curriculum is built to hold both in tension. The morning grounds you in body and facts. The afternoon moves the work. The evening closes the loop and reorients. The anchor points interrupt the expansion-stagnation loop before it compounds.
+  </div>
+
+  <!-- MORNING -->
+  <div class="phase">
+    <div class="section-label">PHASE 01</div>
+    <div class="phase-header">
+      <div class="phase-id morning">MORNING</div>
+      <div class="phase-title">BIOLOGICAL FIRST, EVERYTHING ELSE SECOND</div>
+      <div class="phase-window">0–90 min after waking</div>
+    </div>
+
+    <div class="task" onclick="toggle(this)">
+      <div class="task-check"></div>
+      <div class="task-body">
+        <div class="task-name">Light + movement before the screen</div>
+        <div class="task-desc">Natural light exposure within 30 min of waking. Walk outside if possible — even 10 minutes. This sets the circadian anchor that regulates every downstream system. <strong>No phone until this is done.</strong></div>
+      </div>
+      <div class="task-duration">10–20 min</div>
+    </div>
+
+    <div class="task" onclick="toggle(this)">
+      <div class="task-check"></div>
+      <div class="task-body">
+        <div class="task-name">Somatic check-in — no interpretation</div>
+        <div class="task-desc">Sit still. Scan from feet to skull. Name what's present in the body without explaining it: tight, heavy, buzzing, numb, open. This is data collection, not journaling. <strong>Two minutes of honest sensing is worth more than twenty of analysis.</strong></div>
+      </div>
+      <div class="task-duration">2–5 min</div>
+    </div>
+
+    <div class="task" onclick="toggle(this)">
+      <div class="task-check"></div>
+      <div class="task-body">
+        <div class="task-name">One orienting question — written</div>
+        <div class="task-desc">Write one sentence in response to: <em>"What is the single most important thing I move toward today?"</em> Not a list. One sentence. It anchors teleological direction (Adlerian: where is today's action pointing?) and keeps the archive-building instinct from becoming endless lateral expansion. <strong>If you can't answer it, that itself is information.</strong></div>
+      </div>
+      <div class="task-duration">3–5 min</div>
+    </div>
+
+    <div class="task" onclick="toggle(this)">
+      <div class="task-check"></div>
+      <div class="task-body">
+        <div class="task-name">Breathwork — regulatory, not ritual</div>
+        <div class="task-desc">4-7-8 or box breathing (4-4-4-4). Purpose: bring the nervous system online before cognitive load begins. This is not spiritual practice — it is physiological priming. Extended exhale activates parasympathetic brake. You know this. Do it anyway.</div>
+      </div>
+      <div class="task-duration">5 min</div>
+    </div>
+  </div>
+
+  <!-- MIDDAY WORK BLOCK -->
+  <div class="phase">
+    <div class="section-label">PHASE 02</div>
+    <div class="phase-header">
+      <div class="phase-id midday">WORK BLOCK</div>
+      <div class="phase-title">THE ONE THREAD — MOVE IT FORWARD</div>
+      <div class="phase-window">peak cognitive hours</div>
+    </div>
+
+    <div class="task" onclick="toggle(this)">
+      <div class="task-check"></div>
+      <div class="task-body">
+        <div class="task-name">Athanor: one unit of content</div>
+        <div class="task-desc">One entry, one essay section, one structured page — completed and committed. <strong>Not started. Completed.</strong> The pattern to interrupt: building infrastructure before content exists. The principle: populate before systematizing. This is the one non-negotiable forward-movement act. Ghostwriting or client work satisfies this slot when it applies.</div>
+      </div>
+      <div class="task-duration">60–90 min</div>
+    </div>
+
+    <div class="task" onclick="toggle(this)">
+      <div class="task-check"></div>
+      <div class="task-body">
+        <div class="task-name">Reading — primary source only</div>
+        <div class="task-desc">Adler, Jung, von Franz, Hillman, Eckhart, Pagels, Patanjali, Manly P. Hall — or the Trivium sequence (start with Adler's <em>How to Read a Book</em>). No summaries, no secondary commentary unless you've read the source. <strong>The precision-skeptic register requires actual engagement with claims at their origin.</strong></div>
+      </div>
+      <div class="task-duration">20–30 min</div>
+    </div>
+
+    <div class="task" onclick="toggle(this)">
+      <div class="task-check"></div>
+      <div class="task-body">
+        <div class="task-name">Music project — one session unit</div>
+        <div class="task-desc">The darkwave piece doesn't finish by thinking about it. One defined task: reverb pass, LMMS arrangement segment, mix review. Pick one before sitting down. This is the creative pressure-release valve that keeps the psychological work from becoming purely discursive. <strong>Do this at minimum 3x/week.</strong></div>
+      </div>
+      <div class="task-duration">30–45 min</div>
+    </div>
+  </div>
+
+  <!-- MIDDAY ANCHOR -->
+  <div class="phase">
+    <div class="section-label">PHASE 03</div>
+    <div class="phase-header">
+      <div class="phase-id anchor">MID-DAY INTERRUPT</div>
+      <div class="phase-title">REGULATORY RESET — MANDATORY</div>
+      <div class="phase-window">midday or between blocks</div>
+    </div>
+
+    <div class="task" onclick="toggle(this)">
+      <div class="task-check"></div>
+      <div class="task-body">
+        <div class="task-name">Physical reset — leave the chair</div>
+        <div class="task-desc">Walk. Stretch. Eat real food with awareness of eating it. This is not optional recovery — it is the maintenance of the biological substrate on which every other project depends. <strong>The cleansing protocol you're running demands you take the body seriously as infrastructure, not as an afterthought.</strong></div>
+      </div>
+      <div class="task-duration">20–30 min</div>
+    </div>
+
+    <div class="task" onclick="toggle(this)">
+      <div class="task-check"></div>
+      <div class="task-body">
+        <div class="task-name">EFT or somatic discharge — if charge is present</div>
+        <div class="task-desc">Not every day. But when activation is high — when psychological work has surfaced material — run an EFT round using the protocol you already have. The reference guide exists. Use it. <strong>Unprocessed activation becomes noise in every downstream task.</strong></div>
+      </div>
+      <div class="task-duration">10–15 min</div>
+    </div>
+  </div>
+
+  <!-- EVENING -->
+  <div class="phase">
+    <div class="section-label">PHASE 04</div>
+    <div class="phase-header">
+      <div class="phase-id evening">EVENING</div>
+      <div class="phase-title">CLOSE THE LOOP — ORIENT TO TOMORROW</div>
+      <div class="phase-window">final 60 min before wind-down</div>
+    </div>
+
+    <div class="task" onclick="toggle(this)">
+      <div class="task-check"></div>
+      <div class="task-body">
+        <div class="task-name">Honest accounting — what actually moved?</div>
+        <div class="task-desc">Three lines maximum. What completed? What didn't? Why — stated plainly, no self-flagellation and no excuse architecture. This is Adlerian teleology applied backward: what did today's behavior actually serve? <strong>Patterns become visible here before they calcify.</strong></div>
+      </div>
+      <div class="task-duration">5 min</div>
+    </div>
+
+    <div class="task" onclick="toggle(this)">
+      <div class="task-check"></div>
+      <div class="task-body">
+        <div class="task-name">Pathology protocol check — parasitology + remediation</div>
+        <div class="task-desc">Take remediation agents as scheduled. Log any physical shifts — symptom changes, digestive response, energy. The cleansing process is a live experiment. Log it as data. <strong>You built the PATHOLOGY sub-hub for this reason — the knowledge should inform the practice.</strong></div>
+      </div>
+      <div class="task-duration">5 min</div>
+    </div>
+
+    <div class="task" onclick="toggle(this)">
+      <div class="task-check"></div>
+      <div class="task-body">
+        <div class="task-name">Nervous system downregulation — before sleep</div>
+        <div class="task-desc">Physiological sigh (double inhale, long exhale) or progressive muscle relaxation. Dim the environment. No content that activates threat response in the final hour — this includes deep psychological material, doomscrolling, or complex production work. <strong>Sleep quality directly determines whether tomorrow's protocol is executable.</strong></div>
+      </div>
+      <div class="task-duration">10–15 min</div>
+    </div>
+  </div>
+
+  <!-- WEEKLY PULSE -->
+  <div class="phase">
+    <div class="section-label">WEEKLY TRACKER</div>
+    <div style="display: grid; grid-template-columns: repeat(7,1fr); gap: 6px; text-align: center; margin-bottom: 8px;">
+      <div style="font-size:9px;color:var(--text-dim);padding:4px;letter-spacing:.12em;">MON</div>
+      <div style="font-size:9px;color:var(--text-dim);padding:4px;letter-spacing:.12em;">TUE</div>
+      <div style="font-size:9px;color:var(--text-dim);padding:4px;letter-spacing:.12em;">WED</div>
+      <div style="font-size:9px;color:var(--text-dim);padding:4px;letter-spacing:.12em;">THU</div>
+      <div style="font-size:9px;color:var(--text-dim);padding:4px;letter-spacing:.12em;">FRI</div>
+      <div style="font-size:9px;color:var(--text-dim);padding:4px;letter-spacing:.12em;">SAT</div>
+      <div style="font-size:9px;color:var(--text-dim);padding:4px;letter-spacing:.12em;">SUN</div>
+    </div>
+    <div class="week-grid" id="weekGrid"></div>
+    <div class="progress-row" style="margin-top:16px;">
+      <div class="progress-label">DAYS COMPLETE</div>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-pct" id="progressPct">0/7</div>
+    </div>
+  </div>
+
+  <!-- REFRAME AXIOMS -->
+  <div class="reframe">
+    <div class="reframe-label">OPERATING AXIOMS</div>
+    <div class="reframe-line">The archive expands <em>from output</em>, not from planning. One completed unit daily beats ten elaborate sessions monthly.</div>
+    <div class="reframe-line">Your expansion-stagnation loop triggers when <em>too many threads are open simultaneously</em>. This curriculum closes threads by forcing daily completion.</div>
+    <div class="reframe-line">The body is not the metaphor. The cleansing, the breathwork, the somatic checks — these are <em>infrastructure work on the system that runs everything else</em>.</div>
+    <div class="reframe-line">Writing is the practice. The depth practitioner practice grows through <em>written expression first</em> — one essay per month minimum before building infrastructure.</div>
+    <div class="reframe-line">Grounding means: <em>knowing where you actually are</em>, not where you wish you were. The morning question and the evening accounting serve this function.</div>
+    <div class="reframe-line">Direction means: <em>one thread per day has a completion event</em>. Not progress — completion. This is teleological hygiene.</div>
+  </div>
+
+  <div class="footer">
+    <span>ATHANOR // PERSONAL OPERATIONS LAYER</span>
+    <span>REVISION 1.0 — JUNE 2026</span>
+  </div>
+
+</div>
+
+<script>
+  // task toggle
+  function toggle(el) {
+    el.classList.toggle('done');
+    updateProgress();
+  }
+
+  // weekly grid
+  var days = JSON.parse(localStorage.getItem('curriculum-days') || '[]');
+  function buildWeek() {
+    var g = document.getElementById('weekGrid');
+    g.innerHTML = '';
+    for (var i = 0; i < 7; i++) {
+      var d = document.createElement('div');
+      d.className = 'day-cell' + (days.indexOf(i) > -1 ? ' done' : '');
+      d.dataset.i = i;
+      d.onclick = (function(idx){ return function(){ toggleDay(idx); }; })(i);
+      g.appendChild(d);
+    }
+    updateWeekProgress();
+  }
+  function toggleDay(i) {
+    var idx = days.indexOf(i);
+    if (idx > -1) days.splice(idx, 1); else days.push(i);
+    localStorage.setItem('curriculum-days', JSON.stringify(days));
+    buildWeek();
+  }
+  function updateWeekProgress() {
+    var pct = Math.round((days.length / 7) * 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressPct').textContent = days.length + '/7';
+  }
+
+  function updateProgress() {
+    // task progress not wired to bar — week tracker handles that
+  }
+
+  buildWeek();
+</script>
+</body>
+</html>
