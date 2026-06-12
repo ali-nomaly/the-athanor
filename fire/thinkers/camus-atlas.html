@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Camusian Atlas — A Reference to the Absurd, the Revolt, and the Mediterranean Sun</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;1,8..60,300;1,8..60,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --white:        #F6F3EE;
+    --white-warm:   #EDE7DC;
+    --white-deep:   #DDD4C4;
+    --sand:         #C9B99A;
+    --sand-deep:    #A89070;
+    --ink:          #0D1B2A;
+    --ink-soft:     #1E2E3E;
+    --ink-mid:      #3A4A5A;
+    --sun:          #E8630A;
+    --sun-pale:     #F4A060;
+    --sun-faint:    #FAD8BE;
+    --sea:          #A8B8C8;
+    --sea-deep:     #4A6A80;
+    --sea-night:    #1A3348;
+    --shadow:       #2B4A3F;
+    --rule:         rgba(13,27,42,0.12);
+    --rule-strong:  rgba(13,27,42,0.3);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ink);
+    color: var(--ink);
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 16.5px;
+    line-height: 1.75;
+    font-weight: 400;
+  }
+
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--ink); }
+  ::-webkit-scrollbar-thumb { background: var(--sun); border-radius: 0; }
+
+  /* ── OUTER SHELL ── */
+  .journal {
+    max-width: 1140px;
+    margin: 0 auto;
+    background: var(--white);
+    position: relative;
+    box-shadow: 0 0 120px rgba(232,99,10,0.15), 0 0 300px rgba(0,0,0,0.7);
+  }
+
+  /* ── AMBIENT LIGHT ── */
+  .journal::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 80% 40% at 50% 0%, rgba(232,99,10,0.06) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 30% at 20% 100%, rgba(168,184,200,0.08) 0%, transparent 60%);
+    pointer-events: none; z-index: 0;
+  }
+
+  /* ── NAV ── */
+  .nav {
+    background: var(--ink);
+    padding: 12px 40px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0;
+    position: sticky; top: 0; z-index: 100;
+    border-bottom: 3px solid var(--sun);
+  }
+  .nav-brand {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--sea);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-right: auto;
+    padding-right: 20px;
+  }
+  .nav-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+  }
+  .nav a {
+    font-family: 'Space Mono', monospace;
+    font-size: 9.5px;
+    color: var(--sea);
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    padding: 6px 11px;
+    transition: color 0.2s;
+    border-left: 1px solid rgba(168,184,200,0.12);
+  }
+  .nav a:hover, .nav a.active { color: var(--sun-pale); }
+
+  /* ── MASTHEAD ── */
+  .mast {
+    background: var(--ink);
+    padding: 90px 60px 70px;
+    position: relative;
+    overflow: hidden;
+  }
+  .mast::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent 0%, var(--sun) 30%, var(--sun-pale) 60%, transparent 100%);
+  }
+  /* horizon glow */
+  .mast-horizon {
+    position: absolute;
+    bottom: 3px; left: 0; right: 0;
+    height: 160px;
+    background: linear-gradient(to top, rgba(232,99,10,0.08) 0%, transparent 100%);
+    pointer-events: none;
+  }
+  /* big sun disc */
+  .mast-sun {
+    position: absolute;
+    right: 80px; top: 60px;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(232,99,10,0.18) 0%, rgba(232,99,10,0.06) 50%, transparent 70%);
+    border: 1px solid rgba(232,99,10,0.2);
+  }
+  .mast-sun::after {
+    content: '';
+    position: absolute;
+    inset: 20px;
+    border-radius: 50%;
+    border: 1px solid rgba(232,99,10,0.15);
+  }
+  .mast-flag {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--sun);
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .mast-flag::before {
+    content: '';
+    display: block;
+    width: 40px; height: 1px;
+    background: var(--sun);
+  }
+  .mast h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(44px, 6.5vw, 88px);
+    font-weight: 400;
+    line-height: 0.93;
+    color: var(--white);
+    letter-spacing: -0.02em;
+    position: relative; z-index: 1;
+    max-width: 680px;
+  }
+  .mast h1 em {
+    color: var(--sun-pale);
+    font-style: italic;
+  }
+  .mast-sub {
+    font-family: 'Source Serif 4', serif;
+    font-style: italic;
+    font-size: 19px;
+    color: var(--sea);
+    margin-top: 24px;
+    max-width: 540px;
+    line-height: 1.5;
+    font-weight: 300;
+    position: relative; z-index: 1;
+  }
+  .mast-meta {
+    margin-top: 40px;
+    display: flex;
+    gap: 48px;
+    align-items: flex-start;
+    position: relative; z-index: 1;
+  }
+  .mast-stat {
+    border-left: 2px solid var(--sun);
+    padding-left: 14px;
+  }
+  .mast-stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    color: var(--white);
+    line-height: 1;
+  }
+  .mast-stat-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    color: var(--sea);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  /* ── SECTIONS ── */
+  section {
+    padding: 72px 60px 64px;
+    position: relative;
+    z-index: 1;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  /* Horizon rule — the signature element */
+  .horizon {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 36px;
+  }
+  .horizon-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--sand-deep) 0%, var(--sun) 40%, var(--sea) 80%, transparent 100%);
+  }
+  .horizon-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--sun);
+    flex-shrink: 0;
+    margin: 0 12px;
+    box-shadow: 0 0 8px rgba(232,99,10,0.4);
+  }
+  .horizon-right {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, var(--sea) 20%, var(--sand-deep) 80%);
+  }
+
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--sun);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(26px, 3.5vw, 40px);
+    font-weight: 500;
+    line-height: 1.1;
+    color: var(--ink);
+    margin-bottom: 28px;
+    letter-spacing: -0.01em;
+  }
+  h2 em { font-style: italic; color: var(--sea-deep); }
+
+  .lead {
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--ink-soft);
+    margin-bottom: 28px;
+    max-width: 720px;
+    line-height: 1.7;
+  }
+  p {
+    color: var(--ink-mid);
+    margin-bottom: 18px;
+    max-width: 740px;
+  }
+  p em { color: var(--ink-soft); font-style: italic; }
+
+  /* ── PULL QUOTE ── */
+  .pull {
+    border-left: 3px solid var(--sun);
+    padding: 6px 0 6px 28px;
+    margin: 36px 0 36px 40px;
+    max-width: 600px;
+  }
+  .pull-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--ink-soft);
+    line-height: 1.45;
+    margin-bottom: 10px;
+  }
+  .pull-cite {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--sun);
+    letter-spacing: 0.15em;
+  }
+
+  /* ── BIO TIMELINE ── */
+  .bio-line {
+    position: relative;
+    margin-top: 36px;
+  }
+  .bio-line::before {
+    content: '';
+    position: absolute;
+    left: 80px; top: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--sun), var(--sea), transparent);
+  }
+  .bio-event {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 0 28px;
+    padding: 18px 0;
+    opacity: 0; transform: translateX(-8px);
+    transition: opacity 0.5s, transform 0.5s;
+  }
+  .bio-year {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--sun);
+    letter-spacing: 0.1em;
+    padding-top: 3px;
+    text-align: right;
+    padding-right: 28px;
+  }
+  .bio-body {
+    border-left: none;
+    padding-left: 0;
+    padding-bottom: 6px;
+  }
+  .bio-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .bio-desc {
+    font-size: 14px;
+    color: var(--ink-mid);
+    line-height: 1.55;
+    margin-bottom: 0;
+  }
+  .bio-event::before {
+    display: none;
+  }
+  /* dot on timeline */
+  .bio-event .bio-dot {
+    position: absolute;
+    left: 76px;
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--white);
+    border: 2px solid var(--sun);
+    top: 22px;
+  }
+
+  /* ── CONCEPT GRID ── */
+  .concept-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2px;
+    margin-top: 32px;
+    border: 1px solid var(--rule);
+  }
+  .concept {
+    background: var(--white);
+    padding: 28px 26px;
+    border: 1px solid var(--rule);
+    opacity: 0; transform: translateY(8px);
+    transition: opacity 0.4s, transform 0.4s, background 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .concept::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--sun);
+    transform: scaleX(0);
+    transition: transform 0.3s;
+    transform-origin: left;
+  }
+  .concept:hover { background: var(--white-warm); }
+  .concept:hover::before { transform: scaleX(1); }
+  .concept-term {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+  .concept-fr {
+    font-family: 'Space Mono', monospace;
+    font-size: 9.5px;
+    color: var(--sea-deep);
+    letter-spacing: 0.12em;
+    margin-bottom: 12px;
+    display: block;
+  }
+  .concept-def {
+    font-size: 14px;
+    color: var(--ink-mid);
+    line-height: 1.6;
+    margin-bottom: 0;
+  }
+
+  /* ── TRIAD LAYOUT ── */
+  .triad {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 32px;
+  }
+  .triad-card {
+    border-top: 3px solid var(--sun);
+    padding: 24px 20px;
+    background: var(--white-warm);
+    opacity: 0; transform: translateY(8px);
+    transition: opacity 0.4s, transform 0.4s;
+  }
+  .triad-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 32px;
+    color: var(--sun);
+    line-height: 1;
+    margin-bottom: 12px;
+    font-weight: 400;
+  }
+  .triad-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 10px;
+  }
+  .triad-body {
+    font-size: 14px;
+    color: var(--ink-mid);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* ── WORK ENTRY ── */
+  .works-list {
+    margin-top: 32px;
+    border-top: 1px solid var(--rule);
+  }
+  .work {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 0 32px;
+    padding: 26px 0;
+    border-bottom: 1px solid var(--rule);
+    opacity: 0; transform: translateY(6px);
+    transition: opacity 0.4s, transform 0.4s;
+  }
+  .work:hover .work-title { color: var(--sun); }
+  .work-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+    padding-top: 2px;
+  }
+  .work-year {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--sun);
+    letter-spacing: 0.1em;
+  }
+  .work-kind {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    color: var(--sea-deep);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: var(--white-warm);
+    padding: 3px 7px;
+    border: 1px solid var(--rule);
+  }
+  .work-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 6px;
+    transition: color 0.2s;
+  }
+  .work-title em {
+    font-style: italic;
+    font-weight: 400;
+    font-size: 15px;
+    color: var(--ink-mid);
+    margin-left: 8px;
+  }
+  .work-desc {
+    font-size: 14px;
+    color: var(--ink-mid);
+    line-height: 1.6;
+    margin: 0;
+    max-width: 600px;
+  }
+
+  /* ── TENSION TABLE ── */
+  .tension-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 28px;
+    font-size: 14px;
+  }
+  .tension-table thead th {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--white);
+    background: var(--ink);
+    padding: 14px 18px;
+    text-align: left;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .tension-table thead th:first-child {
+    background: var(--sea-night);
+    color: var(--sea);
+  }
+  .tension-table tbody tr { border-bottom: 1px solid var(--rule); }
+  .tension-table tbody tr:nth-child(even) td { background: var(--white-warm); }
+  .tension-table tbody td {
+    padding: 14px 18px;
+    vertical-align: top;
+    color: var(--ink-mid);
+    border-right: 1px solid var(--rule);
+    line-height: 1.55;
+  }
+  .tension-table tbody td:first-child {
+    font-family: 'Space Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink);
+    letter-spacing: 0.04em;
+    background: var(--white-deep);
+    font-weight: 700;
+  }
+
+  /* ── INFLUENCE CARDS ── */
+  .inf-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 16px;
+    margin-top: 28px;
+  }
+  .inf-card {
+    border: 1px solid var(--rule);
+    padding: 22px 20px;
+    background: var(--white);
+    opacity: 0; transform: translateY(8px);
+    transition: opacity 0.4s, transform 0.4s, border-color 0.2s;
+  }
+  .inf-card:hover { border-color: var(--sun); }
+  .inf-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .inf-rel {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    color: var(--sun);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .inf-desc {
+    font-size: 13px;
+    color: var(--ink-mid);
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  /* ── SECTION DARK ── */
+  section.dark {
+    background: var(--ink);
+    color: var(--white);
+  }
+  section.dark h2 { color: var(--white); }
+  section.dark h2 em { color: var(--sun-pale); }
+  section.dark .lead { color: var(--sea); }
+  section.dark p { color: rgba(246,243,238,0.65); max-width: 740px; }
+  section.dark .section-label { color: var(--sun-pale); }
+  section.dark .horizon-line { background: linear-gradient(90deg, var(--sea-deep), var(--sun-pale) 40%, var(--sea-night) 100%); }
+  section.dark .horizon-right { background: linear-gradient(90deg, var(--sea-night), var(--sea-deep) 80%); }
+  section.dark .pull { border-left-color: var(--sun-pale); }
+  section.dark .pull-text { color: var(--sea); }
+  section.dark .pull-cite { color: var(--sun-pale); }
+  section.dark .concept-grid { border-color: rgba(255,255,255,0.06); }
+  section.dark .concept {
+    background: var(--ink-soft);
+    border-color: rgba(255,255,255,0.08);
+    color: var(--white);
+  }
+  section.dark .concept:hover { background: var(--sea-night); }
+  section.dark .concept-term { color: var(--white); }
+  section.dark .concept-fr { color: var(--sea); }
+  section.dark .concept-def { color: rgba(246,243,238,0.65); }
+  section.dark .triad-card { background: var(--ink-soft); border-top-color: var(--sun-pale); }
+  section.dark .triad-title { color: var(--white); }
+  section.dark .triad-body { color: rgba(246,243,238,0.65); }
+  section.dark .triad-num { color: var(--sun-pale); }
+
+  /* ── FOOTER ── */
+  .foot {
+    background: var(--ink);
+    padding: 24px 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    border-top: 3px solid var(--sun);
+  }
+  .foot-text {
+    font-family: 'Space Mono', monospace;
+    font-size: 9.5px;
+    color: var(--sea);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .foot-horizon {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--sun-pale);
+  }
+
+  @media (max-width: 720px) {
+    section { padding: 50px 24px 40px; }
+    .mast { padding: 60px 24px 50px; }
+    .nav { padding: 10px 20px; }
+    .foot { padding: 20px 24px; }
+    .triad { grid-template-columns: 1fr; }
+    .work { grid-template-columns: 1fr; }
+    .work-meta { align-items: flex-start; flex-direction: row; }
+    .pull { margin-left: 0; }
+    .bio-line::before { left: 64px; }
+    .bio-event { grid-template-columns: 64px 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="journal">
+
+<!-- ── NAV ── -->
+<nav class="nav">
+  <span class="nav-brand">Athanor · Camusian Atlas</span>
+  <div class="nav-links">
+    <a href="#life">Life</a>
+    <a href="#absurd">Absurd</a>
+    <a href="#revolt">Revolt</a>
+    <a href="#concepts">Concepts</a>
+    <a href="#works">Works</a>
+    <a href="#tensions">Tensions</a>
+    <a href="#legacy">Legacy</a>
+  </div>
+</nav>
+
+<!-- ── MASTHEAD ── -->
+<header class="mast">
+  <div class="mast-sun"></div>
+  <div class="mast-horizon"></div>
+  <div class="mast-flag">Athanor Reference Series — Vol. III</div>
+  <h1>Albert <em>Camus</em></h1>
+  <p class="mast-sub">Philosopher of the sun, the revolt, and the unreasonable silence of the world</p>
+  <div class="mast-meta">
+    <div class="mast-stat">
+      <div class="mast-stat-num">1913–1960</div>
+      <div class="mast-stat-label">Years Alive</div>
+    </div>
+    <div class="mast-stat">
+      <div class="mast-stat-num">1957</div>
+      <div class="mast-stat-label">Nobel Prize</div>
+    </div>
+    <div class="mast-stat">
+      <div class="mast-stat-num">Oran · Paris</div>
+      <div class="mast-stat-label">Worlds</div>
+    </div>
+  </div>
+</header>
+
+<!-- ── I. LIFE ── -->
+<section id="life">
+  <div class="section-label">§ I — Biographical Context</div>
+  <div class="horizon"><div class="horizon-line"></div><div class="horizon-dot"></div><div class="horizon-right"></div></div>
+  <h2>The Son of Algeria</h2>
+  <p class="lead">Camus was not a Parisian intellectual who theorized poverty. He was born into it — the son of an illiterate Algerian cleaning woman and a father killed in the Marne before Camus turned one. Everything he wrote bears the pressure of that origin.</p>
+  <p>He grew up in the Belcourt district of Algiers, a working-class neighborhood of pieds-noirs — French settlers who had lived in Algeria for generations but held no real power. Poverty was concrete: he wore his uncle's old shoes to school, slept in a two-room apartment shared by six. What he had instead was the Mediterranean — light, heat, the body's pleasure in the world, a sensuousness that never left his prose.</p>
+  <p>His teacher Louis Germain recognized something in the boy and fought to have him entered into a scholarship competition — a gesture Camus memorialized in his Nobel acceptance speech decades later. TB struck him at seventeen, closing the door on a career in football (he had played goalkeeper for the Racing Universitaire d'Alger) and opening a long relationship with mortality that would define his thinking.</p>
+
+  <div class="pull">
+    <p class="pull-text">I learned that books and sun could not coexist long in the same place, and that one had to choose.</p>
+    <p class="pull-cite">— Albert Camus, <em>The Wrong Side and the Right Side</em></p>
+  </div>
+
+  <div class="bio-line">
+
+    <div class="bio-event">
+      <div class="bio-dot"></div>
+      <div class="bio-year">1913</div>
+      <div class="bio-body">
+        <div class="bio-title">Born in Mondovi, French Algeria</div>
+        <p class="bio-desc">Second son of Lucien Auguste Camus and Catherine Sintès. Father is a cellar-worker; mother is near-deaf and functionally illiterate. The family moves to Belcourt, Algiers.</p>
+      </div>
+    </div>
+
+    <div class="bio-event">
+      <div class="bio-dot"></div>
+      <div class="bio-year">1914</div>
+      <div class="bio-body">
+        <div class="bio-title">Father Killed at the Marne</div>
+        <p class="bio-desc">Lucien Camus dies of wounds suffered in the First Battle of the Marne, one month after the war begins. Camus grows up fatherless, raised by his mother and domineering grandmother.</p>
+      </div>
+    </div>
+
+    <div class="bio-event">
+      <div class="bio-dot"></div>
+      <div class="bio-year">1930</div>
+      <div class="bio-body">
+        <div class="bio-title">First Bout of Tuberculosis</div>
+        <p class="bio-desc">Seventeen years old. The disease becomes a recurring presence. It permanently disqualifies him from the French national teaching certification examination and introduces him, viscerally, to the proximity of death.</p>
+      </div>
+    </div>
+
+    <div class="bio-event">
+      <div class="bio-dot"></div>
+      <div class="bio-year">1935</div>
+      <div class="bio-body">
+        <div class="bio-title">Joins the Algerian Communist Party</div>
+        <p class="bio-desc">Joins primarily out of anti-fascist solidarity and concern for Arab workers' conditions. Leaves two years later when the party abandons Algerian independence for Stalinist directives. The experience instills a permanent suspicion of political absolutism.</p>
+      </div>
+    </div>
+
+    <div class="bio-event">
+      <div class="bio-dot"></div>
+      <div class="bio-year">1942</div>
+      <div class="bio-body">
+        <div class="bio-title"><em>The Stranger</em> and <em>The Myth of Sisyphus</em> Published</div>
+        <p class="bio-desc">Two works released simultaneously — the novel dramatizing the absurd, the essay theorizing it. The combination makes Camus a literary event in occupied Paris almost overnight.</p>
+      </div>
+    </div>
+
+    <div class="bio-event">
+      <div class="bio-dot"></div>
+      <div class="bio-year">1943–44</div>
+      <div class="bio-body">
+        <div class="bio-title">Editor of <em>Combat</em> — The Resistance</div>
+        <p class="bio-desc">Becomes editor-in-chief of the Resistance newspaper <em>Combat</em>, writing under the pseudonym Beauchard. This is not theoretical. He is hiding manuscripts in apartments, dodging the Gestapo, burying colleagues.</p>
+      </div>
+    </div>
+
+    <div class="bio-event">
+      <div class="bio-dot"></div>
+      <div class="bio-year">1947</div>
+      <div class="bio-body">
+        <div class="bio-title"><em>The Plague</em> Published</div>
+        <p class="bio-desc">Instantly understood as an allegory for the Occupation, though Camus resisted the reduction. His most sustained meditation on collective solidarity and the ethics of care in the face of indifferent evil.</p>
+      </div>
+    </div>
+
+    <div class="bio-event">
+      <div class="bio-dot"></div>
+      <div class="bio-year">1951</div>
+      <div class="bio-body">
+        <div class="bio-title"><em>The Rebel</em> and the Break with Sartre</div>
+        <p class="bio-desc"><em>L'Homme révolté</em> is a direct confrontation with Marxist teleology and revolutionary violence. Sartre's journal publishes a vicious review. Their public quarrel becomes a defining philosophical event of the postwar decade.</p>
+      </div>
+    </div>
+
+    <div class="bio-event">
+      <div class="bio-dot"></div>
+      <div class="bio-year">1957</div>
+      <div class="bio-body">
+        <div class="bio-title">Nobel Prize in Literature</div>
+        <p class="bio-desc">Awarded at 44 — the second-youngest recipient in history. In his acceptance speech, he thanks Louis Germain, his primary school teacher, before anyone else. The letter he writes to Germain afterward is one of the most moving documents in French literature.</p>
+      </div>
+    </div>
+
+    <div class="bio-event">
+      <div class="bio-dot"></div>
+      <div class="bio-year">1960</div>
+      <div class="bio-body">
+        <div class="bio-title">Death in an Automobile Accident</div>
+        <p class="bio-desc">January 4th. A Facel Vega driven by his publisher Michel Gallimard wraps around a tree near Sens, France. Camus dies instantly. He is 46. In his briefcase: an unfinished manuscript — <em>The First Man</em>, his most autobiographical novel. A train ticket to Paris, unused, is also found.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── II. THE ABSURD ── -->
+<section id="absurd" class="dark">
+  <div class="section-label">§ II — The Foundation</div>
+  <div class="horizon"><div class="horizon-line"></div><div class="horizon-dot"></div><div class="horizon-right"></div></div>
+  <h2>The <em>Absurd</em></h2>
+  <p class="lead">The absurd is not a condition of the world, nor a condition of the human being. It is what arises in the confrontation between the two — the collision between man's unreasonable longing for clarity and the world's unreasonable silence.</p>
+  <p>Camus introduces the absurd with a deceptively simple question at the opening of <em>The Myth of Sisyphus</em>: there is but one truly serious philosophical problem, and that is suicide. If life has no inherent meaning, why continue? His entire philosophical project is an answer to this question that does not require meaning to be smuggled back in through a theological or ideological back door.</p>
+  <p>The absurd has a specific structure. Three elements are required, and none can be eliminated without destroying the tension. Human beings demand that the world be intelligible, that suffering be explicable, that death have some significance. The world offers nothing of the kind. It is mute, indifferent, formally resistant to every attempt to impose an order on it. The absurd is neither one of these elements alone — it is the <em>gap</em> that opens between them, and the only honest response is to stare into that gap without blinking.</p>
+
+  <div class="triad">
+    <div class="triad-card">
+      <div class="triad-num">I</div>
+      <div class="triad-title">The Human Longing</div>
+      <p class="triad-body">The unreasonable hunger for clarity, unity, and significance. The demand that the world make sense, that suffering mean something, that death be accountable. This is not a cognitive error — it is constitutive of being human.</p>
+    </div>
+    <div class="triad-card">
+      <div class="triad-num">II</div>
+      <div class="triad-title">The World's Silence</div>
+      <p class="triad-body">The mute, indifferent refusal of the world to answer. Not hostile — hostility would imply recognition. Simply silent. The universe does not know we exist. This is not nihilism but a factual description.</p>
+    </div>
+    <div class="triad-card">
+      <div class="triad-num">III</div>
+      <div class="triad-title">The Absurd</div>
+      <p class="triad-body">What arises in the confrontation. Not a substance but a relation — it lives between the two. To eliminate either term is to dissolve the absurd, which is always the temptation. Camus calls these eliminations "philosophical suicide."</p>
+    </div>
+  </div>
+
+  <div class="pull">
+    <p class="pull-text">There is but one truly serious philosophical problem, and that is suicide. Judging whether life is or is not worth living amounts to answering the fundamental question of philosophy.</p>
+    <p class="pull-cite">— Albert Camus, <em>The Myth of Sisyphus</em> (1942)</p>
+  </div>
+
+  <p>The three responses Camus identifies — and rejects — are physical suicide (eliminating the human term), philosophical suicide (eliminating the world's silence by leaping to transcendence), and denial (pretending the confrontation isn't happening). All three are, in his framework, forms of dishonesty — ways of not looking directly at what is.</p>
+  <p>His fourth response is what he calls revolt: to remain in the tension, lucid and alive, refusing every false resolution. Sisyphus at the bottom of the hill, watching the boulder roll back down, choosing to turn and go push it again. The final line of <em>The Myth of Sisyphus</em> is not ironic: we must imagine Sisyphus happy.</p>
+</section>
+
+<!-- ── III. REVOLT ── -->
+<section id="revolt">
+  <div class="section-label">§ III — The Ethics</div>
+  <div class="horizon"><div class="horizon-line"></div><div class="horizon-dot"></div><div class="horizon-right"></div></div>
+  <h2>Revolt, Freedom, <em>Passion</em></h2>
+  <p class="lead">The absurd does not lead to despair. For Camus, it is the condition of freedom — once we stop looking to any external source for justification, we are responsible for how we spend the time we have.</p>
+  <p>From the confrontation with the absurd, Camus draws three consequences: revolt, freedom, and passion. These are inseparable.</p>
+  <p>Revolt is not political rebellion, though it can take that form. It is the fundamental posture of defiance toward the conditions of existence — the refusal to be crushed by the rock, the refusal to pretend the rock is not there, the choice to keep going. It is the stance of Sisyphus, of Meursault facing execution, of Dr. Rieux staying in the plague city without hope of rescue. Revolt is not optimism. It does not require the situation to improve. It is an act of self-assertion in the face of an indifferent universe.</p>
+
+  <div class="pull">
+    <p class="pull-text">I revolt, therefore we exist.</p>
+    <p class="pull-cite">— Albert Camus, <em>The Rebel</em> (1951)</p>
+  </div>
+
+  <p>Freedom, for Camus, is what the absurd opens rather than closes. Without a predetermined meaning to conform to, the person is radically free — but this freedom is vertiginous, not comfortable. It is not the liberal freedom to choose among given options; it is the existential freedom that has no given options at all. The absurd removes the scaffold. What remains is the raw responsibility of being alive.</p>
+  <p>Passion — the word he uses deliberately — is the heightening of experience that follows from recognizing its finitude. If there is no afterlife, no transcendence, no compensating meaning for suffering, then what we have is this: the warmth of sunlight, the pleasure of a body, the texture of friendship, the particular quality of light on the Algerian coast at four in the afternoon. Quantity of experience over quality of renunciation.</p>
+  <p>In <em>The Rebel</em>, he extends this framework to politics. Revolt becomes solidarity. The recognition that the absurd is not a private condition but a shared one — that all human beings suffer under the same unreasonable universe — generates an ethics of mutual care. Revolutionary violence that claims to redeem suffering through future utopia is, for Camus, the same philosophical suicide applied politically: trading the unbearable present for an imagined transcendence that justifies any present murder.</p>
+</section>
+
+<!-- ── IV. KEY CONCEPTS ── -->
+<section id="concepts">
+  <div class="section-label">§ IV — Conceptual Vocabulary</div>
+  <div class="horizon"><div class="horizon-line"></div><div class="horizon-dot"></div><div class="horizon-right"></div></div>
+  <h2>The Working <em>Lexicon</em></h2>
+  <p class="lead">Camus built a relatively spare conceptual vocabulary — he distrusted systematic philosophy — but these terms have precise meanings and cannot be swapped freely.</p>
+
+  <div class="concept-grid">
+
+    <div class="concept">
+      <div class="concept-term">The Absurd</div>
+      <span class="concept-fr">L'Absurde</span>
+      <p class="concept-def">Not a property of the world or the self but the confrontation between them. The gap between human hunger for meaning and the universe's silence. It is a relation, not a thing.</p>
+    </div>
+
+    <div class="concept">
+      <div class="concept-term">Revolt</div>
+      <span class="concept-fr">La Révolte</span>
+      <p class="concept-def">The fundamental stance of defiance. Not despair, not acceptance, not transcendence. The refusal to be silenced or destroyed by the conditions of existence while remaining fully lucid about them.</p>
+    </div>
+
+    <div class="concept">
+      <div class="concept-term">Philosophical Suicide</div>
+      <span class="concept-fr">Le Suicide Philosophique</span>
+      <p class="concept-def">The leap from the confrontation with absurdity to a transcendent meaning — religious, ideological, or psychological — that resolves the tension falsely. The same structure as physical suicide but in thought.</p>
+    </div>
+
+    <div class="concept">
+      <div class="concept-term">The Leap</div>
+      <span class="concept-fr">Le Saut</span>
+      <p class="concept-def">Kierkegaard's move from despair to faith, or the Marxist move from present suffering to utopian redemption. For Camus, any leap that trades the unbearable present for a compensating future or transcendence. Always a betrayal of lucidity.</p>
+    </div>
+
+    <div class="concept">
+      <div class="concept-term">Lucidity</div>
+      <span class="concept-fr">La Lucidité</span>
+      <p class="concept-def">The discipline of seeing the situation clearly, without consolation or falsification. Not cold detachment but a warm and embodied refusal of illusion. The precondition of authentic revolt.</p>
+    </div>
+
+    <div class="concept">
+      <div class="concept-term">Solidarity</div>
+      <span class="concept-fr">La Solidarité</span>
+      <p class="concept-def">The political and ethical consequence of recognizing a shared absurd condition. Not sentiment — an imperative. Illustrated in <em>The Plague</em>: the only response to collective suffering is to stay and work, together, without expectation of reward.</p>
+    </div>
+
+    <div class="concept">
+      <div class="concept-term">Mediterranean Thought</div>
+      <span class="concept-fr">La Pensée de Midi</span>
+      <p class="concept-def">Camus's counter to the totalizing philosophies of the North. A philosophical tradition — Greek, solar, moderate — that holds two things in tension without collapsing them: daylight and shadow, yes and no, life and death. The sun as epistemological principle.</p>
+    </div>
+
+    <div class="concept">
+      <div class="concept-term">The Absurd Hero</div>
+      <span class="concept-fr">Le Héros Absurde</span>
+      <p class="concept-def">The figure who lives without appeal — without hope of transcendence or redemption — and chooses life anyway. Sisyphus, Don Juan, the Actor, the Conqueror. Defined not by what they believe but by how they inhabit the confrontation.</p>
+    </div>
+
+    <div class="concept">
+      <div class="concept-term">The Plague</div>
+      <span class="concept-fr">La Peste</span>
+      <p class="concept-def">Both a literal epidemic and a symbol. Camus uses it as a portable metaphor for any collective evil — Nazism, historical terror, indifferent natural catastrophe. Its presence is not a puzzle to be solved but a condition to be met.</p>
+    </div>
+
+    <div class="concept">
+      <div class="concept-term">The Stranger</div>
+      <span class="concept-fr">L'Étranger / Meursault</span>
+      <p class="concept-def">The figure who has not internalized the social codes that make collective life bearable — who tells the truth about his indifference, loves the world physically without moral narration, and is executed for it. A diagnostic figure, not a moral ideal.</p>
+    </div>
+
+    <div class="concept">
+      <div class="concept-term">Passion / Quantity</div>
+      <span class="concept-fr">La Passion / La Quantité</span>
+      <p class="concept-def">The absurd person seeks maximum experience rather than maximum meaning. Not hedonism — more like a refusal to thin the texture of experience through premature spiritualization. All of it counts. None of it is preparation for something else.</p>
+    </div>
+
+    <div class="concept">
+      <div class="concept-term">The Limit</div>
+      <span class="concept-fr">La Mesure</span>
+      <p class="concept-def">In <em>The Rebel</em>, the ethical principle that revolt must stop short of the absolute. Rebellion which demands total transformation at any cost becomes its own tyranny. The limit is not weakness — it is the condition of genuine solidarity.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── V. WORKS ── -->
+<section id="works">
+  <div class="section-label">§ V — The Corpus</div>
+  <div class="horizon"><div class="horizon-line"></div><div class="horizon-dot"></div><div class="horizon-right"></div></div>
+  <h2>Essential <em>Works</em></h2>
+  <p class="lead">Camus organized his work in cycles — each cycle a sustained meditation on one dimension of the human condition, expressed simultaneously in fiction, essay, and drama.</p>
+
+  <div class="works-list">
+
+    <div class="work">
+      <div class="work-meta">
+        <div class="work-year">1937</div>
+        <div class="work-kind">Essays</div>
+      </div>
+      <div>
+        <div class="work-title">The Wrong Side and the Right Side <em>L'Envers et l'Endroit</em></div>
+        <p class="work-desc">His first published collection, written at 22. Five lyrical essays on poverty, the grandmother, the mother's silence, and the Algerian light. He spent his life trying to get back to the lucidity of this book.</p>
+      </div>
+    </div>
+
+    <div class="work">
+      <div class="work-meta">
+        <div class="work-year">1939</div>
+        <div class="work-kind">Essays</div>
+      </div>
+      <div>
+        <div class="work-title">Nuptials <em>Noces</em></div>
+        <p class="work-desc">Four ecstatic essays on the Mediterranean — Tipasa, Djemila, the sea, the summer. The fullest expression of his solar sensibility: the body's joy in the world as a philosophical stance, not a distraction from philosophy.</p>
+      </div>
+    </div>
+
+    <div class="work">
+      <div class="work-meta">
+        <div class="work-year">1942</div>
+        <div class="work-kind">Novel</div>
+      </div>
+      <div>
+        <div class="work-title">The Stranger <em>L'Étranger</em></div>
+        <p class="work-desc">Meursault, a French Algerian, kills an Arab on a beach and is tried less for the murder than for his failure to perform grief at his mother's funeral. The absurd dramatized — the confrontation between an honest man and a society built on comfortable lies.</p>
+      </div>
+    </div>
+
+    <div class="work">
+      <div class="work-meta">
+        <div class="work-year">1942</div>
+        <div class="work-kind">Essay</div>
+      </div>
+      <div>
+        <div class="work-title">The Myth of Sisyphus <em>Le Mythe de Sisyphe</em></div>
+        <p class="work-desc">The philosophical companion to <em>The Stranger</em>. Introduces the absurd, dismantles the case for suicide, examines four absurd heroes (Don Juan, the Actor, the Conqueror, the Creator), and ends with the famous invitation to imagine Sisyphus happy. The foundational text.</p>
+      </div>
+    </div>
+
+    <div class="work">
+      <div class="work-meta">
+        <div class="work-year">1944</div>
+        <div class="work-kind">Play</div>
+      </div>
+      <div>
+        <div class="work-title">Caligula</div>
+        <p class="work-desc">The Roman emperor pursues a logic of total freedom to its murderous end. A warning embedded in a tragedy: the absurd, taken as a license for any act rather than a constraint on violence, becomes fascism. Camus is already arguing with himself.</p>
+      </div>
+    </div>
+
+    <div class="work">
+      <div class="work-meta">
+        <div class="work-year">1947</div>
+        <div class="work-kind">Novel</div>
+      </div>
+      <div>
+        <div class="work-title">The Plague <em>La Peste</em></div>
+        <p class="work-desc">An epidemic quarantines the Algerian city of Oran. Dr. Rieux stays and works. The novel is a meditation on solidarity, the limits of heroism, the ethics of care under conditions of collective catastrophe, and why ordinary decency is the most radical act available to us.</p>
+      </div>
+    </div>
+
+    <div class="work">
+      <div class="work-meta">
+        <div class="work-year">1951</div>
+        <div class="work-kind">Essay</div>
+      </div>
+      <div>
+        <div class="work-title">The Rebel <em>L'Homme Révolté</em></div>
+        <p class="work-desc">A history of revolt from metaphysical rebellion to revolutionary terror. Argues that revolution which demands total transformation at any cost is the same leap as religion — a sacrifice of the present for a transcendent future. The break with Sartre follows its publication.</p>
+      </div>
+    </div>
+
+    <div class="work">
+      <div class="work-meta">
+        <div class="work-year">1956</div>
+        <div class="work-kind">Novel</div>
+      </div>
+      <div>
+        <div class="work-title">The Fall <em>La Chute</em></div>
+        <p class="work-desc">His darkest work. A former Parisian defense lawyer conducts a monologue-confession in an Amsterdam bar. A sustained study in bad faith, self-deception, and the pleasure of judgment. Many read it as Camus's confrontation with his own complicity in the Algerian situation.</p>
+      </div>
+    </div>
+
+    <div class="work">
+      <div class="work-meta">
+        <div class="work-year">1957</div>
+        <div class="work-kind">Stories</div>
+      </div>
+      <div>
+        <div class="work-title">Exile and the Kingdom <em>L'Exil et le Royaume</em></div>
+        <p class="work-desc">His only story collection. Six pieces exploring dislocation, loneliness, the difficulty of solidarity, and the cost of artistic vocation. "The Guest" and "The Artist at Work" are among his most perfectly constructed works.</p>
+      </div>
+    </div>
+
+    <div class="work">
+      <div class="work-meta">
+        <div class="work-year">1994</div>
+        <div class="work-kind">Novel (Posthumous)</div>
+      </div>
+      <div>
+        <div class="work-title">The First Man <em>Le Premier Homme</em></div>
+        <p class="work-desc">The manuscript found in the briefcase at the crash site. Autobiographical, unfinished, the most naked thing he wrote — a son searching for a father he never knew, a return to Belcourt and Algeria, an attempt to understand where he came from and what he owed it. The most essential document for understanding Camus's formation.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── VI. TENSIONS ── -->
+<section id="tensions" class="dark">
+  <div class="section-label">§ VI — Comparative Friction</div>
+  <div class="horizon"><div class="horizon-line"></div><div class="horizon-dot"></div><div class="horizon-right"></div></div>
+  <h2>Camus Against the <em>Field</em></h2>
+  <p class="lead">Camus is best understood in friction with his contemporaries. He did not operate in a vacuum — he was defined partly by what he refused.</p>
+
+  <table class="tension-table">
+    <thead>
+      <tr>
+        <th>Axis</th>
+        <th>Camus</th>
+        <th>Sartre</th>
+        <th>Kierkegaard</th>
+        <th>Jung</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Starting Point</td>
+        <td>The absurd: man versus mute world</td>
+        <td>Radical freedom: existence precedes essence</td>
+        <td>Despair as the path to authentic selfhood</td>
+        <td>The unconscious as psychic ground</td>
+      </tr>
+      <tr>
+        <td>The Leap</td>
+        <td>Rejected — philosophical suicide</td>
+        <td>Rejected — but replaced with political engagement</td>
+        <td>Required — from despair to faith</td>
+        <td>Encouraged — descent into psyche opens transcendence</td>
+      </tr>
+      <tr>
+        <td>Meaning</td>
+        <td>Not given; not invented; confronted without resolution</td>
+        <td>Self-created through radical choice</td>
+        <td>Found in the relationship with God through paradox</td>
+        <td>Discovered in the Self; the psyche is teleological</td>
+      </tr>
+      <tr>
+        <td>Transcendence</td>
+        <td>Refused — the only honest response is immanent revolt</td>
+        <td>Refused, but political History takes its place</td>
+        <td>The entire point — the only ground of authentic existence</td>
+        <td>Embraced — individuation aims at the Self as ordering center</td>
+      </tr>
+      <tr>
+        <td>Politics</td>
+        <td>Anti-totalitarian; solidarity without ideology; limits on revolt</td>
+        <td>Marxist-aligned; revolutionary violence sometimes justified</td>
+        <td>Apolitical; the political is the aesthetic stage, not the ethical</td>
+        <td>Suspicious of collective; individuation is personal work</td>
+      </tr>
+      <tr>
+        <td>Death</td>
+        <td>The condition that makes revolt urgent and experience precious</td>
+        <td>Defines freedom; its certainty is the ground of responsibility</td>
+        <td>Consciousness of death drives toward the eternal</td>
+        <td>The second half of life is preparation; death as transformation</td>
+      </tr>
+      <tr>
+        <td>Primary Affect</td>
+        <td>Clear-eyed joy; Mediterranean warmth in the face of absurdity</td>
+        <td>Nausea, anguish, bad faith — the default condition is negative</td>
+        <td>Trembling and fear; the leap is terrifying</td>
+        <td>The work is difficult; integration brings wholeness, not joy per se</td>
+      </tr>
+      <tr>
+        <td>Key Risk</td>
+        <td>Passivity; aestheticizing suffering without engaging it</td>
+        <td>Absolutism; revolutionary violence justified by future redemption</td>
+        <td>Solipsism; the individual before God has no social ethics</td>
+        <td>Inflation; the individual loses ground in identification with archetypes</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="pull">
+    <p class="pull-text">Between Sartre's world — nausea, in which you are condemned to be free — and Camus's world — absurdity, in which you are invited to revolt — the difference is the presence or absence of the sun.</p>
+    <p class="pull-cite">— Ronald Aronson, <em>Camus and Sartre</em></p>
+  </div>
+</section>
+
+<!-- ── VII. LEGACY ── -->
+<section id="legacy">
+  <div class="section-label">§ VII — Afterlives</div>
+  <div class="horizon"><div class="horizon-line"></div><div class="horizon-dot"></div><div class="horizon-right"></div></div>
+  <h2>The Persistent <em>Relevance</em></h2>
+  <p class="lead">Camus was dismissed by the Parisian left after <em>The Rebel</em>, written off as a moralist rather than a philosopher — yet his work keeps returning with each new century of plague, terror, and totalitarianism. The ideas proved more durable than the argument that discredited them.</p>
+
+  <div class="inf-grid">
+    <div class="inf-card">
+      <div class="inf-name">James Baldwin</div>
+      <div class="inf-rel">Direct Literary Influence</div>
+      <p class="inf-desc">Baldwin engaged deeply with Camus in the 1950s in Paris. The question of whether a Black American could inhabit the "universal" category Camus wrote from was central to their complex relationship and Baldwin's own development.</p>
+    </div>
+    <div class="inf-card">
+      <div class="inf-name">Simone Weil</div>
+      <div class="inf-rel">Philosophical Kinship</div>
+      <p class="inf-desc">Weil and Camus share the Mediterranean emphasis on limit, attention, and the refusal of totality. Camus championed her work at Gallimard — he was her posthumous editor and advocate.</p>
+    </div>
+    <div class="inf-card">
+      <div class="inf-name">Nelson Mandela</div>
+      <div class="inf-rel">Political Formation</div>
+      <p class="inf-desc">Mandela read Camus on Robben Island. <em>The Stranger</em> was among the texts circulated among political prisoners. The ethics of revolt without revenge, of solidarity under conditions of total deprivation, were not academic.</p>
+    </div>
+    <div class="inf-card">
+      <div class="inf-name">Paul Ricoeur</div>
+      <div class="inf-rel">Philosophical Development</div>
+      <p class="inf-desc">Ricoeur's philosophy of narrative and attestation carries traces of Camus's emphasis on embodied, finite existence that cannot be fully systematized. The limits Camus imposed on revolt become the limits of total interpretation.</p>
+    </div>
+    <div class="inf-card">
+      <div class="inf-name">Terror and Pandemic</div>
+      <div class="inf-rel">Historical Recurrences</div>
+      <p class="inf-desc"><em>The Plague</em> is purchased in mass quantities after every major epidemic. The ethics of staying and working without hope of redemption proves more useful in actual catastrophe than the philosophical systems that dismissed it.</p>
+    </div>
+    <div class="inf-card">
+      <div class="inf-name">Anti-Totalitarian Left</div>
+      <div class="inf-rel">Political Lineage</div>
+      <p class="inf-desc">The post-Stalinist European left — the generation that could no longer justify Gulag deaths in the name of History — returned to Camus as the thinker who had been right too soon. His rehabilitation is part of the story of the European left reckoning with its own violence.</p>
+    </div>
+    <div class="inf-card">
+      <div class="inf-name">Secular Ethics</div>
+      <div class="inf-rel">Ethical Framework</div>
+      <p class="inf-desc">For readers who can no longer believe in God but refuse nihilism, Camus offers a rigorous account of why solidarity and care are still obligatory — not because heaven demands them but because the absurd makes them the only honest response to shared suffering.</p>
+    </div>
+    <div class="inf-card">
+      <div class="inf-name">Postcolonial Critique</div>
+      <div class="inf-rel">Unresolved Tension</div>
+      <p class="inf-desc">The ongoing argument about Camus and Algeria — his silence on French settler violence, the absent Arab in <em>The Stranger</em> — represents the most serious unresolved problem in his legacy. Edward Said, Kamel Daoud's <em>The Meursault Investigation</em>, and others have pressed this wound productively.</p>
+    </div>
+  </div>
+
+  <div class="pull">
+    <p class="pull-text">What I know most surely about morality and the duty of man I owe to sport.</p>
+    <p class="pull-cite">— Albert Camus, on his years playing goalkeeper for Racing Universitaire d'Alger</p>
+  </div>
+
+  <p>Camus remains unfinished in the specific sense that his thinking is genuinely open at its edges. He died before completing <em>The First Man</em>, before addressing the Algerian War at the length it demanded, before the third cycle — presumably on love — was written. The incompleteness is not incidental. It is, perhaps, the most honest thing about him.</p>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer class="foot">
+  <span class="foot-text">Athanor · Camusian Atlas · Vol. III</span>
+  <span class="foot-horizon">nous devons imaginer Sisyphe heureux</span>
+  <span class="foot-text">Sources: Camus · Todd · Carroll · Aronson · Daoud</span>
+</footer>
+
+</div><!-- .journal -->
+
+<script>
+  // Nav active state
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav a');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const id = e.target.id;
+        navLinks.forEach(a => {
+          a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+        });
+      }
+    });
+  }, { threshold: 0.2 });
+  sections.forEach(s => io.observe(s));
+
+  // Entrance animations
+  const anim = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'none';
+        anim.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.05 });
+
+  document.querySelectorAll(
+    '.concept, .triad-card, .work, .inf-card, .bio-event'
+  ).forEach(el => {
+    anim.observe(el);
+  });
+</script>
+
+</body>
+</html>
