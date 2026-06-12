@@ -34,6 +34,7 @@ body::before {
 }
 #corner-tl { top: 48px; left: 8px; border-width: 1px 0 0 1px; }
 #corner-tr { top: 48px; right: 8px; border-width: 1px 1px 0 0; }
+#corner-tr { top: 48px; right: 8px; border-width: 1px 1px 0 0; }
 #corner-bl { bottom: 36px; left: 8px; border-width: 0 0 1px 1px; }
 #corner-br { bottom: 36px; right: 8px; border-width: 0 1px 1px 0; }
 
@@ -143,7 +144,7 @@ body::before {
 /* ── CARD BASE ── */
 .card {
   flex-shrink: 0;
-  width: 420px;
+  width: 560px;
   border: 1px solid rgba(199,255,67,0.15);
   background: rgba(199,255,67,0.015);
   display: flex;
@@ -375,9 +376,218 @@ body::before {
   animation: pulse 2s ease-in-out infinite;
 }
 
+.card.muse {
+  flex-shrink: 0;
+  width: 1020px;
+  border: 1px solid rgba(199,255,67,0.15);
+  background: rgba(199,255,67,0.015);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+.card.muse::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: rgba(199,255,67,0.5);
+}
+.card-label {
+  padding: 10px 20px;
+  font-size: 7px;
+  letter-spacing: 0.25em;
+  color: rgba(199,255,67,0.3);
+  border-bottom: 1px solid rgba(199,255,67,0.08);
+  display: flex;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.muse-body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  padding: 12px;
+}
+.muse-body::-webkit-scrollbar { display: none; }
+
+/* masonry via columns */
+.masonry-grid {
+  column-count: 4;
+  column-gap: 8px;
+}
+.masonry-item {
+  break-inside: avoid;
+  margin-bottom: 8px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(199,255,67,0.1);
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+.masonry-item:hover {
+  border-color: rgba(199,255,67,0.45);
+}
+.masonry-item img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: brightness(0.9) contrast(1.05);
+  transition: filter 0.2s, transform 0.3s ease;
+}
+.masonry-item:hover img {
+  filter: brightness(1) contrast(1.05);
+  transform: scale(1.02);
+}
+.item-caption {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 20px 10px 8px;
+  font-size: 7px;
+  letter-spacing: 0.15em;
+  color: rgba(199,255,67,0.8);
+  background: linear-gradient(transparent, rgba(0,0,0,0.75));
+  opacity: 0;
+  transition: opacity 0.2s;
+  text-transform: uppercase;
+}
+.masonry-item:hover .item-caption { opacity: 1; }
+
+/* size scale via aspect-ratio on placeholder */
+.placeholder {
+  width: 100%;
+  background: rgba(199,255,67,0.03);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 7px;
+  letter-spacing: 0.2em;
+  color: rgba(199,255,67,0.18);
+}
+
 @keyframes pulse {
   0%, 100% { opacity: 0.2; }
   50% { opacity: 0.6; }
+}
+
+/* ── MARKET SCAN CARD ── */
+.card.market-scan .card-body {
+  font-size: 11px;
+  line-height: 1.9;
+  color: rgba(199,255,67,0.6);
+  display: flex;
+  flex-direction: column;
+}
+
+.scan-timestamp {
+  font-size: 8px;
+  letter-spacing: 0.2em;
+  color: rgba(199,255,67,0.25);
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+/* each row is a flex column: top-line + toggle + panel */
+.scan-row {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(199,255,67,0.06);
+}
+
+.scan-row:last-child {
+  border-bottom: none;
+}
+
+/* top line: label / value / arrow / read — all inline */
+.scan-row-top {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.scan-label {
+  flex: 0 0 160px;
+  font-size: 8px;
+  letter-spacing: 0.18em;
+  color: rgba(199,255,67,0.35);
+  text-transform: uppercase;
+}
+
+.scan-value {
+  flex: 0 0 90px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: #C7FF43;
+  letter-spacing: 0.05em;
+}
+
+.scan-dir {
+  flex: 0 0 20px;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.scan-dir.up   { color: rgba(100,255,150,0.8); }
+.scan-dir.down { color: rgba(255,100,100,0.8); }
+.scan-dir.flat { color: rgba(199,255,67,0.3); }
+
+.scan-read {
+  flex: 1;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: rgba(199,255,67,0.45);
+  line-height: 1.6;
+}
+
+/* toggle button — sits below the top line */
+.scan-chart-toggle {
+  align-self: flex-start;
+  margin-top: 8px;
+  background: none;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 0.22em;
+  color: rgba(199,255,67,0.2);
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.2s;
+}
+.scan-chart-toggle:hover { color: rgba(199,255,67,0.6); }
+
+/* chart panel — hidden until .open */
+.scan-chart-panel {
+  display: none;
+  margin-top: 10px;
+  width: 100%;
+}
+.scan-chart-panel.open { display: block; }
+
+.scan-chart-panel img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border: 1px solid rgba(199,255,67,0.1);
+  filter: brightness(0.9) contrast(1.05);
+}
+
+.scan-chart-placeholder {
+  width: 100%;
+  aspect-ratio: 16/5;
+  background: rgba(199,255,67,0.02);
+  border: 1px dashed rgba(199,255,67,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 7px;
+  letter-spacing: 0.2em;
+  color: rgba(199,255,67,0.15);
+  text-transform: uppercase;
 }
 </style>
 </head>
@@ -390,8 +600,8 @@ body::before {
 
 <header id="header">
   <div id="header-left">
-    <div id="entry-id">ENTRY // 2026.06.01</div>
-    <div id="entry-date">TRANSMISSION DATE: 2026.06.01 // DOMAIN: ANIMA</div>
+    <div id="entry-id">ENTRY // 2026.05.11</div>
+    <div id="entry-date">TRANSMISSION DATE: 2026.05.11 // DOMAIN: ANIMA</div>
   </div>
   <div id="header-right">
     <a class="nav-link" href="/log/">← LOG</a>
@@ -402,17 +612,18 @@ body::before {
 <div id="scroll-container">
   <div id="cards-track">
 
-<!-- ══ TITLE + WRITING CARD — merged, always first ══ --|| USE <br> for line break -->
+<!-- ══ TITLE + WRITING CARD — merged, always first ══ -->
     <div class="card writing">
       <div class="card-label"><span>ENTRY // WRITING</span><span>01</span></div>
       <div style="padding: 20px 24px 16px; border-bottom: 1px solid rgba(199,255,67,0.12); flex-shrink: 0;">
         <div class="entry-title-text">ENTRY TITLE GOES HERE</div>
         <div class="entry-meta" style="margin-top: 10px;">
-          <div class="entry-meta-row">DATE // 2026.06.01</div>
+          <div class="entry-meta-row">DATE // 2026.05.11</div>
         </div>
         <div class="entry-tags" style="margin-top: 8px;">
           <span class="entry-tag">WRITING</span>
-          <span class="entry-tag">IMAGE</span>
+          <span class="entry-tag">ART</span>
+          <span class="entry-tag">ECONOMICS</span>
         </div>
       </div>
       <div class="card-body">
@@ -423,51 +634,88 @@ body::before {
 
     <div class="card-divider"><div class="divider-dot"></div></div>
 
-    <!-- ══ IMAGE CARD — replace src with your image path ══ -->
-    <div class="card image">
-      <div class="card-label"><span>IMAGE</span><span>03</span></div>
-      <div class="card-body">
-        <img src="/log/assets/your-image.jpg" alt="image description">
-        <div class="image-caption">CAPTION // brief description of what this is</div>
+    <!-- ══ MUSE CARD — collage, edit images array in script ══ -->
+    <div class="card muse">
+      <div class="card-label"><span>MUSE // COLLAGE</span><span>02</span></div>
+      <div class="muse-body">
+        <div class="masonry-grid" id="masonry-grid"></div>
       </div>
     </div>
 
     <div class="card-divider"><div class="divider-dot"></div></div>
 
-    <!-- ══ ILLUSTRATION CARD — wider, for artwork ══ -->
-    <div class="card illustration">
-      <div class="card-label"><span>ILLUSTRATION</span><span>04</span></div>
+    <!-- ══ MARKET SCAN CARD ══ -->
+    <div class="card market-scan">
+      <div class="card-label"><span>TRANSMISSION // ECONOMIC PULSE</span><span>03</span></div>
       <div class="card-body">
-        <img src="/log/assets/your-illustration.jpg" alt="illustration description">
-      </div>
-    </div>
+        <div class="scan-timestamp">SNAPSHOT // 2026.05.11 — 09:30 EST</div>
 
-    <div class="card-divider"><div class="divider-dot"></div></div>
+        <div class="scan-row">
+          <div class="scan-row-top">
+            <span class="scan-label">S&amp;P 500</span>
+            <span class="scan-value">5,214</span>
+            <span class="scan-dir up">▲</span>
+            <span class="scan-read">placeholder text.</span>
+          </div>
+          <button class="scan-chart-toggle" onclick="toggleChart(this)">▸ CHART</button>
+          <div class="scan-chart-panel">
+            <div class="scan-chart-placeholder">NO CHART // DROP IMG SRC HERE</div>
+            <!--<img src="/log/assets/YYYY-MM-DD-sp500.png" alt="S&P 500">-->
+          </div>
+        </div>
 
-    <!-- ══ CHANGELOG CARD ══ -->
-    <div class="card changelog">
-      <div class="card-label"><span>CHANGELOG // ATHANOR</span><span>05</span></div>
-      <div class="card-body">
-        <div class="changelog-item">
-          <span class="changelog-type ADD">ADD</span>
-          <div>
-            <div class="changelog-text">New entry added to the Anima domain: Mecha Pilot updated with re-entry protocol section.</div>
-            <a class="changelog-link" href="https://alinomali.com/anima/mecha-pilot.html">→ VIEW IN ATHANOR</a>
+        <div class="scan-row">
+          <div class="scan-row-top">
+            <span class="scan-label">10Y TREASURY</span>
+            <span class="scan-value">4.38%</span>
+            <span class="scan-dir down">▼</span>
+            <span class="scan-read">placeholder text.</span>
+          </div>
+          <button class="scan-chart-toggle" onclick="toggleChart(this)">▸ CHART</button>
+          <div class="scan-chart-panel">
+            <div class="scan-chart-placeholder">NO CHART // DROP IMG SRC HERE</div>
           </div>
         </div>
-        <div class="changelog-item">
-          <span class="changelog-type UPDATE">UPDATE</span>
-          <div>
-            <div class="changelog-text">Hub graph updated with two new nodes and cross-link between Corpus and Anima domains.</div>
-            <a class="changelog-link" href="https://alinomali.com">→ VIEW HUB</a>
+
+        <div class="scan-row">
+          <div class="scan-row-top">
+            <span class="scan-label">DXY</span>
+            <span class="scan-value">104.2</span>
+            <span class="scan-dir flat">—</span>
+            <span class="scan-read">placeholder text.</span>
+          </div>
+          <button class="scan-chart-toggle" onclick="toggleChart(this)">▸ CHART</button>
+          <div class="scan-chart-panel">
+            <div class="scan-chart-placeholder">NO CHART // DROP IMG SRC HERE</div>
           </div>
         </div>
-        <div class="changelog-item">
-          <span class="changelog-type FIX">FIX</span>
-          <div>
-            <div class="changelog-text">Navigation between hub nodes corrected. Entry buttons now route to live pages.</div>
+
+        <div class="scan-row">
+          <div class="scan-row-top">
+            <span class="scan-label">WTI CRUDE</span>
+            <span class="scan-value">$78.40</span>
+            <span class="scan-dir down">▼</span>
+            <span class="scan-read">placeholder text.</span>
+          </div>
+          <button class="scan-chart-toggle" onclick="toggleChart(this)">▸ CHART</button>
+          <div class="scan-chart-panel">
+            <div class="scan-chart-placeholder">NO CHART // DROP IMG SRC HERE</div>
           </div>
         </div>
+
+        <div class="scan-row">
+          <div class="scan-row-top">
+            <span class="scan-label">CREDIT SPREAD</span>
+            <span class="scan-value">3.12%</span>
+            <span class="scan-dir flat">—</span>
+            <span class="scan-read">placeholder text.</span>
+          </div>
+          <button class="scan-chart-toggle" onclick="toggleChart(this)">▸ CHART</button>
+          <div class="scan-chart-panel">
+            <div class="scan-chart-placeholder">NO CHART // DROP IMG SRC HERE</div>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -478,11 +726,12 @@ body::before {
 
 <div id="status-bar">
   <span>MAGI:ACTIVE // ENTRY:LOADED</span>
-  <span id="card-counter">CARD 1 OF 5</span>
-  <span>alinomali.neocities.org/log</span>
+  <span id="card-counter">CARD 1 OF 3</span>
+  <span>alinomali.com/log</span>
 </div>
 
 <script>
+
 const container = document.getElementById('scroll-container');
 const fill = document.getElementById('progress-fill');
 const counter = document.getElementById('card-counter');
@@ -503,11 +752,64 @@ container.addEventListener('scroll', () => {
 });
 
 container.addEventListener('wheel', e => {
+  const overCardBody = e.target.closest('.card-body');
+  const overMuseBody = e.target.closest('.muse-body');
+  if (overCardBody || overMuseBody) return;
   if (e.deltaY !== 0) {
     e.preventDefault();
     container.scrollLeft += e.deltaY;
   }
 }, { passive: false });
+
+// ── IMAGE MANIFEST ──
+const images = [
+  { src: null, caption: 'image one', w: 1, h: 2 },
+  { src: null, caption: 'image two',   w: 1, h: 1 },
+  { src: null, caption: 'image three', w: 2, h: 3 },
+  { src: null, caption: 'image four',  w: 1, h: 1 },
+  { src: null, caption: 'image five',  w: 1, h: 2 },
+  { src: null, caption: 'image six',   w: 2, h: 1 },
+  { src: null, caption: 'image seven', w: 1, h: 3 },
+  { src: null, caption: 'image eight', w: 1, h: 2 },
+  { src: null, caption: 'image nine',  w: 2, h: 2 },
+  { src: null, caption: 'image ten',   w: 1, h: 1 },
+];
+
+const hRatio = { 1: '16/9', 2: '4/3', 3: '2/3' };
+const wSpan  = { 1: 'span 1', 2: 'span 2', 3: 'span 3' };
+
+function buildMasonry() {
+  const grid = document.getElementById('masonry-grid');
+  grid.innerHTML = '';
+  images.forEach(img => {
+    const item = document.createElement('div');
+    item.className = 'masonry-item';
+    if (img.w > 1) { item.style.columnSpan = 'all'; }
+    if (img.src) {
+      item.innerHTML = `
+        <img src="${img.src}" alt="${img.caption}" loading="lazy">
+        <div class="item-caption">${img.caption}</div>
+      `;
+    } else {
+      item.innerHTML = `
+        <div class="placeholder" style="aspect-ratio:${hRatio[img.h] || '4/3'}">
+          ${img.caption.toUpperCase()}
+        </div>
+        <div class="item-caption">${img.caption}</div>
+      `;
+    }
+    grid.appendChild(item);
+  });
+}
+
+buildMasonry();
+
+function toggleChart(btn) {
+  const panel = btn.nextElementSibling;
+  const open = panel.classList.toggle('open');
+  btn.textContent = open ? '▾ CHART' : '▸ CHART';
+}
+
 </script>
 </body>
 </html>
